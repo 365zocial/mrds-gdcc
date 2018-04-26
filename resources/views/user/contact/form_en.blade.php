@@ -49,7 +49,7 @@
             </p>
 
             <form class="" action="{{ url('user/contact/contactForm') }}" method="post">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                @csrf
 
                 <div class="row row-inform">
                     <div class="col-md-12">
@@ -153,76 +153,4 @@
         </div>
     </div>
 </div>
-
-<!--
-    <div class="row">
-        <div class="col-md-12-">
-            <p>
-                Contact US
-            </p>
-            <p>
-                Please use this form if you have any comment or question.<br>
-                We'll get back with your email very soon.
-            </p>
-        </div>
-    </div>
-    <form class="" action="{{ url('user/contact/contactForm') }}" method="post">
-        <div class="row">
-            <div class="col-md-12">
-                <label for="">Select Type</label>
-                Comment <input type="radio" name="contact_type" value="1">
-                Question ? <input type="radio" name="contact_type" value="2">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <label for="">Marine Center</label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <select class="" name="mrct">
-                    @foreach($mrcts as $mrct)
-                        <option value="{{ $mrct->id }}"> {{ $mrct->marinecenter }}</option>
-                    @endforeach
-                </select>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <label for="">Subject Name</label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <input type="text" name="topic" value="">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <label for="">Name</label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <input type="text" name="user" value="{{ $name }}" readonly="">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <label for="">Message</label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <textarea name="message" rows="8" cols="40"></textarea>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <input type="hidden" name="lang" value="en">
-                <input type="submit" name="name" value="Send Message">
-            </div>
-        </div>
-    </form> -->
 @endsection

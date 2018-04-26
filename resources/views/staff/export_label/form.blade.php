@@ -51,7 +51,7 @@
 <div class="row">
     <div class="col-md-12">
         <form id="form" action="{{ url('staff/export_label/export') }}" method="post">
-            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            @csrf
 
             @for ( $i=0; $i<12; $i++ )
                 @if ( $i%3===0 ) <div class="row row-inform"> @endif

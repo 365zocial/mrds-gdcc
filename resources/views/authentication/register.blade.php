@@ -49,7 +49,7 @@
           </p>
 
           <form class="register-input" action="{{ url('register') }}" method="post">
-              <input type="hidden" name="_token" value="{{ csrf_token() }}">
+              @csrf
 
               <div class="row row-inform">
                     <div class="col-md-6">

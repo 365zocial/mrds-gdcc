@@ -37,7 +37,7 @@
     </div>
 
     <form class="register-input" action="{{ url('resetpassword') }}" method="post">
-
+        @csrf
         <div class="row">
             <div class="col-md-12">
                 <label for="">New Password</label>
@@ -50,7 +50,7 @@
                 <input class="form-control login-field" type="password" name="confirm_password" placeholder="Confirm New Password" required="">
             </div>
         </div>
-        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        @csrf
         <div class="row">
             <center>
                 <button type="submit" class="btn btn-default" name="button">Change Password</button>

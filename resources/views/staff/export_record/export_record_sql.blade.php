@@ -90,7 +90,7 @@
                     <div class="col-md-12">
                         <center>
                             <form action="{{ url('staff/doExportRecordSQL') }}" method="post" id="form" name="form">
-                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                @csrf
                                 <button type="submit">
                                     <div class="loan-block">
                                     <img class="icon" src="{{ URL::asset('assets/images/icon_dashboard_manager/export_record.png') }}" />

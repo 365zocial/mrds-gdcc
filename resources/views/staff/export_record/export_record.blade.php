@@ -88,6 +88,7 @@
 
                 <div class="row">
                     <form action="{{ url('staff/doExportRecord') }}" method="post" id="form" name="form">
+                        @csrf
                         <?php
                             $arr = [
                                 ['1', 'classification'],        // 0
@@ -146,7 +147,7 @@
                         <!-- Submit Button -->
                         <div class="row submit_select" style="text-align:center;">
                             <div class="col-md-12 btn-action-box">
-                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                @csrf
                                 <button type="submit" class="btn btn-default btn-gold" style="font-size: 16px;">
                                     Export Files
                                 </button>

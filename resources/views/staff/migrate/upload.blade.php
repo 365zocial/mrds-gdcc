@@ -38,6 +38,7 @@
 
         <div class="row">
             <form action="{{ url('staff/migdata/uploadsourcedata') }}" method="post" id="form" enctype="multipart/form-data">
+                @csrf
                 <div class="col-md-12">
                     <div class="form-group">
                         <label for="cur_sci_name">Upload File <font style="color:red;"><em>(Accept Only File Type .CSV)</em><font></label>

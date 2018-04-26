@@ -113,6 +113,7 @@
 
             <div class="row">
                 <form action="{{ url('staff/doChangeClassification') }}" method="post" id="form">
+                    @csrf
                     <div class="col-md-12">
                         <div class="form-group">
                             <label for="cur_sci_name">Current Scientific Name</label>

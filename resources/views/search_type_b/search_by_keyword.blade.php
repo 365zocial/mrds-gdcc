@@ -155,7 +155,7 @@
             <p class="content-help-text">You can search all record by these form.</p>
 
             <form action="#" method="post" id="form" name="form">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                @csrf
 
                 <!-- Choose Specimens or Publication -->
                 <div class="row row-inform">

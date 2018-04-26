@@ -78,7 +78,7 @@
             @elseif(in_array(Auth::user()->role_id,[3,6]))
                 <form class="" id="form" action="{{ url('staff/searchCategory/distribution') }}" method="post">
             @endif
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                @csrf
 
                 <div class="row row-inform">
                     <div class="col-md-12" id="choose_source">

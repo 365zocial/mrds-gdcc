@@ -117,7 +117,7 @@
     <div class="col-md-4 col-md-offset-2">
         <div class="content-box">
             <form class="form-horizontal" method="POST" action="{{ url('staff/searchReport/biogeography') }}">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                @csrf
 
                 <div class="row row-form">
                     <div class="col-md-12">
@@ -146,7 +146,7 @@
     <div class="col-md-4">
         <div class="content-box">
             <form class="form-horizontal" method="POST" action="/staff/searchReport/diversity">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                @csrf
 
                 <div class="row row-form">
                     <div class="col-md-12">
@@ -177,7 +177,7 @@
     <div class="col-md-4 col-md-offset-2">
         <div class="content-box">
             <form class="form-horizontal" method="POST" action="/staff/searchReport/diversity">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                @csrf
 
                 <div class="row row-form">
                     <div class="col-md-12">
@@ -206,7 +206,7 @@
     <div class="col-md-4">
         <div class="content-box">
             <form class="form-horizontal" method="POST" action="/staff/searchReport/diversity">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                @csrf
 
                 <div class="row row-form">
                     <div class="col-md-12" style="text-align: left;">

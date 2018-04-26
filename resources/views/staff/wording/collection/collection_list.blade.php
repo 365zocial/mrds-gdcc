@@ -147,7 +147,7 @@
 			</div>
 
 			<form action="{{ url('staff/wording/addCollection') }}" method="post" id="add_modal_form">
-				<input type="hidden" name="_token" value="{{ csrf_token() }}">
+				@csrf
 
 				<div class="modal-body">
 
@@ -195,7 +195,7 @@
 			</div>
 
 			<form action="{{ url('staff/wording/editCollection') }}" method="post" id="edit_modal_form">
-				<input type="hidden" name="_token" value="{{ csrf_token() }}">
+				@csrf
 				<div id="hidden_wording_id"><input type="hidden" name="collection_id" value=""></div>
 				<!-- <input type="hidden" name="edit_collection_code" value=""> -->
 

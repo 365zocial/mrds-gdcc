@@ -162,7 +162,7 @@
 
                 <form class="form-horizontal" method="post" action="{{ url('user/loan/submit_request') }}" enctype="multipart/form-data" >
 
-                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    @csrf
 
                     <p class="submit-request-sub-header">
                         @if($lang == 2)

@@ -157,7 +157,7 @@
             <p class="content-help-text">Enter counting criteria here. Numbers of matches are shown below.</p>
 
             <form class="form-horizontal search-report-form" method="POST" action="{{ url('staff/searchReport/diversity') }}">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                @csrf
 
                 <div class="row row-inform">
 

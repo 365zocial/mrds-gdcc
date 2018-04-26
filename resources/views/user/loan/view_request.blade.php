@@ -272,6 +272,7 @@
             <div class="row row-comment">
                 <div class="col-md-12">
                     <form class="form-horizontal" method="post" action="/user/loan/view_request/{{ $recordLoanID }}" enctype="multipart/form-data" >
+                        @csrf
                         <div class="row">
                             <div class="col-md-12">
                                 <p class="view-request-input-header">

@@ -145,7 +145,7 @@
             <p class="content-help-text font-thai-resize">ช่องที่ไม่มีภาษาไทยสามารถกรอกเป็นภาษาอังกฤษได้ <span class="english-in-thai">(</span>ควรหลีกเลี่ยงเครื่องหมายเหล่านี้ <span class="english-in-thai">&, *, #, <, >, ", ', .)</span></p>
 
             <form id="form" action="{{ url('staff/doAddRecordTH') }}" method="post">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                @csrf
                 <input type="hidden" name="classification_id" value="{{ $classification->id }}">
 
                 <p class="search-report-dropdown-header font-thai-resize">ชื่อวิทยาศาสตร์ และข้อมูลต่างๆ</p>

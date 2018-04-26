@@ -121,7 +121,7 @@
 <div class="row row-btn row-centered">
     <div class="col-md-7 col-centered">
         <form class="form-horizontal" method="post" action="{{ url('staff/loan/update_status', $recordLoanID) }}">
-
+            @csrf
             <div class="row" style="margin-bottom: 10px;">
                 <div class="col-md-8">
                     <p class="view-request-input-header-small">Status Approve</p>
@@ -198,7 +198,7 @@
         <div class="row row-comment">
             <div class="col-md-12">
                 <form class="form-horizontal" method="post" action="/staff/loan/view_request/{{ $recordLoanID }}" >
-
+                    @csrf
                     <div class="row">
                         <div class="col-md-12">
                             <p class="view-request-input-header-small">Comment Box</p>

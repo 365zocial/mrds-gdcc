@@ -28,7 +28,7 @@
             <p class="content-help-text">กรุณาใช้แบบฟอร์มนี้ถ้าหากคุณต้องการแสดงความคิดเห็น หรือมีข้อสอบถามเราจะดำเนินการติดต่อคุณกลับอย่างเร็วที่สุด</p>
 
             <form class="" action="{{ url('user/contact/contactForm') }}" method="post">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                @csrf
 
                 <div class="row row-inform">
                     <div class="col-md-12">
@@ -86,76 +86,4 @@
         </div>
     </div>
 </div>
-
-<!--
-    <div class="row">
-        <div class="col-md-12-">
-            <p>
-                ติดต่อเรา
-            </p>
-            <p>
-                กรุณาใช้แบบฟอร์มนี้ถ้าหากคุณต้องการแสดงความคิดเห็น หรือมีข้อสอบถาม<br>
-                เราจะดำเนินการติดต่อคุณกลับอย่างเร็วที่สุด
-            </p>
-        </div>
-    </div>
-    <form class="" action="{{ url('user/contact/contactForm') }}" method="post">
-        <div class="row">
-            <div class="col-md-12">
-                <label for="">ประเภทการติดต่อ</label>
-                แสดงความคิดเห็น <input type="radio" name="contact_type" value="1">
-                ติดต่อสอบถาม <input type="radio" name="contact_type" value="2">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <label for="">Marine Center</label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <select class="" name="mrct">
-                    @foreach($mrcts as $mrct)
-                        <option value="{{ $mrct->id }}"> {{ $mrct->marinecenter }}</option>
-                    @endforeach
-                </select>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <label for="">หัวข้อที่จะติดต่อ</label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <input type="text" name="topic" value="">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <label for="">ชื่อผู้ติดต่อ</label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <input type="text" name="user" value="{{ $name }}" readonly="">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <label for="">ข้อความ</label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <textarea name="message" rows="8" cols="40"></textarea>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <input type="hidden" name="lang" value="th">
-                <input type="submit" name="name" value="ส่งข้อความ">
-            </div>
-        </div>
-    </form> -->
 @endsection

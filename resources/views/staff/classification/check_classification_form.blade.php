@@ -165,7 +165,7 @@
             <p class="content-help-text">Please use English characters only (avoid using characters such as &, *, #, <, >, ", ', .)</p>
 
             <form action="{{ url('staff/addClassificationForm') }}" method="post" id="form">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                @csrf
 
                 <div class="row row-inform">
                     <div class="col-md-12">

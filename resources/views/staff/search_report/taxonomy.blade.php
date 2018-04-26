@@ -76,7 +76,7 @@
                 <p class="content-header">Record Count Over a Year</p>
                 <p class="content-help-text">The count is based on the collector date.</p>
                 <form class="form-inline" method="POST" action="{{ url('staff/searchReport/record_count_chart') }}">
-                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    @csrf
                     <div class="form-group">
                         <label class="sr-only">Enter Year Label</label>
                         <p class="form-control-static">Enter Year (Ex.2016)</p>

@@ -16,6 +16,7 @@
     </div>
     <div class="col-md-12">
         <form class="form-horizontal" role="form" method="post" action="{{ url('user/add')}}">
+            @csrf
             <div class="form-group">
                 <label class="control-label col-sm-2" for="-username">Username:</label>
                 <div class="col-sm-4">

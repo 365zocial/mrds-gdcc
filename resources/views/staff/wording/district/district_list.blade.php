@@ -164,7 +164,7 @@
 			</div>
 
 			<form action="{{ url('staff/wording/addDistrict') }}" method="post" id="add_modal_form">
-				<input type="hidden" name="_token" value="{{ csrf_token() }}">
+				@csrf
 
 				<div class="modal-body">
 
@@ -221,7 +221,7 @@
 			</div>
 
 			<form action="{{ url('staff/wording/editDistrict') }}" method="post" id="edit_modal_form">
-				<input type="hidden" name="_token" value="{{ csrf_token() }}">
+				@csrf
 				<div id="hidden_wording_id"><input type="hidden" name="district_wording_id" value=""></div>
 
 				<div class="modal-body">

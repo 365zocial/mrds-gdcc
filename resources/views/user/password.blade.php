@@ -62,7 +62,7 @@
                     </p>
 
                     <form class="register-input" action="{{ url('editpassword') }}" method="post">
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        @csrf
 
                         <div class="row">
                             <div class="col-md-12">
@@ -117,70 +117,5 @@
         </div>
     </div>
 </div>
-
-    <!-- <div class="row row-first">
-        <div class="col-md-12">
-            <p>
-                @if(Session::get('language') == 2)
-                    เปลี่ยนรหัสผ่าน
-                @else
-                    Change Password
-                @endif
-            </p>
-            <p>
-                @if(Session::get('language') == 2)
-                    กรุณากรอกรหัสผ่านเดิมเพื่อยืนยันและตั้งรหัสผ่านใหม่ด้านล่างนี้
-                @else
-                    In the fields below enter your new password.
-                @endif
-            </p>
-        </div>
-    </div>
-    <form class="register-input" action="{{ url('editpassword') }}" method="post">
-        <div class="row">
-            <div class="col-md-12">
-                <label for="">
-                    @if(Session::get('language') == 2)
-                        รหัสผ่านเดิม
-                    @else
-                        Current Password
-                    @endif
-                </label>
-                @if( $set_new_pass )<span style="color:red">* Incorrect Current Password</span>@endif
-                <input class="form-control login-field" type="password" name="current_password" required="" @if( $set_new_pass ){{ "autofocus" }}@endif >
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <label for="">
-                    @if(Session::get('language') == 2)
-                        รหัสผ่านใหม่
-                    @else
-                        New Password
-                    @endif
-                </label>
-                <input class="form-control login-field" type="password" name="password" required="">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <label for="">
-                    @if(Session::get('language') == 2)
-                        กรอกรหัสผ่านใหม่อีกครั้ง
-                    @else
-                        Confirm New Password
-                    @endif
-                </label>
-                <input class="form-control login-field" type="password" name="confirm_password" required="">
-            </div>
-        </div>
-        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-        <div class="row">
-            <center>
-                <button type="submit" class="btn btn-default" name="button">Change Password</button>
-            </center>
-        </div>
-    </form> -->
-
 
 @endsection

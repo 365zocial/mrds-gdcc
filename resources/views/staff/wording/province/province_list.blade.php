@@ -161,46 +161,46 @@
 			</div>
 
 			<form action="{{ url('staff/wording/addProvince') }}" method="post" id="add_modal_form">
-				<input type="hidden" name="_token" value="{{ csrf_token() }}">
+				@csrf
 
 				<div class="modal-body">
 
 					<div class="row row-inform">
-            <div class="col-md-12">
-                <p class="search-report-dropdown-header">Country</p>
-                <select class="form-control search-report-select select2" id="add_country_province" name="add_country_province" required>
-                @if( count($countrys) !== 0 )
-                    <option value="" selected disabled>Select</option>
-                    @foreach ( $countrys as $country )
-                        <option value="{{ $country->id }}">{{ $country->country_en }} / {{ $country->country_th }}</option>
-                    @endforeach
-                @else
-                    <option value="" selected>No list in select</option>
-                @endif
-                </select>
-            </div>
-          </div>
+                        <div class="col-md-12">
+                            <p class="search-report-dropdown-header">Country</p>
+                            <select class="form-control search-report-select select2" id="add_country_province" name="add_country_province" required>
+                            @if( count($countrys) !== 0 )
+                                <option value="" selected disabled>Select</option>
+                                @foreach ( $countrys as $country )
+                                    <option value="{{ $country->id }}">{{ $country->country_en }} / {{ $country->country_th }}</option>
+                                @endforeach
+                            @else
+                                <option value="" selected>No list in select</option>
+                            @endif
+                            </select>
+                        </div>
+                    </div>
 
 					<div class="row row-inform">
-            <div class="col-md-12">
-                <p class="search-report-dropdown-header">English Name</p>
-                <input type="text" class="form-control" id="add_province_en" name="add_province_en" maxlength="255" placeholder="Wording English" required>
-            </div>
-          </div>
+                        <div class="col-md-12">
+                            <p class="search-report-dropdown-header">English Name</p>
+                            <input type="text" class="form-control" id="add_province_en" name="add_province_en" maxlength="255" placeholder="Wording English" required>
+                        </div>
+                    </div>
 
-          <div class="row row-inform">
-            <div class="col-md-12">
-                <p class="search-report-dropdown-header">Thai Name</p>
-                <input type="text" class="form-control" id="add_province_th" name="add_province_th" maxlength="255" placeholder="Wording Thai" required>
-            </div>
-          </div>
+                    <div class="row row-inform">
+                        <div class="col-md-12">
+                            <p class="search-report-dropdown-header">Thai Name</p>
+                            <input type="text" class="form-control" id="add_province_th" name="add_province_th" maxlength="255" placeholder="Wording Thai" required>
+                        </div>
+                    </div>
 
-          <div class="row">
-              <div class="col-md-12 search-report-button modal-button">
-                  <button type="button" class="btn btn-default btn-gold btn-gray" data-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-default btn-gold btn-right" id="submit_button" style="">Save</button>
-              </div>
-          </div>
+                    <div class="row">
+                        <div class="col-md-12 search-report-button modal-button">
+                            <button type="button" class="btn btn-default btn-gold btn-gray" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-default btn-gold btn-right" id="submit_button" style="">Save</button>
+                        </div>
+                    </div>
 
 				</div>
 
@@ -218,7 +218,7 @@
 			</div>
 
             <form action="{{ url('staff/wording/editProvince') }}" method="post" id="edit_modal_form">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                @csrf
                 <div id="hidden_wording_id"><input type="hidden" name="province_wording_id" value=""></div>
 
                 <div class="modal-body">

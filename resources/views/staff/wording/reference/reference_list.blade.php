@@ -154,53 +154,53 @@
 				<h4 class="modal-title">Add Reference</h4>
 			</div>
 			<form action="{{ url('staff/wording/addReference') }}" method="post" id="add_modal_form">
-				<input type="hidden" name="_token" value="{{ csrf_token() }}">
+				@csrf
 
 				<div class="modal-body">
 
 					<div class="row row-inform">
-            <div class="col-md-12">
-                <p class="search-report-dropdown-header">Marine Center</p>
-                <select class="form-control search-report-select select2" id="marinecenter" name="marinecenter" required>
-                @if( count($marinecenters) !== 0 )
-                    <option value="" selected disabled>Select</option>
-                    @foreach ( $marinecenters as $marinecenter )
-                        <option value="{{ $marinecenter->id }}">{{ $marinecenter->marinecenter }}</option>
-                    @endforeach
-                @else
-                    <option value="" selected>No list in select</option>
-                @endif
-                </select>
-            </div>
-          </div>
+                        <div class="col-md-12">
+                            <p class="search-report-dropdown-header">Marine Center</p>
+                            <select class="form-control search-report-select select2" id="marinecenter" name="marinecenter" required>
+                            @if( count($marinecenters) !== 0 )
+                                <option value="" selected disabled>Select</option>
+                                @foreach ( $marinecenters as $marinecenter )
+                                    <option value="{{ $marinecenter->id }}">{{ $marinecenter->marinecenter }}</option>
+                                @endforeach
+                            @else
+                                <option value="" selected>No list in select</option>
+                            @endif
+                            </select>
+                        </div>
+                    </div>
 
-          <div class="row row-inform">
-            <div class="col-md-12">
-                <p class="search-report-dropdown-header">Reference Code</p>
-                <input type="text" class="form-control" id="add_reference_code" name="add_reference_code" maxlength="255" placeholder="Code" required>
-            </div>
-          </div>
+                    <div class="row row-inform">
+                        <div class="col-md-12">
+                            <p class="search-report-dropdown-header">Reference Code</p>
+                            <input type="text" class="form-control" id="add_reference_code" name="add_reference_code" maxlength="255" placeholder="Code" required>
+                        </div>
+                    </div>
 
 					<div class="row row-inform">
-            <div class="col-md-12">
-                <p class="search-report-dropdown-header">English Name</p>
-                <input type="text" class="form-control" id="add_reference_en" name="add_reference_en" placeholder="Wording English" required>
-            </div>
-          </div>
+                        <div class="col-md-12">
+                            <p class="search-report-dropdown-header">English Name</p>
+                            <input type="text" class="form-control" id="add_reference_en" name="add_reference_en" placeholder="Wording English" required>
+                        </div>
+                    </div>
 
-          <div class="row row-inform">
-            <div class="col-md-12">
-                <p class="search-report-dropdown-header">Thai Name</p>
-                <input type="text" class="form-control" id="add_reference_th" name="add_reference_th" placeholder="Wording Thai" required>
-            </div>
-          </div>
+                    <div class="row row-inform">
+                        <div class="col-md-12">
+                            <p class="search-report-dropdown-header">Thai Name</p>
+                            <input type="text" class="form-control" id="add_reference_th" name="add_reference_th" placeholder="Wording Thai" required>
+                        </div>
+                    </div>
 
-          <div class="row">
-              <div class="col-md-12 search-report-button modal-button">
-                  <button type="button" class="btn btn-default btn-gold btn-gray" data-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-default btn-gold btn-right" id="submit_button" style="">Save</button>
-              </div>
-          </div>
+                    <div class="row">
+                        <div class="col-md-12 search-report-button modal-button">
+                            <button type="button" class="btn btn-default btn-gold btn-gray" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-default btn-gold btn-right" id="submit_button" style="">Save</button>
+                        </div>
+                    </div>
 
 				</div>
 
@@ -217,38 +217,38 @@
 				<h4 class="modal-title">Edit Reference</h4>
 			</div>
 			<form action="{{ url('staff/wording/editReference') }}" method="post" id="edit_modal_form">
-				<input type="hidden" name="_token" value="{{ csrf_token() }}">
+				@csrf
 				<div id="hidden_wording_id"><input type="hidden" name="reference_id" value=""></div>
 
 				<div class="modal-body">
 
 					<div class="row row-inform">
-            <div class="col-md-12">
-                <p class="search-report-dropdown-header">Status</p>
-                <input id="status_swtich" class="status_switching" name="status_switch" type="checkbox" data-toggle="toggle" data-width="100" data-on="Enabled" data-off="Disabled" checked>
-            </div>
-          </div>
+                        <div class="col-md-12">
+                            <p class="search-report-dropdown-header">Status</p>
+                            <input id="status_swtich" class="status_switching" name="status_switch" type="checkbox" data-toggle="toggle" data-width="100" data-on="Enabled" data-off="Disabled" checked>
+                        </div>
+                    </div>
 
 					<div class="row row-inform">
-            <div class="col-md-12">
-                <p class="search-report-dropdown-header">English Name</p>
-                <input type="text" class="form-control" id="edit_reference_en" name="edit_reference_en" placeholder="Wording English" required>
-            </div>
-          </div>
+                        <div class="col-md-12">
+                            <p class="search-report-dropdown-header">English Name</p>
+                            <input type="text" class="form-control" id="edit_reference_en" name="edit_reference_en" placeholder="Wording English" required>
+                        </div>
+                    </div>
 
-          <div class="row row-inform">
-            <div class="col-md-12">
-                <p class="search-report-dropdown-header">Thai Name</p>
-                <input type="text" class="form-control" id="edit_reference_th" name="edit_reference_th" placeholder="Wording Thai" required>
-            </div>
-          </div>
+                    <div class="row row-inform">
+                        <div class="col-md-12">
+                            <p class="search-report-dropdown-header">Thai Name</p>
+                            <input type="text" class="form-control" id="edit_reference_th" name="edit_reference_th" placeholder="Wording Thai" required>
+                        </div>
+                    </div>
 
-          <div class="row">
-              <div class="col-md-12 search-report-button modal-button">
-                  <button type="button" class="btn btn-default btn-gold btn-gray" data-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-default btn-gold btn-right" id="submit_button_edit" style="">Save</button>
-              </div>
-          </div>
+                    <div class="row">
+                        <div class="col-md-12 search-report-button modal-button">
+                            <button type="button" class="btn btn-default btn-gold btn-gray" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-default btn-gold btn-right" id="submit_button_edit" style="">Save</button>
+                        </div>
+                    </div>
 
 				</div>
 

@@ -246,7 +246,7 @@
         @endif
 
         <form id="form" action="{{ url('staff/doEditRecordForm') }}" method="post">
-          <input type="hidden" name="_token" value="{{ csrf_token() }}">
+          @csrf
           <input type="hidden" name="classification_id" value="{{ $classification->id }}">
 
           <p class="search-report-dropdown-header">Scientific Name and Description</p>

@@ -141,7 +141,7 @@
 				<h4 class="modal-title">Add Country</h4>
 			</div>
 			<form action="{{ url('staff/wording/addCountry') }}" method="post" id="add_modal_form">
-				<input type="hidden" name="_token" value="{{ csrf_token() }}">
+				@csrf
 
 				<div class="modal-body">
 
@@ -181,7 +181,7 @@
 				<h4 class="modal-title">Edit Country</h4>
 			</div>
 			<form action="{{ url('staff/wording/editCountry') }}" method="post" id="edit_modal_form">
-				<input type="hidden" name="_token" value="{{ csrf_token() }}">
+				@csrf
 				<div id="hidden_wording_id"><input type="hidden" name="country_wording_id" value=""></div>
 
 				<div class="modal-body">

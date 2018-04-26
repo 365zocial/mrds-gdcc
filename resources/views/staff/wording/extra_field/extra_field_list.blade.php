@@ -115,7 +115,7 @@
 				<h4 class="modal-title">Edit Extra Field Name</h4>
 			</div>
 			<form action="{{ url('staff/wording/editExtraField') }}" method="post" id="edit_modal_form">
-				<input type="hidden" name="_token" value="{{ csrf_token() }}">
+				@csrf
 				<div id="hidden_extra_field_id"><input type="hidden" name="hidden_extra_field_id" value=""></div>
 
 				<div class="modal-body">

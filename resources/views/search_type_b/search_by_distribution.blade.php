@@ -49,7 +49,7 @@
             <p class="content-help-text">@if($lang == 2){{'คุณสามารถสืบค้นข้อมูลสิ่งมีชีวิตทั้งหมดได้ด้วยหน้าฟอร์มนี้'}}@else{{'You can search all record by these form.'}}@endif</p>
 
             <form class="" id="form" action="{{ url('staff/searchCategory/doSearchDistribution') }}" method="post">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                @csrf
 
                 <div class="row row-inform">
                     <div class="col-md-12" id="choose_source">

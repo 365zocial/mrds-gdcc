@@ -240,7 +240,7 @@
             <p class="content-help-text">Please use English characters only (avoid using characters such as &, *, #, <, >, ", ', .)</p>
 
             <form id="form" action="{{ url('staff/doAddRecord') }}" method="post">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                @csrf
                 <input type="hidden" name="classification_id" value="{{ $classification->id }}">
 
                 <p class="search-report-dropdown-header">Scientific Name and Description</p>

@@ -64,7 +64,7 @@
 
             <div class="col-md-7">
               <form action="{{ url('login') }}" method="post">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                @csrf
 
                 <div class="row">
                   <div class="col-md-12">

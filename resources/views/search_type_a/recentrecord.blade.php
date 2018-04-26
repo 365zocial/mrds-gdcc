@@ -288,6 +288,7 @@
                 <p class="content-header">RECENT RECORD</p>
 
                 <form class="" id="form" action="" method="post">
+                @csrf
                     <div class="row row-inform">
                         <div class="col-md-6">
                             <p class="search-report-dropdown-header">

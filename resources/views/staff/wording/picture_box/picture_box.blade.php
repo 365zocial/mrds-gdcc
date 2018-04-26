@@ -75,7 +75,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <form action="{{ url('staff/wording/doUpdatePictureBox/1') }}" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        @csrf
                         <div class="form-group">
                             <label for="picture_file">File input</label>
                             <input type="file" name="picture_file">
@@ -102,7 +102,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <form action="{{ url('staff/wording/doUpdatePictureBox/2') }}" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        @csrf
                         <div class="form-group">
                             <label for="picture_file">File input</label>
                             <input type="file" name="picture_file">
@@ -129,7 +129,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <form action="{{ url('staff/wording/doUpdatePictureBox/3') }}" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        @csrf
                         <div class="form-group">
                             <label for="picture_file">File input</label>
                             <input type="file" name="picture_file">

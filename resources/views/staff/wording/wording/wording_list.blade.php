@@ -141,31 +141,31 @@
 
 			<form action="{{ url('staff/wording/addWording') }}" method="post" id="add_wording_modal_form">
 				<input type="hidden" name="wording_type" value="{{ $wordings_type_id->id }}">
-        <input type="hidden" name="name_wording_type" value="{{ $name_wording_type }}">
-				<input type="hidden" name="_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="name_wording_type" value="{{ $name_wording_type }}">
+				@csrf
 
 				<div class="modal-body">
 
 					<div class="row row-inform">
-            <div class="col-md-12">
-                <p class="search-report-dropdown-header">English Name</p>
-                <input type="text" class="form-control" id="add_wording_en" name="add_wording_en" maxlength="255" placeholder="Wording English" required>
-            </div>
-          </div>
+                        <div class="col-md-12">
+                            <p class="search-report-dropdown-header">English Name</p>
+                            <input type="text" class="form-control" id="add_wording_en" name="add_wording_en" maxlength="255" placeholder="Wording English" required>
+                        </div>
+                    </div>
 
-          <div class="row row-inform">
-            <div class="col-md-12">
-                <p class="search-report-dropdown-header">Thai Name</p>
-                <input type="text" class="form-control" id="add_wording_th" name="add_wording_th" maxlength="255" placeholder="Wording Thai" required>
-            </div>
-          </div>
+                    <div class="row row-inform">
+                        <div class="col-md-12">
+                            <p class="search-report-dropdown-header">Thai Name</p>
+                            <input type="text" class="form-control" id="add_wording_th" name="add_wording_th" maxlength="255" placeholder="Wording Thai" required>
+                        </div>
+                    </div>
 
-          <div class="row">
-              <div class="col-md-12 search-report-button modal-button">
-                  <button type="button" class="btn btn-default btn-gold btn-gray" data-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-default btn-gold btn-right" id="submit_button" style="">Save</button>
-              </div>
-          </div>
+                    <div class="row">
+                        <div class="col-md-12 search-report-button modal-button">
+                            <button type="button" class="btn btn-default btn-gold btn-gray" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-default btn-gold btn-right" id="submit_button" style="">Save</button>
+                        </div>
+                    </div>
 
 				</div>
 
@@ -185,38 +185,38 @@
 			<form action="{{ url('staff/wording/editWording') }}" method="post" id="edit_wording_modal_form">
 				<div id="hidden_wording_id"><input type="hidden" name="wording_wording_id" value=""></div>
 				<input type="hidden" name="wording_type" value="{{ $wordings_type_id->id }}">
-        <input type="hidden" name="name_wording_type" value="{{ $name_wording_type }}">
-        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="name_wording_type" value="{{ $name_wording_type }}">
+                @csrf
 
 				<div class="modal-body">
 
 					<div class="row row-inform">
-            <div class="col-md-12">
-                <p class="search-report-dropdown-header">Status</p>
-                <input id="status_swtich" name="status_switch" class="status_switching" type="checkbox" data-statuswordingid="" data-toggle="toggle" data-width="100" data-on="Enabled" data-off="Disabled" checked>
-            </div>
-          </div>
+                        <div class="col-md-12">
+                            <p class="search-report-dropdown-header">Status</p>
+                            <input id="status_swtich" name="status_switch" class="status_switching" type="checkbox" data-statuswordingid="" data-toggle="toggle" data-width="100" data-on="Enabled" data-off="Disabled" checked>
+                        </div>
+                    </div>
 
-					<div class="row row-inform">
-            <div class="col-md-12">
-                <p class="search-report-dropdown-header">English Name</p>
-                <input type="text" class="form-control" id="edit_wording_en" name="edit_wording_en" maxlength="255" placeholder="Wording English" required>
-            </div>
-          </div>
+                                <div class="row row-inform">
+                        <div class="col-md-12">
+                            <p class="search-report-dropdown-header">English Name</p>
+                            <input type="text" class="form-control" id="edit_wording_en" name="edit_wording_en" maxlength="255" placeholder="Wording English" required>
+                        </div>
+                    </div>
 
-          <div class="row row-inform">
-            <div class="col-md-12">
-                <p class="search-report-dropdown-header">Thai Name</p>
-                <input type="text" class="form-control" id="edit_wording_th" name="edit_wording_th" maxlength="255" placeholder="Wording Thai" required>
-            </div>
-          </div>
+                    <div class="row row-inform">
+                        <div class="col-md-12">
+                            <p class="search-report-dropdown-header">Thai Name</p>
+                            <input type="text" class="form-control" id="edit_wording_th" name="edit_wording_th" maxlength="255" placeholder="Wording Thai" required>
+                        </div>
+                    </div>
 
-          <div class="row">
-              <div class="col-md-12 search-report-button modal-button">
-                  <button type="button" class="btn btn-default btn-gold btn-gray" data-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-default btn-gold btn-right" id="submit_button_edit" style="">Save</button>
-              </div>
-          </div>
+                    <div class="row">
+                        <div class="col-md-12 search-report-button modal-button">
+                            <button type="button" class="btn btn-default btn-gold btn-gray" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-default btn-gold btn-right" id="submit_button_edit" style="">Save</button>
+                        </div>
+                    </div>
 
 				</div>
 

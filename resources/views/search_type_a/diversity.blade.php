@@ -232,7 +232,7 @@
             <!-- <p class="content-help-text">Enter counting criteria here. Numbers of matches are shown below.</p> -->
 
             <form class="" id="form" action="" method="post">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                @csrf
 
                 <div class="row row-inform">
                     <div class="col-md-6">

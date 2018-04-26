@@ -173,39 +173,39 @@
 			</div>
 
 			<form action="{{ url('staff/wording/addTaxonomy') }}" method="post" id="add_taxonomy_modal_form">
-				<input type="hidden" name="_token" value="{{ csrf_token() }}">
+				@csrf
 
 				<div class="modal-body">
 
 					<div class="row row-inform">
-            <div class="col-md-12">
-                <p class="search-report-dropdown-header">Taxonomy Type</p>
-                <select class="form-control search-report-select select2" id="add_header_taxonomy" name="add_header_taxonomy" required>
-                @if( count($header_taxonomys) !== 0 )
-                    <option value="" selected disabled>Select</option>
-                    @foreach ( $header_taxonomys as $header_taxonomy )
-                        <option value="{{ $header_taxonomy->id }}">{{ $header_taxonomy->name }}</option>
-                    @endforeach
-                @else
-                    <option value="" selected>No list in select</option>
-                @endif
-                </select>
-            </div>
-          </div>
+                        <div class="col-md-12">
+                            <p class="search-report-dropdown-header">Taxonomy Type</p>
+                            <select class="form-control search-report-select select2" id="add_header_taxonomy" name="add_header_taxonomy" required>
+                            @if( count($header_taxonomys) !== 0 )
+                                <option value="" selected disabled>Select</option>
+                                @foreach ( $header_taxonomys as $header_taxonomy )
+                                    <option value="{{ $header_taxonomy->id }}">{{ $header_taxonomy->name }}</option>
+                                @endforeach
+                            @else
+                                <option value="" selected>No list in select</option>
+                            @endif
+                            </select>
+                        </div>
+                    </div>
 
-          <div class="row row-inform">
-            <div class="col-md-12">
-                <p class="search-report-dropdown-header">Taxonomy Name</p>
-                <input type="text" class="form-control" id="add_taxonomy" name="add_taxonomy" maxlength="255" placeholder="Wording" required>
-            </div>
-          </div>
+                    <div class="row row-inform">
+                        <div class="col-md-12">
+                            <p class="search-report-dropdown-header">Taxonomy Name</p>
+                            <input type="text" class="form-control" id="add_taxonomy" name="add_taxonomy" maxlength="255" placeholder="Wording" required>
+                        </div>
+                    </div>
 
-          <div class="row">
-              <div class="col-md-12 search-report-button" style="text-align: right; margin-top: 15px;">
-                  <button type="button" class="btn btn-default btn-gold btn-gray" data-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-default btn-gold" id="submit_button" style="margin-left: 10px;">Save</button>
-              </div>
-          </div>
+                    <div class="row">
+                        <div class="col-md-12 search-report-button" style="text-align: right; margin-top: 15px;">
+                            <button type="button" class="btn btn-default btn-gold btn-gray" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-default btn-gold" id="submit_button" style="margin-left: 10px;">Save</button>
+                        </div>
+                    </div>
 
 				</div>
 
@@ -223,47 +223,47 @@
 			</div>
 			<form action="{{ url('staff/wording/editTaxonomy') }}" method="post" id="edit_taxonomy_modal_form">
 
-				<input type="hidden" name="_token" value="{{ csrf_token() }}">
+				@csrf
 				<div id="hidden_wording_id"></div>
 
 				<div class="modal-body">
 
 					<div class="row row-inform">
-            <div class="col-md-12">
-                <p class="search-report-dropdown-header">Status</p>
-                <input id="status_swtich" name="status_switch" class="status_switching" type="checkbox" data-toggle="toggle" data-width="100" data-on="Enabled" data-off="Disabled" checked>
-            </div>
-          </div>
+                        <div class="col-md-12">
+                            <p class="search-report-dropdown-header">Status</p>
+                            <input id="status_swtich" name="status_switch" class="status_switching" type="checkbox" data-toggle="toggle" data-width="100" data-on="Enabled" data-off="Disabled" checked>
+                        </div>
+                    </div>
 
-					<div class="row row-inform">
-            <div class="col-md-12">
-                <p class="search-report-dropdown-header">Taxonomy Type</p>
-                <select class="form-control search-report-select select2" id="edit_header_taxonomy" name="edit_header_taxonomy" required>
-                @if( count($header_taxonomys) !== 0 )
-                    <option value="" selected disabled>Select</option>
-                    @foreach ( $header_taxonomys as $header_taxonomy )
-                        <option value="{{ $header_taxonomy->id }}">{{ $header_taxonomy->name }}</option>
-                    @endforeach
-                @else
-                    <option value="" selected>No list in select</option>
-                @endif
-                </select>
-            </div>
-          </div>
+                    <div class="row row-inform">
+                        <div class="col-md-12">
+                            <p class="search-report-dropdown-header">Taxonomy Type</p>
+                            <select class="form-control search-report-select select2" id="edit_header_taxonomy" name="edit_header_taxonomy" required>
+                            @if( count($header_taxonomys) !== 0 )
+                                <option value="" selected disabled>Select</option>
+                                @foreach ( $header_taxonomys as $header_taxonomy )
+                                    <option value="{{ $header_taxonomy->id }}">{{ $header_taxonomy->name }}</option>
+                                @endforeach
+                            @else
+                                <option value="" selected>No list in select</option>
+                            @endif
+                            </select>
+                        </div>
+                    </div>
 
-          <div class="row row-inform">
-            <div class="col-md-12">
-                <p class="search-report-dropdown-header">Taxonomy Name</p>
-                <div id="old_taxonomy"></div>
-            </div>
-          </div>
+                    <div class="row row-inform">
+                        <div class="col-md-12">
+                            <p class="search-report-dropdown-header">Taxonomy Name</p>
+                            <div id="old_taxonomy"></div>
+                        </div>
+                    </div>
 
-          <div class="row">
-              <div class="col-md-12 search-report-button" style="text-align: right; margin-top: 15px;">
-                  <button type="button" class="btn btn-default btn-gold btn-gray" data-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-default btn-gold" id="submit_button_edit" style="margin-left: 10px;">Save</button>
-              </div>
-          </div>
+                    <div class="row">
+                        <div class="col-md-12 search-report-button" style="text-align: right; margin-top: 15px;">
+                            <button type="button" class="btn btn-default btn-gold btn-gray" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-default btn-gold" id="submit_button_edit" style="margin-left: 10px;">Save</button>
+                        </div>
+                    </div>
 
 				</div>
 			</form>

@@ -107,6 +107,7 @@
             <p class="content-help-text">You can search for your require information by these topic.</p>
 
             <form class="" id="form" action="{{ url('staff/systemlog/search') }}" method="post">
+                @csrf
                 <div class="row row-inform">
                     <div class="col-md-12">
                         <p class="search-report-dropdown-header">Search By</p>
@@ -147,70 +148,5 @@
         </div>
     </div>
 </div>
-
-    <!-- <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-            <div class="content-box">
-                <form class="" id="form" action="{{ url('staff/systemlog/search') }}" method="post">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h3>
-                                EXPORT LOG FILES
-                            </h3>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            You can search for your require information by these topic.
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <p class="search-report-dropdown-header">
-                                Search by
-                            </p>
-                        </div>
-                        <br>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 form-group">
-                            <select class="form-control select2" name="table_name" id="dd_table">
-                                <option value="login_log">User Login log</option>
-                                <option value="export_log">File Export log</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 form-group">
-                            <div class='input-group'>
-                                <input type='text' id='start_date' class="form-control date_picker_search" name="start_date" placeholder="Calendar" readonly required />
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <div class='input-group'>
-                                <input type='text' id='end_date' class="form-control date_picker_search" name="end_date" placeholder="Calendar" readonly required />
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row submit_select" style="text-align:center; margin-bottom: 0px;">
-                        <div class="col-md-12 btn-action-box">
-                            <button type="submit" class="btn btn-default btn-gold" style="font-size: 16px;">
-                                Export Files
-                            </button>
-                        </div>
-                    </div>
-                    <br>
-                </form>
-            </div>
-        </div>
-    </div> -->
-
 
 @endsection
