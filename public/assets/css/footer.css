@@ -1,0 +1,20 @@
+footer { 
+	text-align:center;
+	background-color:#1A2D8A;
+	position:relative;
+	right:0;
+	bottom:0;
+	left:0;
+	margin-top:10px;
+	padding:1rem;
+	border-top:2px solid #69A6F3 !important;
+	color:#FFF
+}
+
+footer.main-footer {
+	height: 40px; 
+	background-color: #075f9d; 
+	border-top: 2px solid #2089d3 !important;
+}
+
+/*# sourceMappingURL=footer.css.map */

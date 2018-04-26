@@ -1,0 +1,282 @@
+div.row {
+  margin-bottom: 20px;
+}
+
+p {
+  font-family: 'Roboto';
+  color: #636363;
+  font-weight: 300;
+}
+
+hr {
+  border-top-color: #eaeaea;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.center {
+  text-align: center;
+}
+
+.loan-alert-center {
+  text-align: center;
+}
+
+/* ***** Loan Specimen User ***** */
+
+/* Loan Dashboard */
+p.loan-header {
+  text-transform: uppercase;
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 2px;
+}
+
+p.loan-sub-header {
+  text-align: center;
+  font-size: 12px;
+}
+
+div.loan-block {
+  text-align: center;
+  border: 2px solid #edecec;
+  border-radius: 3px;
+  padding: 20px 40px;
+}
+
+div.loan-block:hover {
+  border-color: #e3e3e3;
+}
+
+div.loan-block > p.loan-header {
+  font-weight: 400;
+  margin-bottom: 0px;
+}
+
+div.loan-block > p.loan-sub-header {
+  margin-bottom: 0px;
+}
+
+img.big-icon {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: 100%;
+}
+
+div.table-responsive {
+  margin-top: 20px;
+  border-radius: 3px;
+}
+
+table.table > thead > tr > th {
+  color: #FFFFFF;
+  font-size: 16px;
+  font-weight: 500;
+  background-color: #b8b8b8;
+  border-bottom: 0px;
+  padding: 15px 20px;
+}
+
+table.table > thead > tr > th.center, table > tbody > tr > td.center {
+  text-align: center;
+}
+
+table.table > tbody > tr > td {
+  font-size: 16px;
+  font-weight: 300;
+  color: #636363;
+  padding: 15px 20px;
+}
+
+table.table > tbody > tr > td.col-manage > a {
+  font-size: 14px;
+  vertical-align: middle;
+  color: #636363;
+}
+
+table.table > tbody > tr > td.col-manage > a:hover {
+  color: #101010;
+  text-decoration: none;
+}
+
+table.table > tbody > tr > td.col-manage > a > i.fa {
+  font-size: 18px;
+}
+
+table.table > tbody > tr:last-child > td {
+  border-bottom: 2px solid #bebebe;
+}
+
+/* Submit Request */
+
+div.submit-request-block {
+  padding: 28px 30px 30px 30px;
+  border: 2px solid #49ADF6;
+  border-radius: 3px;
+}
+
+p.submit-request-header {
+  font-size: 24px;
+  text-transform: uppercase;
+}
+
+p.submit-request-sub-header {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+span.submit-request-sub-header-small {
+  font-size: 12px;
+}
+
+div.radio > label {
+  font-family: 'Roboto';
+  color: #636363;
+  font-weight: 300;
+  font-size: 16px;
+}
+
+button.btn-ton-gold {
+  margin-top: 15px;
+  padding: 10px 30px 10px 30px;
+
+  border-radius: 3px;
+  background-color: #fee59a;
+  border: 0px;
+  border-bottom: 2px solid #e4d196;
+
+  font-family: 'Roboto';
+  font-size: 16px;
+  font-weight: 500;
+  color: #ab8617;
+}
+
+button.btn-view-request {
+  font-size: 24px;
+  padding: 3px 50px;
+}
+
+div.row.row-btn {
+  margin-bottom: 0px;
+}
+
+/* Loan Specimen Post */
+div.lastest-loan-post {
+  padding: 25px 30px 20px 30px;
+  border: 2px solid #49ADF6;
+  border-radius: 3px;
+  text-align: left;
+}
+
+div.lastest-loan-post > div > div > p.main-text {
+  font-size: 24px;
+}
+
+div.lastest-loan-post > div > div > p.sub-text {
+  font-size: 16px;
+}
+
+a.link-view-pdf {
+  color: #3dabf9;
+}
+
+a.link-view-pdf:hover {
+  color: #337ab7;
+  text-decoration: none;
+}
+
+.loan-status-approve {
+  color: #23b60b;
+}
+
+.loan-status-reject {
+  color: #f30a0a;
+}
+
+p.comment-form-header {
+  font-size: 24px;
+  text-align: center;
+}
+
+div.loan-content {
+  border-radius: 3px;
+  padding: 12px 30px 8px 30px;
+}
+
+div.admin-content {
+  background-color: #fff1ce;
+}
+
+div.user-content {
+  background-color: #e1ecff;
+}
+
+div.loan-content > p.header {
+  font-size: 22px;
+  font-weight: 500;
+}
+
+div.loan-content > p.date {
+  margin-bottom: 2px;
+  font-size: 12px;
+  font-weight: 300;
+}
+
+div.loan-content > p.comment {
+  font-size: 16px;
+  font-weight: 300;
+  text-align: justify;
+}
+
+div.loan-content > p.link {
+  font-size: 16px;
+  font-weight: 300;
+}
+
+p.view-request-input-header {
+  font-size: 22px;
+  font-weight: 500;
+}
+
+p.view-request-input-header-small {
+  font-size: 16px;
+  font-weight: 300;
+  text-align: left;
+}
+
+div.row-comment {
+  margin-top: 50px;
+}
+
+/* ****************************** */
+
+
+/* ***** Loan Specimen Manager ***** */
+
+/* Dashboard */
+
+/* View Request */
+div.row-of-pdf-link {
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
+
+/* Datatable */
+div#loanSpecimenTable_filter > label {
+  font-size: 16px;
+  font-weight: 300;
+  margin-bottom: 20px;
+  font-family: 'Roboto';
+  color: #636363;
+}
+
+div#loanSpecimenTable_filter > label > input[type="search"] {
+  border-radius: 3px;
+  font-size: 16px;
+  font-weight: 300;
+  padding: 5px;
+}
+
+/* ********************************* */

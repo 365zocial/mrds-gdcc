@@ -1,0 +1,30 @@
+.padding-btm-15,.listmenu div{padding-bottom:15px}.btn-group-lg>.btn,.btn-lg{margin-bottom:15px}.parsley-required{color:red}
+/*# sourceMappingURL=wording.css.map */
+
+/* Menu Wording */
+p.wording-text {
+    font-size: 18px;
+    font-weight: 400;
+    text-decoration: none;
+    text-align: center;
+    margin-bottom: 0px;
+}
+
+a.wording-link , a.wording-link:hover {
+    text-decoration: none;
+}
+
+div.wording-outline {
+    margin-top: 30px;
+    padding: 15px 20px;
+    border: 2px solid #EDECEC;
+    border-radius: 3px;
+    color: #818181;
+}
+
+div.wording-outline:hover {
+    border: 2px solid #fee59a;
+    background-color: #fee59a;
+    color: #ab8617 !important;
+}
+/* ************ */

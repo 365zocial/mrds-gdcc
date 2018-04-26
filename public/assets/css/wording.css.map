@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,6BAAgB,CACZ,cAAc,CAAE,IAAI,CAGxB,0BAA4B,CACxB,aAAa,CAAE,IAAI,CAGvB,iBAAkB,CACd,KAAK,CAAE,GAAG",
+"sources": ["../../../resources/assets/sass/wording.scss"],
+"names": [],
+"file": "wording.css"
+}

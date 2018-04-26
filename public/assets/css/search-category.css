@@ -1,0 +1,54 @@
+div#result_wrapper.dataTables_wrapper.form-inline.dt-bootstrap.no-footer {
+    margin-top: 10px;
+}
+
+table#result.display.dataTable.no-footer {
+    width: 100% !important;
+}
+
+table#result.display.dataTable.no-footer thead tr th ,
+table#result.display.dataTable.no-footer tbody tr td {
+    font-size: 12px;
+}
+
+table#result.display tbody tr td:last-child {
+    text-align: center;
+}
+table#result.display tbody tr td a {
+    color: #636363;
+}
+table#result.display tbody tr td a:hover, table#result.display tbody tr td a:focus, table#result.display tbody tr td a:active {
+    text-decoration: none;
+    color: #000;
+}
+table#result.display tbody tr td span.between {
+    text-align: center;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+div.row.search-category-pages {
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
+
+hr.search-category-pages {
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+div.btn-action-box {
+    text-align: center;
+    padding-top: 15px;
+}
+
+p.content-header.search-result {
+    text-align: left;
+    padding-top: 20px;
+    margin-bottom: 0px;
+}
+
+p.record-label.search-result {
+    text-align: left;
+    margin-top: 0px;
+}
