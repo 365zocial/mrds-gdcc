@@ -36,7 +36,7 @@
                     { data: 'DT_Row_Index', orderable: false, searchable: false },                    
                     { data: 'id', name: 'id'},                    
                     { data: 'related_catalog_item', name: 'related_catalog_item' },
-                    { data: 'current_scientific_name_format', name: 'current_scientific_name_format' },
+                    { data: 'current_scientific_name_format', name: 'classification.current_scientific_name_format' },
                     { data: 'action', orderable: false, searchable: false }
                 ],
                 "columnDefs": [
