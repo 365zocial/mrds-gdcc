@@ -1956,12 +1956,12 @@ class ExportRecordController extends Controller
     //                             if ( $data->individual_count == 0 ) $data->individual_count = '';
     //
     //                             //check picture
-    //                             if ( $data->path_pic1 != null ) $data->path_pic1 = url('uploads/images').'/'.$data->path_pic1;
-    //                             if ( $data->path_pic2 != null ) $data->path_pic2 = url('uploads/images').'/'.$data->path_pic2;
-    //                             if ( $data->path_pic3 != null ) $data->path_pic3 = url('uploads/images').'/'.$data->path_pic3;
-    //                             if ( $data->path_pic4 != null ) $data->path_pic4 = url('uploads/images').'/'.$data->path_pic4;
-    //                             if ( $data->path_pic5 != null ) $data->path_pic5 = url('uploads/images').'/'.$data->path_pic5;
-    //                             if ( $data->path_pic6 != null ) $data->path_pic6 = url('uploads/images').'/'.$data->path_pic6;
+    //                             if ( $data->path_pic1 != null ) $data->path_pic1 = "/mrds_file/uploads/images".'/'.$data->path_pic1;
+    //                             if ( $data->path_pic2 != null ) $data->path_pic2 = "/mrds_file/uploads/images".'/'.$data->path_pic2;
+    //                             if ( $data->path_pic3 != null ) $data->path_pic3 = "/mrds_file/uploads/images".'/'.$data->path_pic3;
+    //                             if ( $data->path_pic4 != null ) $data->path_pic4 = "/mrds_file/uploads/images".'/'.$data->path_pic4;
+    //                             if ( $data->path_pic5 != null ) $data->path_pic5 = "/mrds_file/uploads/images".'/'.$data->path_pic5;
+    //                             if ( $data->path_pic6 != null ) $data->path_pic6 = "/mrds_file/uploads/images".'/'.$data->path_pic6;
     //
     //                             $sheet->row( $row_number, array(
     //             				    $data->created_at, $data->updated_at, $data->department.' : '.$data->institution, $data->marinecenter, $data->marinecenter_code,
@@ -2366,12 +2366,12 @@ class ExportRecordController extends Controller
     //                             }
     //
     //                             //check picture
-    //                             if ( $data->path_pic1 != null ) $data->path_pic1 = url('uploads/images').'/'.$data->path_pic1;
-    //                             if ( $data->path_pic2 != null ) $data->path_pic2 = url('uploads/images').'/'.$data->path_pic2;
-    //                             if ( $data->path_pic3 != null ) $data->path_pic3 = url('uploads/images').'/'.$data->path_pic3;
-    //                             if ( $data->path_pic4 != null ) $data->path_pic4 = url('uploads/images').'/'.$data->path_pic4;
-    //                             if ( $data->path_pic5 != null ) $data->path_pic5 = url('uploads/images').'/'.$data->path_pic5;
-    //                             if ( $data->path_pic6 != null ) $data->path_pic6 = url('uploads/images').'/'.$data->path_pic6;
+    //                             if ( $data->path_pic1 != null ) $data->path_pic1 = "/mrds_file/uploads/images".'/'.$data->path_pic1;
+    //                             if ( $data->path_pic2 != null ) $data->path_pic2 = "/mrds_file/uploads/images".'/'.$data->path_pic2;
+    //                             if ( $data->path_pic3 != null ) $data->path_pic3 = "/mrds_file/uploads/images".'/'.$data->path_pic3;
+    //                             if ( $data->path_pic4 != null ) $data->path_pic4 = "/mrds_file/uploads/images".'/'.$data->path_pic4;
+    //                             if ( $data->path_pic5 != null ) $data->path_pic5 = "/mrds_file/uploads/images".'/'.$data->path_pic5;
+    //                             if ( $data->path_pic6 != null ) $data->path_pic6 = "/mrds_file/uploads/images".'/'.$data->path_pic6;
     //
     //                             $sheet->row( $row_number, array(
     //             				    $data->created_at, $data->updated_at, $data->department.' : '.$data->institution, $data->marinecenter, $data->marinecenter_code,

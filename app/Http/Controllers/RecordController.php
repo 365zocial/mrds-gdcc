@@ -612,7 +612,8 @@ class RecordController extends Controller
 
 				$extention_type = $value->getClientOriginalExtension();
 				$filename = $id_class."_".$id_record."_pic".$pic."_".strtotime(date("Y-m-d H:i:s"))."_".uniqid().'.'.$extention_type;
-				$destinationPath = 'uploads/images';
+				// $destinationPath = 'uploads/images';
+				$destinationPath = $_SERVER['DOCUMENT_ROOT']."/mrds_file/uploads/images";
 
 				$successUplaod	=	$value->move($destinationPath, $filename);
 
@@ -1377,7 +1378,7 @@ class RecordController extends Controller
 				$del[$a] = null;
 			}
 
-			if($picture[$a] == "" && $oldpicture[$a] != "" && $oldid[$a] != "" && $del[$a] == "" && $caption[$a] != "" && $photographer[$a] != ""){
+			if(!isset($picture[$a]) && $oldpicture[$a] != "" && $oldid[$a] != "" && $del[$a] == "" && $caption[$a] != "" && $photographer[$a] != ""){
 				//use old pic
 				//update only text
 
@@ -1404,7 +1405,7 @@ class RecordController extends Controller
 
 			}
 
-			if($picture[$a] != "" && $oldpicture[$a] == "" && $oldid[$a] == "" && $del[$a] == ""){
+			if(isset($picture[$a]) && $oldpicture[$a] == "" && $oldid[$a] == "" && $del[$a] == ""){
 				// use new pic
 
 
@@ -1419,7 +1420,9 @@ class RecordController extends Controller
 					$filename = $id_class."_".$id_record."_pic".$pic."_".strtotime(date("Y-m-d H:i:s"))."_".uniqid().'.'.$extention_type;
 					// dd($filename);
 
-					$destinationPath = 'uploads/images';
+					// $destinationPath = 'uploads/images';
+					$destinationPath = $_SERVER['DOCUMENT_ROOT']."/mrds_file/uploads/images";
+
 					$successUplaod	=	$picture[$a]->move($destinationPath, $filename);
 
 					$lastId		=	Picture::addPictureRecord($id_record_unique, $filename, $caption[$a], $photographer[$a], 1, 1);
@@ -1448,8 +1451,7 @@ class RecordController extends Controller
 
 			}
 
-
-			if($picture[$a] != "" && $oldpicture[$a] != "" && $oldid[$a] != ""){
+			if(isset($picture[$a]) && $oldpicture[$a] != "" && $oldid[$a] != ""){
 				//replace new pic
 
 				if(isset($picture[$a])){
@@ -1460,7 +1462,8 @@ class RecordController extends Controller
 					}
 
 					$filename = $id_class."_".$id_record."_pic".$pic."_".strtotime(date("Y-m-d H:i:s"))."_".uniqid();
-					$destinationPath = 'uploads/images';
+					// $destinationPath = 'uploads/images';
+					$destinationPath = $_SERVER['DOCUMENT_ROOT']."/mrds_file/uploads/images";
 					$successUplaod	=	$picture[$a]->move($destinationPath, $filename);
 
 					if( Picture::editPictureRecord($oldid[$a], $filename, $caption[$a], $photographer[$a], 1, 1) ){

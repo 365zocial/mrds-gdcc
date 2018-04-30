@@ -186,14 +186,14 @@
                                     </div>
                                     <div id="collapse_{{ $i }}" class="panel-collapse collapse @if($i == 0){{ "in" }}@endif" role="tabpanel" aria-labelledby="headingOne">
                                         <div class="panel-body">
-
+                                            
                                             @if(isset($pictures[$i]))
                                                 <div class="row row-inform">
                                                     <div class="oldpic col-md-12">
                                                         <p class="search-report-dropdown-header">Old Image</p>
                                                         <div class="row">
                                                             <div class="col-md-8">
-                                                                <img width="100%" src="{{ url('uploads/images') }}/{{ $pictures[$i]->path_pic }}" alt="Image Responsive" />
+                                                                <img width="100%" src="{{ "/mrds_file/uploads/images" }}/{{ $pictures[$i]->path_pic }}" alt="Image Responsive" />
                                                                 <input type="hidden" name="oldpicture[]" value="{{ $pictures[$i]->path_pic }}">
                                                                 <input type="hidden" name="oldid_{{ $i }}" value="{{ $pictures[$i]->id }}">
                                                             </div>

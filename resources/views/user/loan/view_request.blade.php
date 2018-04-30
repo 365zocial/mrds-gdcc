@@ -188,7 +188,7 @@
                     <div class="col-md-12">
                         <p class="sub-text">
                             <strong>
-                                <a class="link-view-pdf" href="{{ url('uploads/loan_pdf', $lastRecordLoanFile) }}" target="_BLANK">
+                                <a class="link-view-pdf" href="{{ "/mrds_file/uploads/loan_pdf/".$lastRecordLoanFile }}" target="_BLANK">
                                     @if($lang == 2)
                                         เรียกดูไฟล์ PDF
                                     @else
@@ -252,7 +252,7 @@
                                 @if(!empty($recordLoanPost->file_path))
                                   <p class="link">
                                       <strong>
-                                          <a class="link-view-pdf" href="{{ url('uploads/loan_pdf', $recordLoanPost->file_path) }}" target="_BLANK">
+                                          <a class="link-view-pdf" href="{{ "/mrds_file/uploads/loan_pdf/".$recordLoanPost->file_path }}" target="_BLANK">
                                               @if($lang == 2)
                                                   กดเพื่อดูไฟล์แนบ PDF
                                               @else

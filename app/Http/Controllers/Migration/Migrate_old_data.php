@@ -161,7 +161,8 @@ class Migrate_old_data extends Controller
 
         $filename = $csv->getClientOriginalName();
 
-        $destinationPath = 'migrate_old_data__';
+        // $destinationPath = 'migrate_old_data__';
+        $destinationPath = $_SERVER['DOCUMENT_ROOT']."/mrds_file/migrate_old_data__";
 
         $successUplaod	=	$csv->move($destinationPath, $filename);
 
