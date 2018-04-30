@@ -185,4 +185,20 @@ class StaffController extends Controller
         return redirect('staff/list');
     }
 
+    public function searchByName(Request $request){
+        
+        if($request->typename == 'localname'){
+            $data['datas'] = \App\Model\Record::leftjoin('classification', 'record.id', 'classification.id')->where('record.local_name', 'like', '%'.$request->search.'%')->get();
+        }elseif($request->typename == 'vernacularname'){
+            $data['datas'] = \App\Model\Record::leftjoin('classification', 'record.id', 'classification.id')->where('record.vernacular_name', 'like', '%'.$request->search.'%')->get();
+        }elseif($request->typename == 'commonname'){
+            $data['datas'] = \App\Model\Record::leftjoin('classification', 'record.id', 'classification.id')->where('classification.common_name', 'like', '%'.$request->search.'%')->get();
+            // $data['datas'] = Classification::leftjoin('record', 'record.id', 'classification.classification_id')
+            //                         ->where('common_name', 'like', '%'.$request->search.'%')
+            //                         ->get();
+        }
+    
+        return view('staff/searchByName', $data);
+    }
+
 }

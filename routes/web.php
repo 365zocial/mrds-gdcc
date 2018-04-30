@@ -109,6 +109,7 @@ Route::group(['middleware' => ['Authen']], function () {
     Route::group(['prefix' => 'staff'], function(){
         Route::post('getInfoClassification', 'AjaxController@getInfoClassification'); //AjaxController
         Route::post('getTaxonomyName','AjaxController@getTaxonomyName'); //AjaxController
+        Route::post('searchname', 'StaffController@searchByName');
         //Route::post('getNospecies', 'AjaxController@getLastDuplicationPublication');  //AjaxController
 
         Route::get('dashboard','StaffController@dashboard');
