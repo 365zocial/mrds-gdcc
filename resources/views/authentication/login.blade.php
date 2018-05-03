@@ -94,7 +94,8 @@
       </div>
 
       <div class="col-md-4 col-login">
-        <a class="box-link" href="{{ url('register')}}">
+        {{-- <a class="box-link" href="{{ url('register')}}"> --}}
+        <a class="box-link" href="#" disabled>
           <div class="register-button">
             <img class="image-icon" src="{{ url('assets/images/icon_dashboard_manager/register.png')}}" alt="Login Icon" />
             <p class="sub-icon">@if($lang == 1){{ 'Register' }}@else{{ 'สมัครสมาชิก' }}@endif</p>
