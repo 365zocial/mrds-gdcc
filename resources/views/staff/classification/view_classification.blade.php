@@ -226,6 +226,19 @@
               </div>
             </div>
 
+            <div class="row row-before-line">
+              <div class="col-md-6">
+                <p class="record-label">Protection Type:
+                  <span class="record-data">{{ AllMean::ReplaceNullWithDash( Wording::find($classification->protection_type ), "name_en" ) }}</span>
+                </p>
+              </div>
+              <div class="col-md-6">
+                <p class="record-label">Common Name:
+                  <span class="record-data">{{ AllMean::ReplaceNullWithDash( $classification->common_name ) }}</span>
+                </p>
+              </div>
+            </div>
+
         </div>
     </div>
 </div>
