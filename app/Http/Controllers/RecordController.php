@@ -1579,14 +1579,17 @@ class RecordController extends Controller
 	}
 
 	public function ChangeStatus(Request $input){
-
-		$db = Record::find($input->id_en);
-		$db->status = $input->status;
-		$db->save();
-
-		$db = Record::find($input->id_en+1);
-		$db->status = $input->status;
-		$db->save();
+		try{
+			$db = Record::find($input->id_en);
+			$db->status = $input->status;
+			$db->save();
+	
+			$db = Record::find($input->id_en+1);
+			$db->status = $input->status;
+			$db->save();
+		}catch(\Exception $e){
+			dd($e->getMessage());
+		}
 
 	}
 

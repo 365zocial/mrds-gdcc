@@ -126,7 +126,7 @@ class ClassificationController extends Controller
 									</a>';
 
                             return $btn;
-                        })
+						})
                         ->rawColumns(['current_scientific_name_format','action'])
                         ->addIndexColumn()
                         ->make(true);

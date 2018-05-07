@@ -70,7 +70,10 @@
     <div class="col-md-8 col-md-offset-2">
         <div class="content-box">
 
-            <p class="content-header">@if($lang == 2){{'สืบค้นการกระจายของสิ่งมีชีวิต'}}@else{{'Distribution Search'}}@endif</p>
+            <p class="content-header">
+                @if($lang == 2){{'สืบค้นการกระจายของสิ่งมีชีวิต'}}@else{{'Distribution Search'}}@endif 
+                <a class="btn btn-sm btn-link" href="{{ url('user/referenceLoan') }}">Reference list</a>
+            </p>
             <p class="content-help-text">@if($lang == 2){{'คุณสามารถสืบค้นข้อมูลสิ่งมีชีวิตทั้งหมดได้ด้วยหน้าฟอร์มนี้'}}@else{{'You can search all record by these form.'}}@endif</p>
 
             @if(Auth::user()->role_id == 5)

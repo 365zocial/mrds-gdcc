@@ -315,7 +315,7 @@
                                     </li>
 
                                     <li>
-                                        <a href="@if( Session::get('language') == 2 ){{ url('user/th/search/dashboard') }}@else{{ url('user/search/dashboard') }}@endif">
+                                        <a href="{{ url('user/search/dashboard') }}">
                                             <div class="menu-icon">
                                                 <img src="{{ url('assets/images/icon_menu/search_category.png') }}" alt="Manage Classification Icon" />
                                             </div>
@@ -330,7 +330,7 @@
                                     </li>
 
                                     <li>
-                                        <a href="@if( Session::get('language') == 2 ){{ url('user/loan/dashboard') }}@else{{ url('user/loan/dashboard') }}@endif">
+                                        <a href="{{ url('user/loan/dashboard') }}">
                                             <div class="menu-icon">
                                                 <img src="{{ url('assets/images/icon_menu/loan_specimen.png') }}" alt="Add Record Icon" />
                                             </div>
@@ -345,7 +345,7 @@
                                     </li>
 
                                     <li>
-                                        <a href="@if( Session::get('language') == 2 ){{ url('user/loan/dashboard') }}@else{{ url('user/contact/contactForm') }}@endif">
+                                        <a href="{{ url('user/contact/contactForm') }}">
                                             <div class="menu-icon">
                                                 <img src="{{ url('assets/images/icon_menu/Icon-contact.png') }}" alt="Add Record Icon" />
                                             </div>
@@ -354,6 +354,22 @@
                                                     แบบฟอร์มแสดงความคิดเห็น
                                                 @else
                                                     CONTACT ADMIN
+                                                @endif
+
+                                            </div>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="{{ url('user/referenceLoan') }}">
+                                            <div class="menu-icon">
+                                                <img src="{{ url('assets/images/icon_menu/word_in_system.png') }}" alt="Add Record Icon" />
+                                            </div>
+                                            <div class="menu-text">
+                                                @if(Session::get('language') == 2)
+                                                    รายชื่อหนังสือ และเอกสารอ้างอิง
+                                                @else
+                                                    REFERENCES
                                                 @endif
 
                                             </div>

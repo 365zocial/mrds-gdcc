@@ -56,7 +56,7 @@ class LoanController extends Controller
     {
 
         // Get All Maringcenter.
-        $marineList = Marinecenter::getMarineCenterList();
+        $marineList = Marinecenter::whereIn('id', [1, 2])->get();
 
         // Go to Submit Request Page.
         return view('user.loan.submit_request', compact('marineList'));

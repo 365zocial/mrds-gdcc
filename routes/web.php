@@ -53,6 +53,7 @@ Route::group(['middleware' => ['Authen']], function () {
     Route::group(['middleware' => 'CheckUser'], function() {
         Route::group(['prefix' => 'user'], function(){
             Route::get('dashboard','UserController@dashboard');
+            Route::get('referenceLoan', 'WordingController@referenceLoan');
 
             #----------------------#
             # Registration By User #

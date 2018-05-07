@@ -76,7 +76,7 @@
 
         $(function() {
             $('#result1').DataTable({
-                order: [1, 'desc'],
+                order: [2, 'asc'],
                 // bFilter: true,
                 // bLengthChange: true,
                 // "paging": true,
@@ -87,13 +87,14 @@
                 columns: [
                     { data: 'DT_Row_Index', orderable: false, searchable: false },                    
                     { data: 'id', name: 'id'},                    
+                    { data: 'current_scientific_name', name: 'current_scientific_name'},                    
                     { data: 'current_scientific_name_format', name: 'current_scientific_name_format' },
                     { data: 'status', name: 'status' },
                     { data: 'action', orderable: false, searchable: false }
                 ],
                 "columnDefs": [
                 {
-                    "targets": [1],
+                    "targets": [1,2],
                     "visible": false,
                     "searchable": false
                 }
@@ -141,6 +142,7 @@
     <tr>
       <th>No.</th>
       <th class="">id</th>
+      <th class="">current_scientific_name</th>
       <th class="th-padding-left">Scientific Name</th>
       <th class="th-padding-left">Status</th>
       <th class="th-padding-left" style="text-align:center; width: 150px;">Action</th>

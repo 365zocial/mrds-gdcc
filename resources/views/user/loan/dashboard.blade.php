@@ -195,7 +195,10 @@
         </div>
         @if ( sizeof( $loanList ) )
             <div class="col-md-12">
-                <center><a href="{{ url('user/loan/export_loan_user') }}"><button type="button" class="btn btn-default btn-gold">Export Loan</button></a></center>
+                <center>
+                    <a href="{{ url('user/loan/export_loan_user') }}"><button type="button" class="btn btn-default btn-gold">Export Loan</button></a>
+                    <a href="{{ url('user/referenceLoan') }}"><button type="button" class="btn btn-default btn-gold">Reference List</button></a>
+                </center>
             </div>
         @endif
     </div>

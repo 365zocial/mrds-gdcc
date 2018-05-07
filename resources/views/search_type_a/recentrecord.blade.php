@@ -285,7 +285,10 @@
     <div class="row row-with-margin search-category-pages">
         <div class="col-md-8 col-md-offset-2">
             <div class="content-box">
-                <p class="content-header">RECENT RECORD</p>
+                <p class="content-header">
+                    RECENT RECORD 
+                    <a class="btn btn-sm btn-link" href="{{ url('user/referenceLoan') }}">Reference list</a>
+                </p>
 
                 <form class="" id="form" action="" method="post">
                 @csrf

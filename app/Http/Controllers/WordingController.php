@@ -629,9 +629,9 @@ class WordingController extends Controller
 
         }
 
-        //-------------------------------------------------
+    //-------------------------------------------------
 
-        //---------------- Extra Field --------------------
+    //---------------- Extra Field --------------------
 
         //Sorawit
         //Created : 3-8-59
@@ -681,49 +681,60 @@ class WordingController extends Controller
 
     //----------- Picture Box (Login Page) ------------
 
-    //Sorawit
-    //Created : 21-2-60
-    //Modified : -
-    public function pictureBox(){
-        $data = PictureBox::get();
+        //Sorawit
+        //Created : 21-2-60
+        //Modified : -
+        public function pictureBox(){
+            $data = PictureBox::get();
 
-        return view('staff.wording.picture_box.picture_box', compact('data'));
-    }
-
-    //Sorawit
-    //Created : 21-2-60
-    //Modified : -
-    public function doUpdatePictureBox( Request $request, $id ){
-        if ( $request->hasFile('picture_file') ) {
-
-            // get old data for log
-            $old_data = PictureBox::where('id', $id)->first();
-
-            $file = $request->picture_file;
-            $destinationPath = 'assets/images/first_page_record/';
-            $fileName = 'login_page_'.uniqid().'.'.$file->getClientOriginalExtension();
-            $file->move($destinationPath, $fileName);
-            $path_pic = $fileName;
-
-            $lastId = PictureBox::doUpdatePictureBox( $id, $path_pic );
-
-            // get new data for log
-            $new_data = PictureBox::where('id', $lastId)->first();
-
-
-            if ( $lastId ) {
-                System_Log::Loging( 'picture_boxes', // table_name
-                                    $lastId, // row_id
-                                    AllMean::defineEdit(),  // action
-                                    $old_data->toArray(), // old_data
-                					$new_data->toArray() ); // new_data
-            }
+            return view('staff.wording.picture_box.picture_box', compact('data'));
         }
 
-        return redirect('staff/wording/pictureBox')->with('success', 'Update Success !!!');
-    }
+        //Sorawit
+        //Created : 21-2-60
+        //Modified : -
+        public function doUpdatePictureBox( Request $request, $id ){
+            if ( $request->hasFile('picture_file') ) {
+
+                // get old data for log
+                $old_data = PictureBox::where('id', $id)->first();
+
+                $file = $request->picture_file;
+                $destinationPath = 'assets/images/first_page_record/';
+                $fileName = 'login_page_'.uniqid().'.'.$file->getClientOriginalExtension();
+                $file->move($destinationPath, $fileName);
+                $path_pic = $fileName;
+
+                $lastId = PictureBox::doUpdatePictureBox( $id, $path_pic );
+
+                // get new data for log
+                $new_data = PictureBox::where('id', $lastId)->first();
+
+
+                if ( $lastId ) {
+                    System_Log::Loging( 'picture_boxes', // table_name
+                                        $lastId, // row_id
+                                        AllMean::defineEdit(),  // action
+                                        $old_data->toArray(), // old_data
+                                        $new_data->toArray() ); // new_data
+                }
+            }
+
+            return redirect('staff/wording/pictureBox')->with('success', 'Update Success !!!');
+        }
 
     //-------------------------------------------------
 
+        //Chaloemphon
+        //Created : 5-4-59
+        //Modified : -
+        public function referenceLoan(){
+            $data['action']         =   Session::get('action');
+            $data['references']     =   Reference::getReference();
+            $data['marinecenters']  =   Marinecenter::getMarineCenterList();
+            // dd($data['references']);
+            Session::forget('action');
 
+            return view('staff.wording.reference.reference_loan', $data);
+        }
 }
