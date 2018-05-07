@@ -178,14 +178,12 @@
                 }
                 $('.loader').show();
                 if( $(this).is(':checked') ) {
-                    console.log(123);
                     $.post("{{ url('staff/changeStatus') }}",{ _token : '{{ csrf_token() }}' ,id_en: '{{ $record->id }}', status: 2 });
                 } else {
-                  console.log(567);
                     $.post("{{ url('staff/changeStatus') }}",{ _token : '{{ csrf_token() }}' ,id_en: '{{ $record->id }}', status: 1 });
                 }
                 setTimeout( function () {
-                    // window.location = "{{ url('staff/manageRecord') }}"; //will redirect to your blog page (an ex: blog.html)
+                    window.location = "{{ url('staff/manageRecord') }}"; //will redirect to your blog page (an ex: blog.html)
                 }, 1500); //will call the function after 2 secs.
             }
         }
