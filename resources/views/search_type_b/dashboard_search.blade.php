@@ -53,72 +53,74 @@
 
 @section('contain')
 
-<div class="row">
-    <div class="col-md-12">
-        <p class="content-header">Select Search Type</p>
-        <p class="content-help-text" style="text-align: center; margin-bottom: 0px;">You can search for your required information by these topics.</p>
+    @include('staff.searchByNameForm')
+
+    <div class="row">
+        <div class="col-md-12">
+            <p class="content-header">Select Search Type</p>
+            <p class="content-help-text" style="text-align: center; margin-bottom: 0px;">You can search for your required information by these topics.</p>
+        </div>
     </div>
-</div>
 
-<div class="row">
-    <div class="col-md-3">
-        <a href="{{ url('staff/searchCategory/searchByDate') }}" class="wording-link">
-            <div class="wording-outline">
-                <p class="wording-text">Date</p>
-            </div>
-        </a>
-    </div> <!-- /.col-md-3 -->
+    <div class="row">
+        <div class="col-md-3">
+            <a href="{{ url('staff/searchCategory/searchByDate') }}" class="wording-link">
+                <div class="wording-outline">
+                    <p class="wording-text">Date</p>
+                </div>
+            </a>
+        </div> <!-- /.col-md-3 -->
 
-    <div class="col-md-3">
-        <a href="{{ url('staff/searchCategory/searchByDistribution') }}" class="wording-link">
-            <div class="wording-outline">
-                <p class="wording-text">Distribution</p>
-            </div>
-        </a>
-    </div> <!-- /.col-md-3 -->
+        <div class="col-md-3">
+            <a href="{{ url('staff/searchCategory/searchByDistribution') }}" class="wording-link">
+                <div class="wording-outline">
+                    <p class="wording-text">Distribution</p>
+                </div>
+            </a>
+        </div> <!-- /.col-md-3 -->
 
-    <div class="col-md-3">
-        <a href="{{ url('staff/searchCategory/searchByID') }}" class="wording-link">
-            <div class="wording-outline">
-                <p class="wording-text">IDCatalog / IDRef</p>
-            </div>
-        </a>
-    </div> <!-- /.col-md-3 -->
+        <div class="col-md-3">
+            <a href="{{ url('staff/searchCategory/searchByID') }}" class="wording-link">
+                <div class="wording-outline">
+                    <p class="wording-text">IDCatalog / IDRef</p>
+                </div>
+            </a>
+        </div> <!-- /.col-md-3 -->
 
-    <div class="col-md-3">
-        <!-- <a href="{{ url('staff/searchCategory/searchByKeyword') }}" class="wording-link"> -->
-        <a href="{{ url('staff/searchCategory/searchByKeyword') }}" class="wording-link">
-            <div class="wording-outline">
-                <p class="wording-text">Keyword</p>
-            </div>
-        </a>
-    </div> <!-- /.col-md-3 -->
-</div>
+        <div class="col-md-3">
+            <!-- <a href="{{ url('staff/searchCategory/searchByKeyword') }}" class="wording-link"> -->
+            <a href="{{ url('staff/searchCategory/searchByKeyword') }}" class="wording-link">
+                <div class="wording-outline">
+                    <p class="wording-text">Keyword</p>
+                </div>
+            </a>
+        </div> <!-- /.col-md-3 -->
+    </div>
 
-<div class="row row-centered">
-    <div class="col-md-3 col-centered">
-        <a href="{{ url('staff/searchCategory/searchByLocality') }}" class="wording-link">
-            <div class="wording-outline">
-                <p class="wording-text">Locality</p>
-            </div>
-        </a>
-    </div> <!-- /.col-md-3 -->
+    <div class="row row-centered">
+        <div class="col-md-3 col-centered">
+            <a href="{{ url('staff/searchCategory/searchByLocality') }}" class="wording-link">
+                <div class="wording-outline">
+                    <p class="wording-text">Locality</p>
+                </div>
+            </a>
+        </div> <!-- /.col-md-3 -->
 
-    <div class="col-md-3 col-centered">
-        <a href="{{ url('staff/searchCategory/searchByName') }}" class="wording-link">
-            <div class="wording-outline">
-                <p class="wording-text">Name</p>
-            </div>
-        </a>
-    </div> <!-- /.col-md-3 -->
+        <div class="col-md-3 col-centered">
+            <a href="{{ url('staff/searchCategory/searchByName') }}" class="wording-link">
+                <div class="wording-outline">
+                    <p class="wording-text">Name</p>
+                </div>
+            </a>
+        </div> <!-- /.col-md-3 -->
 
-    <div class="col-md-3 col-centered">
-        <a href="{{ url('staff/searchCategory/searchByTaxonomy') }}" id="search_by_taxonomy" class="wording-link">
-            <div class="wording-outline">
-                <p class="wording-text">Taxonomy</p>
-            </div>
-        </a>
-    </div> <!-- /.col-md-3 -->
+        <div class="col-md-3 col-centered">
+            <a href="{{ url('staff/searchCategory/searchByTaxonomy') }}" id="search_by_taxonomy" class="wording-link">
+                <div class="wording-outline">
+                    <p class="wording-text">Taxonomy</p>
+                </div>
+            </a>
+        </div> <!-- /.col-md-3 -->
 
-</div> <!-- /.row -->
+    </div> <!-- /.row -->
 @endsection

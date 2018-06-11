@@ -47,94 +47,96 @@
 
 @section('contain')
 
-<div class="row row-with-margin" style="padding-top: 20px;">
-    <div class="col-md-12">
-        <p class="content-header">
-            @if( $lang == 2)
-                กรุณาเลือกประเภทที่ต้องการสืบค้น
-            @else
-                Select Search Type
-            @endif
-        </p>
-        <p class="content-help-text" style="text-align: center;">
-            @if( $lang == 2)
-                คุณสามารถสืบค้นข้อมูลที่คุณต้องการจากหัวข้อเหล่านี้
-            @else
-                You can search for your required information by these topics.
-            @endif
-        </p>
-    </div>
-</div>
+    @include('staff.searchByNameForm')
 
-<div class="row row-centered">
-
-    <div class="col-md-3 menu-box col-centered">
-        @if(Auth::user()->role_id == 5)
-            <a class="box-link" href="{{ url('user/search/diversity') }}">
-        @elseif( in_array(Auth::user()->role_id, [3,6]) )
-            <a class="box-link" href="{{ url('staff/searchCategory/diversity') }}">
-        @endif
-        <div class="menu-icon-box">
-            <div class="icon-box">
-                <img class="icon" src='{{ URL::asset("assets/images/icon_dashboard_manager/diversity_search.png") }}' />
-            </div>
-            <p class="menu-text">
+    <div class="row row-with-margin" style="padding-top: 20px;">
+        <div class="col-md-12">
+            <p class="content-header">
                 @if( $lang == 2)
-                    สืบค้นข้อมูลความหลากหลาย
+                    กรุณาเลือกประเภทที่ต้องการสืบค้น
                 @else
-                    Diversity Search
+                    Select Search Type
                 @endif
-                <br>&nbsp;
+            </p>
+            <p class="content-help-text" style="text-align: center;">
+                @if( $lang == 2)
+                    คุณสามารถสืบค้นข้อมูลที่คุณต้องการจากหัวข้อเหล่านี้
+                @else
+                    You can search for your required information by these topics.
+                @endif
             </p>
         </div>
-      </a>
     </div>
 
-    <div class="col-md-3 menu-box col-centered">
-        @if(Auth::user()->role_id == 5)
-            <a class="box-link" href="{{ url('user/search/distribution') }}">
-        @elseif( in_array(Auth::user()->role_id, [3,6]) )
-            <a class="box-link" href="{{ url('staff/searchCategory/distribution') }}">
-        @endif
-        <div class="menu-icon-box">
-            <div class="icon-box">
-                <img class="icon" src='{{ URL::asset("assets/images/icon_dashboard_manager/distribution_search.png") }}' />
-            </div>
-            <p class="menu-text">
-                @if( $lang == 2)
-                    สืบค้นการกระจายของสิ่งมีชีวิต
-                @else
-                    Distribution Search
-                @endif
-                <br>&nbsp;
-            </p>
-        </div>
-      </a>
-    </div>
+    <div class="row row-centered">
 
-    <div class="col-md-3 menu-box col-centered">
-        @if(Auth::user()->role_id == 5)
-            <a class="box-link" href="{{ url('user/search/recentrecord') }}">
-        @elseif( in_array(Auth::user()->role_id, [3,6]) )
-            <a class="box-link" href="{{ url('staff/searchCategory/recentrecord') }}">
-        @endif
-        <div class="menu-icon-box">
-            <div class="icon-box">
-                <img class="icon" src='{{ URL::asset("assets/images/icon_dashboard_manager/recent_record.png") }}' />
-            </div>
-            <p class="menu-text">
-                @if( $lang == 2)
-                    สืบค้นรายการลงทะเบียน
+        <div class="col-md-3 menu-box col-centered">
+            @if(Auth::user()->role_id == 5)
+                <a class="box-link" href="{{ url('user/search/diversity') }}">
+            @elseif( in_array(Auth::user()->role_id, [3,6]) )
+                <a class="box-link" href="{{ url('staff/searchCategory/diversity') }}">
+            @endif
+            <div class="menu-icon-box">
+                <div class="icon-box">
+                    <img class="icon" src='{{ URL::asset("assets/images/icon_dashboard_manager/diversity_search.png") }}' />
+                </div>
+                <p class="menu-text">
+                    @if( $lang == 2)
+                        สืบค้นข้อมูลความหลากหลาย
+                    @else
+                        Diversity Search
+                    @endif
                     <br>&nbsp;
-                @else
-                    Recent Record
-                @endif
-                <br>&nbsp;
-            </p>
+                </p>
+            </div>
+        </a>
         </div>
-      </a>
-    </div>
 
-</div>
+        <div class="col-md-3 menu-box col-centered">
+            @if(Auth::user()->role_id == 5)
+                <a class="box-link" href="{{ url('user/search/distribution') }}">
+            @elseif( in_array(Auth::user()->role_id, [3,6]) )
+                <a class="box-link" href="{{ url('staff/searchCategory/distribution') }}">
+            @endif
+            <div class="menu-icon-box">
+                <div class="icon-box">
+                    <img class="icon" src='{{ URL::asset("assets/images/icon_dashboard_manager/distribution_search.png") }}' />
+                </div>
+                <p class="menu-text">
+                    @if( $lang == 2)
+                        สืบค้นการกระจายของสิ่งมีชีวิต
+                    @else
+                        Distribution Search
+                    @endif
+                    <br>&nbsp;
+                </p>
+            </div>
+        </a>
+        </div>
+
+        <div class="col-md-3 menu-box col-centered">
+            @if(Auth::user()->role_id == 5)
+                <a class="box-link" href="{{ url('user/search/recentrecord') }}">
+            @elseif( in_array(Auth::user()->role_id, [3,6]) )
+                <a class="box-link" href="{{ url('staff/searchCategory/recentrecord') }}">
+            @endif
+            <div class="menu-icon-box">
+                <div class="icon-box">
+                    <img class="icon" src='{{ URL::asset("assets/images/icon_dashboard_manager/recent_record.png") }}' />
+                </div>
+                <p class="menu-text">
+                    @if( $lang == 2)
+                        สืบค้นรายการลงทะเบียน
+                        <br>&nbsp;
+                    @else
+                        Recent Record
+                    @endif
+                    <br>&nbsp;
+                </p>
+            </div>
+        </a>
+        </div>
+
+    </div>
 
 @endsection
