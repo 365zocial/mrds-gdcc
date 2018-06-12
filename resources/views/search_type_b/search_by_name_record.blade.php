@@ -63,9 +63,10 @@
                     $count = 1;
 
                     $.each(data['results'], function(i, data){
+                        // data['related_catalog_item']data['related_reference_item'],
                         tb.row.add( [
                             $count,
-                            data['related_catalog_item'] + data['related_reference_item'],
+                            (typeof data['related_catalog_item'] === "string") ? data['related_catalog_item'] : ""  + (typeof data['related_reference_item'] === "string") ? data['related_reference_item'] : "",
                             data['current_scientific_name_format'],
                             CreateView( data['id'] ) +
                                 '<span class="between"> | </span>' +
