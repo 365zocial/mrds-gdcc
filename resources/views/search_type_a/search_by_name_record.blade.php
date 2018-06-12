@@ -61,39 +61,20 @@
                     $('.table_result').slideDown();
                     tb.clear().draw();
                     $count = 1;
-                    if ( data['source'] == 1 ) {    // specimens
-                        $.each(data['results'], function(i, data){
-                            tb.row.add( [
-                                $count,
-                                data['related_catalog_item'],
-                                data['current_scientific_name_format'],
-                                CreateView( data['id'] ) +
-                                    '<span class="between"> | </span>' +
-                                    CreateLink( data['id'] )
-                            ] ).draw();
-                            $count++;
+                    
+                    $.each(data['results'], function(i, data){
+                        tb.row.add( [
+                            $count,
+                            data['related_catalog_item'] + data['related_reference_item'],
+                            data['current_scientific_name_format'],
+                            CreateView( data['id'] ) +
+                                '<span class="between"> | </span>' +
+                                CreateLink( data['id'] )
+                        ] ).draw();
+                        $count++;
 
-                        });
-                    } else {    // publication
-                        $.each(data['results'], function(i, data){
-                            tb.row.add( [
-                                $count,
-                                data['related_reference_item'],
-                                data['current_scientific_name_format'],
-                                CreateView( data['id'] ) +
-                                    '<span class="between"> | </span>' +
-                                    CreateLink( data['id'] )
-                            ] ).draw();
-                            $count++;
-                        });
-                    }
-
-                    // if ( data['name_type'] == 1 ) {
-                    //     name_result = 'Collector - ' + data['name_people'];
-                    // } else {
-                    //     name_result = 'Identifier - ' + data['name_people'];
-                    // }
-
+                    });
+                    
                     name_result = data['name_type'] + ' : ' + data['search'];
 
                     // $('.source_result').html(source);
