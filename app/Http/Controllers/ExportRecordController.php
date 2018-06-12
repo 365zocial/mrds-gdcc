@@ -652,6 +652,144 @@ class ExportRecordController extends Controller
 
     }
 
+    //Chaloemphon
+    //Created : 11-6-61
+    //Modified : -
+    # Search By Name Record for export excel
+    public static function exportSearchByNameRecord( $name_type, $search ) {
+        // created export date
+        $date = date_create();
+        $date_export = date_format( $date, "d-m-Y H:i:s" );
+        $date_export_file_name = date_format( $date, "Y-m-d_H-i-s" );
+
+
+        //---- make file excel ----
+        $name_file = 'Excel_Record_Search_By_Name_Record'.'_'.$name_type.'_'.$date_export_file_name;
+        Excel::create( $name_file, function( $excel ) use ( $name_type, $search, $date_export ) {
+        $excel->sheet( 'Record Data', function( $sheet ) use ( $name_type, $search, $date_export ) {
+
+            //--- Set Parameter ---
+                $user_name = Auth::user()->first_name.' '.Auth::user()->last_name.' ('.Auth::user()->telephone.') ('.Auth::user()->email.')';
+
+                $name_type_column = ucfirst($name_type);
+
+                // query db
+                if ( $name_type != null && $search != '' ) {
+                    if($name_type == 'localname'){
+                        $results = \App\Model\Record::leftjoin('classification', 'record.classification_id', 'classification.id')->where('record.local_name', 'like', '%'.$search.'%')->get();
+                    }elseif($name_type == 'vernacularname'){
+                        $results = \App\Model\Record::leftjoin('classification', 'record.classification_id', 'classification.id')->where('record.vernacular_name', 'like', '%'.$search.'%')->get();
+                    }elseif($name_type == 'commonname'){
+                        $results = \App\Model\Record::leftjoin('classification', 'record.classification_id', 'classification.id')->where('classification.common_name', 'like', '%'.$search.'%')->get();
+                    }   
+
+                    //--- Set Layout and Style ---
+                        $sheet->mergeCells( 'A2:D2' );
+                        $sheet->mergeCells( 'A3:D3' );
+                        $sheet->mergeCells( 'A4:D4' );
+                        $sheet->mergeCells( 'A5:D5' );
+                        $sheet->mergeCells( 'A6:D6' );
+                        $sheet->mergeCells( 'A7:D7' );
+                        $sheet->mergeCells( 'A8:D8' );
+                        $sheet->mergeCells( 'A9:D9' );
+                        $sheet->mergeCells( 'A10:D10' );
+                        $sheet->mergeCells( 'A11:D11' );
+
+                        $sheet->setHeight( 2, 30 );
+                        $sheet->setHeight( 6, 30 );
+                        $sheet->setHeight( 12, 30 );
+
+                        $sheet->row( 2, function( $row ) {
+                        $row->setBackground( '#FE9529' );
+                        });
+                        $sheet->row( 6, function( $row ) {
+                        $row->setBackground('#FE9529');
+                        });
+                        $sheet->row( 12, function( $row ) {
+                        $row->setBackground( '#FE9529' );
+                        });
+
+                        $sheet->cell( 'A2:D2', function( $cells ) {
+                        $cells->setFontSize( 20 );
+                        });
+                        $sheet->cell( 'A6:D6', function( $cells ) {
+                        $cells->setFontSize( 20 );
+                        });
+                        $sheet->cell( 'A12:D12', function( $cells ) {
+                        $cells->setFontSize( 16 );
+                        });
+
+                        $sheet->cells( 'A2:D2', function( $cells ) {
+                        $cells->setFontWeight( 'bold' );
+                        });
+                        $sheet->cells( 'A6:D6', function( $cells ) {
+                        $cells->setFontWeight( 'bold' );
+                        });
+                        $sheet->cells( 'A12:D12', function( $cells ) {
+                        $cells->setFontWeight( 'bold' );
+                        $cells->setAlignment( 'center' );
+                        $cells->setValignment( 'middle' );
+                        });
+
+                        $sheet->setBorder( 'A12:D12', 'thin' );
+                    //--- -------------------- ---
+
+                    //--- Header Part ---
+                        $sheet->row( 2, array( 'Export Information' ) );
+                        $sheet->row( 3, array( 'Export By: '.$user_name ) );
+                        $sheet->row( 4, array( 'Date Export: '.$date_export ) );
+                        $sheet->row( 6, array( 'Data Information' ) );
+                        $sheet->row( 7, array( 'Search Type: Search By Name' ) );
+                        $sheet->row( 9, array( 'Name Type: '.$name_type_column ) );
+                        $sheet->row( 10, array( 'Search Name: '.$search ) );
+                    //--- ----------- ---
+
+                    //--- Header Table Part ---
+                        $sheet->row(12, array(
+                            'No.', 'IDCatalog / IDRef', 'Scientific Name', 'Name'
+                        ));
+                    //--- ----------------- ---
+
+                    //--- Content Part ---
+                        // display data
+                        $row_number = 13;   // start line
+                        $count_line = 1;   // count line for No.
+
+                            foreach ( $results as $data ) {
+                                if ($data->source == 1) {
+                                    $sheet->row( $row_number, array(
+                                        $count_line, $data->related_catalog_item, $data->current_scientific_name, $data->name
+                                    ));
+                                } else {
+                                    $sheet->row( $row_number, array(
+                                        $count_line, $data->related_reference_item, $data->current_scientific_name, $data->name
+                                    ));
+                                }
+    
+                                //--- Set Layout and Style ---
+                                    $sheet->setBorder('A'.$row_number.':D'.$row_number, 'thin');
+                                //--- -------------------- ---
+
+                                $row_number++; $count_line++;
+                            }
+                        
+                    //--- ------------ ---
+                } else {
+                    $results = null;
+                }
+            //--- ------------- ---
+
+            });
+        })->store('csv', Config::get('path.export_record_file_path'));
+
+        // save export log : 0 is excel, 1 is pdf, 2 is api
+        ExportLog::saveExportLog( 0, $name_file );
+
+        // sent name_file for download
+        echo $name_file.'.csv';
+
+    }
+
     //Sorawit
     //Created : 11-7-59
     //Modified : -

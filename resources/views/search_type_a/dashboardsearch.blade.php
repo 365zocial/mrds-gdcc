@@ -47,7 +47,6 @@
 
 @section('contain')
 
-    @include('staff.searchByNameForm')
 
     <div class="row row-with-margin" style="padding-top: 20px;">
         <div class="col-md-12">
@@ -70,7 +69,7 @@
 
     <div class="row row-centered">
 
-        <div class="col-md-3 menu-box col-centered">
+        <div class="col-md-3 menu-box">
             @if(Auth::user()->role_id == 5)
                 <a class="box-link" href="{{ url('user/search/diversity') }}">
             @elseif( in_array(Auth::user()->role_id, [3,6]) )
@@ -92,7 +91,7 @@
         </a>
         </div>
 
-        <div class="col-md-3 menu-box col-centered">
+        <div class="col-md-3 menu-box">
             @if(Auth::user()->role_id == 5)
                 <a class="box-link" href="{{ url('user/search/distribution') }}">
             @elseif( in_array(Auth::user()->role_id, [3,6]) )
@@ -114,7 +113,7 @@
         </a>
         </div>
 
-        <div class="col-md-3 menu-box col-centered">
+        <div class="col-md-3 menu-box">
             @if(Auth::user()->role_id == 5)
                 <a class="box-link" href="{{ url('user/search/recentrecord') }}">
             @elseif( in_array(Auth::user()->role_id, [3,6]) )
@@ -130,6 +129,29 @@
                         <br>&nbsp;
                     @else
                         Recent Record
+                    @endif
+                    <br>&nbsp;
+                </p>
+            </div>
+        </a>
+        </div>
+
+        <div class="col-md-3 menu-box">
+            @if(Auth::user()->role_id == 5)
+                <a class="box-link" href="{{ url('user/search/NameRecord') }}">
+            @elseif( in_array(Auth::user()->role_id, [3,6]) )
+                <a class="box-link" href="{{ url('staff/searchCategory/NameRecord') }}">
+            @endif
+            <div class="menu-icon-box">
+                <div class="icon-box">
+                    <img class="icon" src='{{ URL::asset("assets/images/icon_dashboard_manager/name_search.png") }}' />
+                </div>
+                <p class="menu-text">
+                    @if( $lang == 2)
+                        สืบค้นรายการลงทะเบียน
+                        <br>&nbsp;
+                    @else
+                        Name Search
                     @endif
                     <br>&nbsp;
                 </p>

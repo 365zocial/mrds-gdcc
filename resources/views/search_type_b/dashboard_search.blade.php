@@ -53,8 +53,6 @@
 
 @section('contain')
 
-    @include('staff.searchByNameForm')
-
     <div class="row">
         <div class="col-md-12">
             <p class="content-header">Select Search Type</p>
@@ -97,8 +95,8 @@
         </div> <!-- /.col-md-3 -->
     </div>
 
-    <div class="row row-centered">
-        <div class="col-md-3 col-centered">
+    <div class="row">
+        <div class="col-md-3">
             <a href="{{ url('staff/searchCategory/searchByLocality') }}" class="wording-link">
                 <div class="wording-outline">
                     <p class="wording-text">Locality</p>
@@ -106,7 +104,7 @@
             </a>
         </div> <!-- /.col-md-3 -->
 
-        <div class="col-md-3 col-centered">
+        <div class="col-md-3">
             <a href="{{ url('staff/searchCategory/searchByName') }}" class="wording-link">
                 <div class="wording-outline">
                     <p class="wording-text">Name</p>
@@ -114,10 +112,18 @@
             </a>
         </div> <!-- /.col-md-3 -->
 
-        <div class="col-md-3 col-centered">
+        <div class="col-md-3">
             <a href="{{ url('staff/searchCategory/searchByTaxonomy') }}" id="search_by_taxonomy" class="wording-link">
                 <div class="wording-outline">
                     <p class="wording-text">Taxonomy</p>
+                </div>
+            </a>
+        </div> <!-- /.col-md-3 -->
+
+        <div class="col-md-3">
+            <a href="{{ url('staff/searchCategory/searchByNameRecord') }}" class="wording-link">
+                <div class="wording-outline">
+                    <p class="wording-text">Name Record</p>
                 </div>
             </a>
         </div> <!-- /.col-md-3 -->

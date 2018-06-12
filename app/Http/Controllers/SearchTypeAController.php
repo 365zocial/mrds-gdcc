@@ -348,5 +348,45 @@ class SearchTypeAController extends Controller
         return $data;
     }
 
+    //Chaloemphon
+    //Created : 11-6-61
+    //Modified : 11-6-61
+    # for search name form
+    public function searchByNameRecord() {
+        $data['lang']   = Session::get('language');
+        return view('search_type_a.search_by_name_record', $data);
+    }
+
+    //Chaloemphon
+	//Created : 11-6-61
+	//Modified : 11-6-61
+	# for search name
+    public function doSearchNameRecord( Request $input ) {
+        // get value from form
+        $way = $input->way;
+
+        $name_type = $input->name_type;
+        $search = $input->search;
+
+        if( $way == 1 ) {   // search
+            // get DB
+                if($input->name_type == 'localname'){
+                    $data['results'] = \App\Model\Record::leftjoin('classification', 'record.classification_id', 'classification.id')->where('record.local_name', 'like', '%'.$input->search.'%')->get();
+                }elseif($input->name_type == 'vernacularname'){
+                    $data['results'] = \App\Model\Record::leftjoin('classification', 'record.classification_id', 'classification.id')->where('record.vernacular_name', 'like', '%'.$input->search.'%')->get();
+                }elseif($input->name_type == 'commonname'){
+                    $data['results'] = \App\Model\Record::leftjoin('classification', 'record.classification_id', 'classification.id')->where('classification.common_name', 'like', '%'.$input->search.'%')->get();
+                }
+            // ------
+
+            $data['name_type'] = ucfirst($name_type);
+            $data['search'] = $search;
+
+        	return Response::json($data);
+        } else {    //ajax
+            // export excel
+            ExportRecordController::exportSearchByNameRecord( $name_type, $search );
+        }
+    }
 
 }

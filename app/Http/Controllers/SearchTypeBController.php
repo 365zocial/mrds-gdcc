@@ -817,7 +817,7 @@ class SearchTypeBController extends Controller
 
         // get extra information
 		$data['extra_info'] = Extra_Info::getExtraInfo( $data['record'][0]->unique_record );
-		if ( sizeof( $data['extra_info'] ) ) {	// check have or not have
+		if ( sizeof( (array)$data['extra_info'] ) ) {	// check have or not have
 			$data['extra_fields'] = Extra_Field::getExtraFieldNameList(); // get extra field
 		} else {
 			$data['extra_info'] = null;
@@ -826,4 +826,43 @@ class SearchTypeBController extends Controller
 		return view('search_type_b.view_record', $data);
 	}
 
+    //Chaloemphon
+    //Created : 11-6-61
+    //Modified : 11-6-61
+    # for search name form
+    public function searchByNameRecord() {
+        return view('search_type_b.search_by_name_record');
+    }
+
+    //Chaloemphon
+	//Created : 11-6-61
+	//Modified : 11-6-61
+	# for search name
+    public function doSearchNameRecord( Request $input ) {
+        // get value from form
+        $way = $input->way;
+
+        $name_type = $input->name_type;
+        $search = $input->search;
+
+        if( $way == 1 ) {   // search
+            // get DB
+                if($input->name_type == 'localname'){
+                    $data['results'] = \App\Model\Record::leftjoin('classification', 'record.classification_id', 'classification.id')->where('record.local_name', 'like', '%'.$input->search.'%')->get();
+                }elseif($input->name_type == 'vernacularname'){
+                    $data['results'] = \App\Model\Record::leftjoin('classification', 'record.classification_id', 'classification.id')->where('record.vernacular_name', 'like', '%'.$input->search.'%')->get();
+                }elseif($input->name_type == 'commonname'){
+                    $data['results'] = \App\Model\Record::leftjoin('classification', 'record.classification_id', 'classification.id')->where('classification.common_name', 'like', '%'.$input->search.'%')->get();
+                }
+            // ------
+
+            $data['name_type'] = ucfirst($name_type);
+            $data['search'] = $search;
+
+        	return Response::json($data);
+        } else {    //ajax
+            // export excel
+            ExportRecordController::exportSearchByNameRecord( $name_type, $search );
+        }
+    }
 }

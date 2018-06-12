@@ -102,6 +102,8 @@ Route::group(['middleware' => ['Authen']], function () {
                 Route::post('distribution','SearchTypeAController@getDistribution');
                 Route::get('recentrecord','SearchTypeAController@searchRecent');
                 Route::post('searchdata','SearchTypeAController@search'); //AjaxController
+                Route::get('NameRecord', 'SearchTypeAController@searchByNameRecord');
+                Route::post('doNameRecord', 'SearchTypeAController@doSearchNameRecord'); //Ajax
             });
         });
     });
@@ -371,6 +373,8 @@ Route::group(['middleware' => ['Authen']], function () {
                 Route::post('doSearchLocality', 'SearchTypeBController@doSearchLocality'); //Ajax
                 Route::get('searchByName', 'SearchTypeBController@searchByName');
                 Route::post('doSearchName', 'SearchTypeBController@doSearchName'); //Ajax
+                Route::get('searchByNameRecord', 'SearchTypeBController@searchByNameRecord');
+                Route::post('doSearchNameRecord', 'SearchTypeBController@doSearchNameRecord'); //Ajax
                 Route::get('searchByTaxonomy', 'SearchTypeBController@searchByTaxonomy');
                 Route::post('doSearchTaxonomy', 'SearchTypeBController@doSearchTaxonomy'); //Ajax
                 Route::post('getTaxonomyFromHeaderTaxonomy', 'AjaxController@getTaxonomyFromHeaderTaxonomy'); //AjaxController
@@ -453,6 +457,8 @@ Route::group(['middleware' => ['Authen']], function () {
                 Route::post('distribution','SearchTypeAController@getDistribution');
                 Route::get('recentrecord','SearchTypeAController@searchRecent');
                 Route::post('searchdata','SearchTypeAController@search'); //Ajax
+                Route::get('NameRecord', 'SearchTypeAController@searchByNameRecord');
+                Route::post('doNameRecord', 'SearchTypeAController@doSearchNameRecord'); //Ajax
 
             });
         });
