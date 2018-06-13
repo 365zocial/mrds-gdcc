@@ -151,7 +151,7 @@
                         สืบค้นรายการลงทะเบียน
                         <br>&nbsp;
                     @else
-                        Name Search
+                        Name Record
                     @endif
                     <br>&nbsp;
                 </p>
