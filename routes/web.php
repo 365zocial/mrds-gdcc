@@ -21,8 +21,8 @@ Route::get('reclaim/loan_specimen', 'LoanController@emailReclaim');
 if(!Auth::check()){
     Route::get('/','AuthenController@login');
     Route::get('login','AuthenController@login');
-    // Route::get('register','AuthenController@register');
-    // Route::post('register','AuthenController@doRegister');
+    Route::get('register','AuthenController@register');
+    Route::post('register','AuthenController@doRegister');
     Route::get('forgetpassword','AuthenController@forgetpass');
     Route::post('forgetpassword','AuthenController@doforgetpass');
     Route::get('resetpassword/{id}','AuthenController@resetPassword');
