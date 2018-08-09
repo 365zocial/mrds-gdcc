@@ -1,0 +1,49 @@
+version: '2'
+services:
+
+  # The Application
+  app:
+    build:
+      context: ./
+      dockerfile: app.dockerfile
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: mbds_v2
+      DB_USERNAME: root
+      DB_PASSWORD: root
+
+
+  # The Web Server
+  webserver:
+    build:
+      context: ./
+      dockerfile: web.dockerfile
+    working_dir: /var/www/html
+    volumes_from:
+      - app
+    ports:
+      - 8080:80
+
+  # The Database
+  db:
+    image: mariadb
+    restart: always
+    volumes:
+      - ./data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: mbds_v2
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: user
+      MYSQL_PASSWORD: secret
+    ports:
+        - "3306:3306"
+
+  # adminer:
+  #   image: adminer
+  #   restart: always
+  #   ports:
+  #     - 8080:8080
