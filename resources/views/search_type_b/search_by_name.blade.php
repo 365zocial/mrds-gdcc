@@ -134,7 +134,7 @@
                 }
             }).done(function( data ) {
                 if ( data ) {
-                    window.location.href = '<?php echo url('export_result_record') ?>'+ '/' + data;
+                    window.location.href = '<?php echo "mrds_file/export_result_record" ?>'+ '/' + data;
 
                     // // delete file
                     // $.ajax({
