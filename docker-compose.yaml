@@ -34,6 +34,7 @@ services:
     restart: always
     volumes:
       - ./data:/var/lib/mysql
+      - ./mrds.sql:/docker-entrypoint-initdb.d/dump.sql
     environment:
       MYSQL_DATABASE: mbds_v2
       MYSQL_ROOT_PASSWORD: root
