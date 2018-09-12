@@ -409,7 +409,7 @@
               @endif
               </select>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-8">
               <p class="search-report-dropdown-header">Islands / Island</p>
               <input type="text" class="form-control" id="island" name="island" placeholder="Text Input" @if ( $record->islands_island != null ) value="{{ $record->islands_island }}" @endif disabled>
             </div>
