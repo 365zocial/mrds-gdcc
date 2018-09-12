@@ -35,7 +35,8 @@ class UserController extends Controller
     // }
 
     public function dashboard(){
-        return view('user.dashbaord');
+        $data['lang'] = Session::get('language');
+        return view('user.dashboard', $data);
     }
 
     // public function addUser(){
