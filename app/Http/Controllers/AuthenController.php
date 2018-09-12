@@ -92,13 +92,7 @@ class AuthenController extends Controller
     }
 
     public function authorization_check_role_id($role_id = ""){
-      if($role_id == 5){
-        return "user/dashboard";
-    }elseif(in_array($role_id,[1,2,3,4,6])){
         return "staff/dashboard";
-      }else{
-        return false;
-      }
       // 1 = Super Admin
       // 2 = Administrator
       // 3 = Manager
