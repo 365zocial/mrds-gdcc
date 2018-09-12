@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app_user')
 
 @section('css')
     @include('base_wording_css')
@@ -60,8 +60,8 @@
 
 @section('breadcump')
     <?php
-        $breadcump['Dashboard'] = url('user/dashboard');
-        $breadcump['Refereneces'] = url('user/referenceLoan');
+        $breadcump['Dashboard'] = url('/');
+        $breadcump['Refereneces'] = url('referenceLoan');
     ?>
 @endsection
 
