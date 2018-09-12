@@ -116,12 +116,12 @@ class AuthenController extends Controller
 
     public function setLanguageTH(){
         Session::put('language', 2);
-        return redirect('login');
+        return redirect()->back();
     }
 
     public function setLanguageEN(){
         Session::put('language', 1);
-        return redirect('login');
+        return redirect()->back();
     }
 
     public function register()
