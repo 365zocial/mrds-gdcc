@@ -428,7 +428,7 @@
                   </div>
                   <div class="col-md-4">
                     <p class="search-report-dropdown-header">Islands / Island</p>
-                    <input type="text" class="form-control" id="island" name="island" placeholder="Text Input">
+                    <input type="text" class="form-control" id="island" name="island" placeholder="Text Input" disabled>
                   </div>
                 </div>
 
