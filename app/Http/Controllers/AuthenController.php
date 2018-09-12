@@ -40,11 +40,7 @@ class AuthenController extends Controller
     public function login(){
 
         if( !is_null(Auth::user()) ){
-            if(Auth::user()->role_id == 5){
-                return redirect('user/dashboard');
-            }elseif( in_array(Auth::user()->role_id, [2,3,4,6]) ){
-                return redirect('staff/dashboard');
-            }
+            return redirect('staff/dashboard');
         }
 
         if(Session::has('language'))
