@@ -677,9 +677,13 @@
               <p class="search-report-dropdown-header">Gene Bank Number</p>
               <input type="text" class="form-control" id="gene_bank_number" name="gene_bank_number" maxlength="255" placeholder="Text Input" @if ( $record->gene_bank_number != null ) value="{{ $record->gene_bank_number }}" @endif>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-4">
               <p class="search-report-dropdown-header">Diagnosis</p>
               <input type="text" class="form-control" id="diagnosis" name="diagnosis" placeholder="Text Input" @if ( $record->diagnosis != null ) value="{{ $record->diagnosis }}" @endif>
+            </div>
+            <div class="col-md-4">
+              <p class="search-report-dropdown-header">Sediment Type</p>
+              <input type="text" class="form-control" id="sediment_type" name="sediment_type" placeholder="Text Input" @if ( $record->sediment_type != null ) value="{{ $record->sediment_type }}" @endif disabled>
             </div>
           </div>
 
