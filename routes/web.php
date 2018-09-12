@@ -11,103 +11,44 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 # For Reclaim Loan Specimen.
 Route::get('reclaim/loan_specimen', 'LoanController@emailReclaim');
 
-if(!Auth::check()){
-    Route::get('/','AuthenController@login');
-    Route::get('login','AuthenController@login');
-    Route::get('register','AuthenController@register');
-    Route::post('register','AuthenController@doRegister');
-    Route::get('forgetpassword','AuthenController@forgetpass');
-    Route::post('forgetpassword','AuthenController@doforgetpass');
-    Route::get('resetpassword/{id}','AuthenController@resetPassword');
-    Route::post('resetpassword','AuthenController@doResetPassword');
-}
+Route::group(['middleware' => ['CheckAuthened']], function() {
+    Route::get('/','UserController@dashboard');
+    Route::group(['prefix' => 'search'], function(){
+        Route::post('getTaxonomyName','AjaxController@getTaxonomyName'); //AjaxController
+        // Route::get('dashboard','SearchTypeCController@searchCDashboard');
+        Route::get('diversity','SearchTypeCController@searchDiversity');
+        Route::get('distribution','SearchTypeCController@searchDistribution');
+        Route::post('distribution','SearchTypeCController@getDistribution');
+        Route::get('recentrecord','SearchTypeCController@searchRecent');
+        Route::post('searchdata','SearchTypeCController@search'); //AjaxController
+        Route::get('NameRecord', 'SearchTypeCController@searchByNameRecord');
+        Route::post('doNameRecord', 'SearchTypeCController@doSearchNameRecord'); //Ajax
+    });
+    Route::get('referenceLoan', 'WordingController@referenceLoan');
+});
 
-Route::post('login','AuthenController@authenticate');
-Route::get('logout','AuthenController@logout');
 Route::get('setLangThai','AuthenController@setLanguageTH');
 Route::get('setLangEng','AuthenController@setLanguageEN');
+
 Route::get('profile','UserController@viewProfile');
 Route::get('editprofile','UserController@editProfile');
 Route::post('editprofile','UserController@doEditProfile');
 Route::get('editpassword','UserController@editPassword');
 Route::post('editpassword','UserController@doEditPassword');
 
+include_once('authen.php');
 Route::group(['middleware' => ['Authen']], function () {
 
     Route::post('recordPicture', 'AjaxController@getRecordPicture');    //AjaxController
     Route::post('exportSearchTypeA', 'ExportRecordController@exportSearchTypeA'); //Ajax
     Route::post('deleteFileForExcelRecord', 'ExportRecordController@deleteFileForExcelRecord'); //Ajax
-
-    /*
-    *
-    * CheckUser
-    *
-    */
-    Route::group(['middleware' => 'CheckUser'], function() {
-        Route::group(['prefix' => 'user'], function(){
-            Route::get('dashboard','UserController@dashboard');
-            Route::get('referenceLoan', 'WordingController@referenceLoan');
-
-            #----------------------#
-            # Registration By User #
-            #----------------------#
-            Route::get('add','UserController@addUser');
-            Route::get('edit/{id}','UserController@editUserById')->where('id','[0-9]+');
-            Route::get('edit/{id}','UserController@editUserById')->where('id','[0-9]+');
-            Route::get('delete/{id}','UserController@deleteUserById')->where('id','[0-9]+');
-            Route::post('add','UserController@addUserAction');
-            Route::post('edit/{id}','UserController@editUserByIdAction')->where('id','[0-9]+');
-
-            #-----------------------#
-            # Loan Specimen By User #
-            #-----------------------#
-            Route::group(['prefix' => 'loan'], function(){
-                # Show Loan Specimen Request List
-                Route::get('dashboard','LoanController@dashboard');
-                # Create Request
-                Route::get('submit_request','LoanController@submitRequest');
-                # Insert Request to DB
-                Route::post('submit_request','LoanController@submitRequestInsert');
-                # View Request and Create Comment
-                Route::get('view_request/{record_loan_id}','LoanController@viewRequest');
-                # Insert Comment to DB
-                Route::post('view_request/{record_loan_id}','LoanController@viewRequestInsert');
-                # View Loan Specimen List
-                Route::get('export_loan_user','ExportLoanController@exportLoanUser');
-            });
-
-            #-----------------------#
-            # Contact Admin By User #
-            #-----------------------#
-            Route::group(['prefix' => 'contact'], function(){
-                Route::get('contactForm','MailboxController@contactForm');
-                Route::post('contactForm','MailboxController@docontactForm');
-            });
-
-            #-----------------------------#
-            # Search Type A (User Search) #
-            #-----------------------------#
-            Route::group(['prefix' => 'search'], function(){
-                Route::post('getTaxonomyName','AjaxController@getTaxonomyName'); //AjaxController
-                Route::get('dashboard','SearchTypeAController@searchADashboard');
-                Route::get('diversity','SearchTypeAController@searchDiversity');
-                Route::get('distribution','SearchTypeAController@searchDistribution');
-                Route::post('distribution','SearchTypeAController@getDistribution');
-                Route::get('recentrecord','SearchTypeAController@searchRecent');
-                Route::post('searchdata','SearchTypeAController@search'); //AjaxController
-                Route::get('NameRecord', 'SearchTypeAController@searchByNameRecord');
-                Route::post('doNameRecord', 'SearchTypeAController@doSearchNameRecord'); //Ajax
-            });
-        });
-    });
-    /*-- end CheckUser --*/
 
     Route::group(['prefix' => 'staff'], function(){
         Route::post('getInfoClassification', 'AjaxController@getInfoClassification'); //AjaxController
@@ -468,9 +409,4 @@ Route::group(['middleware' => ['Authen']], function () {
     });
 });
 
-/*-- Stat Record --*/
-Route::get('getStatNumberPicturePerCenter', 'StatController@getStatNumberPicturePerCenter');
-Route::get('getStatNumberRecordPerCenter', 'StatController@getStatNumberRecordPerCenter');
-Route::get('getStatClassification', 'StatController@getStatClassification');
-Route::get('getStatRecord', 'StatController@getStatRecord');
-/*-- end Stat Record --*/
+include_once('stat.php');
