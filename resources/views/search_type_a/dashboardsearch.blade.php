@@ -75,20 +75,20 @@
             @elseif( in_array(Auth::user()->role_id, [3,6]) )
                 <a class="box-link" href="{{ url('staff/searchCategory/diversity') }}">
             @endif
-            <div class="menu-icon-box">
-                <div class="icon-box">
-                    <img class="icon" src='{{ URL::asset("assets/images/icon_dashboard_manager/diversity_search.png") }}' />
+                <div class="menu-icon-box">
+                    <div class="icon-box">
+                        <img class="icon" src='{{ URL::asset("assets/images/icon_dashboard_manager/diversity_search.png") }}' />
+                    </div>
+                    <p class="menu-text">
+                        @if( $lang == 2)
+                            สืบค้นข้อมูลความหลากหลาย
+                        @else
+                            Diversity Search
+                        @endif
+                        <br>&nbsp;
+                    </p>
                 </div>
-                <p class="menu-text">
-                    @if( $lang == 2)
-                        สืบค้นข้อมูลความหลากหลาย
-                    @else
-                        Diversity Search
-                    @endif
-                    <br>&nbsp;
-                </p>
-            </div>
-        </a>
+            </a>
         </div>
 
         <div class="col-md-3 menu-box">
@@ -97,20 +97,20 @@
             @elseif( in_array(Auth::user()->role_id, [3,6]) )
                 <a class="box-link" href="{{ url('staff/searchCategory/distribution') }}">
             @endif
-            <div class="menu-icon-box">
-                <div class="icon-box">
-                    <img class="icon" src='{{ URL::asset("assets/images/icon_dashboard_manager/distribution_search.png") }}' />
+                <div class="menu-icon-box">
+                    <div class="icon-box">
+                        <img class="icon" src='{{ URL::asset("assets/images/icon_dashboard_manager/distribution_search.png") }}' />
+                    </div>
+                    <p class="menu-text">
+                        @if( $lang == 2)
+                            สืบค้นการกระจายของสิ่งมีชีวิต
+                        @else
+                            Distribution Search
+                        @endif
+                        <br>&nbsp;
+                    </p>
                 </div>
-                <p class="menu-text">
-                    @if( $lang == 2)
-                        สืบค้นการกระจายของสิ่งมีชีวิต
-                    @else
-                        Distribution Search
-                    @endif
-                    <br>&nbsp;
-                </p>
-            </div>
-        </a>
+            </a>
         </div>
 
         <div class="col-md-3 menu-box">
@@ -119,21 +119,21 @@
             @elseif( in_array(Auth::user()->role_id, [3,6]) )
                 <a class="box-link" href="{{ url('staff/searchCategory/recentrecord') }}">
             @endif
-            <div class="menu-icon-box">
-                <div class="icon-box">
-                    <img class="icon" src='{{ URL::asset("assets/images/icon_dashboard_manager/recent_record.png") }}' />
-                </div>
-                <p class="menu-text">
-                    @if( $lang == 2)
-                        สืบค้นรายการลงทะเบียน
+                <div class="menu-icon-box">
+                    <div class="icon-box">
+                        <img class="icon" src='{{ URL::asset("assets/images/icon_dashboard_manager/recent_record.png") }}' />
+                    </div>
+                    <p class="menu-text">
+                        @if( $lang == 2)
+                            สืบค้นรายการลงทะเบียน
+                            <br>&nbsp;
+                        @else
+                            Recent Record
+                        @endif
                         <br>&nbsp;
-                    @else
-                        Recent Record
-                    @endif
-                    <br>&nbsp;
-                </p>
-            </div>
-        </a>
+                    </p>
+                </div>
+            </a>
         </div>
 
         <div class="col-md-3 menu-box">
@@ -142,21 +142,21 @@
             @elseif( in_array(Auth::user()->role_id, [3,6]) )
                 <a class="box-link" href="{{ url('staff/searchCategory/NameRecord') }}">
             @endif
-            <div class="menu-icon-box">
-                <div class="icon-box">
-                    <img class="icon" src='{{ URL::asset("assets/images/icon_dashboard_manager/name_search.png") }}' />
-                </div>
-                <p class="menu-text">
-                    @if( $lang == 2)
-                        สืบค้นรายการลงทะเบียน
+                <div class="menu-icon-box">
+                    <div class="icon-box">
+                        <img class="icon" src='{{ URL::asset("assets/images/icon_dashboard_manager/name_search.png") }}' />
+                    </div>
+                    <p class="menu-text">
+                        @if( $lang == 2)
+                            สืบค้นจากชื่อ
+                            <br>&nbsp;
+                        @else
+                            Name Record
+                        @endif
                         <br>&nbsp;
-                    @else
-                        Name Record
-                    @endif
-                    <br>&nbsp;
-                </p>
-            </div>
-        </a>
+                    </p>
+                </div>
+            </a>
         </div>
 
     </div>
