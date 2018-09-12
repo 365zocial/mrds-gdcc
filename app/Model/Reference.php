@@ -13,7 +13,7 @@ class Reference extends Model
 
     public static function getReference(){
          $query = Reference::orderBy('marinecenter_id', 'asc')->orderBy('ref_code','asc');
-         if(Auth::user()->role_id == 3){
+         if(Auth::check() && Auth::user()->role_id == 3){
              $query = $query->where('marinecenter_id',Auth::user()->marinecenter_id);
          }
         //  else if(Auth::user()->role_id == 2){

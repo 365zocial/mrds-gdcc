@@ -729,12 +729,12 @@ class WordingController extends Controller
         //Created : 5-4-59
         //Modified : -
         public function referenceLoan(){
+            $data['lang']           =   2;
             $data['action']         =   Session::get('action');
             $data['references']     =   Reference::getReference();
             $data['marinecenters']  =   Marinecenter::getMarineCenterList();
-            // dd($data['references']);
             Session::forget('action');
 
-            return view('staff.wording.reference.reference_loan', $data);
+            return view('search_type_c.reference_loan', $data);
         }
 }
