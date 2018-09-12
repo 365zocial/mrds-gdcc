@@ -59,7 +59,6 @@ class AuthenController extends Controller
         $password         =   $request->input('inp-password');
 
         if (Auth::attempt(['name' => strtolower($name), 'password' => $password])) {
-
             if($this->authorization_check_LoggedIn() && $this->authorization_check_status(Auth::user()->status)){
                 //-------login log
                     Login_Log::addLogInLog(Auth::user()->id);
@@ -67,6 +66,7 @@ class AuthenController extends Controller
                 return redirect($this->authorization_check_role_id(Auth::user()->role_id));
             }else{
                 echo "Your account is disable";
+                return redirect('/');
             }
 
         }else{
