@@ -376,13 +376,10 @@
               @endif
               </select>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-4">
               <p class="search-report-dropdown-header">Size</p>
               <input type="text" class="form-control" id="size" name="size" placeholder="Text Input"  @if ( $record->size != null ) value="{{ $record->size }}" @endif>
             </div>
-          </div>
-
-          <div class="row row-inform">
             <div class="col-md-4">
               <p class="search-report-dropdown-header">Life Stage</p>
               <select class="form-control search-report-select select2" id="life_stage" name="life_stage">
@@ -396,6 +393,9 @@
               @endif
               </select>
             </div>
+          </div>
+
+          <div class="row row-inform">
             <div class="col-md-4">
               <p class="search-report-dropdown-header">Ocean / Sea / Lake</p>
               <select class="form-control search-report-select select2" id="ocean_sea_lake" name="ocean_sea_lake">
@@ -408,6 +408,10 @@
                 <option value="" selected>No list in select</option>
               @endif
               </select>
+            </div>
+            <div class="col-md-8">
+              <p class="search-report-dropdown-header">Islands / Island</p>
+              <input type="text" class="form-control" id="island" name="island" placeholder="Text Input">
             </div>
           </div>
 
