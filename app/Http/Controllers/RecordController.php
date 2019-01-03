@@ -363,8 +363,7 @@ class RecordController extends Controller
 			$data['animal_type3s'] 		= Wording::getWordingByWordingTypeForForm(20);
 			$data['protection_types'] 	= Wording::getWordingByWordingTypeForForm(12);
 			$data['plant_types'] 		= Wording::getWordingByWordingTypeForForm(21);
-			$data['places'] 			= Wording::getWordingByWordingTypeForForm(22);
-			$data['protection_type_iucns'] 	= Wording::getWordingByWordingTypeForForm(12);
+			$data['protection_type_iucns'] 	= Wording::getWordingByWordingTypeForForm(22);
 
 			$data['record'] = $record;
 
@@ -1021,7 +1020,7 @@ class RecordController extends Controller
 			$data['animal_type2s'] 				= Wording::getWordingByWordingTypeForForm(19);
 			$data['animal_type3s'] 				= Wording::getWordingByWordingTypeForForm(20);
 			$data['protection_types'] 			= Wording::getWordingByWordingTypeForForm(12);
-			$data['protection_type_iucns'] 	= Wording::getWordingByWordingTypeForForm(12);
+			$data['protection_type_iucns'] 	= Wording::getWordingByWordingTypeForForm(23);
 			$data['plant_types'] 				= Wording::getWordingByWordingTypeForForm(21);
 
 			// $data['utilizations_record'] 		= RecordUtilization::where('record_unique_id', $record->unique_record)->get();
