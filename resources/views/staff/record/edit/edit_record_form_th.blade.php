@@ -470,7 +470,7 @@
 
                 <div class="row row-inform">
                     <div class="col-md-6">
-                        <p class="search-report-dropdown-header font-thai-resize">ผู้ให้ข้อมูล <span class="required font-thai-resize">*จำเป็นต้องกรอก</span></p>
+                        <p class="search-report-dropdown-header font-thai-resize">ผู้ให้ข้อมูล</p>
                         <input type="text" class="form-control" id="recorder" name="recorder" placeholder="Text Input" value="{{ $record->recorder }}">
                     </div>
                 </div>

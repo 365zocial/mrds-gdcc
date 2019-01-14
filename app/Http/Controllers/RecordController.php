@@ -357,7 +357,7 @@ class RecordController extends Controller
 			$data['area_explorations'] = Wording::getWordingByWordingTypeForForm(16);
 			$data['area_directions'] = Wording::getWordingByWordingTypeForForm(13);
 			$data['utilizations'] = Wording::getWordingByWordingTypeForForm(14);
-			$data['recorders'] = Wording::getWordingByWordingTypeForForm(17);
+			// $data['recorders'] = Wording::getWordingByWordingTypeForForm(17);
 			$data['animal_type1s'] 		= Wording::getWordingByWordingTypeForForm(18);
 			$data['animal_type2s'] 		= Wording::getWordingByWordingTypeForForm(19);
 			$data['animal_type3s'] 		= Wording::getWordingByWordingTypeForForm(20);
@@ -677,7 +677,7 @@ class RecordController extends Controller
 
 		$query = $query->groupby('record.marinecenter_id','record.collection_code','record.related_catalog_item','record.related_reference_item');
 			// ->orderBy('record.id', 'desc');
-			
+
 		$btn = '';
 		return Datatables::of($query)
 					->addColumn('action', function ($query) use ($btn) {
@@ -1015,7 +1015,7 @@ class RecordController extends Controller
 			$data['places']				= $place;
 
 
-			$data['recorders'] 					= Wording::getWordingByWordingTypeForForm(17);
+			// $data['recorders'] 					= Wording::getWordingByWordingTypeForForm(17);
 			$data['animal_type1s'] 				= Wording::getWordingByWordingTypeForForm(18);
 			$data['animal_type2s'] 				= Wording::getWordingByWordingTypeForForm(19);
 			$data['animal_type3s'] 				= Wording::getWordingByWordingTypeForForm(20);
@@ -1584,7 +1584,7 @@ class RecordController extends Controller
 			$db = Record::find($input->id_en);
 			$db->status = $input->status;
 			$db->save();
-	
+
 			$db = Record::find($input->id_en+1);
 			$db->status = $input->status;
 			$db->save();

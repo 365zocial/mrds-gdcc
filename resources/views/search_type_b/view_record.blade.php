@@ -1062,7 +1062,7 @@
               </div>
               <div class="col-md-6">
                 <p class="record-label">ผู้ให้ข้อมูล:
-                  <span class="record-data">{{ AllMean::ReplaceNullWithDash( Wording::getWordingWithAttr( $record[1]->recorder,"name_th" )) }}</span>
+                  <span class="record-data">{{ $record[1]->recorder }}</span>
                 </p>
               </div>
             </div>
