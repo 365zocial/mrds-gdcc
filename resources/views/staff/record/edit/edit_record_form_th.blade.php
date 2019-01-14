@@ -399,7 +399,7 @@
                         </select>
                     </div>
                     <div class="col-md-8">
-                        <p class="search-report-dropdown-header font-thai-resize">พื้นที่สำรวจ <span class="required font-thai-resize">*จำเป็นต้องกรอก</span></p>
+                        <p class="search-report-dropdown-header font-thai-resize">พื้นที่สำรวจ</p>
                         <select class="form-control search-report-select select2" id="area_exploration" name="area_exploration">
                         @if( count($area_explorations) !== 0 )
                             <option value="" selected disabled>Select</option>
