@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Http\Requests;
+use Illuminate\Http\Request;
 use Auth;
 use Excel;
 use App\Model\ExportLog;

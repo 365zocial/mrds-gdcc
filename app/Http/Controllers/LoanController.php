@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
-use App\Http\Requests;
+use Illuminate\Http\Request;
 
 use App\Model\RecordLoan;
 use App\Model\RecordLoanPost;

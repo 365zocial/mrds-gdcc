@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Wording;
 use Auth;
 use Response;
 use Session;
-use App\Http\Requests;
+use Illuminate\Http\Request;
 
 use App\Model\AllMean;
 use App\Model\System_Log;

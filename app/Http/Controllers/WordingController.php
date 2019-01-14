@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Auth;
 use Response;
 use Session;
-use App\Http\Requests;
+use Illuminate\Http\Request;
 //model path
 use App\Model\AllMean;
 use App\Model\System_Log;

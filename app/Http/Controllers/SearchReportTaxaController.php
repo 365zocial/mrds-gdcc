@@ -11,7 +11,7 @@ use App\Model\Province;
 use App\Model\District;
 use App\Model\County;
 use App\Model\Wording;
-use App\Http\Requests;
+use Illuminate\Http\Request;
 use App\Model\Taxonomy;
 
 class SearchReportTaxaController extends Controller

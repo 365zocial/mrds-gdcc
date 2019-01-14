@@ -13,7 +13,7 @@ use Response;
 
 use Illuminate\Http\Request;
 use Session;
-use App\Http\Requests;
+use Illuminate\Http\Request;
 use App\Model\Header_Taxonomy;
 use App\Model\Taxonomy;
 use App\Model\Country;
