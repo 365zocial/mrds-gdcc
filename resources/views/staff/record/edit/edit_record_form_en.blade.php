@@ -307,7 +307,7 @@
           @endif
 
           <div class="row row-inform">
-            <div class="col-md-6">
+            <div class="col-md-12">
               <p class="search-report-dropdown-header">Variety Name</p>
               <input type="text" class="form-control" id="variety_name" name="variety_name" placeholder="Text Input" value="{{ $record->variety_name }}">
             </div>
@@ -411,7 +411,7 @@
             </div>
             <div class="col-md-8">
               <p class="search-report-dropdown-header">Islands / Island</p>
-              <input type="text" class="form-control" id="island" name="island" placeholder="Text Input" @if ( $record->islands_island != null ) value="{{ $record->islands_island }}" @endif disabled>
+              <input type="text" class="form-control" id="islands_island" name="islands_island" placeholder="Text Input" @if ( $record->islands_island != null ) value="{{ $record->islands_island }}" @endif>
             </div>
           </div>
 
@@ -537,7 +537,7 @@
           </div>
 
           <div class="row row-inform">
-            <div class="col-md-4">
+            <div class="col-md-6">
               <p class="search-report-dropdown-header">Habitat</p>
               <select class="form-control search-report-select select2" id="habitat" name="habitat">
               @if( count($habitats) !== 0 )
@@ -550,38 +550,53 @@
               @endif
               </select>
             </div>
-            <div class="col-md-4">
-              <p class="search-report-dropdown-header">Depth Start</p>
-              <div class="row">
-                <div class="col-md-6">
-                  <input type="number" step="any" class="form-control" id="depth" name="depth" maxlength="255" placeholder="Number" @if ( $record->depth_start != null ) value="{{ $record->depth_start }}" @endif>
-                </div>
-                <div class="dash-between-input">-</div>
-                <div class="col-md-6">
-                  <select class="form-control search-report-select select2" id="depth_unit" name="depth_unit">
-                    <option value="1" selected>meter</option>
-                    <option value="2">ft.</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <p class="search-report-dropdown-header">Depth End</p>
-              <div class="row">
-                <div class="col-md-6">
-                  <input type="number" step="any" class="form-control" id="depth_end" name="depth_end" maxlength="255" placeholder="Number" @if ( $record->depth_end != null ) value="{{ $record->depth_end }}" @endif>
-                </div>
-                <div class="dash-between-input">-</div>
-                <div class="col-md-6">
-                  <select class="form-control search-report-select select2" id="depth_end_unit" name="depth_end_unit">
-                    <option value="1" selected>meter</option>
-                    <option value="2">ft.</option>
-                  </select>
-                </div>
-              </div>
+            <div class="col-md-6">
+              <p class="search-report-dropdown-header">Sediment Type</p>
+              <select class="form-control search-report-select select2" id="sediment_type" name="sediment_type">
+              @if( count($sediment_types) !== 0 )
+                <option value="" selected disabled>Select</option>
+                @foreach($sediment_types as $sediment_type)
+                  <option value="{{ $sediment_type->id }}" @if( $record->sediment_type == $sediment_type->id ){{ "selected" }}@endif >{{ $sediment_type->name_en }}</option>
+                @endforeach
+              @else
+                <option value="" selected>No list in select</option>
+              @endif
+              </select>
             </div>
           </div>
 
+          <div class="row row-inform">
+              <div class="col-md-6">
+                <p class="search-report-dropdown-header">Depth Start</p>
+                <div class="row">
+                  <div class="col-md-6">
+                    <input type="number" step="any" class="form-control" id="depth" name="depth" maxlength="255" placeholder="Number" @if ( $record->depth_start != null ) value="{{ $record->depth_start }}" @endif>
+                  </div>
+                  <div class="dash-between-input">-</div>
+                  <div class="col-md-6">
+                    <select class="form-control search-report-select select2" id="depth_unit" name="depth_unit">
+                      <option value="1" selected>meter</option>
+                      <option value="2">ft.</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <p class="search-report-dropdown-header">Depth End</p>
+                <div class="row">
+                  <div class="col-md-6">
+                    <input type="number" step="any" class="form-control" id="depth_end" name="depth_end" maxlength="255" placeholder="Number" @if ( $record->depth_end != null ) value="{{ $record->depth_end }}" @endif>
+                  </div>
+                  <div class="dash-between-input">-</div>
+                  <div class="col-md-6">
+                    <select class="form-control search-report-select select2" id="depth_end_unit" name="depth_end_unit">
+                      <option value="1" selected>meter</option>
+                      <option value="2">ft.</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+          </div>
           <div class="row row-inform">
             <div class="col-md-8">
               <p class="search-report-dropdown-header">Collector</p>
@@ -677,13 +692,9 @@
               <p class="search-report-dropdown-header">Gene Bank Number</p>
               <input type="text" class="form-control" id="gene_bank_number" name="gene_bank_number" maxlength="255" placeholder="Text Input" @if ( $record->gene_bank_number != null ) value="{{ $record->gene_bank_number }}" @endif>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-8">
               <p class="search-report-dropdown-header">Diagnosis</p>
               <input type="text" class="form-control" id="diagnosis" name="diagnosis" placeholder="Text Input" @if ( $record->diagnosis != null ) value="{{ $record->diagnosis }}" @endif>
-            </div>
-            <div class="col-md-4">
-              <p class="search-report-dropdown-header">Sediment Type</p>
-              <input type="text" class="form-control" id="sediment_type" name="sediment_type" placeholder="Text Input" @if ( $record->sediment_type != null ) value="{{ $record->sediment_type }}" @endif disabled>
             </div>
           </div>
 

@@ -58,9 +58,9 @@
                 $.ajax({
                     method: "POST",
                     url: "<?php echo url('staff/wording/getProvinceInCountry'); ?>",
-                    data: { 
+                    data: {
                       _token: "{{ csrf_token() }}",
-                      id: $(this).val() 
+                      id: $(this).val()
                     }
                 })
                 .done(function( data ) {
@@ -164,7 +164,7 @@
                     method: "POST",
                     url: "<?php echo url('staff/wording/getReferenceByMarineCenterID'); ?>",
                     data: {
-                            _token: "{{ csrf_token() }}", 
+                            _token: "{{ csrf_token() }}",
                             marinecenter_id: $(this).val()
                           }
                 })
@@ -324,7 +324,7 @@
                 </div>
 
                 <div class="row row-inform">
-                  <div class="col-md-6">
+                  <div class="col-md-12">
                     <p class="search-report-dropdown-header">Variety Name</p>
                     <input type="text" class="form-control" id="variety_name" name="variety_name" placeholder="Text Input">
                   </div>
@@ -428,7 +428,7 @@
                   </div>
                   <div class="col-md-8">
                     <p class="search-report-dropdown-header">Islands / Island</p>
-                    <input type="text" class="form-control" id="island" name="island" placeholder="Text Input" disabled>
+                    <input type="text" class="form-control" id="islands_island" name="islands_island" placeholder="Text Input">
                   </div>
                 </div>
 
@@ -531,7 +531,7 @@
                 </div>
 
                 <div class="row row-inform">
-                  <div class="col-md-4">
+                  <div class="col-md-6">
                     <p class="search-report-dropdown-header">Habitat</p>
                     <select class="form-control search-report-select select2" id="habitat" name="habitat">
                     @if( count($habitats) !== 0 )
@@ -544,7 +544,23 @@
                     @endif
                     </select>
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-md-6">
+                    <p class="search-report-dropdown-header">Sediment Type</p>
+                    <select class="form-control search-report-select select2" id="sediment_type" name="sediment_type">
+                    @if( count($sediment_types) !== 0 )
+                      <option value="" selected disabled>Select</option>
+                      @foreach($sediment_types as $sediment_type)
+                        <option value="{{ $sediment_type->id }}">{{ $sediment_type->name_en }}</option>
+                      @endforeach
+                    @else
+                      <option value="" selected>No list in select</option>
+                    @endif
+                    </select>
+                  </div>
+                </div>
+
+                <div class="row row-inform">
+                  <div class="col-md-6">
                     <p class="search-report-dropdown-header">Depth Start</p>
                     <div class="row">
                       <div class="col-md-6">
@@ -559,7 +575,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-md-6">
                     <p class="search-report-dropdown-header">Depth End</p>
                     <div class="row">
                       <div class="col-md-6">
@@ -671,13 +687,9 @@
                     <p class="search-report-dropdown-header">Gene Bank Number</p>
                     <input type="text" class="form-control" id="gene_bank_number" name="gene_bank_number" maxlength="255" placeholder="Text Input">
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-md-8">
                     <p class="search-report-dropdown-header">Diagnosis</p>
                     <input type="text" class="form-control" id="diagnosis" name="diagnosis" placeholder="Text Input">
-                  </div>
-                  <div class="col-md-4">
-                    <p class="search-report-dropdown-header">Sediment Type</p>
-                    <input type="text" class="form-control" id="sediment_type" name="sediment_type" placeholder="Text Input" disabled>
                   </div>
                 </div>
 

@@ -1164,6 +1164,14 @@
             <hr class="view-record-line">
 
             <div class="row">
+                <div class="col-md-12">
+                  <p class="record-label">คุณค่าทางเศรษฐกิจ:
+                    <span class="record-data">{{ AllMean::ReplaceNullWithDash( Wording::getWordingWithAttr( $record[1]->economic_value,"name_th" ) ) }}</span>
+                  </p>
+                </div>
+            </div>
+
+            <div class="row">
               <div class="col-md-4">
                 <p class="record-label">ถิ่นอาศัยที่พบ:
                   <span class="record-data">

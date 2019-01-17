@@ -103,6 +103,7 @@ class RecordController extends Controller
 			$data['sexs'] = Wording::getWordingByWordingTypeForForm(5);
 			$data['life_stages'] = Wording::getWordingByWordingTypeForForm(9);
 			$data['ocean_sea_lakes'] = Wording::getWordingByWordingTypeForForm(3);
+			$data['sediment_types'] = Wording::getWordingByWordingTypeForForm(25);
 			$data['countries'] = Country::getCountryListForFormEN();
 			$data['provinces'] = Province::getProvinceListForFormEN();
 			$data['districts'] = District::getDistrictListForFormEN();
@@ -166,6 +167,7 @@ class RecordController extends Controller
 		$size = $input->size;
 		$life_stage = $input->life_stage;
 		$ocean_sea_lake = $input->ocean_sea_lake;
+		$islands_island = $input->islands_island;
 		$country = $input->country;
 		$province = $input->province;
 		$district = $input->district;
@@ -180,6 +182,7 @@ class RecordController extends Controller
 		$start_long = $input->start_long;
 		$end_long = $input->end_long;
 		$habitat = $input->habitat;
+		$sediment_type = $input->sediment_type;
 
 		// 1 foot = 0.3048 m.
 		if( $input->depth_unit == 2)
@@ -274,7 +277,9 @@ class RecordController extends Controller
 				$db->county						 	= $county;
 				$db->locality						= $locality;
 				$db->ocean_sea_lake					= $ocean_sea_lake;
+				$db->islands_island					= $islands_island;
 				$db->habitat						= $habitat;
+				$db->sediment_type					= $sediment_type;
 				$db->type_status					= $type_status;
 				$db->sex						 	= $sex;
 				$db->size						 	= $size;
@@ -362,6 +367,7 @@ class RecordController extends Controller
 			$data['animal_type2s'] 		= Wording::getWordingByWordingTypeForForm(19);
 			$data['animal_type3s'] 		= Wording::getWordingByWordingTypeForForm(20);
 			$data['plant_types'] 		= Wording::getWordingByWordingTypeForForm(21);
+			$data['economic_values'] 		= Wording::getWordingByWordingTypeForForm(24);
 
 			$data['record'] = $record;
 
@@ -424,6 +430,7 @@ class RecordController extends Controller
 		// getinput
 		$variety_name 					= $input->variety_name;
 		$size 							= $input->size;
+		$islands_island 				= $input->islands_island;
 		$locality						= $input->locality;
 		$gene_bank_number				= $input->gene_bank_number;
 		$description					= $input->description;
@@ -453,8 +460,8 @@ class RecordController extends Controller
 		// $ground_earth_place 			= $input->ground_earth_place;
 		// $coast_place 					= $input->coast_place;
 		$place							= $input->place;
-
 		$plant_type 					= $input->plant_type;
+		$economic_value 				= $input->economic_value;
 		$animal_type1 					= $input->animal_type1;
 		$animal_type2 					= $input->animal_type2;
 		$animal_type3 					= $input->animal_type3;
@@ -474,6 +481,7 @@ class RecordController extends Controller
 			$db 							= Record::find($record_id_add_th);
 			$db->locality					= $locality;
 			$db->size 						= $size;
+			$db->islands_island				= $islands_island;
 			$db->gene_bank_number			= $gene_bank_number;
 			$db->description				= $description;
 			$db->diagnosis					= $diagnosis;
@@ -503,6 +511,7 @@ class RecordController extends Controller
 			// $db->ground_earth_place 		= $ground_earth_place;
 			// $db->coast_place 				= $coast_place;
 			$db->plant_type 				= $plant_type;
+			$db->economic_value 			= $economic_value;
 			$db->animal_type1 				= $animal_type1;
 			$db->animal_type2 				= $animal_type2;
 			$db->animal_type3 				= $animal_type3;
@@ -766,6 +775,7 @@ class RecordController extends Controller
 		$data['sexs'] 				= Wording::getWordingByWordingTypeForForm(5);
 		$data['life_stages'] 		= Wording::getWordingByWordingTypeForForm(9);
 		$data['ocean_sea_lakes'] 	= Wording::getWordingByWordingTypeForForm(3);
+		$data['sediment_types'] 	= Wording::getWordingByWordingTypeForForm(25);
 		$data['countries'] 			= Country::getCountryListForFormEN();
 		$data['provinces'] 			= Province::getProvinceEnableInCountry($record[0]->country);
 		$data['districts'] 			= District::getDistrictEnableInProvince($record[0]->province);
@@ -814,6 +824,7 @@ class RecordController extends Controller
 		$size 					= $input->size;
 		$life_stage 			= $input->life_stage;
 		$ocean_sea_lake 		= $input->ocean_sea_lake;
+		$islands_island			= $input->islands_island;
 		$country 				= $input->country;
 		$province 				= $input->province;
 		$district 				= $input->district;
@@ -828,6 +839,7 @@ class RecordController extends Controller
 		$start_long 			= $input->start_long;
 		$end_long 				= $input->end_long;
 		$habitat 				= $input->habitat;
+		$sediment_type 			= $input->sediment_type;
 
 		// 1 foot = 0.3048 m.
 		if( $input->depth_unit == 2)
@@ -866,6 +878,7 @@ class RecordController extends Controller
 		//-----save in database ****FOR English Only
 			$db = Record::find($record_id_edit_en);
 			$db->variety_name = $variety_name;
+			$db->islands_island	= $islands_island;
 			$db->locality = $locality;
 			$db->gene_bank_number = $gene_bank_number;
 			$db->description = $description;
@@ -928,6 +941,7 @@ class RecordController extends Controller
 				$db->county 				= $county;
 				$db->ocean_sea_lake 		= $ocean_sea_lake;
 				$db->habitat 				= $habitat;
+				$db->sediment_type			= $sediment_type;
 				$db->type_status 			= $type_status;
 				$db->sex 					= $sex;
 				$db->size 					= $size;
@@ -1018,6 +1032,7 @@ class RecordController extends Controller
 			$data['animal_type2s'] 				= Wording::getWordingByWordingTypeForForm(19);
 			$data['animal_type3s'] 				= Wording::getWordingByWordingTypeForForm(20);
 			$data['plant_types'] 				= Wording::getWordingByWordingTypeForForm(21);
+			$data['economic_values'] 			= Wording::getWordingByWordingTypeForForm(24);
 
 			// $data['utilizations_record'] 		= RecordUtilization::where('record_unique_id', $record->unique_record)->get();
 			$data['classification'] 	= 	Classification::getClassification($record->classification_id);
@@ -1074,6 +1089,7 @@ class RecordController extends Controller
 		// get and set value from form
 		$variety_name 			= $input->variety_name;
 		$size 					= $input->size;
+		$islands_island			= $input->islands_island;
 		$locality 				= $input->locality;
 		$gene_bank_number 		= $input->gene_bank_number;
 		$description 			= $input->description;
@@ -1105,6 +1121,7 @@ class RecordController extends Controller
 		// $coast_place 			= $input->coast_place;
 		$place 					= $input->place;
 		$plant_type 			= $input->plant_type;
+		$economic_value 		= $input->economic_value;
 		$animal_type1 			= $input->animal_type1;
 		$animal_type2 			= $input->animal_type2;
 		$animal_type3 			= $input->animal_type3;
@@ -1124,6 +1141,7 @@ class RecordController extends Controller
 			$db 				= Record::find($record_id_edit_th);
 			$db->variety_name 	= $variety_name;
 			$db->size 			= $size;
+			$db->islands_island	= $islands_island;
 			$db->locality 		= $locality;
 			$db->gene_bank_number = $gene_bank_number;
 			$db->description 	= $description;
@@ -1154,6 +1172,7 @@ class RecordController extends Controller
 			// $db->ground_earth_place = $ground_earth_place;
 			// $db->coast_place = $coast_place;
 			$db->plant_type = $plant_type;
+			$db->economic_value = $economic_value;
 			$db->animal_type1 = $animal_type1;
 			$db->animal_type2 = $animal_type2;
 			$db->animal_type3 = $animal_type3;

@@ -94,8 +94,8 @@ class ClassificationController extends Controller
 			$data['subspecieses'] = Taxonomy::getSubspecies();
 			$data['identification_qualifiers'] = Wording::getWordingByWordingType(1); // 1 is mean identification_qualifiers
 			$data['protection_iucns'] 	= Wording::getWordingByWordingTypeForForm(12);
-			$data['protection_thai_laws'] 	= Wording::getWordingByWordingTypeForForm(12);	// 22 TODO: ยังไม่เสร็จ
-			$data['protection_citeses'] 	= Wording::getWordingByWordingTypeForForm(12);	// 23 TODO: ยังไม่เสร็จ
+			$data['protection_thai_laws'] 	= Wording::getWordingByWordingTypeForForm(22);
+			$data['protection_citeses'] 	= Wording::getWordingByWordingTypeForForm(23);
 
 			return view('staff.classification.add.add_classification_form', $data);
 		}
@@ -164,9 +164,9 @@ class ClassificationController extends Controller
 		$data['identification_qualifiers'] = Wording::getWordingByWordingType(1); // 2 is mean identification_qualifiers
 		$data['classifications'] = Classification::getClassification($classification_id);
 		$data['protection_iucns'] 	= Wording::getWordingByWordingTypeForForm(12);
-		$data['protection_thai_laws'] 	= Wording::getWordingByWordingTypeForForm(12);	// 22 TODO: ยังไม่เสร็จ
-		$data['protection_citeses'] 	= Wording::getWordingByWordingTypeForForm(12);	// 23 TODO: ยังไม่เสร็จ
-		
+		$data['protection_thai_laws'] 	= Wording::getWordingByWordingTypeForForm(22);
+		$data['protection_citeses'] 	= Wording::getWordingByWordingTypeForForm(23);
+
 		return view('staff.classification.edit.edit_classification_form', $data);
 	}
 

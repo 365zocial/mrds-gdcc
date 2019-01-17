@@ -197,20 +197,24 @@
                         <p class="search-report-dropdown-header font-thai-resize">เพศ</p>
                         <input type="text" class="form-control font-thai-resize" id="sex" placeholder=" @if ( $record->sex != 0 && $record->sex != null ) {{ Wording::getWording($record->sex)->name_th }} @else - @endif " readonly>
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-4">
                         <p class="search-report-dropdown-header font-thai-resize">ขนาดที่พบ</p>
                         <input type="text" step="any" class="form-control" name="size" id="size" placeholder="Text Input" @if ( $record->size != 0 && $record->size != null ) value="{{ $record->size }}" @endif>
+                    </div>
+                    <div class="col-md-4">
+                        <p class="search-report-dropdown-header font-thai-resize">ระยะการเจริญเติบโตที่พบ</p>
+                        <input type="text" class="form-control font-thai-resize" id="life_stage" placeholder=" @if ( $record->life_stage != 0 && $record->life_stage != null ) {{ Wording::getWording($record->life_stage)->name_th }} @else - @endif " readonly>
                     </div>
                 </div>
 
                 <div class="row row-inform">
                     <div class="col-md-4">
-                        <p class="search-report-dropdown-header font-thai-resize">ระยะการเจริญเติบโตที่พบ</p>
-                        <input type="text" class="form-control font-thai-resize" id="life_stage" placeholder=" @if ( $record->life_stage != 0 && $record->life_stage != null ) {{ Wording::getWording($record->life_stage)->name_th }} @else - @endif " readonly>
-                    </div>
-                    <div class="col-md-4">
                         <p class="search-report-dropdown-header font-thai-resize">มหาสมุทร <span class="english-in-thai">/</span> ทะเล <span class="english-in-thai">/</span> ทะเลสาบ</p>
                         <input type="text" class="form-control font-thai-resize" id="ocean_sea_lake" placeholder=" @if ( $record->ocean_sea_lake != 0 && $record->ocean_sea_lake != null ) {{ Wording::getWording($record->ocean_sea_lake)->name_th }} @else - @endif " readonly>
+                    </div>
+                    <div class="col-md-8">
+                        <p class="search-report-dropdown-header font-thai-resize">หมู่เกาะ / เกาะ</p>
+                        <input type="text" step="any" class="form-control" name="islands_island" id="islands_island" placeholder="Text Input" value="{{ $record->islands_island }}">
                     </div>
                 </div>
 
@@ -289,15 +293,22 @@
                 </div>
 
                 <div class="row row-inform">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <p class="search-report-dropdown-header font-thai-resize">ระบบนิเวศที่อาศัย</p>
                         <input type="text" class="form-control font-thai-resize" id="habitat" placeholder=" @if ( $record->habitat != 0 && $record->habitat != null ) {{ Wording::getWording($record->habitat)->name_th }} @else - @endif " readonly>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
+                        <p class="search-report-dropdown-header font-thai-resize">ประเภทของดินตะกอน</p>
+                        <input type="text" class="form-control font-thai-resize" id="sediment_type" placeholder=" @if ( $record->sediment_type != 0 && $record->sediment_type != null ) {{ Wording::getWording($record->sediment_type)->name_th }} @else - @endif " readonly>
+                    </div>
+                </div>
+
+                <div class="row row-inform">
+                    <div class="col-md-6">
                         <p class="search-report-dropdown-header font-thai-resize">ความลึก (ความลึกเร่ิมต้น)</p>
                         <input type="text" class="form-control" id="depth" placeholder=" @if ( $record->depth_start != 0 && $record->depth_start != null ) {{ $record->depth_start }} @else - @endif " readonly>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <p class="search-report-dropdown-header font-thai-resize">ความลึกสุดท้าย</p>
                         <input type="text" class="form-control" id="depth_end" placeholder=" @if ( $record->depth_end != 0 && $record->depth_end != null ) {{ $record->depth_end }} @else - @endif " readonly>
                     </div>
@@ -374,11 +385,11 @@
                 <hr class="view-record-line manage-record thai-page">
 
                 <div class="row row-inform">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <p class="search-report-dropdown-header font-thai-resize">ชื่อพื้นเมือง</p>
                         <input type="text" class="form-control" id="local_name" name="local_name" placeholder="Text Input" @if ( $record->local_name != null ) value="{{ $record->local_name }}" @endif>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <p class="search-report-dropdown-header font-thai-resize">ชื่อท้องถิ่น (ชื่อพื้นบ้าน)</p>
                         <input type="text" class="form-control" id="vernacular_name" name="vernacular_name" placeholder="Text Input" @if ( $record->vernacular_name != null ) value="{{ $record->vernacular_name }}" @endif>
                     </div>
@@ -528,6 +539,24 @@
                             <input class="font-thai-resize" type="checkbox" id="specimen_photograph" name="specimen_photograph" value="1" @if ( $record->specimen_photograph != 0 && $record->specimen_photograph != null ) checked @endif> การบันทึกภาพ
                         </label>
                         </p>
+                    </div>
+                </div>
+
+                <hr class="view-record-line manage-record thai-page">
+
+                <div class="row row-inform">
+                    <div class="col-md-6">
+                        <p class="search-report-dropdown-header font-thai-resize">คุณค่าทางเศรษฐกิจ</p>
+                        <select class="form-control search-report-select select2" id="economic_value" name="economic_value">
+                            @if( count($economic_values) !== 0 )
+                                <option value="" selected disabled>Select</option>
+                                @foreach($economic_values as $economic_value)
+                                    <option value="{{ $economic_value->id }}" @if( $record->economic_value == $economic_value->id ){{ "selected" }}@endif >{{ $economic_value->name_th }}</option>
+                                @endforeach
+                            @else
+                            <option value="" selected>No list in select</option>
+                            @endif
+                        </select>
                     </div>
                 </div>
 
