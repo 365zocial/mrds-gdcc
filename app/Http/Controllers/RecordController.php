@@ -94,18 +94,6 @@ class RecordController extends Controller
 				$data['iq'] = $data['iq']->name_en;
 			}
 
-			// Protection Field
-			$data['class_protection_thai_law'] = Wording::getWording( $data['classification']->class_protection_thailaw );
-			$data['class_protection_iucn'] = Wording::getWording( $data['classification']->class_protection_iucn );
-			$data['class_protection_cites'] = Wording::getWording( $data['classification']->class_protection_cites );
-
-			$data['common_name'] = Wording::getWording($data['classification']->identification_qualifier);
-			if(is_null($data['iq'])){
-				$data['iq'] = null;
-			}else{
-				$data['iq'] = $data['iq']->name_en;
-			}
-
 			//get value for dropdown
 			$data['collection_codes'] = Collection::getCollection();
 			$data['references'] = Reference::getReference();
