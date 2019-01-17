@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use Session;
-use Illuminate\Http\Request;
 use App\Model\System_Log;
 use App\Model\AllMean;
 use App\Model\CatchException;

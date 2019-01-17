@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use Illuminate\Http\Request;
 use Excel;
 use Auth;
 use DB;
@@ -681,7 +680,7 @@ class ExportRecordController extends Controller
                         $results = \App\Model\Record::leftjoin('classification', 'record.classification_id', 'classification.id')->where('record.vernacular_name', 'like', '%'.$search.'%')->get();
                     }elseif($name_type == 'commonname'){
                         $results = \App\Model\Record::leftjoin('classification', 'record.classification_id', 'classification.id')->where('classification.common_name', 'like', '%'.$search.'%')->get();
-                    }   
+                    }
 
                     //--- Set Layout and Style ---
                         $sheet->mergeCells( 'A2:D2' );
@@ -765,14 +764,14 @@ class ExportRecordController extends Controller
                                         $count_line, $data->related_reference_item, $data->current_scientific_name, $data->name
                                     ));
                                 }
-    
+
                                 //--- Set Layout and Style ---
                                     $sheet->setBorder('A'.$row_number.':D'.$row_number, 'thin');
                                 //--- -------------------- ---
 
                                 $row_number++; $count_line++;
                             }
-                        
+
                     //--- ------------ ---
                 } else {
                     $results = null;

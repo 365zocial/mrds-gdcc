@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Migration;
 
 use Illuminate\Http\Request;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DB;
 

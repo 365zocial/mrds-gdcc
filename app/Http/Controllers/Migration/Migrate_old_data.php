@@ -11,7 +11,6 @@ use File;
 use Session;
 
 use App\Model\CatchException;
-use Illuminate\Http\Request;
 use App\Model\Country;
 use App\Model\Province;
 use App\Model\District;

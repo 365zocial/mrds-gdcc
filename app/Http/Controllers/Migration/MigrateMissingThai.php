@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Migration;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use Illuminate\Http\Request;
 use App\Model\Record;
 use App\Model\RecordPlace;
 

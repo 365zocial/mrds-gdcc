@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use Illuminate\Http\Request;
 use App\Model\AllMean;
 use DB;
 use Auth;

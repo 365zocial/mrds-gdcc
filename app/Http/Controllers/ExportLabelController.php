@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use Illuminate\Http\Request;
-
 use App\Model\Record;
 use App\Model\Marinecenter;
 use App\Model\Wording;

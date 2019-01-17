@@ -9,7 +9,6 @@ use DB;
 
 use App\Http\Controllers\SearchTypeAController;
 
-use Illuminate\Http\Request;
 use App\Model\Country;
 use App\Model\Province;
 use App\Model\District;

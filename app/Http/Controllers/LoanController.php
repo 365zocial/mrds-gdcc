@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
-use Illuminate\Http\Request;
-
 use App\Model\RecordLoan;
 use App\Model\RecordLoanPost;
 use App\Model\RecordLoanLog;
