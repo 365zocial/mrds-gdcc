@@ -93,7 +93,9 @@ class ClassificationController extends Controller
 			$data['specieses'] = Taxonomy::getSpecies();
 			$data['subspecieses'] = Taxonomy::getSubspecies();
 			$data['identification_qualifiers'] = Wording::getWordingByWordingType(1); // 1 is mean identification_qualifiers
-			$data['protection_types'] 	= Wording::getWordingByWordingTypeForForm(12);
+			$data['protection_iucns'] 	= Wording::getWordingByWordingTypeForForm(12);
+			$data['protection_thai_laws'] 	= Wording::getWordingByWordingTypeForForm(12);	// 22 TODO: ยังไม่เสร็จ
+			$data['protection_citeses'] 	= Wording::getWordingByWordingTypeForForm(12);	// 23 TODO: ยังไม่เสร็จ
 
 			return view('staff.classification.add.add_classification_form', $data);
 		}
@@ -161,8 +163,10 @@ class ClassificationController extends Controller
 		$data['subspecieses'] = Taxonomy::getSubspecies();
 		$data['identification_qualifiers'] = Wording::getWordingByWordingType(1); // 2 is mean identification_qualifiers
 		$data['classifications'] = Classification::getClassification($classification_id);
-		$data['protection_types'] 	= Wording::getWordingByWordingTypeForForm(12);
-
+		$data['protection_iucns'] 	= Wording::getWordingByWordingTypeForForm(12);
+		$data['protection_thai_laws'] 	= Wording::getWordingByWordingTypeForForm(12);	// 22 TODO: ยังไม่เสร็จ
+		$data['protection_citeses'] 	= Wording::getWordingByWordingTypeForForm(12);	// 23 TODO: ยังไม่เสร็จ
+		
 		return view('staff.classification.edit.edit_classification_form', $data);
 	}
 
@@ -197,12 +201,14 @@ class ClassificationController extends Controller
 		$subspecies 		= 	$input->subspecies;
 		$cur_sci_name 		= 	$input->cur_sci_name;
 		$common_name 		=	$input->common_name;
-		$protection_type	=	$input->protection_type;
+		$protection_thai_law	=	$input->protection_thai_law;
+		$protection_iucn	=	$input->protection_iucn;
+		$protection_cites	=	$input->protection_cites;
 
 		$lastId 		= Classification::addClassification($cur_sci_name, $iq, $pre_sci_name,
 						$domain, $kingdom, $subkingdom, $infrakingdom, $phylum, $subphylum, $infraphylum, $superclass, $class, $subclass, $infraclass,
 						$superorder, $order, $suborder, $infraorder, $superfamily, $family, $subfamily,
-						$genus, $subgenus, $species, $subspecies, $common_name, $protection_type);
+						$genus, $subgenus, $species, $subspecies, $common_name, $protection_thai_law, $protection_iucn, $protection_cites);
 
 		if ( $lastId ) {
 			System_Log::Loging(
@@ -256,12 +262,14 @@ class ClassificationController extends Controller
 		$subspecies 		=	$input->subspecies;
 		$status 			=	$input->status_switch;
 		$common_name 		=	$input->common_name;
-		$protection_type	=	$input->protection_type;
+		$protection_thai_law	=	$input->protection_thai_law;
+		$protection_iucn	=	$input->protection_iucn;
+		$protection_cites	=	$input->protection_cites;
 
 		if (Classification::updateClassification($classification_id, $cur_sci_name, $iq, $pre_sci_name,
 							$domain, $kingdom, $subkingdom, $infrakingdom, $phylum, $subphylum, $infraphylum, $superclass, $class, $subclass, $infraclass,
 						 	$superorder, $order, $suborder, $infraorder, $superfamily, $family, $subfamily,
-							$genus, $subgenus, $species, $subspecies , AllMean::ConvertSwitchStatus($status), $common_name, $protection_type) ) {
+							$genus, $subgenus, $species, $subspecies , AllMean::ConvertSwitchStatus($status), $common_name, $protection_thai_law, $protection_iucn, $protection_cites) ) {
 
 			System_Log::Loging( 'classification',  // table_name
 								$input->classification_id, // row_id

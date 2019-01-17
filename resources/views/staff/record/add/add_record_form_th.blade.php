@@ -647,35 +647,6 @@
                     </div>
                 </div>
 
-                <div class="row row-inform">
-                    <div class="col-md-6">
-                        <p class="search-report-dropdown-header font-thai-resize">ความคุ้มครอง <span style="font-size: 16px;">(ตามกฎหมายไทย)</span></p>
-                        <select class="form-control search-report-select select2" id="protection_type" name="protection_type">
-                            @if( count($protection_types) !== 0 )
-                                <option value="" selected disabled>Select</option>
-                                @foreach($protection_types as $protection_type)
-                                    <option value="{{ $protection_type->id }}" @if( $record->protection_type == $protection_type->id ){{ "selected" }}@endif >{{ $protection_type->name_th }}</option>
-                                @endforeach
-                            @else
-                                <option value="" selected>No list in select</option>
-                            @endif
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <p class="search-report-dropdown-header font-thai-resize">ความคุ้มครอง <span style="font-size: 16px;">(IUCN)</span></p>
-                        <select class="form-control search-report-select select2" id="protection_type_iucn" name="protection_type_iucn">
-                            @if( count($protection_type_iucns) !== 0 )
-                                <option value="" selected disabled>Select</option>
-                                @foreach($protection_type_iucns as $protection_type_iucn)
-                                    <option value="{{ $protection_type_iucn->id }}" @if( $record->protection_type_iucn == $protection_type_iucn->id ){{ "selected" }}@endif >{{ $protection_type_iucn->name_th }}</option>
-                                @endforeach
-                            @else
-                                <option value="" selected>No list in select</option>
-                            @endif
-                        </select>
-                    </div>
-                </div>
-
                 <div class="row">
                     <div class="col-md-12 search-report-button" style="text-align: center">
                         <button type="submit" class="btn btn-default btn-gold" style="font-size: 16px;">Save Thai Record</button>

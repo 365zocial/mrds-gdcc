@@ -1,3 +1,7 @@
+<?php
+  use App\Model\Wording;
+?>
+
 <div class="panel panel-primary panel-custom">
 
     <div class="panel-heading" role="tab" id="headingTwo">
@@ -181,10 +185,44 @@
             </div>
           </div>
 
-          @if($can_change_class)
-            <a href="{{ url('staff/changeClassification'.'/'.base64_encode(base64_encode(base64_encode($record->id))).'/'.base64_encode(base64_encode(base64_encode($record->classification_id))) ) }}" class="btn btn-default">Change Classification</a>
-          @endif
-          
+          <hr class="view-record-line manage-record">
+
+          <div class="row">
+            <div class="col-md-12">
+              <p class="record-label">Common Name:
+                <span class="record-data">{{ AllMean::ReplaceNullWithDash( $classification->common_name ) }}</span>
+              </p>
+            </div>
+          </div>
+
+          <hr class="view-record-line manage-record">
+
+          <div class="row">
+              <div class="col-md-12">
+                <p class="record-label">Protection Thai Law:
+                  <span class="record-data">{{ AllMean::ReplaceNullWithDash( Wording::find($classification->protection_thai_law ), "name_th" ) }}</span>
+                </p>
+              </div>
+              <div class="col-md-12">
+                <p class="record-label">Protection IUCN:
+                  <span class="record-data">{{ AllMean::ReplaceNullWithDash( Wording::find($classification->protection_iucn ), "name_en" ) }} @if( $classification->protection_iucn != null ) ({{ AllMean::ReplaceNullWithDash( Wording::find($classification->protection_iucn ), "name_th" ) }}) @endif</span>
+                </p>
+              </div>
+              <div class="col-md-12">
+                <p class="record-label">Protection CITES:
+                  <span class="record-data">{{ AllMean::ReplaceNullWithDash( Wording::find($classification->protection_cites ), "name_en" ) }} @if ($classification->protection_cites != null) ({{ AllMean::ReplaceNullWithDash( Wording::find($classification->protection_cites ), "name_th" ) }}) @endif</span>
+                </p>
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="col-md-12">
+                  @if($can_change_class)
+                    <a href="{{ url('staff/changeClassification'.'/'.base64_encode(base64_encode(base64_encode($record->id))).'/'.base64_encode(base64_encode(base64_encode($record->classification_id))) ) }}" class="btn btn-default">Change Classification</a>
+                  @endif
+              </div>
+          </div>
+
         </div>
     </div>
 </div>

@@ -226,15 +226,30 @@
               </div>
             </div>
 
+            <hr>
+
             <div class="row row-before-line">
-              <div class="col-md-6">
-                <p class="record-label">Protection Type:
-                  <span class="record-data">{{ AllMean::ReplaceNullWithDash( Wording::find($classification->protection_type ), "name_en" ) }}</span>
-                </p>
-              </div>
               <div class="col-md-6">
                 <p class="record-label">Common Name:
                   <span class="record-data">{{ AllMean::ReplaceNullWithDash( $classification->common_name ) }}</span>
+                </p>
+              </div>
+              <div class="col-md-6">
+                <p class="record-label">Protection Thai Law:
+                  <span class="record-data">{{ AllMean::ReplaceNullWithDash( Wording::find($classification->protection_thai_law ), "name_th" ) }}</span>
+                </p>
+              </div>
+            </div>
+
+            <div class="row row-before-line">
+                <div class="col-md-6">
+                  <p class="record-label">Protection IUCN:
+                    <span class="record-data">{{ AllMean::ReplaceNullWithDash( Wording::find($classification->protection_iucn ), "name_en" ) }} @if( $classification->protection_iucn != null ) ({{ AllMean::ReplaceNullWithDash( Wording::find($classification->protection_iucn ), "name_th" ) }}) @endif</span>
+                  </p>
+                </div>
+              <div class="col-md-6">
+                <p class="record-label">Protection CITES:
+                  <span class="record-data">{{ AllMean::ReplaceNullWithDash( Wording::find($classification->protection_cites ), "name_en" ) }} @if ($classification->protection_cites != null) ({{ AllMean::ReplaceNullWithDash( Wording::find($classification->protection_cites ), "name_th" ) }}) @endif</span>
                 </p>
               </div>
             </div>

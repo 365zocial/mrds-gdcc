@@ -449,23 +449,53 @@
               </div>
 
               <hr class="search-report">
-              <div class="row">
+
+              <div class="row row-inform">
                 <div class="col-md-6">
-                    <p class="search-report-dropdown-header">Protection Type</p>
-                    <select class="form-control search-report-select select2" id="protection_type" name="protection_type">
-                        @if( count($protection_types) !== 0 )
+                    <p class="search-report-dropdown-header">Common Name</p>
+                    <input type="text" class="form-control" id="common_name" name="common_name" placeholder="Text Input" @if ( $classifications->common_name != null ) value="{{ $classifications->common_name }}" @endif>
+                </div>
+                <div class="col-md-6">
+                    <p class="search-report-dropdown-header">Protection Thai Law</p>
+                    <select class="form-control search-report-select select2" id="protection_thai_law" name="protection_thai_law">
+                        @if( count($protection_thai_laws) !== 0 )
                             <option value="" selected disabled>Select</option>
-                            @foreach($protection_types as $protection_type)
-                                <option value="{{ $protection_type->id }}" @if( $classifications->protection_type == $protection_type->id ){{ "selected" }}@endif >{{ $protection_type->name_th }}</option>
+                            @foreach($protection_thai_laws as $protection_thai_law)
+                                <option value="{{ $protection_thai_law->id }}" @if( $classifications->protection_thai_law == $protection_thai_law->id ){{ "selected" }}@endif >{{ $protection_thai_law->name_th }}</option>
                             @endforeach
                         @else
                             <option value="" selected>No list in select</option>
                         @endif
                     </select>
                 </div>
+              </div>
+
+              <div class="row">
+                  <div class="col-md-6">
+                      <p class="search-report-dropdown-header">Protection IUCN</p>
+                      <select class="form-control search-report-select select2" id="protection_iucn" name="protection_iucn">
+                          @if( count($protection_iucns) !== 0 )
+                              <option value="" selected disabled>Select</option>
+                              @foreach($protection_iucns as $protection_iucn)
+                                  <option value="{{ $protection_iucn->id }}" @if( $classifications->protection_iucn == $protection_iucn->id ){{ "selected" }}@endif >{{ $protection_iucn->name_en }} ({{ $protection_iucn->name_th }})</option>
+                              @endforeach
+                          @else
+                              <option value="" selected>No list in select</option>
+                          @endif
+                      </select>
+                  </div>
                 <div class="col-md-6">
-                    <p class="search-report-dropdown-header">Common Name</p>
-                    <input type="text" class="form-control" id="common_name" name="common_name" placeholder="Text Input" @if ( $classifications->common_name != null ) value="{{ $classifications->common_name }}" @endif>
+                    <p class="search-report-dropdown-header">Protection CITES</p>
+                    <select class="form-control search-report-select select2" id="protection_cites" name="protection_cites">
+                        @if( count($protection_citeses) !== 0 )
+                            <option value="" selected disabled>Select</option>
+                            @foreach($protection_citeses as $protection_cites)
+                                <option value="{{ $protection_cites->id }}" @if( $classifications->protection_cites == $protection_cites->id ){{ "selected" }}@endif >{{ $protection_cites->name_en }} ({{ $protection_cites->name_th }})</option>
+                            @endforeach
+                        @else
+                            <option value="" selected>No list in select</option>
+                        @endif
+                    </select>
                 </div>
               </div>
 

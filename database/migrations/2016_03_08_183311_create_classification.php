@@ -17,7 +17,7 @@ class CreateClassification extends Migration
             $table->string('current_scientific_name');
             $table->string('current_scientific_name_format');
             $table->string('previous_scientific_name')->nullable();
-            $table->string('previous_scientific_name_format');
+            $table->string('previous_scientific_name_format')->nullable();
             $table->integer('domain')->unsigned()->nullable();
             $table->integer('kingdom')->unsigned()->nullable();
             $table->integer('subkingdom')->unsigned()->nullable();
@@ -43,7 +43,9 @@ class CreateClassification extends Migration
             $table->tinyInteger('identification_qualifier')->unsigned()->nullable();
             $table->integer('status')->unsigned();
             $table->text('common_name')->nullable();
-            $table->integer('protection_type')->nullable();
+            $table->integer('protection_thai_law')->nullable();
+            $table->integer('protection_iucn')->nullable();
+            $table->integer('protection_cites')->nullable();
             $table->boolean('migration_data')->default(false);
             $table->integer('created_by');
             $table->integer('updated_by');

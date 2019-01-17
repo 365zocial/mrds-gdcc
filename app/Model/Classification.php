@@ -14,7 +14,7 @@ class Classification extends Model
 {
 	protected $table = 'classification';
 
-	public static function addClassification($cur_sci_name, $iq, $pre_sci_name, $domain, $kingdom, $subkingdom, $infrakingdom, $phylum, $subphylum, $infraphylum, $superclass, $class, $subclass, $infraclass, $superorder, $order_o, $suborder, $infraorder, $superfamily, $family, $subfamily, $genus, $subgenus, $species, $subspecies, $common_name, $protection_type,$migrate = false) {
+	public static function addClassification($cur_sci_name, $iq, $pre_sci_name, $domain, $kingdom, $subkingdom, $infrakingdom, $phylum, $subphylum, $infraphylum, $superclass, $class, $subclass, $infraclass, $superorder, $order_o, $suborder, $infraorder, $superfamily, $family, $subfamily, $genus, $subgenus, $species, $subspecies, $common_name, $protection_thai_law, $protection_iucn, $protection_cites, $migrate = false) {
 
 		//get $created_by
 		$count_classduplicate = Classification::where('current_scientific_name', strip_tags($cur_sci_name) )
@@ -49,9 +49,11 @@ class Classification extends Model
 			$db->species 							= 	$species;
 			$db->subspecies 						= 	$subspecies;
 			$db->identification_qualifier 			= 	$iq;
-			$db->protection_type					=	$protection_type;
+			$db->protection_thai_law				=	$protection_thai_law;
+			$db->protection_iucn					=	$protection_iucn;
+			$db->protection_cites					=	$protection_cites;
 			$db->common_name						=	$common_name;
-			
+
 			$db->status 							= 	2;
 			$db->migration_data 					= 	$migrate;
 
@@ -62,7 +64,7 @@ class Classification extends Model
 				$db->created_by         =   1;
 				$db->updated_by         =   1;
 			}
-		
+
 			return CatchException::catcherAdd($db);
 		}else{
 			Session::put('exception_catcher','Classification '.$cur_sci_name.' is Duplicate. Please check this classification in Manage Classification list');
@@ -71,7 +73,7 @@ class Classification extends Model
 
     }
 
-	public static function updateClassification($id, $cur_sci_name, $iq, $pre_sci_name, $domain, $kingdom, $subkingdom, $infrakingdom, $phylum, $subphylum, $infraphylum, $superclass, $class, $subclass, $infraclass, $superorder, $order_o, $suborder, $infraorder, $superfamily, $family, $subfamily, $genus, $subgenus, $species, $subspecies, $status, $common_name, $protection_type){
+	public static function updateClassification($id, $cur_sci_name, $iq, $pre_sci_name, $domain, $kingdom, $subkingdom, $infrakingdom, $phylum, $subphylum, $infraphylum, $superclass, $class, $subclass, $infraclass, $superorder, $order_o, $suborder, $infraorder, $superfamily, $family, $subfamily, $genus, $subgenus, $species, $subspecies, $status, $common_name, $protection_thai_law, $protection_iucn, $protection_cites){
 
 		//get $created_by
     	$created_by 					=	Auth::user()->id;
@@ -114,7 +116,9 @@ class Classification extends Model
 			$db->subspecies 						= 	$subspecies;
 			$db->identification_qualifier 			= 	$iq;
 			$db->status 							= 	$status;
-			$db->protection_type					=	$protection_type;
+			$db->protection_thai_law				=	$protection_thai_law;
+			$db->protection_iucn					=	$protection_iucn;
+			$db->protection_cites					=	$protection_cites;
 			$db->common_name						=	$common_name;
 			$db->created_by 						= 	$created_by;
 			$db->updated_by 						= 	$created_by;

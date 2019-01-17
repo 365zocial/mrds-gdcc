@@ -94,6 +94,18 @@ class RecordController extends Controller
 				$data['iq'] = $data['iq']->name_en;
 			}
 
+			// Protection Field
+			$data['class_protection_thai_law'] = Wording::getWording( $data['classification']->class_protection_thailaw );
+			$data['class_protection_iucn'] = Wording::getWording( $data['classification']->class_protection_iucn );
+			$data['class_protection_cites'] = Wording::getWording( $data['classification']->class_protection_cites );
+
+			$data['common_name'] = Wording::getWording($data['classification']->identification_qualifier);
+			if(is_null($data['iq'])){
+				$data['iq'] = null;
+			}else{
+				$data['iq'] = $data['iq']->name_en;
+			}
+
 			//get value for dropdown
 			$data['collection_codes'] = Collection::getCollection();
 			$data['references'] = Reference::getReference();
@@ -361,9 +373,7 @@ class RecordController extends Controller
 			$data['animal_type1s'] 		= Wording::getWordingByWordingTypeForForm(18);
 			$data['animal_type2s'] 		= Wording::getWordingByWordingTypeForForm(19);
 			$data['animal_type3s'] 		= Wording::getWordingByWordingTypeForForm(20);
-			$data['protection_types'] 	= Wording::getWordingByWordingTypeForForm(12);
 			$data['plant_types'] 		= Wording::getWordingByWordingTypeForForm(21);
-			$data['protection_type_iucns'] 	= Wording::getWordingByWordingTypeForForm(22);
 
 			$data['record'] = $record;
 
@@ -1019,8 +1029,6 @@ class RecordController extends Controller
 			$data['animal_type1s'] 				= Wording::getWordingByWordingTypeForForm(18);
 			$data['animal_type2s'] 				= Wording::getWordingByWordingTypeForForm(19);
 			$data['animal_type3s'] 				= Wording::getWordingByWordingTypeForForm(20);
-			$data['protection_types'] 			= Wording::getWordingByWordingTypeForForm(12);
-			$data['protection_type_iucns'] 	= Wording::getWordingByWordingTypeForForm(23);
 			$data['plant_types'] 				= Wording::getWordingByWordingTypeForForm(21);
 
 			// $data['utilizations_record'] 		= RecordUtilization::where('record_unique_id', $record->unique_record)->get();
@@ -1112,7 +1120,6 @@ class RecordController extends Controller
 		$animal_type1 			= $input->animal_type1;
 		$animal_type2 			= $input->animal_type2;
 		$animal_type3 			= $input->animal_type3;
-		// $protection_type 		= $input->protection_type;
 
 		$reproduction  					= "";
 		if($input->sexual == null && $input->asexual == null){
@@ -1162,7 +1169,6 @@ class RecordController extends Controller
 			$db->animal_type1 = $animal_type1;
 			$db->animal_type2 = $animal_type2;
 			$db->animal_type3 = $animal_type3;
-			// $db->protection_type = $protection_type;
 			$db->reproduction = $reproduction;
 
 			RecordUtilization::where('record_unique_id', $db->unique_record)->delete();

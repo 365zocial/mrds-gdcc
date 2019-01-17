@@ -24,7 +24,7 @@ class CreateWordingTypeTable extends Migration
                                                 9 = life_stage,
                                                 10 = donated_from,
                                                 11 = deposited_at,
-                                                12 = protection_type,
+                                                12 = protection_iucn,
                                                 13 = reproduction
                                                 14 = area_direction,
                                                 15 = utilization,
@@ -33,12 +33,14 @@ class CreateWordingTypeTable extends Migration
                                                 18 = animal_type1,
                                                 19 = animal_type2,
                                                 20 = animal_type3,
-                                                21 = plant_type";
+                                                21 = plant_type,
+                                                22 = protection_thai_law,
+                                                23 = protection_cites";
             $table->string('name');
             $table->integer('created_by')->unsigned();
             $table->integer('updated_by')->unsigned();
             $table->timestamps();
-            
+
         });
     }
 
