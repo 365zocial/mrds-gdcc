@@ -384,6 +384,11 @@
               <span class="record-data">{{ AllMean::ReplaceNullWithDash( Wording::getWordingWithAttr( $record[0]->ocean_sea_lake,"name_en" )) }}</span>
             </p>
           </div>
+          <div class="col-md-4">
+            <p class="record-label">Islands / Island:
+              <span class="record-data">{{ AllMean::ReplaceNullWithDash( $record[0]->islands_island ) }}</span>
+            </p>
+          </div>
         </div>
 
         <div class="row">
@@ -483,14 +488,22 @@
               <span class="record-data">{{ AllMean::ReplaceNullWithDash( Wording::getWordingWithAttr( $record[0]->habitat,"name_en" )) }}</span>
             </p>
           </div>
-          <div class="col-md-3">
-            <p class="record-label">Depth:
-              <span class="record-data">{{ AllMean::ReplaceNullWithDash($record[0]->depth_start) }}</span>
+          <div class="col-md-6">
+            <p class="record-label">Sediment Type:
+              <span class="record-data">{{ AllMean::ReplaceNullWithDash( Wording::getWordingWithAttr( $record[0]->sediment_type ,"name_en" )) }}</span>
             </p>
           </div>
-          <div class="col-md-3">
+        </div>
+
+        <div class="row">
+          <div class="col-md-4">
+            <p class="record-label">Depth:
+              <span class="record-data">{{ AllMean::ReplaceNullWithDash($record[0]->depth_start) }} meter</span>
+            </p>
+          </div>
+          <div class="col-md-4">
             <p class="record-label">End Depth:
-              <span class="record-data">{{ AllMean::ReplaceNullWithDash($record[0]->depth_end) }}</span>
+              <span class="record-data">{{ AllMean::ReplaceNullWithDash($record[0]->depth_end) }} meter</span>
             </p>
           </div>
         </div>
@@ -664,6 +677,11 @@
               <span class="record-data">{{ AllMean::ReplaceNullWithDash( Wording::getWordingWithAttr( $record[1]->ocean_sea_lake ,"name_th" )) }}</span>
             </p>
           </div>
+          <div class="col-md-4">
+            <p class="record-label">หมู่เกาะ / เกาะ:
+              <span class="record-data">{{ AllMean::ReplaceNullWithDash( $record[1]->islands_island ) }}</span>
+            </p>
+          </div>
         </div>
 
         <div class="row">
@@ -748,12 +766,20 @@
               <span class="record-data">{{ AllMean::ReplaceNullWithDash( Wording::getWordingWithAttr( $record[1]->habitat ,"name_th" )) }}</span>
             </p>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-6">
+            <p class="record-label">ประเภทของดินตะกอน:
+              <span class="record-data">{{ AllMean::ReplaceNullWithDash( Wording::getWordingWithAttr( $record[1]->sediment_type ,"name_th" )) }}</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4">
             <p class="record-label">ความลึก (ความลึกเริ่มต้น):
               <span class="record-data">{{ AllMean::ReplaceNullWithDash($record[1]->depth_start) }} เมตร</span>
             </p>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-4">
             <p class="record-label">ความลึกสุดท้าย:
               <span class="record-data">{{ AllMean::ReplaceNullWithDash($record[1]->depth_end) }} เมตร</span>
             </p>
