@@ -474,7 +474,7 @@ class RecordController extends Controller
 		}else if($input->sexual == null && $input->asexual != null){
 			$reproduction	=	"2";
 		}else if($input->sexual != null && $input->asexual != null){
-			$reproduction	=	"1_2";
+			$reproduction	=	"3";
 		}
 
 		//-----update in database (thai)
@@ -1134,7 +1134,7 @@ class RecordController extends Controller
 		}else if($input->sexual == null && $input->asexual != null){
 			$reproduction	=	"2";
 		}else if($input->sexual != null && $input->asexual != null){
-			$reproduction	=	"1_2";
+			$reproduction	=	"3";
 		}
 
 		//-----update in database (thai)

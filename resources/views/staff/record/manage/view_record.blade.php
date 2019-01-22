@@ -1056,7 +1056,7 @@
                 @endif
                 @if($record[1]->reproduction === "0")
                   {{ "-" }}
-                @elseif($record[1]->reproduction === "1_2" )
+                @elseif($record[1]->reproduction === "3" )
                   {{ "," }}
                 @endif
                 @if(strpos($record[1]->reproduction, "2") !== false)

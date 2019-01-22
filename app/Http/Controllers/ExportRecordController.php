@@ -2496,7 +2496,7 @@ class ExportRecordController extends Controller
     //                                 $data->reproduction = 'อาศัยเพศ';
     //                             } elseif ( $data->reproduction == 2 ) {
     //                                 $data->reproduction = 'ไม่อาศัยเพศ';
-    //                             } elseif ( $data->reproduction == '1_2' ) {
+    //                             } elseif ( $data->reproduction == '3' ) {
     //                                 $data->reproduction = 'อาศัยเพศและไม่อาศัยเพศ';
     //                             } else {
     //                                 $data->reproduction = '';
