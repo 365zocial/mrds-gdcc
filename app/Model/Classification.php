@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 use Auth;
 use Session;
+
+use App\Model\AllMean;
 use App\Model\System_Log;
 use App\Model\CatchException;
 use App\Model\Header_Taxonomy;
@@ -17,14 +19,14 @@ class Classification extends Model
 	public static function addClassification($cur_sci_name, $iq, $pre_sci_name, $domain, $kingdom, $subkingdom, $infrakingdom, $phylum, $subphylum, $infraphylum, $superclass, $class, $subclass, $infraclass, $superorder, $order_o, $suborder, $infraorder, $superfamily, $family, $subfamily, $genus, $subgenus, $species, $subspecies, $common_name, $protection_thai_law, $protection_iucn, $protection_cites, $migrate = false) {
 
 		//get $created_by
-		$count_classduplicate = Classification::where('current_scientific_name', strip_tags($cur_sci_name) )
+		$count_classduplicate = Classification::where('current_scientific_name', AllMean::checkAndCutForNoneBackSpace( strip_tags($cur_sci_name) ) )
 						->count();
 
 		if($count_classduplicate == 0){
 			$db = new Classification;
-			$db->current_scientific_name 			= 	strip_tags($cur_sci_name);
+			$db->current_scientific_name 			= 	AllMean::checkAndCutForNoneBackSpace( strip_tags($cur_sci_name) );
 			$db->current_scientific_name_format 	= 	$cur_sci_name;
-			$db->previous_scientific_name 			= 	strip_tags($pre_sci_name);
+			$db->previous_scientific_name 			= 	AllMean::checkAndCutForNoneBackSpace( strip_tags($pre_sci_name) );
 			$db->previous_scientific_name_format 	= 	$pre_sci_name;
 			$db->domain 							= 	$domain;
 			$db->kingdom 							= 	$kingdom;
@@ -78,19 +80,16 @@ class Classification extends Model
 		//get $created_by
     	$created_by 					=	Auth::user()->id;
 
-		// $count_classduplicate = Classification::where('current_scientific_name', strip_tags($cur_sci_name) )
-		// 										->count();
+		// ตรวจสอบว่าชื่อซ้ำและไม่ใช่ id ตัวเองหรือไม่ ถ้ามี จะแก้ไข classification ไม่ได้
+		$count_classduplicate = Classification::where('current_scientific_name', AllMean::checkAndCutForNoneBackSpace( strip_tags( $cur_sci_name ) ) )->where('id', '!=', $id)->count();
 
-		// dd($count_classduplicate);
-		//
-		// if($count_classduplicate == 0){
+		if ( $count_classduplicate == 0 ) {
 	    	$db 							=	Classification::find($id);
 			System_Log::setOldData($db->toArray());
 
-
-			$db->current_scientific_name 			= strip_tags($cur_sci_name);
+			$db->current_scientific_name 			= AllMean::checkAndCutForNoneBackSpace( strip_tags($cur_sci_name) );
 			$db->current_scientific_name_format 	= $cur_sci_name;
-			$db->previous_scientific_name 			= strip_tags($pre_sci_name);
+			$db->previous_scientific_name 			= AllMean::checkAndCutForNoneBackSpace(strip_tags($pre_sci_name) );
 			$db->previous_scientific_name_format 	= $pre_sci_name;
 			$db->domain 							= 	$domain;
 			$db->kingdom 							= 	$kingdom;
@@ -122,10 +121,10 @@ class Classification extends Model
 			$db->common_name						=	$common_name;
 			$db->created_by 						= 	$created_by;
 			$db->updated_by 						= 	$created_by;
-		// }else{
-		// 	Session::put('exception_catcher','Classification is Dupliicate. Please check this classification in Manage Classification list');
-		// 	return false;
-		// }
+		} else {
+			Session::put('exception_catcher','Classification is Dupliicate. Please check this classification in Manage Classification list');
+			return false;
+		}
 
 		return CatchException::catcherEdit($db);
 	}

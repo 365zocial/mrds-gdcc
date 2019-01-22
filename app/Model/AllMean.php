@@ -161,4 +161,8 @@ class AllMean
         return sprintf("%.2f",$decimal);
     }
 
+    public static function checkAndCutForNoneBackSpace( $word ) {
+        return str_replace("&nbsp;"," ", $word);
+    }
+
 }
