@@ -61,20 +61,17 @@
                     $('.table_result').slideDown();
                     tb.clear().draw();
                     $count = 1;
-                    
+
                     $.each(data['results'], function(i, data){
                         tb.row.add( [
                             $count,
                             (typeof data['related_catalog_item'] === "string") ? data['related_catalog_item'] : ""  + (typeof data['related_reference_item'] === "string") ? data['related_reference_item'] : "",
-                            data['current_scientific_name_format'],
-                            CreateView( data['id'] ) +
-                                '<span class="between"> | </span>' +
-                                CreateLink( data['id'] )
+                            data['current_scientific_name_format']
                         ] ).draw();
                         $count++;
 
                     });
-                    
+
                     name_result = data['name_type'] + ' : ' + data['search'];
 
                     // $('.source_result').html(source);
@@ -84,16 +81,6 @@
                 });
             });
         });
-
-        function CreateView( id ) {
-            var view = "<a href=<?php echo url("staff/searchCategory/viewCard"); ?>" + '/' + window.btoa( window.btoa( window.btoa( id ))) + " target='_blank'><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span> View Card</a>";
-            return view;
-        }
-
-        function CreateLink( id ) {
-            var link = "<a href=<?php echo url("staff/searchCategory/viewRecord"); ?>" + '/' + window.btoa( window.btoa( window.btoa( id ))) + " target='_blank'><span class='glyphicon glyphicon-eye-open' aria-hidden='true'></span> View Detail</a>";
-            return link;
-        }
 
         // export record from result
         function exportRecord() {
@@ -130,7 +117,11 @@
 
 @section('header')
     <?php
-        $headerName = "Search Category";
+        if($lang == 2){
+            $headerName = "การค้นหากลุ่มตัวอย่าง";
+        }else{
+            $headerName = "Search Category";
+        }
         $iconFileName = "icon_dashboard_manager/search_category.png";
      ?>
 @endsection
@@ -139,7 +130,7 @@
     <?php
         if($lang == 2){
             $breadcump['หน้าควบคุม'] = url('/');
-            $breadcump['สืบค้นข้อมูลความหลากหลาย'] = url('search/searchByNameRecord');
+            $breadcump['สืบค้นรายการจากชื่อ'] = url('search/searchByNameRecord');
         }else{
             $breadcump['Dashboard'] = url('/');
             $breadcump['Search By Name Record'] = url('search/searchByNameRecord');
@@ -150,10 +141,10 @@
 @section('contain')
 
 <div class="row row-with-margin search-category-pages">
-    <div class="col-md-6 col-md-offset-3">
+    <div class="col-md-8 col-md-offset-2">
         <div class="content-box">
-            <p class="content-header">Search by Name Record</p>
-            <p class="content-help-text">You can search all record by these form.</p>
+            <p class="content-header">@if($lang == 2){{'สืบค้นรายการจากชื่อ'}}@else{{'Search by Name Record'}}@endif </p>
+            <p class="content-help-text">@if($lang == 2){{'คุณสามารถสืบค้นข้อมูลสิ่งมีชีวิตทั้งหมดได้ด้วยหน้าฟอร์มนี้'}}@else{{'You can search all record by these form.'}}@endif</p>
 
             <form action="#" method="post" id="form" name="form">
                 @csrf
@@ -161,16 +152,16 @@
                 <!-- Search by name -->
                 <div class="row row-inform">
                     <div class="col-md-4">
-                        <p class="search-report-dropdown-header">Name</p>
+                        <p class="search-report-dropdown-header">@if($lang == 2){{'ชื่อ'}}@else{{'Name'}}@endif</p>
                         <select class="form-control select2" id="name_type" name="name_type">
-                            <option value="localname">Local Name</option>
-                            <option value="vernacularname">Vernacular Name</option>
-                            <option value="commonname">Common Name</option>
+                            <option value="localname">@if($lang == 2){{'ชื่อพื้นเมือง'}}@else{{'Local Name'}}@endif</option>
+                            <option value="vernacularname">@if($lang == 2){{'ชื่อท้องถิ่น (ชื่อพื้นบ้าน)'}}@else{{'Vernacular Name'}}@endif</option>
+                            <!-- <option value="commonname">Common Name</option> -->
                         </select>
                     </div>
                     <div class="col-md-8">
                         <p class="search-report-dropdown-header">&nbsp;</p>
-                        <input type="text" class="form-control" id="search" name="search" placeholder="Input Text" required>
+                        <input type="text" class="form-control" id="search" name="search" placeholder="@if($lang == 2){{'ชื่อที่ต้องการค้นหา'}}@else{{'Input Text'}}@endif" required>
                     </div>
                 </div>
                 <!-- /.Search by name -->
@@ -178,7 +169,7 @@
                 <!-- Submit Button -->
                 <div class="row" style="margin-bottom: 0px;">
                     <div class="col-md-12" style="text-align: center; padding-top: 15px;">
-                        <button id="submit_button" type="submit" class="btn btn-default btn-gold" style="font-size: 16px;">Search Data</button>
+                        <button id="submit_button" type="submit" class="btn btn-default btn-gold" style="font-size: 16px;">@if($lang == 2){{'ค้นหา'}}@else{{'Search Data'}}@endif</button>
                     </div>
                 </div>
                 <!-- /.Submit Button -->
@@ -218,7 +209,6 @@
                         <th>No.</th>
                         <th>IDCatalog / IDRef</th>
                         <th>Scientific Name</th>
-                        <th style="text-align: center;">Action</th>
                     </tr>
                 </thead>
             </table>

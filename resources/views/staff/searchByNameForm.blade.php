@@ -6,7 +6,7 @@
                 <option value="" selected disabled>ค้นหาจาก</option>
                 <option value="localname">Local Name</option>
                 <option value="vernacularname">Vernacular Name</option>
-                <option value="commonname">Common Name</option>
+                <!-- <option value="commonname">Common Name</option> -->
             </select>
         </div>
         <div class="col-md-6">

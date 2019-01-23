@@ -162,7 +162,7 @@
                         <select class="form-control select2" id="name_type" name="name_type">
                             <option value="localname">Local Name</option>
                             <option value="vernacularname">Vernacular Name</option>
-                            <option value="commonname">Common Name</option>
+                            <!-- <option value="commonname">Common Name</option> -->
                         </select>
                     </div>
                     <div class="col-md-8">

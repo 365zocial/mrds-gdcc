@@ -160,11 +160,6 @@
             });
         }
 
-        function CreateView( id ) {
-            var view = "<a href=<?php echo url("staff/searchCategory/viewCard"); ?>" + '/' + window.btoa( window.btoa( window.btoa( id ))) + " target='_blank'><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span> View Card</a>";
-            return view;
-        }
-
         // export record from result
         function exportRecord() {
             $('.loader').show();
@@ -240,7 +235,11 @@
         <div class="col-md-8 col-md-offset-2">
             <div class="content-box">
                 <p class="content-header">
-                    RECENT RECORD 
+                    @if($lang == 2)
+                        สืบค้นรายการลงทะเบียน
+                    @else
+                        RECENT RECORD
+                    @endif
                     <a class="btn btn-sm btn-link" href="{{ url('referenceLoan') }}">Reference list</a>
                 </p>
 
@@ -436,7 +435,6 @@
                         @endif
                     </p>
                     <p class="record-label search-result">
-                        @if(Auth::user()->role_id == 3)
                         @if($group_permission_a == 2)
                         @if($lang == 2)
                         ค้นหาด้วยหมวดหมู่:
@@ -453,8 +451,6 @@
                         @endif
                         <span class="record-data"><span class="locality_search"></span></span>
                         @endif
-                        @endif
-                        @if(Auth::user()->role_id == 5)
                         @if($group_permission_a == 2)
                         @if($lang == 2)
                         ค้นหาด้วยหมวดหมู่:
@@ -470,7 +466,6 @@
                         Locality:
                         @endif
                         <span class="record-data"><span class="locality_search"></span></span>
-                        @endif
                         @endif
                     </p>
                 </div>
@@ -533,9 +528,6 @@
                     @endif
                     <th>Expendition</th>
                     <th>Picture</th>
-                    @if(Auth::user()->role_id == 3)
-                        <th>Action</th>
-                    @endif
                 </thead>
             </table>
         </div>

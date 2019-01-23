@@ -61,7 +61,7 @@
                     $('.table_result').slideDown();
                     tb.clear().draw();
                     $count = 1;
-                    
+
                     $.each(data['results'], function(i, data){
                         tb.row.add( [
                             $count,
@@ -74,7 +74,7 @@
                         $count++;
 
                     });
-                    
+
                     name_result = data['name_type'] + ' : ' + data['search'];
 
                     // $('.source_result').html(source);
@@ -179,7 +179,7 @@
                         <select class="form-control select2" id="name_type" name="name_type">
                             <option value="localname">Local Name</option>
                             <option value="vernacularname">Vernacular Name</option>
-                            <option value="commonname">Common Name</option>
+                            <!-- <option value="commonname">Common Name</option> -->
                         </select>
                     </div>
                     <div class="col-md-8">

@@ -141,7 +141,7 @@ class SearchTypeAController extends Controller
     public function getDistribution(Request $input){
         $this->getPermission();
 
-        $data                           =   $this->search_base($input->chk_taxa, $input->chk_locality, $input->chk_expedition, $input->header_taxonomy, $input->domain, $input->kingdom, $input->phylum, $input->subphylum, $input->class, $input->order, $input->suborder, $input->infraorder, $input->family, $input->locality_type, $input->locality_country, $input->locality_province, $input->locality_district, $input->locality_county, $input->expan_id, $input->map_type);
+        $data                           =   $this->search_base($input->chk_taxa, $input->chk_locality, $input->chk_expedition, $input->header_taxonomy, $input->domain, $input->kingdom, $input->phylum, $input->subphylum, $input->class, $input->order, $input->suborder, $input->infraorder, $input->family, $input->locality_type, $input->locality_country, $input->locality_province, $input->locality_district, $input->locality_county, $input->expedition, $input->map_type);
         $data['lang']                   =   $data['lang_table'];
         $data['group_permission_a']     =   $this->group_permission_a;
         $data['group_permission_b']     =   $this->group_permission_b;

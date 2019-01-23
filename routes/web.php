@@ -19,10 +19,13 @@
 Route::get('reclaim/loan_specimen', 'LoanController@emailReclaim');
 
 Route::group(['middleware' => ['CheckAuthened']], function() {
+    # เข้าใช้งาน โดย user (คนทั่วไป) ไม่ต้อง login
     Route::get('/','UserController@dashboard');
     Route::group(['prefix' => 'search'], function(){
+        #------------------------#
+        # Search Category C Type #
+        #------------------------#
         Route::post('getTaxonomyName','AjaxController@getTaxonomyName'); //AjaxController
-        // Route::get('dashboard','SearchTypeCController@searchCDashboard');
         Route::get('diversity','SearchTypeCController@searchDiversity');
         Route::get('distribution','SearchTypeCController@searchDistribution');
         Route::post('distribution','SearchTypeCController@getDistribution');
@@ -30,6 +33,8 @@ Route::group(['middleware' => ['CheckAuthened']], function() {
         Route::post('searchdata','SearchTypeCController@search'); //AjaxController
         Route::get('NameRecord', 'SearchTypeCController@searchByNameRecord');
         Route::post('doNameRecord', 'SearchTypeCController@doSearchNameRecord'); //Ajax
+
+        Route::post('exportSearchTypeA', 'ExportRecordController@exportSearchTypeA'); //Ajax
     });
     Route::get('referenceLoan', 'WordingController@referenceLoan');
 });
@@ -94,7 +99,7 @@ Route::group(['middleware' => ['Authen']], function () {
                 //taxonomy
                 Route::get('taxonomyList', 'WordingController@taxonomyList');
                 Route::get('list-taxonomy', 'WordingController@getTaxonomyDataTable')->name('list.taxonomy.datatable');
-                
+
                 Route::post('addTaxonomy', 'WordingController@addTaxonomy');
                 Route::post('getTaxonomyWording', 'WordingController@getTaxonomyWording');
                 Route::post('editTaxonomy', 'WordingController@editTaxonomy');

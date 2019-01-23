@@ -31,11 +31,6 @@
     @include('googlemap')
 
     <script>
-        // function CreateView( id ) {
-        //     var view = "<a href=<?php echo url("staff/searchCategory/viewCard"); ?>" + '/' + window.btoa( window.btoa( window.btoa( id ))) + " target='_blank'><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span> View Card</a>";
-        //     return view;
-        // }
-
         // export record from result
         function exportRecord() {
             $('.loader').show();
@@ -82,10 +77,10 @@
 @section('breadcump')
     <?php
         if($lang == 2){
-            $breadcump['หน้าควบคุม'] = url('dashboard');
+            $breadcump['หน้าควบคุม'] = url('/');
             $breadcump['สืบค้นการกระจายของสิ่งมีชีวิต'] = url('search/distribution');
         }else{
-            $breadcump['Dashboard'] = url('dashboard');
+            $breadcump['Dashboard'] = url('/');
             $breadcump['Distribution Search'] = url('search/distribution');
         }
     ?>
@@ -198,9 +193,6 @@
                             <th>Locality</th>
                             @endif
                             <th>Picture</th>
-                            @if( Auth::user()->role_id == 3 )
-                            <th>Action</th>
-                            @endif
                         </thead>
                         <tbody>
                             @foreach( $result_searchs as $value)
@@ -229,9 +221,6 @@
                                 <td>{{ $value->locality }}</td>
                                 @endif
                                 <td><a href='#' class='showPic' data-toggle='modal' data-target='#myModal' data-uniqueid='{{  $value->unique_record }}'><span class='glyphicon glyphicon-eye-open' aria-hidden='true'> View image</a></td>
-                                    @if( Auth::user()->role_id == 3 )
-                                    <td><a href="{{ url('staff/searchCategory/viewCard') }}/{{ base64_encode( base64_encode( base64_encode( $value->record_id ))) }}" target="_blank"><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span> View Card</a></td>
-                                    @endif
                             </tr>
                             @endforeach
                         </tbody>
@@ -243,7 +232,6 @@
     </div>
 
 </div>
-
 
 <script type="text/javascript">
 function printContent(redirect){

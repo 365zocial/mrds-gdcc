@@ -2,8 +2,8 @@
 
 #
 #
-# Type A: Diviersity Search, Distribution Search and Recent Record
-# Role: Manager, User and PGCP
+# Type C is copy type a: Diviersity Search, Distribution Search and Recent Record
+# Role: User (you cannot login, can use)
 #
 #
 
@@ -39,11 +39,10 @@ class SearchTypeCController extends Controller
     }
 
     #------------------ En Zone ------------------
-    public function searchCDashboard(){
-        $data['lang']   = Session::get('language');
-        dd($data);
-        return view('search_type_c.dashboardsearch', $data);
-    }
+    // public function searchCDashboard(){
+    //     $data['lang']   = Session::get('language');
+    //     return view('search_type_c.dashboardsearch', $data);
+    // }
 
     public function searchDistribution(){
         $this->getPermission();
@@ -128,10 +127,11 @@ class SearchTypeCController extends Controller
     public function getDistribution(Request $input){
         $this->getPermission();
 
-        $data                           =   $this->search_base($input->chk_taxa, $input->chk_locality, $input->chk_expedition, $input->header_taxonomy, $input->domain, $input->kingdom, $input->phylum, $input->subphylum, $input->class, $input->order, $input->suborder, $input->infraorder, $input->family, $input->locality_type, $input->locality_country, $input->locality_province, $input->locality_district, $input->locality_county, $input->expan_id, $input->map_type);
+        $data                           =   $this->search_base($input->chk_taxa, $input->chk_locality, $input->chk_expedition, $input->header_taxonomy, $input->domain, $input->kingdom, $input->phylum, $input->subphylum, $input->class, $input->order, $input->suborder, $input->infraorder, $input->family, $input->locality_type, $input->locality_country, $input->locality_province, $input->locality_district, $input->locality_county, $input->expedition, $input->map_type);
         $data['lang']                   =   $data['lang_table'];
         $data['group_permission_a']     =   $this->group_permission_a;
         $data['group_permission_b']     =   $this->group_permission_b;
+
         return view('search_type_c.result_distribute' ,$data);
     }
 
@@ -232,9 +232,9 @@ class SearchTypeCController extends Controller
             $db = $db->where('r.language_id',1);
         }
 
-        if( Auth::user()->role_id == 3 ){
-            $db = $db->where('r.marinecenter_id', Auth::user()->marinecenter_id);
-        }
+        // if( Auth::user()->role_id == 3 ){
+        //     $db = $db->where('r.marinecenter_id', Auth::user()->marinecenter_id);
+        // }
 
         $db = $db->where('approve_status', 1);
         $db = $db->where('r.status',2);
@@ -279,7 +279,8 @@ class SearchTypeCController extends Controller
         $data_export['taxa']                    = $taxa;
         $data_export['result_searchs']          = $data['result_searchs'];
 
-        Session::put( 'search_result_a', json_encode($data_export) );
+        // Session::put( 'search_result_a', json_encode($data_export) );
+        // dd($data);
         return $data;
     }
 

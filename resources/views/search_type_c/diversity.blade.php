@@ -118,11 +118,6 @@
             });
         }
 
-        function CreateView( id ) {
-            var view = "<a href=<?php echo url("staff/searchCategory/viewCard"); ?>" + '/' + window.btoa( window.btoa( window.btoa( id ))) + " target='_blank'><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span> View Card</a>";
-            return view;
-        }
-
         // export record from result
         function exportRecord() {
             $('.loader').show();
