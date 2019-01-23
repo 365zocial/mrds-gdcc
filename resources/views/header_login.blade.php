@@ -17,6 +17,17 @@
                               <a href="{{ url('setLangEng') }}">English</a>
                             </div>
                         </li>
+                        <li>
+                            <a class="a-logout" href="{{ url('/') }}">
+                                <div class="nav-logout">
+                                    @if($lang == 2)
+                                        หน้าแรก
+                                    @else
+                                        Homepage
+                                    @endif
+                                </div>
+                            </a>
+                        </li>
                     </ul>
 
                 </div>

@@ -2,6 +2,33 @@
 
 @section('css')
     @include('base_wording_css')
+    <link href="<?php echo url('assets/fonts/THSarabunNew/THSarabunNew.ttf'); ?>" rel="stylesheet" type="text/css">
+    <link href="<?php echo url('assets/fonts/THSarabunNew/THSarabunNewBold.ttf'); ?>" rel="stylesheet" type="text/css">
+    <link href="<?php echo url('assets/fonts/THSarabunNew/THSarabunNewBoldItalic.ttf'); ?>" rel="stylesheet" type="text/css">
+    <link href="<?php echo url('assets/fonts/THSarabunNew/THSarabunNewItalic.ttf'); ?>" rel="stylesheet" type="text/css">
+    <style media="screen">
+        .font-th-header {
+            font-size: 18px !important;
+            font-family: THSarabun;
+            font-weight: 500 !important;
+            color: #636363;
+            opacity: 0.8;
+        }
+        .font-th-content {
+            font-size: 16px !important;
+            font-family: THSarabun;
+            color: #636363;
+            opacity: 0.6;
+            line-height: 1.75 !important;
+            font-size: 18px !important;
+            text-align: justify;
+        }
+        @media (max-width: 768px) {
+            .font-th-header, .font-th-content {
+                padding: 0 15px;
+            }
+        }
+    </style>
 @endsection
 
 @section('script')
@@ -33,25 +60,6 @@
                         You can search for your required information by these topics.
                     @endif
                 </p>
-            </div>
-        </div>
-
-        <div class="row row-with-margin" style="padding-top: 20px;">
-            <div class="col-md-12" style="text-align: center;">
-                ระบบฐานข้อมูลสิ่งมีชีวิตทางทะเล (Marine Resource Database System - MRDS) <br>
-                เป็นระบบสารสนเทศของข้อมูลตัวอย่างสิ่งมีชีวิตทางทะเล <br>
-                ทั้งที่มีตัวอย่างอ้างอิงและที่อ้างอิงจากผลงานตีพิมพ์ <br>
-                ของสถาบันวิจัยและพัฒนาทรัพยากรทางทะเล ชายฝั่งทะเล และป่าชายเลน <br>
-                ซึ่งประกอบด้วยข้อมูลของศูนย์วิจัยและพัฒนาทรัพยากรทางทะเลและชายฝั่งทั้ง ๕ ศูนย์ <br>
-                ได้แก่ ศูนย์วิจัยและพัฒนาทรัพยากรทางทะเลและชายฝั่งอ่าวไทยฝั่งตะวันออก (ศวทอ.) <br>
-                ศูนย์วิจัยและพัฒนาทรัพยากรทางทะเลและชายฝั่งอ่าวไทยตอนบน (ศวทบ.) <br>
-                ศูนย์วิจัยและพัฒนาทรัพยากรทางทะเลและชายฝั่งอ่าวไทยตอนกลาง (ศวทก.) <br>
-                ศูนย์วิจัยและพัฒนาทรัพยากรทางทะเลและชายฝั่งอ่าวไทยตอนล่าง (ศวทล.) <br>
-                และศูนย์วิจัยและพัฒนาทรัพยากรทางทะเลและชายฝั่งทะเลอันดามัน (ศวทม.) <br>
-                ระบบจะทำการบันทึกข้อมูลจากทุกศูนย์ มาจัดเก็บและจัดทำเป็นฐานข้อมูลเดียวกัน <br>
-                เพื่อนำไปใช้ประโยชน์ร่วมกันทั้งในด้านการวิจัยและเพื่อการศึกษา <br>
-                และเพื่อให้สามารถเชื่อมโยงฐานข้อมูลดังกล่าวกับศูนย์ข้อมูลพันธุกรรมพืช <br>
-                โครงการอนุรักษ์พันธุกรรมพืชอันเนื่องมาจากพระราชดำริ สมเด็จพระเทพรัตนราชสุดาฯ สยามบรมราชกุมารี (อพ.สธ.) ได้
             </div>
         </div>
 
@@ -172,6 +180,23 @@
               </a>
             </div>
 
+        </div>
+
+        <div class="row row-with-margin" style="padding-top: 30px;">
+                <p class="content-header font-th-header" style="text-align: left;">ระบบฐานข้อมูลสิ่งมีชีวิตทางทะเล (Marine Resource Database System - MRDS)</p>
+                <p class="menu-text font-th-content">เป็นระบบสารสนเทศของข้อมูลตัวอย่างสิ่งมีชีวิตทางทะเล
+                ทั้งที่มีตัวอย่างอ้างอิงและที่อ้างอิงจากผลงานตีพิมพ์
+                ของสถาบันวิจัยและพัฒนาทรัพยากรทางทะเล ชายฝั่งทะเล และป่าชายเลน
+                ซึ่งประกอบด้วยข้อมูลของศูนย์วิจัยและพัฒนาทรัพยากรทางทะเลและชายฝั่งทั้ง ๕ ศูนย์
+                ได้แก่ ศูนย์วิจัยและพัฒนาทรัพยากรทางทะเลและชายฝั่งอ่าวไทยฝั่งตะวันออก (ศวทอ.)
+                ศูนย์วิจัยและพัฒนาทรัพยากรทางทะเลและชายฝั่งอ่าวไทยตอนบน (ศวทบ.)
+                ศูนย์วิจัยและพัฒนาทรัพยากรทางทะเลและชายฝั่งอ่าวไทยตอนกลาง (ศวทก.)
+                ศูนย์วิจัยและพัฒนาทรัพยากรทางทะเลและชายฝั่งอ่าวไทยตอนล่าง (ศวทล.)
+                และศูนย์วิจัยและพัฒนาทรัพยากรทางทะเลและชายฝั่งทะเลอันดามัน (ศวทม.)
+                ระบบจะทำการบันทึกข้อมูลจากทุกศูนย์ มาจัดเก็บและจัดทำเป็นฐานข้อมูลเดียวกัน
+                เพื่อนำไปใช้ประโยชน์ร่วมกันทั้งในด้านการวิจัยและเพื่อการศึกษา
+                และเพื่อให้สามารถเชื่อมโยงฐานข้อมูลดังกล่าวกับศูนย์ข้อมูลพันธุกรรมพืช
+                โครงการอนุรักษ์พันธุกรรมพืชอันเนื่องมาจากพระราชดำริ สมเด็จพระเทพรัตนราชสุดาฯ สยามบรมราชกุมารี (อพ.สธ.) ได้</p>
         </div>
 
     </div>
