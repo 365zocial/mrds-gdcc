@@ -245,7 +245,7 @@
                     ติดต่อที่ : ดร.จรัสศรี  อ๋างตันญา<br>
                     โทร : 084-627-2786
                 @else
-                    Contact Name : Dr. Charatsee Aungtonya
+                    Contact Name : Dr. Charatsee Aungtonya<br>
                     Telephone : 084-627-2786
                 @endif
             </div>
