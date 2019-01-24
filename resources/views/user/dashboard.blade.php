@@ -242,7 +242,7 @@
             </div>
             <div class="modal-body">
                 @if(Session::get('language') == 2)
-                    หากต้องการยืมคืนตัวอย่าง ให้ทำการติดต่อที่ ดร.จรัสศรี  อ๋างตันญา<br>
+                    ติดต่อที่ ดร.จรัสศรี  อ๋างตันญา<br>
                     โทร : 084-627-2786
                 @else
                     Contact Name : Dr. Charatsee Aungtonya
