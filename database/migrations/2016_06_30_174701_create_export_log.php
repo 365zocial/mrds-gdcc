@@ -13,11 +13,11 @@ class CreateExportLog extends Migration
     public function up()
     {
         Schema::create('export_log', function (Blueprint $table) {
-            $table->increments('id');
-            $table->tinyInteger('way');
-            $table->text('note')->nullable();
-            $table->integer('created_by')->unsigned();
-            $table->integer('updated_by')->unsigned();
+            $table->increments('id')->comment('ID ของ export_log');
+            $table->tinyInteger('way')->comment('Export ผ่านช่องทางไหน // 0 = excel, 1 = pdf, 2 = api');
+            $table->text('note')->nullable()->comment('จำนวน row ใน File, ชื่อไฟล์, สิ่งที่อยากบันทึก');
+            $table->integer('created_by')->unsigned()->comment('ใครเป็นผู้ export, FK: users table');
+            $table->integer('updated_by')->unsigned()->comment('ใครเป็นผู้แก้ไข export, FK: users table');
             $table->timestamps();
         });
     }

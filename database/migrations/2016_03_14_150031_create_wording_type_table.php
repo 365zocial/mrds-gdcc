@@ -13,7 +13,7 @@ class CreateWordingTypeTable extends Migration
     public function up()
     {
         Schema::create('wording_type', function (Blueprint $table) {
-            $table->increments('id')->comment = "1 = identification_qualifier,
+            $table->increments('id')->comment(' 1 = identification_qualifier,
                                                 2 = type_status,
                                                 3 = ocean_sea_lake,
                                                 4 = gear_method,
@@ -35,10 +35,13 @@ class CreateWordingTypeTable extends Migration
                                                 20 = animal_type3,
                                                 21 = plant_type,
                                                 22 = protection_thai_law,
-                                                23 = protection_cites";
-            $table->string('name');
-            $table->integer('created_by')->unsigned();
-            $table->integer('updated_by')->unsigned();
+                                                23 = protection_cites,
+                                                24 = economic_value,
+                                                25 = sediment_type
+                                                ');
+            $table->string('name')->comment('ชื่อประเภทของข้อความ');
+            $table->integer('created_by')->unsigned()->comment('ใครเป็นผู้บันทึก, FK: users table');
+            $table->integer('updated_by')->unsigned()->comment('ใครเป็นผู้แก้ไข, FK: users table');
             $table->timestamps();
 
         });

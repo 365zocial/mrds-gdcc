@@ -13,8 +13,8 @@ class CreateLoginLog extends Migration
     public function up()
     {
         Schema::create('login_log', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('user_id')->unsigned();
+            $table->increments('id')->comment('ID ของ Login log');
+            $table->integer('user_id')->unsigned()->comment('User ID ของผู้ที่เข้าระบบ');
             $table->timestamps();
         });
     }

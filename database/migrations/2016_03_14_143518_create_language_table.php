@@ -13,12 +13,12 @@ class CreateLanguageTable extends Migration
     public function up()
     {
         Schema::create('language', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->string('code_lang', 2);
-            $table->tinyInteger('status');
-            $table->integer('created_by')->unsigned();
-            $table->integer('updated_by')->unsigned();
+            $table->increments('id')->comment('ID ของภาษา // 1 = EN, 2 = TH');
+            $table->string('name')->comment('ชื่อของภาษา');
+            $table->string('code_lang', 2)->comment('ตัวย่อของภาษา // EN = ภาษาอังกฤษ, TH = ภาษาไทย');
+            $table->tinyInteger('status')->comment('สถานะของการใช้งาน // 2 = Enable, 1 = Disable');
+            $table->integer('created_by')->unsigned()->comment('ใครเป็นผู้บันทึก, FK: users table');
+            $table->integer('updated_by')->unsigned()->comment('ใครเป็นผู้แก้ไข, FK: users table');
             $table->timestamps();
         });
     }

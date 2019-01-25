@@ -13,13 +13,13 @@ class CreateProvince extends Migration
     public function up()
     {
         Schema::create('province', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('country_id')->unsigned();
-            $table->string('province_en');
-            $table->string('province_th');
-            $table->tinyInteger('status');
-            $table->integer('created_by')->unsigned();
-            $table->integer('updated_by')->unsigned();
+            $table->increments('id')->comment('ID ของจังหวัด');
+            $table->integer('country_id')->unsigned()->comment('ID ของประเทศ, FK: country table');
+            $table->string('province_en')->comment('ชื่อจังหวัด ภาษาอังกฤษ');
+            $table->string('province_th')->comment('ชื่อจังหวัด ภาษาไทย');
+            $table->tinyInteger('status')->comment('สถานะที่ต้องการจะให้ปรากฏในระบบหรือไม่ // 2 = Enable, 1 = Disable');
+            $table->integer('created_by')->unsigned()->comment('ใครเป็นผู้บันทึก, FK: users table');
+            $table->integer('updated_by')->unsigned()->comment('ใครเป็นผู้แก้ไข, FK: users table');
             $table->timestamps();
         });
     }

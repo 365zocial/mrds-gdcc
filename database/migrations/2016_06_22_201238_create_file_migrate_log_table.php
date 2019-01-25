@@ -13,12 +13,12 @@ class CreateFileMigrateLogTable extends Migration
     public function up()
     {
         Schema::create('file_migrate_log', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('file_name', 255);
-            $table->integer('row')->unsigned();
-            $table->boolean('have_error');
-            $table->integer('created_by')->unsigned();
-            $table->integer('updated_by')->unsigned();
+            $table->increments('id')->comment('ID ของ file_migrate_log');
+            $table->string('file_name', 255)->comment('ชื่อของ File ที่ Upload เข้ามา');
+            $table->integer('row')->unsigned()->comment('จำนวน row ใน File');
+            $table->boolean('have_error')->comment('มี error หรือไม่ // 0 = ไม่มี error, 1 = มี error');
+            $table->integer('created_by')->unsigned()->comment('ใครเป็นผู้ Upload File, FK: users table');
+            $table->integer('updated_by')->unsigned()->comment('ใครเป็นผู้แก้ไข Upload File, FK: users table');
             $table->timestamps();
         });
     }

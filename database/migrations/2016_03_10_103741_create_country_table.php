@@ -13,12 +13,12 @@ class CreateCountryTable extends Migration
     public function up()
     {
         Schema::create('country', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('country_en');
-            $table->string('country_th');
-            $table->tinyInteger('status');
-            $table->integer('created_by')->unsigned();
-            $table->integer('updated_by')->unsigned();
+            $table->increments('id')->comment('ID ของประเทศ');
+            $table->string('country_en')->comment('ชื่อประเทศ ภาษาอังกฤษ');
+            $table->string('country_th')->comment('ชื่อประเทศ ภาษาไทย');
+            $table->tinyInteger('status')->comment('สถานะที่ต้องการจะให้ปรากฏในระบบหรือไม่ // 2 = Enable, 1 = Disable');
+            $table->integer('created_by')->unsigned()->comment('ใครเป็นผู้บันทึก, FK: users table');
+            $table->integer('updated_by')->unsigned()->comment('ใครเป็นผู้แก้ไข, FK: users table');
             $table->timestamps();
         });
     }
