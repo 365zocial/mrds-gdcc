@@ -21,6 +21,8 @@ Route::get('reclaim/loan_specimen', 'LoanController@emailReclaim');
 Route::group(['middleware' => ['CheckAuthened']], function() {
     # เข้าใช้งาน โดย user (คนทั่วไป) ไม่ต้อง login
     Route::get('/','UserController@dashboard');
+    Route::post('sendEmailToAdmin', 'MailboxController@sendEmailToAdmin'); //Ajax
+    
     Route::group(['prefix' => 'search'], function(){
         #------------------------#
         # Search Category C Type #

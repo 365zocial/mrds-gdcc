@@ -112,4 +112,41 @@ class MailboxController extends Controller
         return redirect('user/dashboard');
     }
 
+    public function sendEmailToAdmin( Request $input ) {
+        // Check ภาษา
+        $lang = "en";
+        if( Session::get('language' ) == 2 ) {
+            $lang = "th";
+        } else {
+            $lang = "en";
+        }
+
+        $data['from_email']        = $input->from_email;
+        $data['name']               = $input->name;
+        $data['message']           = $input->message;
+
+        $email_for_mrds     = Config::get('api.email');
+        $email_for_user     = $data['from_email'];
+
+        // #------ Send to MRDS -------#
+
+        Mail::send('emails.loan_specimen_2019.contact_mail_admin', $data, function ($message) use ($email_for_mrds) {
+            $message->to($email_for_mrds)->subject('MRDS - คุณได้รับข้อความจะระบบ MRDS');
+        });
+
+        #------ Send to sender ------#
+
+        // if($lang == "en"){
+        //     Mail::send('emails.loan_specimen_2019.contact_mail_sender_en', $data, function ($message) use ($email_for_user) {
+        //         $message->to($email_for_user)->subject('MRDS - Confirm, we get your email for loan specimen');
+        //     });
+        // }elseif($lang == "th"){
+        //     Mail::send('emails.loan_specimen_2019.contact_mail_sender_th', $data, function ($message) use ($email_for_user) {
+        //         $message->to($email_for_user)->subject('MRDS - อีเมลยืนยันการกรอกแบบฟอร์มเพื่อยืมตืนตัวอย่าง');
+        //     });
+        // }
+
+        return redirect('/');
+    }
+
 }

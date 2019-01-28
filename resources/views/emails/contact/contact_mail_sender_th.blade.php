@@ -1,16 +1,17 @@
-<!DOCTYPE html>
+<!DOCTYPE html>$mrct
 <html>
     <head>
         <meta charset="utf-8">
         <title></title>
     </head>
     <body>
-        Dear {{ $user }}<br>
+        สวัสดี {{ $user }}<br>
         <br>
-        Thank you for contact with MBDS, we open you ticket already and you will get notification via Email.<br>
+        ขอบคุณสำหรับการติดต่อกับทาง MBDS ทางเราได้บันทึกรายละเอียดการติดต่อไว้เรียบร้อยแล้ว<br>
+        และคุณจะได้รับแจ้งเมื่อเราได้ดำเนินการตามที่คุณร้องขอทาง Email<br>
         <br>
-        Your ticket is : {{ $contact }}<br>
-        Subject: {{ $topic }}<br>
+        การสอบถามของคุณคือ : {{ $contact }}<br>
+        เรื่อง: {{ $topic }}<br>
         <br>
         ================================<br>
         <p>{{ $message_email }}</p>

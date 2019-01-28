@@ -241,13 +241,39 @@
                 </h4>
             </div>
             <div class="modal-body">
-                @if(Session::get('language') == 2)
-                    ติดต่อที่ : ดร.จรัสศรี  อ๋างตันญา<br>
-                    โทร : 084-627-2786
-                @else
-                    Contact Name : Dr. Charatsee Aungtonya<br>
-                    Telephone : 084-627-2786
-                @endif
+                <div class="col-sm-12" style="padding-bottom: 10px;">
+                    @if(Session::get('language') == 2)
+                        <p style="font-size: 16px;">กรุณากรอกรายละเอียดเพื่อติดต่อขอยืมตัวอย่าง เจ้าหน้าที่จะติดต่อกลับอย่างเร็วที่สุด</p>
+                    @else
+                        <p style="font-size: 16px;">Please complete this form for borrow our example. Our team will be get in touch as soon as possible.</p>
+                    @endif
+                </div>
+                <form class="form-horizontal" role="form" method="post" action="{{ url('sendEmailToAdmin') }}">
+                    @csrf
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="-gender">@if(Session::get('language') == 2) จากอีเมล* @else From Email* @endif:</label>
+                        <div class="col-sm-9">
+                            <input type="email" class="form-control" name="from_email" maxlength="255" placeholder="@if(Session::get('language') == 2) กรุณากรอกอีเมลเพื่อติดต่อกลับ @else Enter your email @endif" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="-gender">@if(Session::get('language') == 2) ชื่อผู้ติดต่อ* @else Name* @endif:</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="name" maxlength="255" placeholder="@if(Session::get('language') == 2) กรุณากรอกชื่อ @else Enter your name @endif" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="-address">@if(Session::get('language') == 2) ข้อความ* @else Message* @endif:</label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" name="message" rows="10" placeholder="@if(Session::get('language') == 2) กรุณากรอกข้อความ @else Enter your message @endif" required></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 text-center">
+                            <button type="submit" class="btn btn-default">@if(Session::get('language') == 2) ยืนยัน @else Submit @endif</button>
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
