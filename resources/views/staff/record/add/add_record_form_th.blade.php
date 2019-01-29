@@ -32,15 +32,15 @@
 			history.pushState(null, null, 'addRecordFormTH');
 		});
 
-        $('#soil_temperature').change(function(){
-            var valueToParse = parseFloatOne1place($(this).val());
-            $(this).val(valueToParse);
-        });
-
-        $('#soil_ph').change(function(){
-            var valueToParse = parseFloatTwo1place($(this).val());
-            $(this).val(valueToParse);
-        });
+        // $('#soil_temperature').change(function(){
+        //     var valueToParse = parseFloatOne1place($(this).val());
+        //     $(this).val(valueToParse);
+        // });
+        //
+        // $('#soil_ph').change(function(){
+        //     var valueToParse = parseFloatTwo1place($(this).val());
+        //     $(this).val(valueToParse);
+        // });
 
         $('#water_temperature').change(function(){
             var valueToParse = parseFloatOne1place($(this).val());
@@ -472,7 +472,7 @@
                             <input class="font-thai-resize" type="checkbox" id="utilization" name="utilization[]" value="1"> ความเพลิดเพลิน
                         </label>
                         <label class="checkbox-inline font-thai-resize" style="margin-left: 0px !important;">
-                            <input class="font-thai-resize" type="checkbox" id="utilization" name="utilization[]" value="2"> การค้่า
+                            <input class="font-thai-resize" type="checkbox" id="utilization" name="utilization[]" value="2"> การค้า
                         </label>
                         <label class="checkbox-inline font-thai-resize" style="margin-left: 0px !important;">
                             <input class="font-thai-resize" type="checkbox" id="utilization" name="utilization[]" value="3"> ใช้แรงงาน

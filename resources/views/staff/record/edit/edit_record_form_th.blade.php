@@ -45,15 +45,15 @@
     			history.pushState(null, null, 'editRecordFormTH');
     		});
 
-            $('#soil_temperature').change(function(){
-                var valueToParse = parseFloatOne1place($(this).val());
-                $(this).val(valueToParse);
-            });
-
-            $('#soil_ph').change(function(){
-                var valueToParse = parseFloatTwo1place($(this).val());
-                $(this).val(valueToParse);
-            });
+            // $('#soil_temperature').change(function(){
+            //     var valueToParse = parseFloatOne1place($(this).val());
+            //     $(this).val(valueToParse);
+            // });
+            //
+            // $('#soil_ph').change(function(){
+            //     var valueToParse = parseFloatTwo1place($(this).val());
+            //     $(this).val(valueToParse);
+            // });
 
             $('#water_temperature').change(function(){
                 var valueToParse = parseFloatOne1place($(this).val());
@@ -455,7 +455,7 @@
                             <input class="font-thai-resize" type="checkbox" id="utilization" name="utilization[]" value="1" @if(in_array(1,$utilizations)){{ "checked" }}@endif> ความเพลิดเพลิน
                         </label>
                         <label class="checkbox-inline font-thai-resize" style="margin-left: 0px !important;">
-                            <input class="font-thai-resize" type="checkbox" id="utilization" name="utilization[]" value="2" @if(in_array(2,$utilizations)){{ "checked" }}@endif> การค้่า
+                            <input class="font-thai-resize" type="checkbox" id="utilization" name="utilization[]" value="2" @if(in_array(2,$utilizations)){{ "checked" }}@endif> การค้า
                         </label>
                         <label class="checkbox-inline font-thai-resize" style="margin-left: 0px !important;">
                             <input class="font-thai-resize" type="checkbox" id="utilization" name="utilization[]" value="3" @if(in_array(3,$utilizations)){{ "checked" }}@endif> ใช้แรงงาน

@@ -1254,7 +1254,7 @@ class RecordController extends Controller
 		$data['users_add']			=	Users::getUserById($data['record'][0]->created_by);
 		$data['last_update_time']	=	Record::where('unique_record', $data['record'][0]->unique_record)->max('updated_at');
 
-		$util_list 					=	['ความเพลิดเพลิน','การค้่า','ใช้แรงงาน','อาหาร','ยา','ศึกษาวิจัย','เครื่องนุ่งห่ม','สวยงาม'];
+		$util_list 					=	['ความเพลิดเพลิน','การค้า','ใช้แรงงาน','อาหาร','ยา','ศึกษาวิจัย','เครื่องนุ่งห่ม','สวยงาม'];
 		$record_util 				= 	RecordUtilization::where('record_unique_id', $data['record'][0]->unique_record)->get();
 		$data['record_utilizations'] = 	[];
 		foreach ($record_util as $value) {
@@ -1666,7 +1666,7 @@ class RecordController extends Controller
 										->first();
 		$data['users_update'] 		=	Users::getUserById( $users_update->updated_by );
 
-		$util_list 					=	['ความเพลิดเพลิน','การค้่า','ใช้แรงงาน','อาหาร','ยา','ศึกษาวิจัย','เครื่องนุ่งห่ม','สวยงาม'];
+		$util_list 					=	['ความเพลิดเพลิน','การค้า','ใช้แรงงาน','อาหาร','ยา','ศึกษาวิจัย','เครื่องนุ่งห่ม','สวยงาม'];
 		$record_util 				= 	RecordUtilization::where('record_unique_id', $data['record'][0]->unique_record)->get();
 		$data['record_utilizations'] = 	[];
 		foreach ($record_util as $value) {
