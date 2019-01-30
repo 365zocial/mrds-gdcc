@@ -11,6 +11,7 @@ use Session;
 use Auth;
 use Config;
 use Mail;
+use App\Mail\ContactLoanSpecimen;
 
 class MailboxController extends Controller
 {
@@ -123,28 +124,17 @@ class MailboxController extends Controller
 
         $data['from_email']        = $input->from_email;
         $data['name']               = $input->name;
-        $data['message']           = $input->message;
+        $data['info']           = $input->message;
 
         $email_for_mrds     = Config::get('api.email');
         $email_for_user     = $data['from_email'];
 
         // #------ Send to MRDS -------#
-
-        Mail::send('emails.loan_specimen_2019.contact_mail_admin', $data, function ($message) use ($email_for_mrds) {
-            $message->to($email_for_mrds)->subject('MRDS - คุณได้รับข้อความจะระบบ MRDS');
-        });
+        // return (new ContactLoanSpecimen($data, "admin"))->render(); // show detail mail
+        Mail::to($email_for_mrds)->send(new ContactLoanSpecimen($data, "admin"));
 
         #------ Send to sender ------#
-
-        // if($lang == "en"){
-        //     Mail::send('emails.loan_specimen_2019.contact_mail_sender_en', $data, function ($message) use ($email_for_user) {
-        //         $message->to($email_for_user)->subject('MRDS - Confirm, we get your email for loan specimen');
-        //     });
-        // }elseif($lang == "th"){
-        //     Mail::send('emails.loan_specimen_2019.contact_mail_sender_th', $data, function ($message) use ($email_for_user) {
-        //         $message->to($email_for_user)->subject('MRDS - อีเมลยืนยันการกรอกแบบฟอร์มเพื่อยืมตืนตัวอย่าง');
-        //     });
-        // }
+        Mail::to($email_for_user)->send(new ContactLoanSpecimen($data, $lang));
 
         return redirect('/');
     }

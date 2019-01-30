@@ -11,7 +11,7 @@
         <br>
         ชื่อ : {{ $name }}<br>
         <br>
-        ข้อความ : {{ $message }}<br>
+        ข้อความ : {{ $info }}<br>
         <br>
     </body>
 </html>

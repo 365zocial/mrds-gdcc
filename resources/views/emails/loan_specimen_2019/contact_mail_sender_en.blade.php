@@ -5,7 +5,7 @@
         <title></title>
     </head>
     <body>
-        Dear {{ $user }}<br>
+        Dear {{ $name }}<br>
         <br>
         Thank you for contact with MBDS. Our team will be get in touch as soon as possible.<br>
         <br>
@@ -15,7 +15,7 @@
         <br>
         Name : {{ $name }}<br>
         <br>
-        Message : {{ $message }}<br>
+        Message : {{ $info }}<br>
         <br>
     </body>
 </html>
