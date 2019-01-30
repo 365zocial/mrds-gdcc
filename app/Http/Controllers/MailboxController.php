@@ -118,8 +118,10 @@ class MailboxController extends Controller
         $lang = "en";
         if( Session::get('language' ) == 2 ) {
             $lang = "th";
+            $finish_word = "ขอบคุณสำหรับการติดต่อกับทาง MRDS ทางเราได้รับรายละเอียดการติดต่อทางอีเมลเรียบร้อยแล้ว เจ้าหน้าที่จะติดต่อกลับอย่างเร็วที่สุด";
         } else {
             $lang = "en";
+            $finish_word = "Thank you for contact with MBDS. Our team will be get in touch as soon as possible.";
         }
 
         $data['from_email']        = $input->from_email;
@@ -136,7 +138,7 @@ class MailboxController extends Controller
         #------ Send to sender ------#
         Mail::to($email_for_user)->send(new ContactLoanSpecimen($data, $lang));
 
-        return redirect('/');
+        return redirect('/')->with('success', $finish_word);
     }
 
 }

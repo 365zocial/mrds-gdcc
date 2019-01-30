@@ -62,6 +62,25 @@
             </div>
         </div>
 
+        @if(session('success'))
+            <div class="col-12">
+                <center>
+                    <div class="alert alert-success">
+                        <p>{!! session('success') !!}</p>
+                    </div>
+                </center>
+            </div>
+        @endif
+        @if(session('failure'))
+            <div class="col-12">
+                <center>
+                    <div class="alert alert-danger">
+                        <p>{!! session('failure') !!}</p>
+                    </div>
+                </center>
+            </div>
+        @endif
+
         <div class="row" style="margin-top: 5%; margin-bottom: 30px;">
 
             <div class="col-md-3 menu-box">
