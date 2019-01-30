@@ -45,14 +45,14 @@
 
         <div class="row row-with-margin" style="padding-top: 20px;">
             <div class="col-md-12">
-                <p class="content-header">
+                <p class="content-header" style="font-size: 24px !important;">
                     @if( $lang == 2)
                         ระบบฐานข้อมูลสิ่งมีชีวิตทางทะเล
                     @else
                         Marine Resource Database System
                     @endif
                 </p>
-                <p class="content-help-text" style="text-align: center;">
+                <p class="content-help-text" style="text-align: center; font-size: 18px !important;">
                     @if( $lang == 2)
                         คุณสามารถสืบค้นข้อมูลที่คุณต้องการจากหัวข้อเหล่านี้
                     @else
@@ -186,7 +186,7 @@
                     @if(Session::get('language') == 2)
                         ระบบฐานข้อมูลสิ่งมีชีวิตทางทะเล (Marine Resource Database System - MRDS)
                     @else
-                        Marine Resource Database System - MRDS
+                        Marine Resource Database System (MRDS)
                     @endif
                 </p>
                 <p class="menu-text font-th-content">
