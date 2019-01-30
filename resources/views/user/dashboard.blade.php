@@ -8,19 +8,18 @@
     <link href="<?php echo url('assets/fonts/THSarabunNew/THSarabunNewItalic.ttf'); ?>" rel="stylesheet" type="text/css">
     <style media="screen">
         .font-th-header {
-            font-size: 18px !important;
-            font-family: THSarabun;
-            font-weight: 500 !important;
+            font-size: 24px !important;
+            font-family: THSarabunNewBold;
+            font-weight: 600 !important;
             color: #636363;
             opacity: 0.8;
         }
         .font-th-content {
-            font-size: 16px !important;
-            font-family: THSarabun;
+            font-size: 26px !important;
+            font-family: THSarabunNew;
             color: #636363;
             opacity: 0.6;
             line-height: 1.75 !important;
-            font-size: 18px !important;
             text-align: justify;
         }
         @media (max-width: 768px) {
