@@ -1113,7 +1113,14 @@
             <div class="row">
               <div class="col-md-6">
                 <p class="record-label">การใช้ประโยชน์:
-                  <span class="record-data">{{ AllMean::ReplaceNullWithDash( $record[1]->utilization ) }}</span>
+                    @forelse($record_utilizations as $record_utilization)
+                      <span class="record-data">{{ $record_utilization }}</span>
+                      @if($record_utilization != end($record_utilizations))
+                      ,
+                      @endif
+                    @empty
+                     -
+                    @endforelse
                 </p>
               </div>
               <div class="col-md-6">
@@ -1198,42 +1205,17 @@
             </div>
 
             <div class="row">
-              <div class="col-md-4">
+              <div class="col-md-12">
                 <p class="record-label">ถิ่นอาศัยที่พบ:
                   <span class="record-data">
-                    <?php
-                      $places = array("แหล่งน้ำ" => $record[1]->water_place, "บนต้นไม้" => $record[1]->tree_place, "หน้าดิน" => $record[1]->soil_earth_place,
-                                      "บนดิน" => $record[1]->ground_earth_place, "ชายฝั่งและทะเล" => $record[1]->coast_place);
-                      $count = 0;
-                      // dd($places);
-                    ?>
-
-                    @foreach( $places as $name => $place )
-                      @if($place == 1)@if($count!=0){{", "}}@endif{{$name}}<?php $count++; ?>@endif
-                    @endforeach
-
-                    <!-- @if($record[1]->water_place != 1
-                      && $record[1]->tree_place != 1
-                      && $record[1]->soil_earth_place != 1
-                      && $record[1]->ground_earth_place != 1
-                      && $record[1]->coast_place != 1)
-                        {{ "-" }}
-                    @endif
-                    @if($record[1]->water_place == 1)
-                      {{ "แหล่งน้ำ" }}
-                    @endif
-                    @if($record[1]->tree_place)
-                      {{ ", บนต้นไม้" }}
-                    @endif
-                    @if($record[1]->soil_earth_place)
-                      {{ ", หน้าดิน" }}
-                    @endif
-                    @if($record[1]->ground_earth_place)
-                      {{ ", บนดิน" }}
-                    @endif
-                    @if($record[1]->coast_place)
-                      {{ ", ชายฝั่งและทะเล" }}
-                    @endif -->
+                      @forelse($record_places as $record_place)
+                        <span class="record-data">{{ $record_place }}</span>
+                        @if($record_place != end($record_places))
+                        ,
+                        @endif
+                      @empty
+                        -
+                      @endforelse
                   </span>
                 </p>
               </div>

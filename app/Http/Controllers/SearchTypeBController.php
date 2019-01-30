@@ -31,6 +31,8 @@ use App\Model\Picture;
 use App\Model\Group_Permission;
 use App\Model\Extra_Field;
 use App\Model\Extra_Info;
+use App\Model\RecordPlace;
+use App\Model\RecordUtilization;
 
 class SearchTypeBController extends Controller
 {
@@ -773,6 +775,20 @@ class SearchTypeBController extends Controller
 		$data['users_approve']		=	Users::getUserById($data['record'][0]->approve_by);
 		$data['users_add']			=	Users::getUserById($data['record'][0]->created_by);
 		$data['last_update_time']	=	Record::where('unique_record', $data['record'][0]->unique_record)->max('updated_at');
+
+        $util_list 					=	['ความเพลิดเพลิน','การค้า','ใช้แรงงาน','อาหาร','ยา','ศึกษาวิจัย','เครื่องนุ่งห่ม','สวยงาม'];
+		$record_util 				= 	RecordUtilization::where('record_unique_id', $data['record'][0]->unique_record)->get();
+		$data['record_utilizations'] = 	[];
+		foreach ($record_util as $value) {
+			$data['record_utilizations'][] = $util_list[$value->utilization_id - 1];
+		}
+
+        $place_list					=	['น้ำจืด','น้ำกร่อย','ทะเล','ภูเขา','บนต้นไม้','หน้าดิน','ในดิน','บนบก'];
+		$record_place				=	RecordPlace::where('record_unique_id', $data['record'][0]->unique_record)->get();
+		$data['record_places']		=	[];
+		foreach($record_place as $value){
+			$data['record_places'][]	=	$place_list[$value->place_id - 1];
+		}
 
 		// get user for last updated record
 		$users_update				=	Record::select('updated_by')
