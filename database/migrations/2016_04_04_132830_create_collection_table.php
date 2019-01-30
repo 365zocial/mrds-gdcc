@@ -14,7 +14,7 @@ class CreateCollectionTable extends Migration
     {
         Schema::create('collection', function (Blueprint $table) {
             $table->increments('id')->comment('ID ของ collection');
-            $table->string('col_code', 255)->unique()->comment('รหัส (ตัวย่อ) ของ  Collection Code, Unique เพราะว่าจะไม่มีการซ้ำ');
+            $table->string('col_code')->unique()->comment('รหัส (ตัวย่อ) ของ  Collection Code, Unique เพราะว่าจะไม่มีการซ้ำ');
             $table->string('name_en', 255)->comment('ชื่อ collection ภาษาอังกฤษ');
             $table->string('name_th', 255)->comment('ชื่อ collection ภาษาไทย');
             $table->tinyInteger('status')->comment('สถานะที่ต้องการจะให้ใช้งานหรือไม่ // 2 = Enable, 1 = Disable');
