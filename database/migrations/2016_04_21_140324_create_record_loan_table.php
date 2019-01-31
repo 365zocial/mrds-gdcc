@@ -13,7 +13,7 @@ class CreateRecordLoanTable extends Migration
     public function up()
     {
         Schema::create('record_loan', function (Blueprint $table) {
-            $table->increments('id')->comment('ID ของปรเภทคำ');
+            $table->increments('id')->comment('ID ของการยืม');
             $table->integer('marinecenter_id')->unsigned()->comment('เพื่อใช้ในการอ้างอิง Marine Center ที่ยืม, FK: marinecenter table');
             $table->integer('user_id')->unsigned()->comment('User ที่ต้องการยืม, FK: users table');
             $table->integer('credit')->comment('จำนวนวันที่ให้ยืม');

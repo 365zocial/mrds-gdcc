@@ -24,7 +24,7 @@ class CreateUserTable extends Migration
             $table->string('position')->comment('ตำแหน่งงาน');
             $table->string('company')->comment('หน่วยงาน หรือ บริษัทอะไร');
             $table->text('address')->comment('ที่อยู่ของหน่วยงาน');
-            $table->boolean('approve_permission')->default(false)->comment('สิทธิ์ในการ Approve ข้อมูล // Set Default = 0 // 1 = มีสิทธิ์ approve, 0 = ไม่มีสิทธิ์ approve');
+            $table->boolean('approve_permission')->default(0)->comment('สิทธิ์ในการ Approve ข้อมูล // Set Default = 0 // 1 = มีสิทธิ์ approve, 0 = ไม่มีสิทธิ์ approve');
             $table->integer('marinecenter_id')->nullable()->comment('สาขาของ Branch, Admin และ Manager ต้องมี ส่วน User ไม่ต้องมีก็ได้ // FK: marinecenter table');
             $table->integer('role_id')->unsigned()->comment('บทบาทของ User // FK: role table');
             $table->tinyInteger('status')->comment('สถานะที่ต้องการจะให้ผู้ใช้เข้าใช้ระบบได้หรือไม่ // 2 = Enable, 1 = Disable');

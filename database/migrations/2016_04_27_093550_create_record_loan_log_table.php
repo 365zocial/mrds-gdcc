@@ -13,7 +13,7 @@ class CreateRecordLoanLogTable extends Migration
     public function up()
     {
         Schema::create('record_loan_log', function (Blueprint $table) {
-            $table->increments('id')->comment('ID ของปรเภทคำ');
+            $table->increments('id')->comment('ID ของ log การยืม');
             $table->string('action')->comment('ID ของ record loan, FK: record_loan table');
             $table->integer('record_loan_id')->comment('เก็บสถานะต่างๆ');
             $table->text('old_data')->comment('ข้อมูลเก่า');

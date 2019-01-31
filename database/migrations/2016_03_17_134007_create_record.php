@@ -71,7 +71,7 @@ class CreateRecord extends Migration
             $table->integer('preparation_type')->nullable()->comment('วิธีการเก็บ Record, FK: wording table');
             $table->string('gene_bank_number', 255)->nullable()->comment('หมายเลขทะเบียนใน Gene Bank');
             $table->text('local_name')->nullable()->comment('ชื่อพื้นเมือง Local');
-            $table->text('vernacular_name')->nullable()->comment('ชื่อท้องถิ่น (ชื่อพื้นบ้าน) ');
+            $table->text('vernacular_name')->nullable()->comment('ชื่อท้องถิ่น (ชื่อพื้นบ้าน)');
             // $table->text('common_name')->nullable()->comment('ชื่อสามัญ // (ไม่ได้ใช้งานในระบบแล้ว)');
             $table->text('variety_name')->nullable()->comment('Variety Name');
             $table->text('diagnosis')->nullable()->comment('คุณลักษณะเด่น');

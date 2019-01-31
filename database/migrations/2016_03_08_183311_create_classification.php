@@ -13,7 +13,7 @@ class CreateClassification extends Migration
     public function up()
     {
         Schema::create('classification', function (Blueprint $table) {
-            $table->increments('id')->comment('id ของ Classification');
+            $table->increments('id')->comment('ID ของ Classification');
             $table->string('current_scientific_name')->comment('ชื่อของ Classification (ปัจจุบัน)');
             $table->string('current_scientific_name_format')->comment('ชื่อของ Classification (ปัจจุบัน) ที่เป็นแบบตัวเอียง');
             $table->string('previous_scientific_name')->nullable()->comment('ชื่อเก่าของ Classification');
@@ -41,11 +41,11 @@ class CreateClassification extends Migration
             $table->integer('species')->unsigned()->nullable()->comment('รหัสที่บอกว่า Record อยู่ Species อะไร, FK: taxonomy table');
             $table->integer('subspecies')->unsigned()->nullable()->comment('รหัสที่บอกว่า Record อยู่ Subspecies อะไร, FK: taxonomy table');
             $table->tinyInteger('identification_qualifier')->unsigned()->nullable()->comment('คุณลักษณะของการยืนยันชื่อ, FK: wording table');
-            $table->integer('status')->unsigned()->comment('สถานะที่ต้องการจะให้ปรากฏในระบบหรือไม่ // 2 = Enable, 1 = Disable');
-            $table->text('common_name')->nullable()->comment('ชื่อสามัญ');
             $table->integer('protection_thai_law')->nullable()->comment('การคุ้มครองสัตว์ (ตามกฎหมายไทย), FK: wording table');
             $table->integer('protection_iucn')->nullable()->comment('การคุ้มครองสัตว์, FK: wording table');
             $table->integer('protection_cites')->nullable()->comment('การคุ้มครองสัตว์ ตามบัญชี CITES, FK: wording table');
+            $table->text('common_name')->nullable()->comment('ชื่อสามัญ');
+            $table->integer('status')->unsigned()->comment('สถานะที่ต้องการจะให้ปรากฏในระบบหรือไม่ // 2 = Enable, 1 = Disable');
             $table->boolean('migration_data')->default(false)->comment('เป็นตัวบอกว่า Record เป็นข้อมูลใหม่ที่กรอกผ่านเว็บ หรือเป็นข้อมูลที่เกิดจาก migrate // 1 = migrate, 0 = ข้อมูลใหม่');
             $table->integer('created_by')->comment('ใครเป็นผู้บันทึก, FK: users table');
             $table->integer('updated_by')->comment('ใครเป็นผู้แก้ไข, FK: users table');
