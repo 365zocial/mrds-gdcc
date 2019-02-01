@@ -86,8 +86,8 @@
             <div class="col-md-3 menu-box">
                 <a class="box-link" href="{{ url('search/diversity') }}">
                     <div class="menu-icon-box">
-                        <div class="icon-box">
-                            <img class="icon" src='{{ URL::asset("assets/images/icon_dashboard_manager/diversity_search.png") }}' />
+                        <div>
+                            <img class="icon img-responsive" src='{{ URL::asset("assets/images/icon_dashboard_user/diversity_search.png") }}' />
                         </div>
                         <p class="menu-text">
                             @if( $lang == 2)
@@ -104,8 +104,8 @@
             <div class="col-md-3 menu-box">
                 <a class="box-link" href="{{ url('search/distribution') }}">
                     <div class="menu-icon-box">
-                        <div class="icon-box">
-                            <img class="icon" src='{{ URL::asset("assets/images/icon_dashboard_manager/distribution_search.png") }}' />
+                        <div>
+                            <img class="icon img-responsive" src='{{ URL::asset("assets/images/icon_dashboard_user/distribution_search.png") }}' />
                         </div>
                         <p class="menu-text">
                             @if( $lang == 2)
@@ -122,8 +122,8 @@
             <div class="col-md-3 menu-box">
                 <a class="box-link" href="{{ url('search/recentrecord') }}">
                     <div class="menu-icon-box">
-                        <div class="icon-box">
-                            <img class="icon" src='{{ URL::asset("assets/images/icon_dashboard_manager/recent_record.png") }}' />
+                        <div>
+                            <img class="icon img-responsive" src='{{ URL::asset("assets/images/icon_dashboard_user/recent_record.png") }}' />
                         </div>
                         <p class="menu-text">
                             @if( $lang == 2)
@@ -141,8 +141,8 @@
             <div class="col-md-3 menu-box">
                 <a class="box-link" href="{{ url('search/NameRecord') }}">
                     <div class="menu-icon-box">
-                        <div class="icon-box">
-                            <img class="icon" src='{{ URL::asset("assets/images/icon_dashboard_manager/name_search.png") }}' />
+                        <div>
+                            <img class="icon img-responsive" src='{{ URL::asset("assets/images/icon_dashboard_user/name_search.png") }}' />
                         </div>
                         <p class="menu-text">
                             @if( $lang == 2)
@@ -203,40 +203,30 @@
         <div class="row row-with-margin" style="padding-top: 30px;">
                 <p class="content-header font-th-header" style="text-align: left;">
                     @if(Session::get('language') == 2)
-                        ระบบฐานข้อมูลสิ่งมีชีวิตทางทะเล (Marine Resource Database System - MRDS)
+                        ระบบฐานข้อมูลทรัพยากรสิ่งมีชีวิตทางทะเล (Marine Resources Database System - MRDS)
                     @else
-                        Marine Resource Database System (MRDS)
+                        Marine Resources Database System (MRDS)
                     @endif
                 </p>
                 <p class="menu-text font-th-content">
                     @if(Session::get('language') == 2)
-                        เป็นระบบสารสนเทศของข้อมูลตัวอย่างสิ่งมีชีวิตทางทะเล
-                        ทั้งที่มีตัวอย่างอ้างอิงและที่อ้างอิงจากผลงานตีพิมพ์
-                        ของสถาบันวิจัยและพัฒนาทรัพยากรทางทะเล ชายฝั่งทะเล และป่าชายเลน
-                        ซึ่งประกอบด้วยข้อมูลของศูนย์วิจัยและพัฒนาทรัพยากรทางทะเลและชายฝั่งทั้ง ๕ ศูนย์
-                        ได้แก่ ศูนย์วิจัยและพัฒนาทรัพยากรทางทะเลและชายฝั่งอ่าวไทยฝั่งตะวันออก (ศวทอ.)
+                        ระบบฐานข้อมูลทรัพยากรสิ่งมีชีวิตทางทะเล (Marine Resources Database System - MRDS) เป็นระบบสารสนเทศของข้อมูลตัวอย่างสิ่งมีชีวิตทางทะเล
+                        ทั้งที่มีตัวอย่างอ้างอิงและที่อ้างอิงจากผลงานตีพิมพ์ของสถาบันวิจัยและพัฒนาทรัพยากรทางทะเล ชายฝั่งทะเล และป่าชายเลน
+                        ซึ่งประกอบด้วยข้อมูลของศูนย์วิจัยและพัฒนาทรัพยากรทางทะเลและชายฝั่งทั้ง ๕ ศูนย์ ได้แก่
+                        ศูนย์วิจัยและพัฒนาทรัพยากรทางทะเลและชายฝั่งอ่าวไทยฝั่งตะวันออก (ศวทอ.)
                         ศูนย์วิจัยและพัฒนาทรัพยากรทางทะเลและชายฝั่งอ่าวไทยตอนบน (ศวทบ.)
                         ศูนย์วิจัยและพัฒนาทรัพยากรทางทะเลและชายฝั่งอ่าวไทยตอนกลาง (ศวทก.)
                         ศูนย์วิจัยและพัฒนาทรัพยากรทางทะเลและชายฝั่งอ่าวไทยตอนล่าง (ศวทล.)
                         และศูนย์วิจัยและพัฒนาทรัพยากรทางทะเลและชายฝั่งทะเลอันดามัน (ศวทม.)
-                        ระบบจะทำการบันทึกข้อมูลจากทุกศูนย์ มาจัดเก็บและจัดทำเป็นฐานข้อมูลเดียวกัน
-                        เพื่อนำไปใช้ประโยชน์ร่วมกันทั้งในด้านการวิจัยและเพื่อการศึกษา
-                        และเพื่อให้สามารถเชื่อมโยงฐานข้อมูลดังกล่าวกับศูนย์ข้อมูลพันธุกรรมพืช
-                        โครงการอนุรักษ์พันธุกรรมพืชอันเนื่องมาจากพระราชดำริ สมเด็จพระเทพรัตนราชสุดาฯ สยามบรมราชกุมารี (อพ.สธ.) ได้
+                        ระบบจะทำการบันทึกข้อมูลจากทุกศูนย์ มาจัดเก็บและจัดทำเป็นฐานข้อมูลเดียวกันเพื่อนำไปใช้ประโยชน์ร่วมกันทั้งในด้านการวิจัยและเพื่อการศึกษา
                     @else
-                        เป็นระบบสารสนเทศของข้อมูลตัวอย่างสิ่งมีชีวิตทางทะเล
-                        ทั้งที่มีตัวอย่างอ้างอิงและที่อ้างอิงจากผลงานตีพิมพ์
-                        ของสถาบันวิจัยและพัฒนาทรัพยากรทางทะเล ชายฝั่งทะเล และป่าชายเลน
-                        ซึ่งประกอบด้วยข้อมูลของศูนย์วิจัยและพัฒนาทรัพยากรทางทะเลและชายฝั่งทั้ง ๕ ศูนย์
-                        ได้แก่ ศูนย์วิจัยและพัฒนาทรัพยากรทางทะเลและชายฝั่งอ่าวไทยฝั่งตะวันออก (ศวทอ.)
-                        ศูนย์วิจัยและพัฒนาทรัพยากรทางทะเลและชายฝั่งอ่าวไทยตอนบน (ศวทบ.)
-                        ศูนย์วิจัยและพัฒนาทรัพยากรทางทะเลและชายฝั่งอ่าวไทยตอนกลาง (ศวทก.)
-                        ศูนย์วิจัยและพัฒนาทรัพยากรทางทะเลและชายฝั่งอ่าวไทยตอนล่าง (ศวทล.)
-                        และศูนย์วิจัยและพัฒนาทรัพยากรทางทะเลและชายฝั่งทะเลอันดามัน (ศวทม.)
-                        ระบบจะทำการบันทึกข้อมูลจากทุกศูนย์ มาจัดเก็บและจัดทำเป็นฐานข้อมูลเดียวกัน
-                        เพื่อนำไปใช้ประโยชน์ร่วมกันทั้งในด้านการวิจัยและเพื่อการศึกษา
-                        และเพื่อให้สามารถเชื่อมโยงฐานข้อมูลดังกล่าวกับศูนย์ข้อมูลพันธุกรรมพืช
-                        โครงการอนุรักษ์พันธุกรรมพืชอันเนื่องมาจากพระราชดำริ สมเด็จพระเทพรัตนราชสุดาฯ สยามบรมราชกุมารี (อพ.สธ.) ได้
+                        Marine Resources Database System (MRDS) is an information system of Department of Marine Coastal Resources for specimens
+                        deposited at the Reference Collection of Phuket Marine Biological Center (PMBC)
+                        and for biodiversity that published by PMBC
+                        and other four Marine and Coastal Resources Research and Development Center, i.e.,
+                        the Eastern Gulf of Thailand (MCRRDE), the Upper Gulf of Thailand (MCRRDU),
+                        the Center Gulf of Thailand (MCRRDC), the Lower Gulf of Thailand (MCRRDL).
+                        The main objective of MRDS is to gather biodiversity information of marine fauna and flora in Thai waters.
                     @endif
                 </p>
         </div>
