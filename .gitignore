@@ -13,3 +13,12 @@ yarn-error.log
 .env
 /data
 mrds.sql
+
+**/.DS_Store
+.DS_Store
+/public/uploads/images
+/public/uploads/loan_pdf
+/public/export_record_pgcp
+/public/export_result_record
+/public/export_systemlog
+/public/export_loan

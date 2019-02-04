@@ -107,8 +107,7 @@ class LoanController extends Controller
         // Save File on Website.
         $file             = $requests->file('loan_file'); // $originalFileName = $file->getClientOriginalName();
         $fileName         = $this->generateID($recordLoanID, 6).'_'.strtotime(date("Y-m-d H:i:s")).'.'.$file->getClientOriginalExtension();
-        // $destinationPath  = 'uploads/loan_pdf';
-        $destinationPath = $_SERVER['DOCUMENT_ROOT']."/mrds_file/uploads/loan_pdf";
+        $destinationPath  = 'uploads/loan_pdf';
         $uploadStatus     = $requests->file('loan_file')->move($destinationPath, $fileName);
 
         // Insert Comment to Database.
@@ -200,8 +199,7 @@ class LoanController extends Controller
           if( $requests->hasFile('loan_file') ) {
             $file             = $requests->file('loan_file');
             $fileName         = $recordLoanID.'_'.strtotime(date("Y-m-d H:i:s")).'.'.$file->getClientOriginalExtension();
-            // $destinationPath  = 'uploads/loan_pdf';
-            $destinationPath = $_SERVER['DOCUMENT_ROOT']."/mrds_file/uploads/loan_pdf";
+            $destinationPath  = 'uploads/loan_pdf';
             $uploadStatus     = $requests->file('loan_file')->move($destinationPath, $fileName);
             $recordLoanPost->file_path      = $fileName;
           }

@@ -110,7 +110,7 @@
             </div>
             <div class="row row-of-pdf-link">
                 <div class="col-md-12">
-                    <p class="sub-text"><strong><a class="link-view-pdf" href="{{ "/mrds_file/uploads/loan_pdf/".$lastRecordLoanFile }}" target="_BLANK">View PDF File</a></strong></p>
+                    <p class="sub-text"><strong><a class="link-view-pdf" href="{{ url('uploads/loan_pdf', $lastRecordLoanFile) }}" target="_BLANK">View PDF File</a></strong></p>
                 </div>
             </div>
         </div>
@@ -186,7 +186,7 @@
                             <p class="date">Date: {{ AllMean::ReplaceNullWithDefaultDate($recordLoanPost->created_at) }} Time: {{ AllMean::ReplaceNullWithDefaultTime($recordLoanPost->created_at) }}</p>
                             <p class="comment">{!! nl2br($recordLoanPost->comment) !!}</p>
                             @if(!empty($recordLoanPost->file_path))
-                              <p class="link"><strong><a class="link-view-pdf" href="{{ "/mrds_file/uploads/loan_pdf/".$recordLoanPost->file_path }}" target="_BLANK">View PDF File</a></strong></p>
+                              <p class="link"><strong><a class="link-view-pdf" href="{{ url('uploads/loan_pdf', $recordLoanPost->file_path) }}" target="_BLANK">View PDF File</a></strong></p>
                             @endif
                         </div>
                     </div>

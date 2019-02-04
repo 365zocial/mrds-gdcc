@@ -209,7 +209,7 @@
                 }
             }).done(function( data ) {
                 if ( data ) {
-                    window.location.href = '<?php echo '/mrds_file/export_result_record' ?>'+ '/' + data;
+                    window.location.href = '<?php echo 'export_result_record' ?>'+ '/' + data;
 
                     // // delete file
                     // $.ajax({
@@ -286,7 +286,7 @@
         <div class="col-md-8 col-md-offset-2">
             <div class="content-box">
                 <p class="content-header">
-                    RECENT RECORD 
+                    RECENT RECORD
                     <a class="btn btn-sm btn-link" href="{{ url('user/referenceLoan') }}">Reference list</a>
                 </p>
 
