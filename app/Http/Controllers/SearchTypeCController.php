@@ -279,7 +279,7 @@ class SearchTypeCController extends Controller
         $data_export['taxa']                    = $taxa;
         $data_export['result_searchs']          = $data['result_searchs'];
 
-        // Session::put( 'search_result_a', json_encode($data_export) );
+        Session::put( 'search_result_a', json_encode($data_export) );
         // dd($data);
         return $data;
     }

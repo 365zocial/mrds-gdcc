@@ -36,7 +36,7 @@
             $('.loader').show();
             $.ajax({
                 method: "POST",
-                url: "<?php echo url('exportSearchTypeA'); ?>",
+                url: "<?php echo url('search/exportSearchTypeA'); ?>",
                 data: {
                     _token: "{{ csrf_token() }}",
                     way: 'Distribution_Search',

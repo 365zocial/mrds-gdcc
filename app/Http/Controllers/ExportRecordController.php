@@ -668,7 +668,11 @@ class ExportRecordController extends Controller
         $excel->sheet( 'Record Data', function( $sheet ) use ( $name_type, $search, $date_export ) {
 
             //--- Set Parameter ---
-                $user_name = Auth::user()->first_name.' '.Auth::user()->last_name.' ('.Auth::user()->telephone.') ('.Auth::user()->email.')';
+                if ( Auth::check() ) {
+                    $user_name = Auth::user()->first_name.' '.Auth::user()->last_name.' ('.Auth::user()->telephone.') ('.Auth::user()->email.')';
+                } else {
+                    $user_name = "Unknown";
+                }
 
                 $name_type_column = ucfirst($name_type);
 
@@ -1367,28 +1371,34 @@ class ExportRecordController extends Controller
         $excel->sheet( 'Record Data', function( $sheet ) use ( $results, $way, $date_export ) {
 
             //--- Set Parameter ---
-                $user_name = Auth::user()->first_name.' '.Auth::user()->last_name.' ('.Auth::user()->telephone.') ('.Auth::user()->email.')';
-            //--- ------------- ---
+                if( Auth::check() ) {
+                    $user_name = Auth::user()->first_name.' '.Auth::user()->last_name.' ('.Auth::user()->telephone.') ('.Auth::user()->email.')';
 
-            //--- Get Permission Group ---
-                $role_id = Auth::user()->role_id;
-                if ( $role_id == 2 ) {  // administrator
-                    $group_permission_a = 2;
-                    $group_permission_b = 2;
-                } elseif ( $role_id == 6 ) {   // pgcp
-                    $group_permission_a = Group_Permission::getGroup_PermissionById(1)[0]->status_pgcp;
-                    $group_permission_b = Group_Permission::getGroup_PermissionById(2)[0]->status_pgcp;
-                } elseif ( $role_id == 3 ) {   // manager
-                    $group_permission_a   = Group_Permission::getGroup_PermissionById(1)[0]->status_manager;
-                    $group_permission_b   = Group_Permission::getGroup_PermissionById(2)[0]->status_manager;
-                } elseif ( $role_id == 4 ) {   // board
-                    $group_permission_a = Group_Permission::getGroup_PermissionById(1)[0]->status_board;
-                    $group_permission_b = Group_Permission::getGroup_PermissionById(2)[0]->status_board;
-                } else {    // user
+                    //--- Get Permission Group ---
+                        $role_id = Auth::user()->role_id;
+                        if ( $role_id == 2 ) {  // administrator
+                            $group_permission_a = 2;
+                            $group_permission_b = 2;
+                        } elseif ( $role_id == 6 ) {   // pgcp
+                            $group_permission_a = Group_Permission::getGroup_PermissionById(1)[0]->status_pgcp;
+                            $group_permission_b = Group_Permission::getGroup_PermissionById(2)[0]->status_pgcp;
+                        } elseif ( $role_id == 3 ) {   // manager
+                            $group_permission_a   = Group_Permission::getGroup_PermissionById(1)[0]->status_manager;
+                            $group_permission_b   = Group_Permission::getGroup_PermissionById(2)[0]->status_manager;
+                        } elseif ( $role_id == 4 ) {   // board
+                            $group_permission_a = Group_Permission::getGroup_PermissionById(1)[0]->status_board;
+                            $group_permission_b = Group_Permission::getGroup_PermissionById(2)[0]->status_board;
+                        } else {    // user
+                            $group_permission_a = Group_Permission::getGroup_PermissionById(1)[0]->status_user;
+                            $group_permission_b = Group_Permission::getGroup_PermissionById(2)[0]->status_user;
+                        }
+                    //--- --- ---------- ----- ---
+                } else {
+                    $user_name = "Unknown";
                     $group_permission_a = Group_Permission::getGroup_PermissionById(1)[0]->status_user;
                     $group_permission_b = Group_Permission::getGroup_PermissionById(2)[0]->status_user;
                 }
-            //--- --- ---------- ----- ---
+            //--- ------------- ---
 
             # For Diversity Search
             if ( $way == 'Diversity_Search' ) {
