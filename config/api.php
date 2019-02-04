@@ -24,8 +24,8 @@ return [
 
     //email for test
     // 'email'                  =>          'chaloemphon@365zocial.com',
-    'email'                  =>          'sorawit@365zocial.com',
-    // 'email'                  =>          'rc_pmbc@yahoo.com',
+    // 'email'                  =>          'sorawit@365zocial.com',
+    'email'                  =>          'rc_pmbc@yahoo.com',
     /////////////////////////////////
 
 ];
