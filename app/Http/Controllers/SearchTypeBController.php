@@ -202,6 +202,7 @@ class SearchTypeBController extends Controller
         $db = $db->leftjoin('wording as w1', 'r.expedition', '=', 'w1.id');
         $db = $db->leftjoin('wording as w2', 'r.type_status', '=', 'w2.id');
         $db = $db->leftjoin('wording as w3', 'r.habitat', '=', 'w3.id');
+        $db = $db->leftjoin('picture as pic', 'r.unique_record', '=', 'pic.unique_record');
 
         // dd($header_taxonomy);
         $id_taxa = 0;
@@ -336,7 +337,6 @@ class SearchTypeBController extends Controller
         $data['group_permission_b_user']            =   $this->group_permission_b_user;
         $data['group_permission_b_board']           =   $this->group_permission_b_board;
 
-
         Session::put( 'search_result_a', json_encode($data_export) );
 
         return view('search_type_b.result_distribute', $data);
@@ -368,7 +368,9 @@ class SearchTypeBController extends Controller
                             'w3.name_en as habitat_en',
                             'w3.name_th as habitat_th',
                             'w1.name_en as expedition_en',
-                            'w1.name_th as expedition_th'])->get();
+                            'w1.name_th as expedition_th',
+                            'pic.path_pic',
+                            'r.unique_record'])->get();
 
         return $data;
     }

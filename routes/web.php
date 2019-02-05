@@ -22,7 +22,7 @@ Route::group(['middleware' => ['CheckAuthened']], function() {
     # เข้าใช้งาน โดย user (คนทั่วไป) ไม่ต้อง login
     Route::get('/','UserController@dashboard');
     Route::post('sendEmailToAdmin', 'MailboxController@sendEmailToAdmin'); //Ajax
-    
+
     Route::group(['prefix' => 'search'], function(){
         #------------------------#
         # Search Category C Type #
@@ -50,10 +50,12 @@ Route::post('editprofile','UserController@doEditProfile');
 Route::get('editpassword','UserController@editPassword');
 Route::post('editpassword','UserController@doEditPassword');
 
+# For show img when search
+Route::post('recordPicture', 'AjaxController@getRecordPicture');    //AjaxController
+
 include_once('authen.php');
 Route::group(['middleware' => ['Authen']], function () {
 
-    Route::post('recordPicture', 'AjaxController@getRecordPicture');    //AjaxController
     Route::post('exportSearchTypeA', 'ExportRecordController@exportSearchTypeA'); //Ajax
     Route::post('deleteFileForExcelRecord', 'ExportRecordController@deleteFileForExcelRecord'); //Ajax
 
