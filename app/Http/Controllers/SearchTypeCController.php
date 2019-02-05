@@ -132,6 +132,9 @@ class SearchTypeCController extends Controller
         $data['group_permission_a']     =   $this->group_permission_a;
         $data['group_permission_b']     =   $this->group_permission_b;
 
+        // TODO: ลบออก
+        echo "กำลังปรับปรุง"; exit;
+
         return view('search_type_c.result_distribute' ,$data);
     }
 
