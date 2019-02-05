@@ -619,8 +619,7 @@ class RecordController extends Controller
 
 				$extention_type = $value->getClientOriginalExtension();
 				$filename = $id_class."_".$id_record."_pic".$pic."_".strtotime(date("Y-m-d H:i:s"))."_".uniqid().'.'.$extention_type;
-				// $destinationPath = 'uploads/images';
-				$destinationPath = $_SERVER['DOCUMENT_ROOT']."/mrds_file/uploads/images";
+				$destinationPath = 'uploads/images';
 
 				$successUplaod	=	$value->move($destinationPath, $filename);
 
@@ -1387,6 +1386,7 @@ class RecordController extends Controller
 		}
 
 		for($a = 0; $a < 6; $a++){
+			$pic = $a + 1;	// position image
 
 			if($del[$a] === '0' || empty($del[$a])){
 				$del[$a] = null;
@@ -1434,8 +1434,7 @@ class RecordController extends Controller
 					$filename = $id_class."_".$id_record."_pic".$pic."_".strtotime(date("Y-m-d H:i:s"))."_".uniqid().'.'.$extention_type;
 					// dd($filename);
 
-					// $destinationPath = 'uploads/images';
-					$destinationPath = $_SERVER['DOCUMENT_ROOT']."/mrds_file/uploads/images";
+					$destinationPath = 'uploads/images';
 
 					$successUplaod	=	$picture[$a]->move($destinationPath, $filename);
 
@@ -1475,9 +1474,9 @@ class RecordController extends Controller
 						return redirect('staff/editRecordPicture');
 					}
 
-					$filename = $id_class."_".$id_record."_pic".$pic."_".strtotime(date("Y-m-d H:i:s"))."_".uniqid();
-					// $destinationPath = 'uploads/images';
-					$destinationPath = $_SERVER['DOCUMENT_ROOT']."/mrds_file/uploads/images";
+					$extention_type = $picture[$a]->getClientOriginalExtension();
+					$filename = $id_class."_".$id_record."_pic".$pic."_".strtotime(date("Y-m-d H:i:s"))."_".uniqid().'.'.$extention_type;
+					$destinationPath = 'uploads/images';
 					$successUplaod	=	$picture[$a]->move($destinationPath, $filename);
 
 					if( Picture::editPictureRecord($oldid[$a], $filename, $caption[$a], $photographer[$a], 1, 1) ){

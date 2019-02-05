@@ -77,7 +77,7 @@
 <div class="row">
   <div class="col-md-6 view-record-image">
     @if(sizeof($pictures) > 0)
-        <img class="record-image" src="{{ "/mrds_file/uploads/images" }}/{{ $pictures[0]->path_pic }}" alt="Specimen" />
+        <img class="record-image" src="{{ url('uploads/images') }}/{{ $pictures[0]->path_pic }}" alt="Specimen" />
     @else
         <img class="record-image" src="{{ url('assets/images/placeholder-image.png') }}" alt="Place Holder Image" />
     @endif
@@ -1119,7 +1119,7 @@
             @foreach($pictures as $picture)
               <div class="col-md-4 view-record-images">
                 <div class="crop-image">
-                  <img class="image-record" src="{{ "/mrds_file/uploads/images" }}/{{ $picture->path_pic }}" alt="" />
+                  <img class="image-record" src="{{ url('uploads/images') }}/{{ $picture->path_pic }}" alt="" />
                 </div>
                 <p class="record-label">Photographer:
                   <span class="record-data">{{ AllMean::ReplaceNullWithDash( $picture->photographer) }}</span>

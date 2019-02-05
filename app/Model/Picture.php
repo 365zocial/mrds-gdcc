@@ -47,6 +47,11 @@ class Picture extends Model
         $db                     =   Picture::find($record_id);
         System_Log::setOldData($db->toArray());
 
+        // delete old file
+        if ($db->path_pic != null ) {
+            \File::delete('uploads/images/'.$db->path_pic);
+        }
+
         $db->path_pic           =   $path_pic;
         $db->caption            =   $caption;
         $db->photographer       =   $photographer;
