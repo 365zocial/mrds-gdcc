@@ -208,7 +208,7 @@
                         Marine Resources Database System (MRDS)
                     @endif
                 </p>
-                <p class="menu-text font-th-content">
+                <p class="menu-text font-th-content" style="text-transform: none;">
                     @if(Session::get('language') == 2)
                         ระบบฐานข้อมูลทรัพยากรสิ่งมีชีวิตทางทะเล (Marine Resources Database System - MRDS) เป็นระบบสารสนเทศของข้อมูลตัวอย่างสิ่งมีชีวิตทางทะเล
                         ทั้งที่มีตัวอย่างอ้างอิงและที่อ้างอิงจากผลงานตีพิมพ์ของสถาบันวิจัยและพัฒนาทรัพยากรทางทะเล ชายฝั่งทะเล และป่าชายเลน
