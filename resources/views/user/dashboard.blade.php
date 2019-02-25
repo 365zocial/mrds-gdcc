@@ -220,12 +220,12 @@
                         และศูนย์วิจัยและพัฒนาทรัพยากรทางทะเลและชายฝั่งทะเลอันดามัน (ศวทม.)
                         ระบบจะทำการบันทึกข้อมูลจากทุกศูนย์ มาจัดเก็บและจัดทำเป็นฐานข้อมูลเดียวกันเพื่อนำไปใช้ประโยชน์ร่วมกันทั้งในด้านการวิจัยและเพื่อการศึกษา
                     @else
-                        Marine Resources Database System (MRDS) is an information system of Department of Marine Coastal Resources for specimens
-                        deposited at the Reference Collection of Phuket Marine Biological Center (PMBC)
-                        and for biodiversity that published by PMBC
-                        and other four Marine and Coastal Resources Research and Development Center, i.e.,
-                        the Eastern Gulf of Thailand (MCRRDE), the Upper Gulf of Thailand (MCRRDU),
-                        the Center Gulf of Thailand (MCRRDC), the Lower Gulf of Thailand (MCRRDL).
+                        Marine Resources Database System (MRDS) is an information system of Department of Marine Coastal Resources
+                        based on specimens deposited at the Reference Collection of
+                        Phuket Marine Biological Center (PMBC) and biodiversity that published by PMBC and other four Marine and
+                        Coastal Resources Research and Development Center, i.e., the Eastern Gulf of Thailand (MCRRDE),
+                        the Upper Gulf of Thailand (MCRRDU), the Center Gulf of Thailand (MCRRDC),
+                        the Lower Gulf of Thailand (MCRRDL).
                         The main objective of MRDS is to gather biodiversity information of marine fauna and flora in Thai waters.
                     @endif
                 </p>
