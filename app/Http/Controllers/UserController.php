@@ -203,4 +203,9 @@ class UserController extends Controller
 
     }
 
+    public function dashboardAbbreviation() {
+        $data['lang']   = Session::get('language');
+        return view('user.abbreviation.dashboard', $data);
+    }
+
 }

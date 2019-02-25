@@ -53,15 +53,26 @@
 
 @section('header')
     <?php
-        $headerName = "References";
+        if($lang == 2){
+            $headerName = "รายชื่อหนังสือและเอกสารอ้างอิง";
+        }else{
+            $headerName = "References";
+        }
         $iconFileName = "icon_dashboard_manager/word_in_system.png";
      ?>
 @endsection
 
 @section('breadcump')
     <?php
-        $breadcump['Dashboard'] = url('/');
-        $breadcump['Refereneces'] = url('referenceLoan');
+        if($lang == 2){
+            $breadcump['หน้าควบคุม'] = url('/');
+            $breadcump['ความหมายของชื่อ'] = url('abbreviation');
+            $breadcump['รายชื่อหนังสือและเอกสารอ้างอิง'] = url('abbreviation/referenceLoan');
+        }else{
+            $breadcump['Dashboard'] = url('/');
+            $breadcump['Abbreviation'] = url('abbreviation');
+            $breadcump['Refereneces'] = url('abbreviation/referenceLoan');
+        }
     ?>
 @endsection
 

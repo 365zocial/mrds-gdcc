@@ -162,16 +162,16 @@
         <div class="row" style="margin-top: 5%; margin-bottom: 30px;">
 
             <div class="col-md-3 menu-box">
-                <a class="box-link" href="{{ url('referenceLoan') }}">
+                <a class="box-link" href="{{ url('abbreviation') }}">
                     <div class="menu-icon-box">
-                        <div class="icon-box">
-                            <img class="icon" src='{{ URL::asset("assets/images/icon_dashboard_manager/word_in_system.png") }}' />
+                        <div>
+                            <img class="icon img-responsive" src='{{ URL::asset("assets/images/icon_dashboard_user/abbreviation.png") }}' />
                         </div>
                         <p class="menu-text">
                             @if($lang == 2)
-                                รายชื่อหนังสือ และเอกสารอ้างอิง
+                                ความหมายของชื่อ
                             @else
-                                References
+                                Abbreviation
                             @endif
                             <br>&nbsp;
                         </p>
@@ -182,8 +182,8 @@
             <div class="col-md-3 menu-box">
               <a class="box-link" href="#" data-toggle="modal" data-target="#myModal">
                 <div class="menu-icon-box">
-                    <div class="icon-box">
-                        <img class="icon" src='{{ URL::asset("assets/images/icon_dashboard_manager/loan_specimen.png") }}' />
+                    <div>
+                        <img class="icon img-responsive" src='{{ URL::asset("assets/images/icon_dashboard_user/loan_specimen.png") }}' />
                     </div>
                     <p class="menu-text">
                         @if(Session::get('language') == 2)

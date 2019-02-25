@@ -38,7 +38,11 @@ Route::group(['middleware' => ['CheckAuthened']], function() {
 
         Route::post('exportSearchTypeA', 'ExportRecordController@exportSearchTypeA'); //Ajax
     });
-    Route::get('referenceLoan', 'WordingController@referenceLoan');
+
+    Route::group(['prefix' => 'abbreviation'], function(){
+        Route::get('/','UserController@dashboardAbbreviation');
+        Route::get('referenceLoan', 'WordingController@referenceLoan');
+    });
 });
 
 Route::get('setLangThai','AuthenController@setLanguageTH');

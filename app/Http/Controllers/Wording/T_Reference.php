@@ -82,7 +82,7 @@ trait T_Reference {
     //Created : 5-4-59
     //Modified : -
     public function referenceLoan(){
-      $data['lang']           =   2;
+      $data['lang']           =   Session::get('language');
       $data['action']         =   Session::get('action');
       $data['references']     =   Reference::getReference();
       $data['marinecenters']  =   Marinecenter::getMarineCenterList();
