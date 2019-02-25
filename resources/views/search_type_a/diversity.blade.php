@@ -93,7 +93,18 @@
                         expedition = data['expedition_en'];
                         ocean_sea_lake = data['ocean_sea_lake_en'];
                     }
+                    if(data['related_catalog_item'] != null){
+                        re_cat_no = data['related_catalog_item'];
+                    }else{
+                        re_cat_no = "";
+                    }
+                    if(data['related_reference_item'] != null){
+                        re_item_no = data['related_reference_item'];
+                    }else{
+                        re_item_no = "";
+                    }
                     tb.row.add( [
+                        re_cat_no+""+re_item_no,
                         @if(Auth::user()->role_id == 3)
                             @if($group_permission_a == 2)
                                 // data['domain'],
@@ -491,6 +502,7 @@
             <table id="result" class="display" cellspacing="0">
                 <thead>
                     <tr>
+                        <th>ID</th>
                         @if($group_permission_a == 2)
                             <!-- <th>Domain</th>
                             <th>Kingdom</th> -->
