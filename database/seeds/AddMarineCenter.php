@@ -27,7 +27,7 @@ class AddMarineCenter extends Seeder
         ));
         DB::table('marinecenter')->insert(array(
             'institution_id'=>'1',
-            'marinecenter'=>'Marine and Coastal Resources Research and Development Center,The Eastern Gulf of Thailand',
+            'marinecenter'=>'Marine and Coastal Resources Research and Development Center, Eastern Gulf of Thailand',
             'marinecenter_code'=>'MCRRDE',
             'marinecenter_th'=>'ศูนย์วิจัยและพัฒนาทรัพยากรทางทะเลและชายฝั่งอ่าวไทยฝั่งตะวันออก',
             'marinecenter_code_th'=>'-',
@@ -40,7 +40,7 @@ class AddMarineCenter extends Seeder
         ));
         DB::table('marinecenter')->insert(array(
             'institution_id'=>'1',
-            'marinecenter'=>'Marine and Coastal Resources Research and Development Center,The Upper Gulf of Thailand',
+            'marinecenter'=>'Marine and Coastal Resources Research and Development Center, Upper Gulf of Thailand',
             'marinecenter_code'=>'MCRRDU',
             'marinecenter_th'=>'ศูนย์วิจัยและพัฒนาทรัพยากรทางทะเลและชายฝั่งอ่าวไทยตอนบน',
             'marinecenter_code_th'=>'-',
@@ -53,7 +53,7 @@ class AddMarineCenter extends Seeder
         ));
         DB::table('marinecenter')->insert(array(
             'institution_id'=>'1',
-            'marinecenter'=>'Marine and Coastal Resources Research and Development Center,The Central Gulf of Thailand',
+            'marinecenter'=>'Marine and Coastal Resources Research and Development Center, Center Gulf of Thailand',
             'marinecenter_code'=>'MCRRDC',
             'marinecenter_th'=>'ศูนย์วิจัยและพัฒนาทรัพยากรทางทะเลและชายฝั่งอ่าวไทยตอนกลาง',
             'marinecenter_code_th'=>'-',
@@ -66,7 +66,7 @@ class AddMarineCenter extends Seeder
         ));
         DB::table('marinecenter')->insert(array(
             'institution_id'=>'1',
-            'marinecenter'=>'Marine and Coastal Resources Research and Development Center,The Lower Gulf of Thailand',
+            'marinecenter'=>'Marine and Coastal Resources Research and Development Center, Lower Gulf of Thailand',
             'marinecenter_code'=>'MCRRDL',
             'marinecenter_th'=>'ศูนย์วิจัยและพัฒนาทรัพยากรทางทะเลและชายฝั่งอ่าวไทยตอนล่าง',
             'marinecenter_code_th'=>'-',

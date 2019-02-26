@@ -16,6 +16,10 @@ class Collection extends Model
         return Collection::orderBy('name_en', 'asc')->get();
     }
 
+    public static function getCollectionForEnable(){
+        return Collection::where('status', 2)->orderBy('name_en', 'asc')->get();
+    }
+
     public static function getCollectionByID($id) {
         return Collection::where('id', $id)->first();
     }

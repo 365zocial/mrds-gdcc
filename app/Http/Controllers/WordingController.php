@@ -21,13 +21,14 @@ use App\Http\Controllers\Wording\T_Collection as Collection;
 use App\Http\Controllers\Wording\T_Reference as Reference;
 use App\Http\Controllers\Wording\T_ExtraField as Extra_Field;
 use App\Http\Controllers\Wording\T_Picturebox as PictureBox;
+use App\Http\Controllers\Wording\T_Marinecenter as Marinecenter;
 
 use App\Model\Wording_type;
 use App\Model\Wording;
 
 class WordingController extends Controller
 {
-    use Taxonomy, Country, Province, District, County, Reference, Extra_Field, PictureBox, Collection;
+    use Taxonomy, Country, Province, District, County, Reference, Extra_Field, PictureBox, Collection, Marinecenter;
 	//Sorawit
 	//Created : 10-3-59
 	//Modified : -

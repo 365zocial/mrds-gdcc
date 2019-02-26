@@ -86,7 +86,7 @@
 
     <div class="col-md-10 col-md-offset-1" style="padding-top: 30px;">
         <div class="col-md-4">
-            <a class="box-link" href="{{ url('search/recentrecord') }}">
+            <a class="box-link" href="{{ url('abbreviation/MarineCenter') }}">
                 <div class="menu-icon-box">
                     <div>
                         <img class="icon img-responsive" src='{{ URL::asset("assets/images/icon_dashboard_user/marine_center.png") }}' />
@@ -104,7 +104,7 @@
             </a>
         </div>
         <div class="col-md-4">
-            <a class="box-link" href="{{ url('search/recentrecord') }}">
+            <a class="box-link" href="{{ url('abbreviation/collectionCode') }}">
                 <div class="menu-icon-box">
                     <div>
                         <img class="icon img-responsive" src='{{ URL::asset("assets/images/icon_dashboard_user/collection_code.png") }}' />

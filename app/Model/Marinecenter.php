@@ -19,4 +19,8 @@ class Marinecenter extends Model
     public static function getMarineCenterList() {
     	return Marinecenter::get();
     }
+
+    public static function getMarineCenterForEnable(){
+        return Marinecenter::where('status', 2)->orderBy('marinecenter', 'asc')->get();
+    }
 }

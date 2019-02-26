@@ -42,6 +42,8 @@ Route::group(['middleware' => ['CheckAuthened']], function() {
     Route::group(['prefix' => 'abbreviation'], function(){
         Route::get('/','UserController@dashboardAbbreviation');
         Route::get('referenceLoan', 'WordingController@referenceLoan');
+        Route::get('collectionCode', 'WordingController@collectionForUser');
+        Route::get('MarineCenter', 'WordingController@MarineCenterForUser');
     });
 });
 

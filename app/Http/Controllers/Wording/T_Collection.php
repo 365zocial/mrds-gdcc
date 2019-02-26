@@ -78,4 +78,16 @@ trait T_Collection {
 
   }
 
+  // Sorawit
+  // Created : 26-2-62
+  // Modified : -
+  public function collectionForUser(){
+    $data['lang']           =   Session::get('language');
+    $data['action']         =   Session::get('action');
+    $data['collections']    =   Collection::getCollectionForEnable();
+    Session::forget('action');
+
+    return view('search_type_c.collection_for_user', $data);
+  }
+
 }
