@@ -57,7 +57,7 @@
 <div class="row row-with-margin">
     <div class="col-md-8 col-md-offset-2">
         <div class="content-box">
-            <p class="content-header" @if ($classification->status == 1) id="disable_data" @endif>{!! AllMean::ReplaceNullWithDash($classification->current_scientific_name_format) !!}</p>
+            <p class="content-header" style="text-transform: none;" @if ($classification->status == 1) id="disable_data" @endif>{!! AllMean::ReplaceNullWithDash($classification->current_scientific_name_format) !!}</p>
 
             <div class="row">
               <div class="col-md-12">
