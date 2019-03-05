@@ -48,7 +48,7 @@ class SearchTypeCController extends Controller
         $this->getPermission();
 
         $data['lang']   = Session::get('language');
-        $data['expeditions']            =   Wording::getWordingByWordingTypeForForm(6);
+        $data['expeditions']            =   Wording::getWordingByWordingTypeForFormSortByLang(6, 1);    // sort eng lang
         $data['countries']              =   json_decode(Country::getCountryListForFormEN());
         $data['provinces']              =   json_decode(Province::getProvinceListForFormEN());
         $data['districts']              =   json_decode(District::getDistrictListForFormEN());
@@ -63,6 +63,8 @@ class SearchTypeCController extends Controller
         $data['suborders']              =   Taxonomy::getSuborder();
         $data['infraorders']            =   Taxonomy::getInfraorder();
         $data['families']               =   Taxonomy::getFamily();
+        // $data['genuses']                =   Taxonomy::getGenus();
+        // $data['species']                =   Taxonomy::getSpecies();
         $data['group_permission_a']     =   $this->group_permission_a;
         $data['group_permission_b']     =   $this->group_permission_b;
 
@@ -73,7 +75,7 @@ class SearchTypeCController extends Controller
         $this->getPermission();
 
         $data['lang']   = Session::get('language');
-        $data['expeditions']            =   Wording::getWordingByWordingTypeForForm(6);
+        $data['expeditions']            =   Wording::getWordingByWordingTypeForFormSortByLang(6, 1);    // sort eng lang
 
         $data['countries']              =   json_decode(Country::getCountryListForFormEN());
         $data['provinces']              =   json_decode(Province::getProvinceListForFormEN());
@@ -99,7 +101,7 @@ class SearchTypeCController extends Controller
         $this->getPermission();
 
         $data['lang']   = Session::get('language');
-        $data['expeditions']            =   Wording::getWordingByWordingTypeForForm(6);
+        $data['expeditions']            =   Wording::getWordingByWordingTypeForFormSortByLang(6, 1);    // sort eng lang
         $data['countries']              =   json_decode(Country::getCountryListForFormEN());
         $data['provinces']              =   json_decode(Province::getProvinceListForFormEN());
         $data['districts']              =   json_decode(District::getDistrictListForFormEN());
@@ -148,6 +150,7 @@ class SearchTypeCController extends Controller
         $db = $db->leftjoin('taxonomy as t7', 'classification.suborder' ,'=', 't7.id');
         $db = $db->leftjoin('taxonomy as t8', 'classification.infraorder' ,'=', 't8.id');
         $db = $db->leftjoin('taxonomy as t9', 'classification.family' ,'=', 't9.id');
+        $db = $db->leftjoin('taxonomy as t10', 'classification.superfamily' ,'=', 't10.id');
         $db = $db->leftjoin('province as p', 'r.province', '=', 'p.id');
         $db = $db->leftjoin('country as country', 'r.country', '=', 'country.id');
         $db = $db->leftjoin('wording as w1', 'r.expedition', '=', 'w1.id');
@@ -304,6 +307,7 @@ class SearchTypeCController extends Controller
                             't7.name as suborder',
                             't8.name as infraorder',
                             't9.name as family',
+                            't10.name as superfamily',
                             'r.id as record_id',
                             'r.locality',
                             'r.identifier',

@@ -102,23 +102,16 @@
                     tb.row.add( [
                         re_cat_no+""+re_item_no,
                         @if($group_permission_a == 2)
-                            // data['domain'],
-                            // data['kingdom'],
                             data['phylum'],
                             data['subphylum'],
                             data['class'],
                             data['order_o'],
                             data['suborder'],
                             data['infraorder'],
+                            data['superfamily'],
                             data['family'],
                         @endif
                             data['current_scientific_name_format'],
-                        @if($group_permission_b == 2)
-                            ocean_sea_lake,
-                            country,
-                            province,
-                        @endif
-                            expedition,
                    ] ).draw();
                 });
 
@@ -459,23 +452,16 @@
                     <tr>
                         <th>ID</th>
                         @if($group_permission_a == 2)
-                            <!-- <th>Domain</th>
-                            <th>Kingdom</th> -->
                             <th>Phylum</th>
                             <th>Subphylum</th>
-                            <th>Class (Clade)</th>
-                            <th>Order (Clade)</th>
-                            <th>Suborder (Clade)</th>
-                            <th>Infraorder (Clade)</th>
-                            <th>Family (Clade)</th>
+                            <th>Class</th>
+                            <th>Order</th>
+                            <th>Suborder</th>
+                            <th>Infraorder</th>
+                            <th>Superfamily</th>
+                            <th>Family</th>
                         @endif
                         <th>Current Name</th>
-                        @if($group_permission_b == 2)
-                            <th>Ocean/Sea/Lake</th>
-                            <th>Country</th>
-                            <th>Province</th>
-                        @endif
-                        <th>Expendition</th>
                     </tr>
                 </thead>
             </table>

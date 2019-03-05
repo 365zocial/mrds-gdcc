@@ -21,6 +21,14 @@ class Wording extends Model
         return Wording::where('wording_type_id', '=', $wording_type_id)->where('status', 2)->get();
     }
 
+    public static function getWordingByWordingTypeForFormSortByLang($wording_type_id, $language) {
+        if ( $language == 2) { // ภาษาไทย
+            return Wording::where('wording_type_id', '=', $wording_type_id)->where('status', 2)->orderBy('name_th', 'asc')->get();
+        } else {    // ภาษาอังกฤษ
+            return Wording::where('wording_type_id', '=', $wording_type_id)->where('status', 2)->orderBy('name_en', 'asc')->get();
+        }
+    }
+
     public static function getWordingByID($id) {
         return Wording::where('id', $id)->first();
     }
