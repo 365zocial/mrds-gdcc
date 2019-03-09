@@ -18,6 +18,8 @@ $('#taxa_chkbox').change(function(){
         $('#suborder').val( $('#suborder option:first').val() );
         $('#infraorder').val( $('#infraorder option:first').val() );
         $('#family').val( $('#family option:first').val() );
+        $('#genus').val( $('#genus option:first').val() );
+        $('#species').val( $('#species option:first').val() );
     }
 });
 
@@ -111,6 +113,12 @@ $('#taxa_header_id').change(function(){
     if($(this).val() == "family"){
         $('.dd_taxa_sub').eq(9).show();
     }
+    if($(this).val() == "genus"){
+        $('.dd_taxa_sub').eq(10).show();
+    }
+    if($(this).val() == "species"){
+        $('.dd_taxa_sub').eq(11).show();
+    }
 });
 
 checkBeforeSubmit();
@@ -171,6 +179,14 @@ function checkBeforeSubmit(){
                 if( taxa_h == "family" && $('.dd_taxa_sub').eq(9).children().val() == 0){
                     can_submit = false;
                     select_tag = $('.dd_taxa_sub').eq(9).children();
+                }
+                if( taxa_h == "genus" && $('.dd_taxa_sub').eq(10).children().val() == 0){
+                    can_submit = false;
+                    select_tag = $('.dd_taxa_sub').eq(10).children();
+                }
+                if( taxa_h == "species" && $('.dd_taxa_sub').eq(11).children().val() == 0){
+                    can_submit = false;
+                    select_tag = $('.dd_taxa_sub').eq(11).children();
                 }
             }
 

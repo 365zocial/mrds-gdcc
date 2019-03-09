@@ -111,8 +111,11 @@
                         [$suborders,'suborder'],
                         [$infraorders,'infraorder'],
                         [$families,'family']
+                        // TODO: ยังไม่เสร็จ
+                        // [$families,'family'],
+                        // [$genuses,'genus'],
+                        // [$species,'species']
                     ];
-
                 ?>
 
                 <div class="submit_select" style="display: none;"><hr></div>
@@ -131,6 +134,9 @@
                             <option value="suborder">Suborder / Clade</option>
                             <option value="infraorder">Infraorder / Clade</option>
                             <option value="family">Family / Clade</option>
+                            <?php // TODO: ยังไม่เสร็จ ?>
+                            <!-- <option value="genus">Genus</option>
+                            <option value="species">Species</option> -->
                         </select>
                     </div>
                     <div class="col-md-6">

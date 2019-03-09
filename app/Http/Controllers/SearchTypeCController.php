@@ -63,6 +63,7 @@ class SearchTypeCController extends Controller
         $data['suborders']              =   Taxonomy::getSuborder();
         $data['infraorders']            =   Taxonomy::getInfraorder();
         $data['families']               =   Taxonomy::getFamily();
+        // TODO: ยังไม่เสร็จ
         // $data['genuses']                =   Taxonomy::getGenus();
         // $data['species']                =   Taxonomy::getSpecies();
         $data['group_permission_a']     =   $this->group_permission_a;
