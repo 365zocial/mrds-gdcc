@@ -92,10 +92,10 @@
                 serverSide: true,
                 ajax: '{!! route('list.taxonomy.datatable') !!}',
                 columns: [
-                    { data: 'DT_Row_Index', orderable: false, searchable: false },                    
-                    { data: 'id', name: 'id'},                    
+                    { data: 'DT_Row_Index', orderable: false, searchable: false },
+                    { data: 'id', name: 'id'},
                     { data: 'name', name: 'name' },
-                    { data: 'header_taxonomy_name', name: 'header_taxonomy_name' },
+                    { data: 'header_taxonomy_name', name: 'header_taxonomy.name' },
                     { data: 'status', name: 'status' },
                     { data: 'action', orderable: false, searchable: false }
                 ],

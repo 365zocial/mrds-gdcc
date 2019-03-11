@@ -13,6 +13,7 @@ use App\Model\System_Log;
 
 use App\Model\District;
 use App\Model\County;
+use Yajra\Datatables\Datatables;
 
 trait T_County {
     //Chaloemphon
