@@ -284,7 +284,7 @@ class ExportRecordController extends Controller
                                if ( $source == 1 ) {
                                    foreach ( $results as $data ) {
                                         $sheet->row( $row_number, array(
-                                            $count_line, $data->related_catalog_item, $data->current_scientific_name, date('d-m-Y', strtotime( $data->date ) )
+                                            $count_line, $data->related_catalog_item, html_entity_decode($data->current_scientific_name), date('d-m-Y', strtotime( $data->date ) )
                                            ));
                                        //--- Set Layout and Style ---
                                            $sheet->setBorder('A'.$row_number.':D'.$row_number, 'thin');
@@ -294,7 +294,7 @@ class ExportRecordController extends Controller
                                } else {
                                    foreach ( $results as $data ) {
                                         $sheet->row( $row_number, array(
-                                            $count_line, $data->related_reference_item, $data->current_scientific_name, date('d-m-Y', strtotime( $data->date ) )
+                                            $count_line, $data->related_reference_item, html_entity_decode($data->current_scientific_name), date('d-m-Y', strtotime( $data->date ) )
                                            ));
                                        //--- Set Layout and Style ---
                                            $sheet->setBorder('A'.$row_number.':D'.$row_number, 'thin');
@@ -439,7 +439,7 @@ class ExportRecordController extends Controller
                         if ( $source == 1 ) {
                             foreach ( $results as $data ) {
                                 $sheet->row( $row_number, array(
-                                    $count_line, $data->related_catalog_item, $data->current_scientific_name
+                                    $count_line, $data->related_catalog_item, html_entity_decode($data->current_scientific_name)
                                 ));
 
                                 //--- Set Layout and Style ---
@@ -451,7 +451,7 @@ class ExportRecordController extends Controller
                         } else {
                             foreach ( $results as $data ) {
                                 $sheet->row( $row_number, array(
-                                    $count_line, $data->related_reference_item, $data->current_scientific_name
+                                    $count_line, $data->related_reference_item, html_entity_decode($data->current_scientific_name)
                                 ));
 
                                 //--- Set Layout and Style ---
@@ -612,7 +612,7 @@ class ExportRecordController extends Controller
                         if ( $source == 1 ) {
                             foreach ( $results as $data ) {
                                 $sheet->row( $row_number, array(
-                                    $count_line, $data->related_catalog_item, $data->current_scientific_name, $data->name
+                                    $count_line, $data->related_catalog_item, html_entity_decode($data->current_scientific_name), $data->name
                                 ));
 
                                 //--- Set Layout and Style ---
@@ -624,7 +624,7 @@ class ExportRecordController extends Controller
                         } else {
                             foreach ( $results as $data ) {
                                 $sheet->row( $row_number, array(
-                                    $count_line, $data->related_reference_item, $data->current_scientific_name, $data->name
+                                    $count_line, $data->related_reference_item, html_entity_decode($data->current_scientific_name), $data->name
                                 ));
 
                                 //--- Set Layout and Style ---
@@ -761,11 +761,11 @@ class ExportRecordController extends Controller
                             foreach ( $results as $data ) {
                                 if ($data->source == 1) {
                                     $sheet->row( $row_number, array(
-                                        $count_line, $data->related_catalog_item, $data->current_scientific_name, $data->name
+                                        $count_line, $data->related_catalog_item, html_entity_decode($data->current_scientific_name), $data->name
                                     ));
                                 } else {
                                     $sheet->row( $row_number, array(
-                                        $count_line, $data->related_reference_item, $data->current_scientific_name, $data->name
+                                        $count_line, $data->related_reference_item, html_entity_decode($data->current_scientific_name), $data->name
                                     ));
                                 }
 
@@ -941,7 +941,7 @@ class ExportRecordController extends Controller
                             if ( $locality_type > 0 && $locality_type < 6 ) {
                                 foreach ( $results as $data ) {
                                     $sheet->row( $row_number, array(
-                                        $count_line, $data->related_catalog_item, $data->current_scientific_name, $content_result
+                                        $count_line, $data->related_catalog_item, html_entity_decode($data->current_scientific_name), $content_result
                                     ));
 
                                     //--- Set Layout and Style ---
@@ -953,7 +953,7 @@ class ExportRecordController extends Controller
                             } else {
                                 foreach ( $results as $data ) {
                                     $sheet->row( $row_number, array(
-                                        $count_line, $data->related_catalog_item, $data->current_scientific_name, $data->locality
+                                        $count_line, $data->related_catalog_item, html_entity_decode($data->current_scientific_name), $data->locality
                                     ));
 
                                     //--- Set Layout and Style ---
@@ -967,7 +967,7 @@ class ExportRecordController extends Controller
                             if ( $locality_type > 0 && $locality_type < 6 ) {
                                 foreach ( $results as $data ) {
                                     $sheet->row( $row_number, array(
-                                        $count_line, $data->related_reference_item, $data->current_scientific_name, $content_result
+                                        $count_line, $data->related_reference_item, html_entity_decode($data->current_scientific_name), $content_result
                                     ));
 
                                     //--- Set Layout and Style ---
@@ -979,7 +979,7 @@ class ExportRecordController extends Controller
                             } else {
                                 foreach ( $results as $data ) {
                                     $sheet->row( $row_number, array(
-                                        $count_line, $data->related_reference_item, $data->current_scientific_name, $data->locality
+                                        $count_line, $data->related_reference_item, html_entity_decode($data->current_scientific_name), $data->locality
                                     ));
 
                                     //--- Set Layout and Style ---
@@ -1133,7 +1133,7 @@ class ExportRecordController extends Controller
                         if ( $source == 1 ) {
                             foreach ( $results as $data ) {
                                 $sheet->row( $row_number, array(
-                                    $count_line, $data->related_catalog_item, $data->current_scientific_name, $header_taxonomy.'-'.$taxonomy
+                                    $count_line, $data->related_catalog_item, html_entity_decode($data->current_scientific_name), $header_taxonomy.'-'.$taxonomy
                                 ));
 
                                 //--- Set Layout and Style ---
@@ -1145,7 +1145,7 @@ class ExportRecordController extends Controller
                         } else {
                             foreach ( $results as $data ) {
                                 $sheet->row( $row_number, array(
-                                    $count_line, $data->related_reference_item, $data->current_scientific_name, $header_taxonomy.'-'.$taxonomy
+                                    $count_line, $data->related_reference_item, html_entity_decode($data->current_scientific_name), $header_taxonomy.'-'.$taxonomy
                                 ));
 
                                 //--- Set Layout and Style ---
@@ -1305,7 +1305,7 @@ class ExportRecordController extends Controller
                         if ( $source == 1 ) {
                             foreach ( $results as $data ) {
                                 $sheet->row( $row_number, array(
-                                    $count_line, $data->related_catalog_item, $data->current_scientific_name
+                                    $count_line, $data->related_catalog_item, html_entity_decode($data->current_scientific_name)
                                 ));
 
                                 //--- Set Layout and Style ---
@@ -1317,7 +1317,7 @@ class ExportRecordController extends Controller
                         } else {
                             foreach ( $results as $data ) {
                                 $sheet->row( $row_number, array(
-                                    $count_line, $data->related_reference_item, $data->current_scientific_name
+                                    $count_line, $data->related_reference_item, html_entity_decode($data->current_scientific_name)
                                 ));
 
                                 //--- Set Layout and Style ---
@@ -1502,22 +1502,22 @@ class ExportRecordController extends Controller
                                 $arr_content = [
                                     $count_line, $data->phylum, $data->subphylum, $data->class,
                                     $data->order_o, $data->suborder, $data->infraorder, $data->family,
-                                    $data->current_scientific_name, $data->ocean_sea_lake_en.'/'.$data->ocean_sea_lake_th, $data->country_en.'/'.$data->country_th, $data->province_en.'/'.$data->province_th,
+                                    html_entity_decode($data->current_scientific_name), $data->ocean_sea_lake_en.'/'.$data->ocean_sea_lake_th, $data->country_en.'/'.$data->country_th, $data->province_en.'/'.$data->province_th,
                                     $expedition
                                 ];
                             } elseif ( $group_permission_a == 2 && $group_permission_b == 1 ) {
                                 $arr_content = [
                                     $count_line, $data->phylum, $data->subphylum, $data->class,
                                     $data->order_o, $data->suborder, $data->infraorder, $data->family,
-                                    $data->current_scientific_name, $expedition
+                                    html_entity_decode($data->current_scientific_name), $expedition
                                 ];
                             } elseif ( $group_permission_a == 1 && $group_permission_b == 2 ) {
                                 $arr_content = [
-                                    $count_line, $data->current_scientific_name, $data->ocean_sea_lake_en.'/'.$data->ocean_sea_lake_th, $data->country_en.'/'.$data->country_th, $data->province_en.'/'.$data->province_th, $expedition
+                                    $count_line, html_entity_decode($data->current_scientific_name), $data->ocean_sea_lake_en.'/'.$data->ocean_sea_lake_th, $data->country_en.'/'.$data->country_th, $data->province_en.'/'.$data->province_th, $expedition
                                 ];
                             } else {
                                 $arr_content = [
-                                    $count_line, $data->current_scientific_name, $expedition
+                                    $count_line, html_entity_decode($data->current_scientific_name), $expedition
                                 ];
                             }
 
@@ -1629,25 +1629,25 @@ class ExportRecordController extends Controller
                                 $arr_content = [
                                     $data->related_catalog_item.''.$data->related_reference_item, $data->phylum, $data->subphylum, $data->class,
                                     $data->order_o, $data->suborder, $data->infraorder, $data->family,
-                                    $data->current_scientific_name, $data->previous_scientific_name, $data->type_status_en, $data->identifier,
+                                    html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->identifier,
                                     $data->province_en.'/'.$data->province_th
                                 ];
                             } elseif ( $group_permission_a == 2 && $group_permission_b == 1 ) {
                                 $arr_content = [
                                     $data->related_catalog_item.''.$data->related_reference_item, $data->phylum, $data->subphylum, $data->class,
                                     $data->order_o, $data->suborder, $data->infraorder, $data->family,
-                                    $data->current_scientific_name, $data->previous_scientific_name, $data->type_status_en, $data->identifier,
+                                    html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->identifier,
                                 ];
                             } elseif ( $group_permission_a == 1 && $group_permission_b == 2 ) {
                                 $arr_content = [
                                     $data->related_catalog_item.''.$data->related_reference_item,
-                                    $data->current_scientific_name, $data->previous_scientific_name, $data->type_status_en, $data->identifier,
+                                    html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->identifier,
                                     $data->province_en.'/'.$data->province_th
                                 ];
                             } else {
                                 $arr_content = [
                                     $data->related_catalog_item.''.$data->related_reference_item,
-                                    $data->current_scientific_name, $data->previous_scientific_name, $data->type_status_en, $data->identifier
+                                    html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->identifier
                                 ];
                             }
 
@@ -1759,25 +1759,25 @@ class ExportRecordController extends Controller
                                 $arr_content = [
                                     $data->related_catalog_item.''.$data->related_reference_item, $data->phylum, $data->subphylum, $data->class,
                                     $data->order_o, $data->suborder, $data->infraorder, $data->family,
-                                    $data->current_scientific_name, $data->previous_scientific_name, $data->type_status_en, $data->habitat_en, $data->identifier,
+                                    html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->habitat_en, $data->identifier,
                                     $data->locality
                                 ];
                             } elseif ( $group_permission_a == 2 && $group_permission_b == 1 ) {
                                 $arr_content = [
                                     $data->related_catalog_item.''.$data->related_reference_item, $data->phylum, $data->subphylum, $data->class,
                                     $data->order_o, $data->suborder, $data->infraorder, $data->family,
-                                    $data->current_scientific_name, $data->previous_scientific_name, $data->type_status_en, $data->habitat_en, $data->identifier,
+                                    html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->habitat_en, $data->identifier,
                                 ];
                             } elseif ( $group_permission_a == 1 && $group_permission_b == 2 ) {
                                 $arr_content = [
                                     $data->related_catalog_item.''.$data->related_reference_item,
-                                    $data->current_scientific_name, $data->previous_scientific_name, $data->type_status_en, $data->habitat_en, $data->identifier,
+                                    html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->habitat_en, $data->identifier,
                                     $data->locality
                                 ];
                             } else {
                                 $arr_content = [
                                     $data->related_catalog_item.''.$data->related_reference_item,
-                                    $data->current_scientific_name, $data->previous_scientific_name, $data->type_status_en, $data->habitat_en, $data->identifier
+                                    html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->habitat_en, $data->identifier
                                 ];
                             }
 
