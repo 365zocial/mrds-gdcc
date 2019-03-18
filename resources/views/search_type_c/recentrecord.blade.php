@@ -240,7 +240,7 @@
                     @else
                         RECENT RECORD
                     @endif
-                    <a class="btn btn-sm btn-link" href="{{ url('referenceLoan') }}">Reference list</a>
+                    <a class="btn btn-sm btn-link" href="{{ url('abbreviation/referenceLoan') }}">Reference list</a>
                 </p>
 
                 <form class="" id="form" action="" method="post">

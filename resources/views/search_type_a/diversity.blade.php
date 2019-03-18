@@ -239,7 +239,6 @@
                 @else
                     Diversity Search
                 @endif
-                <a class="btn btn-sm btn-link" href="{{ url('user/referenceLoan') }}">Reference list</a>
             </p>
             <!-- <p class="content-help-text">Enter counting criteria here. Numbers of matches are shown below.</p> -->
 

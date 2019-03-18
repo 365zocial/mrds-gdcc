@@ -287,7 +287,6 @@
             <div class="content-box">
                 <p class="content-header">
                     RECENT RECORD
-                    <a class="btn btn-sm btn-link" href="{{ url('user/referenceLoan') }}">Reference list</a>
                 </p>
 
                 <form class="" id="form" action="" method="post">
