@@ -29,7 +29,6 @@ Route::group(['middleware' => ['CheckAuthened']], function() {
         #------------------------#
         Route::post('getTaxonomyName','AjaxController@getTaxonomyName'); //AjaxController
         Route::get('diversity','SearchTypeCController@searchDiversity');
-        Route::post('searchDataDiversity','SearchTypeCController@searchDataDiversity'); // Ajax for Diversity Search
         Route::get('distribution','SearchTypeCController@searchDistribution');
         Route::post('distribution','SearchTypeCController@getDistribution');
         Route::get('recentrecord','SearchTypeCController@searchRecent');

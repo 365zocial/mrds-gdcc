@@ -38,7 +38,7 @@
 
             $.ajax({
                 method: "POST",
-                url: "<?php echo url('search/searchDataDiversity'); ?>",
+                url: "<?php echo url('search/searchdata'); ?>",
                 data: {
                         _token: "{{ csrf_token() }}",
                         header_taxonomy: $('#taxa_header_id').val(),
