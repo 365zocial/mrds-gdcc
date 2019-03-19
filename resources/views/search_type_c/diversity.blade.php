@@ -38,7 +38,7 @@
 
             $.ajax({
                 method: "POST",
-                url: "<?php echo url('search/searchdata'); ?>",
+                url: "<?php echo url('search/searchDataDiversity'); ?>",
                 data: {
                         _token: "{{ csrf_token() }}",
                         header_taxonomy: $('#taxa_header_id').val(),
@@ -51,6 +51,7 @@
                         suborder: $('#suborder').val(),
                         infraorder: $('#infraorder').val(),
                         family: $('#family').val(),
+                        genus: $('#genus').val(),
 
                         chk_taxa: chk_taxa,
                         chk_locality: chk_locality,
@@ -238,7 +239,7 @@
                 </div>
 
                 <?php $arr_taxos = [    [$domains,'domain'], [$kingdoms,'kingdom'], [$phylums,'phylum'], [$subphylums,'subphylum'], [$classes,'class'],
-                                        [$orders,'order'], [$suborders,'suborder'], [$infraorders,'infraorder'], [$families,'family']   ]; ?>
+                                        [$orders,'order'], [$suborders,'suborder'], [$infraorders,'infraorder'], [$families,'family'], [$genuses,'genus']   ]; ?>
 
                 <hr class="search-category-pages hr_search" style="display:none;">
                 <div class="row row-inform taxa_select" style="display:none;">
@@ -261,6 +262,7 @@
                             <option value="suborder">Suborder / Clade</option>
                             <option value="infraorder">Infraorder / Clade</option>
                             <option value="family">Family / Clade</option>
+                            <option value="genus">Genus</option>
                         </select>
                     </div>
                     <div class="col-md-4">
