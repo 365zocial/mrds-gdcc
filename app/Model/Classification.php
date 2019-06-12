@@ -16,7 +16,7 @@ class Classification extends Model
 {
 	protected $table = 'classification';
 
-	public static function addClassification($cur_sci_name, $iq, $pre_sci_name, $domain, $kingdom, $subkingdom, $infrakingdom, $phylum, $subphylum, $infraphylum, $superclass, $class, $subclass, $infraclass, $superorder, $order_o, $suborder, $infraorder, $superfamily, $family, $subfamily, $genus, $subgenus, $species, $subspecies, $common_name, $protection_thai_law, $protection_iucn, $protection_cites, $migrate = false) {
+	public static function addClassification($cur_sci_name, $iq, $pre_sci_name, $domain, $kingdom, $subkingdom, $infrakingdom, $phylum, $subphylum, $infraphylum, $superclass, $class, $subclass, $infraclass, $superorder, $order_o, $suborder, $infraorder, $superfamily, $family, $subfamily, $genus, $subgenus, $species, $subspecies, $common_name, $protection_thai_law, $protection_iucn_onep, $protection_cites, $migrate = false) {
 
 		//get $created_by
 		$count_classduplicate = Classification::where('current_scientific_name', AllMean::checkAndCutForNoneBackSpace( strip_tags($cur_sci_name) ) )
@@ -52,7 +52,7 @@ class Classification extends Model
 			$db->subspecies 						= 	$subspecies;
 			$db->identification_qualifier 			= 	$iq;
 			$db->protection_thai_law				=	$protection_thai_law;
-			$db->protection_iucn					=	$protection_iucn;
+			$db->protection_iucn_onep				=	$protection_iucn_onep;
 			$db->protection_cites					=	$protection_cites;
 			$db->common_name						=	$common_name;
 
@@ -75,7 +75,7 @@ class Classification extends Model
 
     }
 
-	public static function updateClassification($id, $cur_sci_name, $iq, $pre_sci_name, $domain, $kingdom, $subkingdom, $infrakingdom, $phylum, $subphylum, $infraphylum, $superclass, $class, $subclass, $infraclass, $superorder, $order_o, $suborder, $infraorder, $superfamily, $family, $subfamily, $genus, $subgenus, $species, $subspecies, $status, $common_name, $protection_thai_law, $protection_iucn, $protection_cites){
+	public static function updateClassification($id, $cur_sci_name, $iq, $pre_sci_name, $domain, $kingdom, $subkingdom, $infrakingdom, $phylum, $subphylum, $infraphylum, $superclass, $class, $subclass, $infraclass, $superorder, $order_o, $suborder, $infraorder, $superfamily, $family, $subfamily, $genus, $subgenus, $species, $subspecies, $status, $common_name, $protection_thai_law, $protection_iucn_onep, $protection_cites){
 
 		//get $created_by
     	$created_by 					=	Auth::user()->id;
@@ -116,7 +116,7 @@ class Classification extends Model
 			$db->identification_qualifier 			= 	$iq;
 			$db->status 							= 	$status;
 			$db->protection_thai_law				=	$protection_thai_law;
-			$db->protection_iucn					=	$protection_iucn;
+			$db->protection_iucn_onep				=	$protection_iucn_onep;
 			$db->protection_cites					=	$protection_cites;
 			$db->common_name						=	$common_name;
 			$db->created_by 						= 	$created_by;
