@@ -944,7 +944,7 @@
             </p>
           </div>
           <div class="col-md-6">
-            <p class="record-label">หมายเหตุของภูมิปัญญา:
+            <p class="record-label">รายละเอียดของภูมิปัญญา:
               <span class="record-data">{{ AllMean::ReplaceNullWithDash( $record[1]->knowledge_remarks ) }}</span>
             </p>
           </div>

@@ -83,7 +83,7 @@ class CreateRecord extends Migration
             $table->text('area')->nullable()->comment('ของสถานที่ (ภูเขา/แม่น้ำ/โบราณสถาน ฯลฯ)');
             $table->text('folk_wisdom')->nullable()->comment('ภูมิปัญญาชาวบ้าน');
             $table->string('recorder', 255)->nullable()->comment('ผู้ให้ข้อมูลเกี่ยวกับภูมิปัญญาชาวบ้าน // Form ภาษาไทย');
-            $table->text('knowledge_remarks')->nullable()->comment('หมายเหตุของภูมิปัญญา');
+            $table->text('knowledge_remarks')->nullable()->comment('รายละเอียดของภูมิปัญญา');
             // $table->string('soil_temperature', 255)->nullable()->comment('อุณหภูมิดิน หน่วยองศาเซลเซียส // (ไม่ได้ใช้งานในระบบแล้ว)');
             // $table->text('soil_character')->nullable()->comment('ลักษณะของดิน // (ไม่ได้ใช้งานในระบบแล้ว)');
             // $table->string('soil_ph', 255)->nullable()->comment('ความเป็น กรดด่าง ของดิน // (ไม่ได้ใช้งานในระบบแล้ว)');

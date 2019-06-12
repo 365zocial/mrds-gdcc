@@ -508,7 +508,7 @@
                         <textarea class="form-control" id="folk_wisdom" name="folk_wisdom" rows="10" placeholder="Text Input">@if ( $record->folk_wisdom != null ){{ $record->folk_wisdom }}@endif</textarea>
                     </div>
                     <div class="col-md-6">
-                        <p class="search-report-dropdown-header font-thai-resize">หมายเหตุของภูมิปัญญา</p>
+                        <p class="search-report-dropdown-header font-thai-resize">รายละเอียดของภูมิปัญญา</p>
                         <textarea class="form-control" id="knowledge_remarks" name="knowledge_remarks" rows="10" placeholder="Text Input">@if ( $record->knowledge_remarks != null ){{ $record->knowledge_remarks }}@endif</textarea>
                     </div>
                 </div>
