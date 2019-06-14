@@ -499,6 +499,40 @@
                 </div>
               </div>
 
+              <hr class="search-report">
+
+              <div class="row row-inform">
+                <div class="col-md-12">
+                    <p class="search-report-dropdown-header">Invasive Species (ชนิดพันธุ์ต่างถิ่น)</p>
+                    <select class="form-control search-report-select select2" id="invasive_species" name="invasive_species">
+                        @if( count($invasive_species) !== 0 )
+                            <option value="" selected disabled>Select</option>
+                            @foreach($invasive_species as $invasive_species)
+                                <option value="{{ $invasive_species->id }}" @if( $classifications->invasive_species == $invasive_species->id ){{ "selected" }}@endif >{{ $invasive_species->name_th }}</option>
+                            @endforeach
+                        @else
+                            <option value="" selected>No list in select</option>
+                        @endif
+                    </select>
+                </div>
+              </div>
+
+              <div class="row row-inform">
+                <div class="col-md-12">
+                    <p class="search-report-dropdown-header">Living (กลุ่มชนิดพันธุ์)</p>
+                    <select class="form-control search-report-select select2" id="living" name="living">
+                        @if( count($livings) !== 0 )
+                            <option value="" selected disabled>Select</option>
+                            @foreach($livings as $living)
+                                <option value="{{ $living->id }}" @if( $classifications->living == $living->id ){{ "selected" }}@endif >{{ $living->name_th }}</option>
+                            @endforeach
+                        @else
+                            <option value="" selected>No list in select</option>
+                        @endif
+                    </select>
+                </div>
+              </div>
+
               <div class="row">
                   <div class="col-md-6 search-report-button" style="text-align: left">
                       <button type="button" class="btn btn-default btn-gold btn-gray" onclick="window.location.href='{{ url('staff/manageClassification') }}'">Back</button>

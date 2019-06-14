@@ -268,6 +268,21 @@
         </div>
     </div>
 
+    <hr class="view-record-line">
+
+    <div class="row">
+        <div class="col-md-12">
+          <p class="record-label">Invasive Species (ชนิดพันธุ์ต่างถิ่น):
+            <span class="record-data">{{ AllMean::ReplaceNullWithDash( Wording::find($classification->invasive_species ), "name_th" ) }}</span>
+          </p>
+        </div>
+        <div class="col-md-12">
+          <p class="record-label">Living (กลุ่มชนิดพันธุ์):
+            <span class="record-data">{{ AllMean::ReplaceNullWithDash( Wording::find($classification->living ), "name_th" ) }}</span>
+          </p>
+        </div>
+    </div>
+
   </div>
 </div>
 

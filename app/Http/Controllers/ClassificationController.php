@@ -96,6 +96,8 @@ class ClassificationController extends Controller
 			$data['protection_iucn_oneps'] 	= Wording::getWordingByWordingTypeForForm(12);
 			$data['protection_thai_laws'] 	= Wording::getWordingByWordingTypeForForm(22);
 			$data['protection_citeses'] 	= Wording::getWordingByWordingTypeForForm(23);
+			$data['invasive_species'] 	= Wording::getWordingByWordingTypeForForm(26);
+			$data['livings'] 	= Wording::getWordingByWordingTypeForForm(27);
 
 			return view('staff.classification.add.add_classification_form', $data);
 		}
@@ -166,6 +168,8 @@ class ClassificationController extends Controller
 		$data['protection_iucn_oneps'] 	= Wording::getWordingByWordingTypeForForm(12);
 		$data['protection_thai_laws'] 	= Wording::getWordingByWordingTypeForForm(22);
 		$data['protection_citeses'] 	= Wording::getWordingByWordingTypeForForm(23);
+		$data['invasive_species'] 	= Wording::getWordingByWordingTypeForForm(26);
+		$data['livings'] 	= Wording::getWordingByWordingTypeForForm(27);
 
 		return view('staff.classification.edit.edit_classification_form', $data);
 	}
@@ -204,11 +208,13 @@ class ClassificationController extends Controller
 		$protection_thai_law	=	$input->protection_thai_law;
 		$protection_iucn_onep	=	$input->protection_iucn_onep;
 		$protection_cites	=	$input->protection_cites;
+		$invasive_species	=	$input->invasive_species;
+		$living			=	$input->living;
 
 		$lastId 		= Classification::addClassification($cur_sci_name, $iq, $pre_sci_name,
 						$domain, $kingdom, $subkingdom, $infrakingdom, $phylum, $subphylum, $infraphylum, $superclass, $class, $subclass, $infraclass,
 						$superorder, $order, $suborder, $infraorder, $superfamily, $family, $subfamily,
-						$genus, $subgenus, $species, $subspecies, $common_name, $protection_thai_law, $protection_iucn_onep, $protection_cites);
+						$genus, $subgenus, $species, $subspecies, $common_name, $protection_thai_law, $protection_iucn_onep, $protection_cites, $invasive_species, $living);
 
 		if ( $lastId ) {
 			System_Log::Loging(
@@ -265,11 +271,14 @@ class ClassificationController extends Controller
 		$protection_thai_law	=	$input->protection_thai_law;
 		$protection_iucn_onep	=	$input->protection_iucn_onep;
 		$protection_cites	=	$input->protection_cites;
+		$invasive_species	=	$input->invasive_species;
+		$living				=	$input->living;
 
 		if (Classification::updateClassification($classification_id, $cur_sci_name, $iq, $pre_sci_name,
 							$domain, $kingdom, $subkingdom, $infrakingdom, $phylum, $subphylum, $infraphylum, $superclass, $class, $subclass, $infraclass,
 						 	$superorder, $order, $suborder, $infraorder, $superfamily, $family, $subfamily,
-							$genus, $subgenus, $species, $subspecies , AllMean::ConvertSwitchStatus($status), $common_name, $protection_thai_law, $protection_iucn_onep, $protection_cites) ) {
+							$genus, $subgenus, $species, $subspecies , AllMean::ConvertSwitchStatus($status), $common_name, $protection_thai_law, $protection_iucn_onep, $protection_cites,
+							$invasive_species, $living) ) {
 
 			System_Log::Loging( 'classification',  // table_name
 								$input->classification_id, // row_id
