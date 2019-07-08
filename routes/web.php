@@ -191,6 +191,10 @@ Route::group(['middleware' => ['Authen']], function () {
                 Route::get('map', 'Migration\Migrate_old_data@mapUnique_record_picture_record');
                 Route::get('addfilethai', 'Migration\MigrateMissingThai@index');
                 Route::get('checkfile', 'Migration\Migrate_check@index');
+
+                // Route::group(['prefix' => 'v2'], function() {
+                //     Route::get('import', 'Migration\V2\ImporterController');
+                // });
             });
 
 
@@ -425,3 +429,5 @@ Route::group(['middleware' => ['Authen']], function () {
 });
 
 include_once('stat.php');
+
+Route::get('migrate/v2/import', 'Migration\V2\ImporterController@index');

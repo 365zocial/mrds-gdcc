@@ -15,6 +15,7 @@ use App\Model\Header_Taxonomy;
 class Classification extends Model
 {
 	protected $table = 'classification';
+	protected $fillable = [ 'current_scientific_name', 'current_scientific_name_format', 'previous_scientific_name', 'previous_scientific_name_format', 'domain', 'kingdom', 'subkingdom', 'infrakingdom', 'phylum', 'subphylum', 'infraphylum', 'superclass', 'class', 'subclass', 'infraclass', 'superorder', 'order_o', 'suborder', 'infraorder', 'superfamily', 'family', 'subfamily', 'genus', 'subgenus', 'species', 'subspecies', 'identification_qualifier', 'protection_thai_law', 'protection_iucn_onep', 'protection_cites', 'common_name', 'status', 'migration_data'];
 
 	public static function addClassification($cur_sci_name, $iq, $pre_sci_name, $domain, $kingdom, $subkingdom, $infrakingdom, $phylum, $subphylum, $infraphylum, $superclass, $class, $subclass, $infraclass, $superorder, $order_o, $suborder, $infraorder, $superfamily, $family, $subfamily, $genus, $subgenus, $species,
 	$subspecies, $common_name, $protection_thai_law, $protection_iucn_onep, $protection_cites, $invasive_species, $living, $migrate = false) {

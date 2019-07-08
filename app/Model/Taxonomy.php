@@ -13,6 +13,7 @@ use App\Model\CatchException;
 class Taxonomy extends Model
 {
 	protected $table = 'taxonomy';
+	protected $fillable = ['header_taxonomy_id', 'name'];
 
     public static function getTaxonomyList() {
     	return Taxonomy::orderBy('header_taxonomy_id', 'asc')
