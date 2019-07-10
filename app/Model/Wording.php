@@ -12,6 +12,7 @@ use App\Model\CatchException;
 class Wording extends Model
 {
     protected $table = 'wording';
+    protected $fillable = ['wording_type_id', 'name_en', 'name_th', 'status'];
 
     public static function getWordingByWordingType($wording_type_id){
         return Wording::where('wording_type_id','=',$wording_type_id)->get();

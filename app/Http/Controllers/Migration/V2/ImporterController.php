@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Migration\V2;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Migration\V2\WordingCheck;
+
 use App\Http\Controllers\Controller;
 use App\Model\TempData;
 use App\Model\Taxonomy;
@@ -12,9 +14,17 @@ use App\Model\Marinecenter;
 use App\Model\Collection;
 use App\Model\Reference;
 use App\Model\AllMean;
+use App\Model\Wording_type;
+use App\Model\Wording;
+use App\Model\Country;
+use App\Model\Province;
+use App\Model\District;
+use App\Model\County;
 
 class ImporterController extends Controller
 {
+    use WordingCheck;
+
     public $header_row_no = 2;
     public $csvFile;
     public $data = [];
@@ -51,23 +61,18 @@ class ImporterController extends Controller
         $this->csvFile = file($path_to_file);
 
         // import to temp table
-        $this->importData();
-        $this->storeData();
+        $this->importDataToTemp();
 
-        // check toxonomy
-        $this->upsertTaxonomy();
-
-        // check wording
-        $this->upsertWording();
-
-        // insert class
-        $this->insertClass();
-
-        // insert record
-        $this->insertRecord();
+        // insert data to classification and record
+        $this->insertData();
     }
 
-    public function importData() {
+    private function importDataToTemp() {
+        $this->importData();
+        $this->storeData();
+    }
+
+    private function importData() {
         foreach ($this->csvFile as $line) {
             if($this->row > $this->header_row_no) {
                 $this->data[] = str_getcsv($line);
@@ -88,7 +93,7 @@ class ImporterController extends Controller
         }
     }
 
-    public function storeData() {
+    private function storeData() {
         TempData::truncate();
         foreach($this->getDatas() AS $data) {
             $tmp = new TempData;
@@ -252,6 +257,17 @@ class ImporterController extends Controller
         }
     }
 
+    private function insertData() {
+        // check toxonomy
+        $this->upsertTaxonomy();
+
+        // insert class
+        $this->insertClass();
+
+        // insert record
+        $this->insertRecord();
+    }
+
     private function upsertTaxonomy() {
         foreach($this->header_taxonomy as $index_header => $column) {
             $taxo_lists = TempData::get([$column]);
@@ -261,10 +277,6 @@ class ImporterController extends Controller
                 }
             }
         }
-    }
-
-    private function upsertWording() {
-        //
     }
 
     private function insertClass() {
@@ -278,10 +290,10 @@ class ImporterController extends Controller
             $class = Classification::firstOrCreate(
             [
                 // array for insert if not exist
-                'current_scientific_name' => $temp->current_scientific_name,
-                'current_scientific_name_format' => $temp->current_scientific_name,
-                'previous_scientific_name' => $temp->previous_scientific_name,
-                'previous_scientific_name_format' => $temp->previous_scientific_name,
+                'current_scientific_name' => AllMean::checkAndCutForNoneBackSpace( strip_tags( $this->convertUnderScore( $temp->current_scientific_name) ) ),
+                'current_scientific_name_format' => $this->convertUnderScore($temp->current_scientific_name),
+                'previous_scientific_name' => AllMean::checkAndCutForNoneBackSpace( strip_tags( $this->convertUnderScore( $temp->previous_scientific_name) ) ),
+                'previous_scientific_name_format' => $this->convertUnderScore($temp->previous_scientific_name),
                 'domain' => $arr_taxo_id['domain'],
                 'kingdom' => $arr_taxo_id['kingdom'],
                 'subkingdom' => $arr_taxo_id['subkingdom'],
@@ -304,10 +316,10 @@ class ImporterController extends Controller
                 'subgenus' => $arr_taxo_id['subgenus'],
                 'species' => $arr_taxo_id['species'],
                 'subspecies' => $arr_taxo_id['subspecies'],
-                'identification_qualifier' => $temp->identification_qualifier,
-                'protection_thai_law' => $temp->protection_thai_law,
-                'protection_iucn_onep' => $temp->protection_iucn,
-                'protection_cites' => $temp->protection_cites,
+                'identification_qualifier' => $this->wordingIdentificationQualifier($temp->identification_qualifier),
+                'protection_thai_law' => $this->wordingProtectionIUCN($temp->protection_thai_law),
+                'protection_iucn_onep' => $this->wordingProtectionThaiLaw($temp->protection_iucn),
+                'protection_cites' => $this->wordingProtecitonCITES($temp->protection_cites),
                 'common_name' => $temp->common_name,
                 'status' => '',
                 'migration_data' => 1,
@@ -345,117 +357,129 @@ class ImporterController extends Controller
     private function insertRecord() {
         foreach(TempData::get() AS $index => $temp) {
 
-            list($uniq,
-                $marine_center,
-                $collection,
-                $catalog_number,
-                $source,
-                $reference,
-                $page,
-                $no_species,
-                $no_locality,
-                $related_catalog_item,
-                $related_reference_item) = $this->setPrepareRecord($temp);
+            list($_uniq,
+            $_marine_center,
+            $_collection,
+            $_catalog_number,
+            $_source,
+            $_reference,
+            $_page,
+            $_no_species,
+            $_no_locality,
+            $_related_catalog_item,
+            $_related_reference_item,
+            $_country,
+            $_province,
+            $_district,
+            $_county,
+            $_locality,
+            $_variety_name,
+            $_diagnosis,
+            $_description,
+            $_islands_island,
+            $_size,
+            $_verbatim_latitude,
+            $_verbatim_longitude) = $this->setPrepareRecord($temp);
 
             for($i_language = 1; $i_language <= 2 ; $i_language++) {
-                $rc = new Record;
-                $rc->unique_record = $uniq;
-                $rc->classification_id = $this->class_id[$index]; // get each class id to mapping
-                $rc->language_id = $i_language; //set language id 1 or 2
-                $rc->marinecenter_id = $marine_center;
-                $rc->collection_code = $collection;
-                $rc->catalog_number = $catalog_number;
-                $rc->related_catalog_item = $related_catalog_item;
-                $rc->source = $source;
-                $rc->reference = $reference;
-                $rc->page = $page;
-                $rc->no_species = $no_species;
-                $rc->no_locality = $no_locality;
-                $rc->related_reference_item = $related_reference_item;
-                $rc->individual_count = $temp->individual_count;
-                $rc->latitude = $temp->latitude;
-                $rc->verbatim_latitude = $this->readVerbatim($temp->verbatim_latitude);
-                $rc->start_latitude = $temp->start_latitude;
-                $rc->end_latitude = $temp->end_latitude;
-                $rc->longitude = $temp->longitude;
-                $rc->verbatim_longitude = $this->readVerbatim($temp->verbatim_longitude);
-                $rc->start_longitude = $temp->start_longitude;
-                $rc->end_longitude = $temp->end_longitude;
-                $rc->country = $temp->country;
-                $rc->province = $temp->province;
-                $rc->district = $temp->district;
-                $rc->county = $temp->county;
-                $rc->locality = $temp->locality;
-                $rc->ocean_sea_lake = $temp->ocean_sea_lake;
-                $rc->islands_island = $temp->islands_island;
-                $rc->habitat = $temp->habitat;
-                $rc->sediment_type = $temp->sediment_type;
-                $rc->type_status = $temp->type_status;
-                $rc->sex = $temp->sex;
-                $rc->size = $temp->size;
-                $rc->life_stage = $temp->life_stage;
-                $rc->donated_from = $temp->donated_from;
-                $rc->deposited_at = $temp->deposited_at;
-                $rc->gear_method = $temp->gear_method;
-                $rc->depth_start = $temp->depth_start;
-                $rc->depth_end = $temp->depth_end;
-                $rc->collector = $temp->collector;
-                $rc->collected_date = $temp->collected_date;
-                $rc->collected_year = $temp->collected_year;
-                $rc->collected_month = $temp->collected_month;
-                $rc->collected_day = $temp->collected_day;
-                $rc->identifier = $temp->identifier;
-                $rc->identified_date = $temp->identified_date;
-                $rc->identified_year = $temp->identified_year;
-                $rc->identified_month = $temp->identified_month;
-                $rc->identified_day = $temp->identified_day;
-                $rc->previous_identifier = $temp->previous_identifier;
-                $rc->previous_identified_date = $temp->previous_identified_date;
-                $rc->note_collector = $temp->note_collector;
-                $rc->expedition = $temp->expedition;
-                $rc->preparation_type = $temp->preparation_type;
-                $rc->gene_bank_number = $temp->gene_bank_number;
-                $rc->local_name = $temp->local_name;
-                $rc->vernacular_name = $temp->vernacular_name;
-                $rc->variety_name = $temp->variety_name;
-                $rc->diagnosis = $temp->diagnosis;
-                $rc->description = $temp->description;
-                $rc->team_exploration_code = $temp->team_exploration_code;
-                $rc->area_exploration = $temp->area_exploration;
-                $rc->village_no = $temp->village_no;
-                $rc->area_direction = $temp->area_direction;
-                $rc->area = $temp->area;
-                $rc->folk_wisdom = $temp->folk_wisdom;
-                $rc->recorder = $temp->recorder;
-                $rc->knowledge_remarks = $temp->knowledge_remarks;
-                $rc->soil_temperature = $temp->soil_temperature;
-                $rc->soil_character = $temp->soil_character;
-                $rc->soil_ph = $temp->soil_ph;
-                $rc->water_temperature = $temp->water_temperature;
-                $rc->transparency = $temp->transparency;
-                $rc->water_ph = $temp->water_ph;
-                $rc->dissolve_oxygen = $temp->dissolve_oxygen;
-                $rc->suspended_solid = $temp->suspended_solid;
-                $rc->salinity = $temp->salinity;
-                $rc->specimen_collection = $temp->specimen_collection;
-                $rc->specimen_photograph = $temp->specimen_photograph;
-                $rc->sighting_no = $temp->sighting_no;
-                $rc->exploration_remark = $temp->exploration_remark;
-                $rc->sighting_time = $temp->sighting_time;
-                $rc->solo_living = '';
-                $rc->group_living = '';
-                $rc->animal_type1 = $temp->animal_type1;
-                $rc->animal_type2 = $temp->animal_type2;
-                $rc->animal_type3 = $temp->animal_type3;
-                $rc->economic_value = $temp->economic_value;
-                $rc->reproduction = $temp->reproduction;
-                $rc->plant_type = $temp->plant_type;
-                $rc->picture_name = '';
-                $rc->picture_remark = '';
-                $rc->migration_data = '';
-                $rc->approve_status = '';
-                $rc->approve_by = '';
-                $rc->status = '';
+                $rc                             = new Record;
+                $rc->unique_record              = $_uniq;
+                $rc->classification_id          = $this->class_id[$index]; // get each class id to mapping
+                $rc->language_id                = $i_language; //set language id 1 or 2
+                $rc->marinecenter_id            = $_marine_center;
+                $rc->collection_code            = $_collection;
+                $rc->catalog_number             = $_catalog_number;
+                $rc->related_catalog_item       = $_related_catalog_item;
+                $rc->source                     = $_source;
+                $rc->reference                  = $_reference;
+                $rc->page                       = $_page;
+                $rc->no_species                 = $_no_species;
+                $rc->no_locality                = $_no_locality;
+                $rc->related_reference_item     = $_related_reference_item;
+                $rc->individual_count           = $temp->individual_count;
+                $rc->latitude                   = $temp->latitude;
+                $rc->verbatim_latitude          = $_verbatim_latitude;
+                $rc->start_latitude             = $temp->start_latitude;
+                $rc->end_latitude               = $temp->end_latitude;
+                $rc->longitude                  = $temp->longitude;
+                $rc->verbatim_longitude         = $_verbatim_longitude;
+                $rc->start_longitude            = $temp->start_longitude;
+                $rc->end_longitude              = $temp->end_longitude;
+                $rc->country                    = $_country;
+                $rc->province                   = $_province;
+                $rc->district                   = $_district;
+                $rc->county                     = $_county;
+                $rc->locality                   = $_locality[$i_language-1];
+                $rc->ocean_sea_lake             = $this->wordingOceanSeaLake($temp->ocean_sea_lake, $temp->ocean_sea_lake_dup);
+                $rc->islands_island             = $_islands_island[$i_language-1];
+                $rc->habitat                    = $this->wordingHabitat($temp->habitat, $temp->habitat_dup);
+                $rc->sediment_type              = $temp->sediment_type;
+                $rc->type_status                = $this->wordingTypeStatus($temp->type_status, $temp->type_status_dup);
+                $rc->sex                        = $this->wordingSex($temp->sex);
+                $rc->size                       = $_size[$i_language-1];
+                $rc->life_stage                 = $this->wordingLifeStage($temp->life_stage, $temp->life_stage_dup);
+                $rc->donated_from               = $this->wordingDonatedFrom($temp->donated_from);
+                $rc->deposited_at               = $this->wordingDepositedAt($temp->deposited_at);
+                $rc->gear_method                = $this->wordingGearMethod($temp->gear_method, $temp->gear_method_dup);
+                $rc->depth_start                = $temp->depth_start;
+                $rc->depth_end                  = $temp->depth_end;
+                $rc->collector                  = $temp->collector;
+                $rc->collected_date             = $temp->collected_date;
+                $rc->collected_year             = $temp->collected_year;
+                $rc->collected_month            = $temp->collected_month;
+                $rc->collected_day              = $temp->collected_day;
+                $rc->identifier                 = $temp->identifier;
+                $rc->identified_date            = $temp->identified_date;
+                $rc->identified_year            = $temp->identified_year;
+                $rc->identified_month           = $temp->identified_month;
+                $rc->identified_day             = $temp->identified_day;
+                $rc->previous_identifier        = $temp->previous_identifier;
+                $rc->previous_identified_date   = $temp->previous_identified_date;
+                $rc->note_collector             = $temp->note_collector;
+                $rc->expedition                 = $this->wordingExpedition($temp->expedition, $temp->expedition_dup);
+                $rc->preparation_type           = $this->wordingPreparationType($temp->preparation_type, $temp->preparation_type_dup);
+                $rc->gene_bank_number           = $temp->gene_bank_number;
+                $rc->local_name                 = $temp->local_name;
+                $rc->vernacular_name            = $temp->vernacular_name;
+                $rc->variety_name               = $_variety_name[$i_language-1];
+                $rc->diagnosis                  = $_diagnosis[$i_language-1];
+                $rc->description                = $_description[$i_language-1];
+                $rc->team_exploration_code      = $temp->team_exploration_code;
+                $rc->area_exploration           = $temp->area_exploration;
+                $rc->village_no                 = $temp->village_no;
+                $rc->area_direction             = $this->wordingAreaDirection($temp->area_direction, $temp->area_direction_dup);
+                $rc->area                       = $temp->area;
+                $rc->folk_wisdom                = $temp->folk_wisdom;
+                $rc->recorder                   = $temp->recorder;
+                $rc->knowledge_remarks          = $temp->knowledge_remarks;
+                $rc->soil_temperature           = $temp->soil_temperature;
+                $rc->soil_character             = $temp->soil_character;
+                $rc->soil_ph                    = $temp->soil_ph;
+                $rc->water_temperature          = $temp->water_temperature;
+                $rc->transparency               = $temp->transparency;
+                $rc->water_ph                   = $temp->water_ph;
+                $rc->dissolve_oxygen            = $temp->dissolve_oxygen;
+                $rc->suspended_solid            = $temp->suspended_solid;
+                $rc->salinity                   = $temp->salinity;
+                $rc->specimen_collection        = $temp->specimen_collection;
+                $rc->specimen_photograph        = $temp->specimen_photograph;
+                $rc->sighting_no                = $temp->sighting_no;
+                $rc->exploration_remark         = $temp->exploration_remark;
+                $rc->sighting_time              = $temp->sighting_time;
+                $rc->solo_living                = '';
+                $rc->group_living               = '';
+                $rc->animal_type1               = $this->wordingAnimalType1($temp->animal_type1);
+                $rc->animal_type2               = $this->wordingAnimalType2($temp->animal_type2);
+                $rc->animal_type3               = $this->wordingAnimalType3($temp->animal_type3);
+                $rc->economic_value             = $this->wordingEconomicValue($temp->economic_value);
+                $rc->reproduction               = $temp->reproduction;
+                $rc->plant_type                 = $this->wordingPlantType($temp->plant_type);
+                $rc->picture_name               = '';
+                $rc->picture_remark             = '';
+                $rc->migration_data             = '';
+                $rc->approve_status             = '';
+                $rc->approve_by                 = '';
+                $rc->status                     = '';
                 $rc->save();
             }
         }
@@ -506,6 +530,17 @@ class ImporterController extends Controller
         $uniq = (Record::orderBy('id', 'desc')->limit(1)->get(['unique_record'])[0]->unique_record + 1);
         $marine_center = Marinecenter::where('marinecenter_code', $temp->marinecenter_code)->get()[0]->id;
         $collection = Collection::where('name_en', $temp->collection)->get()[0]->id;
+        $country = Country::where('country_th', $temp->country_dup)->get()[0]->id;
+        $province = Province::where('province_th', $temp->province_dup)->get()[0]->id;
+        $district = District::where('district_th', $temp->district_dup)->get()[0]->id;
+        $county = County::where('county_th', $temp->county_dup)->get()[0]->id;
+
+        $locality = [$temp->locality, $temp->locality_dup];
+        $variety_name = [$temp->variety_name, $temp->variety_name_dup];
+        $diagnosis = [$temp->diagnosis, $temp->diagnosis_dup];
+        $description = [$temp->description, $temp->description_dup];
+        $islands_island = [$temp->islands_island, $temp->islands_island_dup];
+        $size = [$temp->size, $temp->size_dup];
 
         if($temp->source === 'Specimen') {
             $catalog_number     = $temp->catalog_number;
@@ -527,7 +562,53 @@ class ImporterController extends Controller
             $related_reference_item = $this->createRelatedReference($temp->marinecenter_code, $source, $temp->collection, $reference, $page, $no_species, $no_locality);
         }
 
-        return [$uniq, $marine_center, $collection, $catalog_number, $source, $reference, $page, $no_species, $no_locality, $related_catalog_item, $related_reference_item];
+        $verbatim_latitude = $this->readVerbatim($temp->verbatim_latitude);
+        $verbatim_longitude = $this->readVerbatim($temp->verbatim_longitude);
+
+        return [$uniq,
+                $marine_center,
+                $collection,
+                $catalog_number,
+                $source,
+                $reference,
+                $page,
+                $no_species,
+                $no_locality,
+                $related_catalog_item,
+                $related_reference_item,
+                $country,
+                $province,
+                $district,
+                $county,
+                $locality,
+                $variety_name,
+                $diagnosis,
+                $description,
+                $islands_island,
+                $size,
+                $verbatim_latitude,
+                $verbatim_longitude];
+    }
+
+    public function convertUnderScore($string){
+        $merge_string = "";
+        $arr_string = explode(" ",$string);
+
+        foreach ($arr_string as $value) {
+            if( strpos($value,"_") !== false){
+                $value = str_replace("_","<i>",$value);
+
+                if( strpos($value,")") !== false ){
+                    $value = rtrim($value, ")");
+                    $value .= "</i>)";
+                }else{
+                    $value .= "</i>";
+                }
+
+            }
+            $merge_string .= $value." ";
+        }
+        return $merge_string;
     }
     // utility function
 }
