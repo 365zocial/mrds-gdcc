@@ -42,7 +42,7 @@ class CreateClassification extends Migration
             $table->integer('subspecies')->unsigned()->nullable()->comment('รหัสที่บอกว่า Record อยู่ Subspecies อะไร, FK: taxonomy table');
             $table->tinyInteger('identification_qualifier')->unsigned()->nullable()->comment('คุณลักษณะของการยืนยันชื่อ, FK: wording table');
             $table->integer('protection_thai_law')->nullable()->comment('การคุ้มครองสัตว์ (ตามกฎหมายไทย), FK: wording table');
-            $table->integer('protection_iucn_onep')->nullable()->comment('การคุ้มครองสัตว์ IUCN ONEP, FK: wording table');
+            $table->integer('protection_iucn_2019')->nullable()->comment('การคุ้มครองสัตว์ IUCN 2019, FK: wording table');
             $table->integer('protection_cites')->nullable()->comment('การคุ้มครองสัตว์ ตามบัญชี CITES, FK: wording table');
             $table->integer('invasive_species')->nullable()->comment('ชนิดพันธุ์ต่างถิ่น, FK: wording table');
             $table->integer('living')->nullable()->comment('กลุ่มชนิดพันธุ์, FK: wording table');

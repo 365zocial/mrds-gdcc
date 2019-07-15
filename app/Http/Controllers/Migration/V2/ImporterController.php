@@ -245,7 +245,7 @@ class ImporterController extends Controller
             $tmp->animal_type2 = $data[145];
             $tmp->animal_type3 = $data[146];
             $tmp->protection_thai_law = $data[147];
-            $tmp->protection_iucn = $data[148];
+            $tmp->protection_iucn_2019 = $data[148];
             $tmp->protection_cites = $data[149];
             $tmp->reproduction = $data[150];
             $tmp->cd = $data[151];
@@ -318,7 +318,7 @@ class ImporterController extends Controller
                 'subspecies' => $arr_taxo_id['subspecies'],
                 'identification_qualifier' => $this->wordingIdentificationQualifier($temp->identification_qualifier),
                 'protection_thai_law' => $this->wordingProtectionIUCN($temp->protection_thai_law),
-                'protection_iucn_onep' => $this->wordingProtectionThaiLaw($temp->protection_iucn),
+                'protection_iucn_2019' => $this->wordingProtectionThaiLaw($temp->protection_iucn_2019),
                 'protection_cites' => $this->wordingProtecitonCITES($temp->protection_cites),
                 'common_name' => $temp->common_name,
                 'status' => '',
@@ -612,4 +612,3 @@ class ImporterController extends Controller
     }
     // utility function
 }
-

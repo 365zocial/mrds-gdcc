@@ -410,8 +410,8 @@
                   </p>
                 </div>
                 <div class="col-md-12">
-                  <p class="record-label">Protection IUCN/ONEP:
-                    <span class="record-data">{{ AllMean::ReplaceNullWithDash( Wording::find($classification->protection_iucn_onep ), "name_en" ) }} @if( $classification->protection_iucn_onep != null ) ({{ AllMean::ReplaceNullWithDash( Wording::find($classification->protection_iucn_onep ), "name_th" ) }}) @endif</span>
+                  <p class="record-label">Protection IUCN 2019:
+                    <span class="record-data">{{ AllMean::ReplaceNullWithDash( Wording::find($classification->protection_iucn_2019 ), "name_en" ) }} @if( $classification->protection_iucn_2019 != null ) ({{ AllMean::ReplaceNullWithDash( Wording::find($classification->protection_iucn_2019 ), "name_th" ) }}) @endif</span>
                   </p>
                 </div>
                 <div class="col-md-12">

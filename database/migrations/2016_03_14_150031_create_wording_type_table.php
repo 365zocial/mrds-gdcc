@@ -24,7 +24,7 @@ class CreateWordingTypeTable extends Migration
                                                 9 = life_stage,
                                                 10 = donated_from,
                                                 11 = deposited_at,
-                                                12 = protection_iucn_onep,
+                                                12 = protection_iucn_2019,
                                                 13 = reproduction
                                                 14 = area_direction,
                                                 15 = utilization,
