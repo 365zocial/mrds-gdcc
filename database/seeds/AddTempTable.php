@@ -11,7 +11,7 @@ class AddTempTable extends Seeder
      */
     public function run()
     {
-        $sql = "DROP TABLE `temp_datas`; CREATE TABLE `temp_datas` (
+        $sql = "DROP TABLE IF EXISTS `temp_datas`; CREATE TABLE `temp_datas` (
             `date` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
             `department` text COLLATE utf8_unicode_ci DEFAULT NULL,
             `department_dup` text COLLATE utf8_unicode_ci DEFAULT NULL,
