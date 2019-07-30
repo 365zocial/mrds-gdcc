@@ -25,7 +25,7 @@ class ImporterController extends Controller
 {
     use WordingCheck;
 
-    public $header_row_no = 2;
+    public $header_row_no = 0;
     public $csvFile;
     public $data = [];
     public $row = 1;
@@ -57,7 +57,7 @@ class ImporterController extends Controller
 
     public function index() {
         // select file
-        $path_to_file = base_path('example_data_set.csv');
+        $path_to_file = base_path('example_data_set_2.csv');
         $this->csvFile = file($path_to_file);
 
         // import to temp table
@@ -476,10 +476,10 @@ class ImporterController extends Controller
                 $rc->plant_type                 = $this->wordingPlantType($temp->plant_type);
                 $rc->picture_name               = '';
                 $rc->picture_remark             = '';
-                $rc->migration_data             = '';
+                $rc->migration_data             = 1;
                 $rc->approve_status             = '';
-                $rc->approve_by                 = '';
-                $rc->status                     = '';
+                $rc->approve_by                 = \Auth::user()->id;
+                $rc->status                     = 2;
                 $rc->save();
             }
         }
@@ -530,10 +530,18 @@ class ImporterController extends Controller
         $uniq = (Record::orderBy('id', 'desc')->limit(1)->get(['unique_record'])[0]->unique_record + 1);
         $marine_center = Marinecenter::where('marinecenter_code', $temp->marinecenter_code)->get()[0]->id;
         $collection = Collection::where('name_en', $temp->collection)->get()[0]->id;
-        $country = Country::where('country_th', $temp->country_dup)->get()[0]->id;
-        $province = Province::where('province_th', $temp->province_dup)->get()[0]->id;
-        $district = District::where('district_th', $temp->district_dup)->get()[0]->id;
-        $county = County::where('county_th', $temp->county_dup)->get()[0]->id;
+
+        $country = Country::where('country_th', $temp->country_dup)->get();
+        $country_id = $country->isNotEmpty() ? $country[0]->id : 0;
+
+        $province = Province::where('province_th', $temp->province_dup)->where('country_id', $country_id)->get();
+        $province_id = $province->isNotEmpty() ? $province[0]->id : 0;
+
+        $district = District::where('district_th', $temp->district_dup)->where('province_id', $province_id)->get();
+        $district_id = $district->isNotEmpty() ? $district[0]->id : 0;
+
+        $county   = County::where('county_th', $temp->county_dup)->where('district_id', $district_id)->get();
+        $county_id = $county->isNotEmpty() ? $county[0]->id : 0;
 
         $locality = [$temp->locality, $temp->locality_dup];
         $variety_name = [$temp->variety_name, $temp->variety_name_dup];
@@ -576,10 +584,10 @@ class ImporterController extends Controller
                 $no_locality,
                 $related_catalog_item,
                 $related_reference_item,
-                $country,
-                $province,
-                $district,
-                $county,
+                $country_id,
+                $province_id,
+                $district_id,
+                $county_id,
                 $locality,
                 $variety_name,
                 $diagnosis,
