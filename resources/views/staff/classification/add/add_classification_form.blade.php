@@ -507,12 +507,12 @@
 
                 <div class="row">
                     <div class="col-md-6">
-                        <p class="search-report-dropdown-header">Protection IUCN/ONEP</p>
-                        <select class="form-control search-report-select select2" id="protection_iucn_onep" name="protection_iucn_onep">
-                            @if( count($protection_iucn_oneps) !== 0 )
+                        <p class="search-report-dropdown-header">Protection IUCN 2019</p>
+                        <select class="form-control search-report-select select2" id="protection_iucn_2019" name="protection_iucn_2019">
+                            @if( count($protection_iucn_2019s) !== 0 )
                                 <option value="" selected disabled>Select</option>
-                                @foreach($protection_iucn_oneps as $protection_iucn_onep)
-                                    <option value="{{ $protection_iucn_onep->id }}" >{{ $protection_iucn_onep->name_en }} ({{ $protection_iucn_onep->name_th }})</option>
+                                @foreach($protection_iucn_2019s as $protection_iucn_2019)
+                                    <option value="{{ $protection_iucn_2019->id }}" >{{ $protection_iucn_2019->name_en }} ({{ $protection_iucn_2019->name_th }})</option>
                                 @endforeach
                             @else
                                 <option value="" selected>No list in select</option>

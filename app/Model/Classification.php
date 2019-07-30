@@ -15,10 +15,10 @@ use App\Model\Header_Taxonomy;
 class Classification extends Model
 {
 	protected $table = 'classification';
-	protected $fillable = [ 'current_scientific_name', 'current_scientific_name_format', 'previous_scientific_name', 'previous_scientific_name_format', 'domain', 'kingdom', 'subkingdom', 'infrakingdom', 'phylum', 'subphylum', 'infraphylum', 'superclass', 'class', 'subclass', 'infraclass', 'superorder', 'order_o', 'suborder', 'infraorder', 'superfamily', 'family', 'subfamily', 'genus', 'subgenus', 'species', 'subspecies', 'identification_qualifier', 'protection_thai_law', 'protection_iucn_onep', 'protection_cites', 'common_name', 'status', 'migration_data'];
+	protected $fillable = [ 'current_scientific_name', 'current_scientific_name_format', 'previous_scientific_name', 'previous_scientific_name_format', 'domain', 'kingdom', 'subkingdom', 'infrakingdom', 'phylum', 'subphylum', 'infraphylum', 'superclass', 'class', 'subclass', 'infraclass', 'superorder', 'order_o', 'suborder', 'infraorder', 'superfamily', 'family', 'subfamily', 'genus', 'subgenus', 'species', 'subspecies', 'identification_qualifier', 'protection_thai_law', 'protection_iucn_2019', 'protection_cites', 'common_name', 'status', 'migration_data'];
 
 	public static function addClassification($cur_sci_name, $iq, $pre_sci_name, $domain, $kingdom, $subkingdom, $infrakingdom, $phylum, $subphylum, $infraphylum, $superclass, $class, $subclass, $infraclass, $superorder, $order_o, $suborder, $infraorder, $superfamily, $family, $subfamily, $genus, $subgenus, $species,
-	$subspecies, $common_name, $protection_thai_law, $protection_iucn_onep, $protection_cites, $invasive_species, $living, $migrate = false) {
+	$subspecies, $common_name, $protection_thai_law, $protection_iucn_2019, $protection_cites, $invasive_species, $living, $migrate = false) {
 
 		//get $created_by
 		$count_classduplicate = Classification::where('current_scientific_name', AllMean::checkAndCutForNoneBackSpace( strip_tags($cur_sci_name) ) )
@@ -54,7 +54,7 @@ class Classification extends Model
 			$db->subspecies 						= 	$subspecies;
 			$db->identification_qualifier 			= 	$iq;
 			$db->protection_thai_law				=	$protection_thai_law;
-			$db->protection_iucn_onep				=	$protection_iucn_onep;
+			$db->protection_iucn_2019				=	$protection_iucn_2019;
 			$db->protection_cites					=	$protection_cites;
 			$db->invasive_species					=	$invasive_species;
 			$db->living								=	$living;
@@ -80,7 +80,7 @@ class Classification extends Model
     }
 
 	public static function updateClassification($id, $cur_sci_name, $iq, $pre_sci_name, $domain, $kingdom, $subkingdom, $infrakingdom, $phylum, $subphylum, $infraphylum, $superclass, $class, $subclass, $infraclass, $superorder, $order_o, $suborder, $infraorder, $superfamily, $family, $subfamily, $genus, $subgenus, $species,
-	$subspecies, $status, $common_name, $protection_thai_law, $protection_iucn_onep, $protection_cites, $invasive_species, $living){
+	$subspecies, $status, $common_name, $protection_thai_law, $protection_iucn_2019, $protection_cites, $invasive_species, $living){
 
 		//get $created_by
     	$created_by 					=	Auth::user()->id;
@@ -121,7 +121,7 @@ class Classification extends Model
 			$db->identification_qualifier 			= 	$iq;
 			$db->status 							= 	$status;
 			$db->protection_thai_law				=	$protection_thai_law;
-			$db->protection_iucn_onep				=	$protection_iucn_onep;
+			$db->protection_iucn_2019				=	$protection_iucn_2019;
 			$db->protection_cites					=	$protection_cites;
 			$db->invasive_species					=	$invasive_species;
 			$db->living								=	$living;
