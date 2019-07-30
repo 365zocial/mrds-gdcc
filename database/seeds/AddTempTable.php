@@ -11,7 +11,7 @@ class AddTempTable extends Seeder
      */
     public function run()
     {
-        $sql = "CREATE TABLE `temp_datas` (
+        $sql = "DROP TABLE `temp_datas`; CREATE TABLE `temp_datas` (
             `date` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
             `department` text COLLATE utf8_unicode_ci DEFAULT NULL,
             `department_dup` text COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -160,7 +160,7 @@ class AddTempTable extends Seeder
             `animal_type2` varchar(191) COLLATE utf8_unicode_ci DEFAULT NULL,
             `animal_type3` varchar(191) COLLATE utf8_unicode_ci DEFAULT NULL,
             `protection_thai_law` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-            `protection_iucn` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+            `protection_iucn_2019` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
             `protection_cites` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
             `reproduction` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
             `cd` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
