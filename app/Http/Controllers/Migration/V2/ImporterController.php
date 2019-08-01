@@ -25,7 +25,7 @@ class ImporterController extends Controller
 {
     use WordingCheck;
 
-    public $header_row_no = 0;
+    public $header_row_no = 1;
     public $csvFile;
     public $data = [];
     public $row = 1;
@@ -56,8 +56,68 @@ class ImporterController extends Controller
     ];
 
     public function index() {
-        // select file
-        $path_to_file = base_path('example_data_set_2.csv');
+        $files = [
+            "Bivalvia (migrate) 2019-08-1-1.csv",
+            "Bivalvia (migrate) 2019-08-1-2.csv",
+            "Bivalvia (migrate) 2019-08-1-3.csv",
+            "Bivalvia (migrate) 2019-08-1-4.csv",
+            "Bivalvia (migrate) 2019-08-1-5.csv",
+            "Bivalvia (migrate) 2019-08-1-6.csv",
+            "Bivalvia (migrate) 2019-08-1-7.csv",
+            "Bivalvia (migrate) 2019-08-2-10.csv",
+            "Bivalvia (migrate) 2019-08-2-11.csv",
+            "Bivalvia (migrate) 2019-08-2-12.csv",
+            "Bivalvia (migrate) 2019-08-2-13.csv",
+            "Bivalvia (migrate) 2019-08-2-14.csv",
+            "Bivalvia (migrate) 2019-08-2-15.csv",
+            "Bivalvia (migrate) 2019-08-2-16.csv",
+            "Bivalvia (migrate) 2019-08-2-17.csv",
+            "Bivalvia (migrate) 2019-08-2-18.csv",
+            "Bivalvia (migrate) 2019-08-2-19.csv",
+            "Bivalvia (migrate) 2019-08-2-20.csv",
+            "Bivalvia (migrate) 2019-08-2-21.csv",
+            "Bivalvia (migrate) 2019-08-2-22.csv",
+            "Bivalvia (migrate) 2019-08-2-8.csv",
+            "Bivalvia (migrate) 2019-08-2-9.csv",
+            "Bivalvia (migrate) 2019-08-3-23.csv",
+            "Bivalvia (migrate) 2019-08-3-24.csv",
+            "Bivalvia (migrate) 2019-08-3-25.csv",
+            "Bivalvia (migrate) 2019-08-3-26.csv",
+            "Bivalvia (migrate) 2019-08-3-27.csv",
+            "Bivalvia (migrate) 2019-08-3-28.csv",
+            "Bivalvia (migrate) 2019-08-3-29.csv",
+            "Bivalvia (migrate) 2019-08-3-30.csv",
+            "Bivalvia (migrate) 2019-08-3-31.csv",
+            "Bivalvia (migrate) 2019-08-3-32.csv",
+            "Bivalvia (migrate) 2019-08-3-33.csv",
+            "Bivalvia (migrate) 2019-08-3-34.csv",
+            "Bivalvia (migrate) 2019-08-3-35.csv",
+            "Bivalvia (migrate) 2019-08-3-36.csv",
+            "Bivalvia (migrate) 2019-08-3-37.csv",
+            "Bivalvia (migrate) 2019-08-4-38.csv",
+            "Cephalopoda (migrate) 2019-07-29-1.csv",
+            "Cephalopoda (migrate) 2019-07-31-2.csv",
+            "Cephalopoda (migrate) 2019-07-31-3.csv",
+            "Cephalopoda (migrate) 2019-07-31-4.csv",
+            "Cephalopoda (migrate) 2019-07-31-5.csv",
+            "Cephalopoda (migrate) 2019-07-31-6.csv",
+            "Cephalopoda (migrate) 2019-07-31-7.csv",
+            "Cephalopoda (migrate) 2019-07-31-8.csv",
+            "Cephalopoda (migrate) 2019-07-31-9.csv",
+            "Gastropoda (migrate) 2019-08-4-1.csv",
+            "Gastropoda (migrate) 2019-08-4-2.csv",
+            "Gastropoda (migrate) 2019-08-4-3.csv",
+            "Gastropoda (migrate) 2019-08-4-4.csv",
+        ];
+
+        foreach($files AS $file) {
+            // select file
+            $path_to_file = base_path('raw_data/'.$file);
+            $this->importEachFile($path_to_file);
+        }
+    }
+
+    private function importEachFile($path_to_file) {
         $this->csvFile = file($path_to_file);
 
         // import to temp table
@@ -379,7 +439,9 @@ class ImporterController extends Controller
             $_islands_island,
             $_size,
             $_verbatim_latitude,
-            $_verbatim_longitude) = $this->setPrepareRecord($temp);
+            $_verbatim_longitude,
+            $_collected_date,
+            $_identified_date) = $this->setPrepareRecord($temp);
 
             for($i_language = 1; $i_language <= 2 ; $i_language++) {
                 $rc                             = new Record;
@@ -424,12 +486,12 @@ class ImporterController extends Controller
                 $rc->depth_start                = $temp->depth_start;
                 $rc->depth_end                  = $temp->depth_end;
                 $rc->collector                  = $temp->collector;
-                $rc->collected_date             = $temp->collected_date;
+                $rc->collected_date             = $_collected_date;
                 $rc->collected_year             = $temp->collected_year;
                 $rc->collected_month            = $temp->collected_month;
                 $rc->collected_day              = $temp->collected_day;
                 $rc->identifier                 = $temp->identifier;
-                $rc->identified_date            = $temp->identified_date;
+                $rc->identified_date            = $_identified_date;
                 $rc->identified_year            = $temp->identified_year;
                 $rc->identified_month           = $temp->identified_month;
                 $rc->identified_day             = $temp->identified_day;
@@ -550,6 +612,13 @@ class ImporterController extends Controller
         $islands_island = [$temp->islands_island, $temp->islands_island_dup];
         $size = [$temp->size, $temp->size_dup];
 
+
+        $collected_date_temp = explode("/",$temp->collected_date);
+        $collected_date = $collected_date_temp[2]."-".$collected_date_temp[0]."-".$collected_date_temp[1];
+
+        $identified_date_temp = explode("/",$temp->identified_date);
+        $identified_date = $identified_date_temp[2]."-".$identified_date_temp[0]."-".$identified_date_temp[1];
+
         if($temp->source === 'Specimen') {
             $catalog_number     = $temp->catalog_number;
             $source             = 1;
@@ -595,7 +664,9 @@ class ImporterController extends Controller
                 $islands_island,
                 $size,
                 $verbatim_latitude,
-                $verbatim_longitude];
+                $verbatim_longitude,
+                $collected_date,
+                $identified_date];
     }
 
     public function convertUnderScore($string){
