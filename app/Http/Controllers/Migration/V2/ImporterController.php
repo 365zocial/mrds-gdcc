@@ -56,59 +56,11 @@ class ImporterController extends Controller
     ];
 
     public function index() {
-        $files = [
-            "Bivalvia (migrate) 2019-08-1-1.csv",
-            "Bivalvia (migrate) 2019-08-1-2.csv",
-            "Bivalvia (migrate) 2019-08-1-3.csv",
-            "Bivalvia (migrate) 2019-08-1-4.csv",
-            "Bivalvia (migrate) 2019-08-1-5.csv",
-            "Bivalvia (migrate) 2019-08-1-6.csv",
-            "Bivalvia (migrate) 2019-08-1-7.csv",
-            "Bivalvia (migrate) 2019-08-2-10.csv",
-            "Bivalvia (migrate) 2019-08-2-11.csv",
-            "Bivalvia (migrate) 2019-08-2-12.csv",
-            "Bivalvia (migrate) 2019-08-2-13.csv",
-            "Bivalvia (migrate) 2019-08-2-14.csv",
-            "Bivalvia (migrate) 2019-08-2-15.csv",
-            "Bivalvia (migrate) 2019-08-2-16.csv",
-            "Bivalvia (migrate) 2019-08-2-17.csv",
-            "Bivalvia (migrate) 2019-08-2-18.csv",
-            "Bivalvia (migrate) 2019-08-2-19.csv",
-            "Bivalvia (migrate) 2019-08-2-20.csv",
-            "Bivalvia (migrate) 2019-08-2-21.csv",
-            "Bivalvia (migrate) 2019-08-2-22.csv",
-            "Bivalvia (migrate) 2019-08-2-8.csv",
-            "Bivalvia (migrate) 2019-08-2-9.csv",
-            "Bivalvia (migrate) 2019-08-3-23.csv",
-            "Bivalvia (migrate) 2019-08-3-24.csv",
-            "Bivalvia (migrate) 2019-08-3-25.csv",
-            "Bivalvia (migrate) 2019-08-3-26.csv",
-            "Bivalvia (migrate) 2019-08-3-27.csv",
-            "Bivalvia (migrate) 2019-08-3-28.csv",
-            "Bivalvia (migrate) 2019-08-3-29.csv",
-            "Bivalvia (migrate) 2019-08-3-30.csv",
-            "Bivalvia (migrate) 2019-08-3-31.csv",
-            "Bivalvia (migrate) 2019-08-3-32.csv",
-            "Bivalvia (migrate) 2019-08-3-33.csv",
-            "Bivalvia (migrate) 2019-08-3-34.csv",
-            "Bivalvia (migrate) 2019-08-3-35.csv",
-            "Bivalvia (migrate) 2019-08-3-36.csv",
-            "Bivalvia (migrate) 2019-08-3-37.csv",
-            "Bivalvia (migrate) 2019-08-4-38.csv",
-            "Cephalopoda (migrate) 2019-07-29-1.csv",
-            "Cephalopoda (migrate) 2019-07-31-2.csv",
-            "Cephalopoda (migrate) 2019-07-31-3.csv",
-            "Cephalopoda (migrate) 2019-07-31-4.csv",
-            "Cephalopoda (migrate) 2019-07-31-5.csv",
-            "Cephalopoda (migrate) 2019-07-31-6.csv",
-            "Cephalopoda (migrate) 2019-07-31-7.csv",
-            "Cephalopoda (migrate) 2019-07-31-8.csv",
-            "Cephalopoda (migrate) 2019-07-31-9.csv",
-            "Gastropoda (migrate) 2019-08-4-1.csv",
-            "Gastropoda (migrate) 2019-08-4-2.csv",
-            "Gastropoda (migrate) 2019-08-4-3.csv",
-            "Gastropoda (migrate) 2019-08-4-4.csv",
-        ];
+        $files = [];
+        $lists = file(base_path('raw_data/list.txt'));
+        foreach ($lists as $line) {
+            $files[] = $line;
+        }
 
         foreach($files AS $file) {
             // select file
@@ -117,8 +69,8 @@ class ImporterController extends Controller
         }
     }
 
-    private function importEachFile($path_to_file) {
-        $this->csvFile = file($path_to_file);
+    private function importEachFile($path_to_file) {;
+        $this->csvFile = file(str_replace("\n","",$path_to_file));
 
         // import to temp table
         $this->importDataToTemp();
@@ -135,6 +87,7 @@ class ImporterController extends Controller
     private function importData() {
         foreach ($this->csvFile as $line) {
             if($this->row > $this->header_row_no) {
+                dd(str_getcsv($line));
                 $this->data[] = str_getcsv($line);
             }
             $this->row++;
