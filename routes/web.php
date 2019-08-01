@@ -193,7 +193,7 @@ Route::group(['middleware' => ['Authen']], function () {
                 Route::get('checkfile', 'Migration\Migrate_check@index');
 
                 Route::group(['prefix' => 'v2'], function() {
-                    Route::get('import', 'Migration\V2\ImporterController');
+                    Route::get('import', 'Migration\V2\ImporterController@index');
                 });
             });
 
