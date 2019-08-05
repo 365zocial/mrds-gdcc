@@ -63,6 +63,7 @@ class ImporterController extends Controller
         }
 
         foreach($files AS $file) {
+            echo $file."\r\n";
             // select file
             $path_to_file = base_path('raw_data/'.$file);
             $this->importEachFile($path_to_file);
@@ -87,7 +88,6 @@ class ImporterController extends Controller
     private function importData() {
         foreach ($this->csvFile as $line) {
             if($this->row > $this->header_row_no) {
-                dd(str_getcsv($line));
                 $this->data[] = str_getcsv($line);
             }
             $this->row++;
