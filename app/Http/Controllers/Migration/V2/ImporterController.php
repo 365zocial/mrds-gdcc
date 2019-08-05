@@ -570,21 +570,21 @@ class ImporterController extends Controller
 
         if($temp->collected_date !== "") {
             $collected_date_temp = explode("/",$temp->collected_date);
-            $collected_date = $collected_date_temp[2]."-".$collected_date_temp[0]."-".$collected_date_temp[1]." 00:00:00";
+            $collected_date = $collected_date_temp[2]."-".$collected_date_temp[0]."-".$collected_date_temp[1];
         }else{
             $collected_date = null;
         }
 
         if($temp->identified_date !== "") {
             $identified_date_temp = explode("/",$temp->identified_date);
-            $identified_date = $identified_date_temp[2]."-".$identified_date_temp[0]."-".$identified_date_temp[1]." 00:00:00";
+            $identified_date = $identified_date_temp[2]."-".$identified_date_temp[0]."-".$identified_date_temp[1];
         }else {
             $identified_date = null;
         }
 
         if($temp->date !== "") {
             $old_date = explode("/",$temp->date);
-            $old_date_temp = $old_date[2]."-".$old_date[0]."-".$old_date[1]." 00:00:00";
+            $old_date_temp = $old_date[2]."-".$old_date[0]."-".$old_date[1];
         }else {
             $old_date = null;
         }
