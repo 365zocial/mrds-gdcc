@@ -116,6 +116,7 @@ class CreateRecord extends Migration
             $table->text('picture_name')->nullable()->comment('แผ่น cd อ้างอิง');
             $table->text('picture_remark')->nullable()->comment('หมายเหตุรูปภาพ');
             $table->boolean('migration_data')->default(false)->comment('เป็นตัวบอกว่า Record เป็นข้อมูลใหม่ที่กรอกผ่านเว็บ หรือเป็นข้อมูลที่เกิดจาก migrate // 1 = migrate 0 = ข้อมูลใหม่');
+            $table->date('migration_old_created_date')->nullable()->comment('วัน/เดือน/ปี ที่สร้างหรือแก้ไขข้อมูลล่าสุดในระบบเก่า (สำหรับข้อมูลที่เกิดจากการ migrate หลังวันที่ 5 Aug 2019)');
             $table->boolean('approve_status')->default(false)->comment('บอกสถานะว่าผ่านการ approve มาหรือยัง // 1 = approve แล้ว, 0 = ยังไม่ approve');
             $table->string('approve_by', 255)->nullable()->comment('เก็บ User ที่ approve, FK: users table');
             $table->tinyInteger('status')->comment('สถานะที่ต้องการจะให้ปรากฏในระบบหรือไม่ // 2 = Enable, 1 = Disable');
