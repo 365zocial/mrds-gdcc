@@ -1,5 +1,15 @@
 <?php
 
+/*
+    วิธีการ migrate
+    - นำ file excel ไปแปลง csv ด้วย google แล้ว google จะสลับ "ว/ด/ป เป็น ด/ว/ป" ใน code ดักไว้แล้ว (สำหรับ file ที่เป็น date)
+    - นำ file csv มาไว้ใน folder raw_data
+    - กำหนดชื่อไฟล์ที่ต้องการจะ migrate ใน raw_data/list.txt โดยสามารถทำได้ทีละ 1 file (ประกอบไปด้วย 100 ตัว)
+    - เรียก url http://localhost/mrds_v2/public/staff/migdata/v2/import
+    - เปลี่ยนชื่อ file ไปเรื่อยๆ
+
+*/
+
 namespace App\Http\Controllers\Migration\V2;
 
 use Illuminate\Http\Request;
@@ -488,16 +498,22 @@ class ImporterController extends Controller
                 $rc->animal_type2                       = $this->wordingAnimalType2($temp->animal_type2);
                 $rc->animal_type3                       = $this->wordingAnimalType3($temp->animal_type3);
                 $rc->economic_value                     = $this->wordingEconomicValue($temp->economic_value);
-                $rc->reproduction                       = $temp->reproduction;
+                if ( $temp->reproduction != null ) {
+                    $rc->reproduction                   = 1;
+                }
                 $rc->plant_type                         = $this->wordingPlantType($temp->plant_type);
                 $rc->picture_name                       = '';
                 $rc->picture_remark                     = '';
                 $rc->migration_data                     = 1;
                 $rc->migration_old_created_date         = $_old_date_temp;
-                $rc->approve_status                     = '';
+                $rc->approve_status                     = 1;
                 $rc->approve_by                         = \Auth::user()->id;
+                $rc->created_by                         = \Auth::user()->id;
+                $rc->updated_by                         = \Auth::user()->id;
                 $rc->status                             = 2;
-                $rc->updated_at                         = $_old_date_temp;
+                if ( $_old_date_temp != null ) {
+                    $rc->updated_at                     = $_old_date_temp;
+                }
                 $rc->save();
             }
         }
@@ -583,8 +599,9 @@ class ImporterController extends Controller
         }
 
         if($temp->date !== "") {
-            $old_date = explode("/",$temp->date);
-            $old_date_temp = $old_date[2]."-".$old_date[0]."-".$old_date[1];
+            $temp->date = trim($temp->date," ");
+            $old_date_temp = explode("/",$temp->date);
+            $old_date = $old_date_temp[2]."-".$old_date_temp[0]."-".$old_date_temp[1];
         }else {
             $old_date = null;
         }
@@ -637,7 +654,7 @@ class ImporterController extends Controller
                 $verbatim_longitude,
                 $collected_date,
                 $identified_date,
-                $old_date_temp];
+                $old_date];
     }
 
     public function convertUnderScore($string){
