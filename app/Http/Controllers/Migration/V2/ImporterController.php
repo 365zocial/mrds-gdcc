@@ -2,6 +2,7 @@
 
 /*
     วิธีการ migrate
+    - ทำการ seed เฉพาะ AddTempTable ด้วย php artisan db:seed --class=AddTempTable
     - นำ file excel ไปแปลง csv ด้วย google แล้ว google จะสลับ "ว/ด/ป เป็น ด/ว/ป" ใน code ดักไว้แล้ว (สำหรับ file ที่เป็น date)
     - นำ file csv มาไว้ใน folder raw_data
     - กำหนดชื่อไฟล์ที่ต้องการจะ migrate ใน raw_data/list.txt โดยสามารถทำได้ทีละ 1 file (ประกอบไปด้วย 100 ตัว)
@@ -307,73 +308,140 @@ class ImporterController extends Controller
             //get taxo id for this class
             $arr_taxo_id = $this->getIdTaxonomy($temp);
 
+            $check_class = Classification::where('domain', $arr_taxo_id['domain'])
+                            ->where('kingdom', $arr_taxo_id['kingdom'])
+                            ->where('subkingdom', $arr_taxo_id['subkingdom'])
+                            ->where('infrakingdom', $arr_taxo_id['infrakingdom'])
+                            ->where('phylum', $arr_taxo_id['phylum'])
+                            ->where('subphylum', $arr_taxo_id['subphylum'])
+                            ->where('infraphylum', $arr_taxo_id['infraphylum'])
+                            ->where('superclass', $arr_taxo_id['superclass'])
+                            ->where('class', $arr_taxo_id['class'])
+                            ->where('subclass', $arr_taxo_id['subclass'])
+                            ->where('infraclass', $arr_taxo_id['infraclass'])
+                            ->where('superorder', $arr_taxo_id['superorder'])
+                            ->where('order_o', $arr_taxo_id['order_o'])
+                            ->where('suborder', $arr_taxo_id['suborder'])
+                            ->where('infraorder', $arr_taxo_id['infraorder'])
+                            ->where('superfamily', $arr_taxo_id['superfamily'])
+                            ->where('family', $arr_taxo_id['family'])
+                            ->where('subfamily', $arr_taxo_id['subfamily'])
+                            ->where('genus', $arr_taxo_id['genus'])
+                            ->where('subgenus', $arr_taxo_id['subgenus'])
+                            ->where('species', $arr_taxo_id['species'])
+                            ->where('subspecies', $arr_taxo_id['subspecies'])
+                            ->first();
+
+            if(is_null($check_class)) {
+                $new_class = new Classification;
+                $new_class->current_scientific_name = AllMean::checkAndCutForNoneBackSpace( strip_tags( $this->convertUnderScore( $temp->current_scientific_name) ) );
+                $new_class->current_scientific_name_format = $this->convertUnderScore($temp->current_scientific_name);
+                $new_class->previous_scientific_name = AllMean::checkAndCutForNoneBackSpace( strip_tags( $this->convertUnderScore( $temp->previous_scientific_name) ) );
+                $new_class->previous_scientific_name_format = $this->convertUnderScore($temp->previous_scientific_name);
+                $new_class->domain = $arr_taxo_id['domain'];
+                $new_class->kingdom = $arr_taxo_id['kingdom'];
+                $new_class->subkingdom = $arr_taxo_id['subkingdom'];
+                $new_class->infrakingdom = $arr_taxo_id['infrakingdom'];
+                $new_class->phylum = $arr_taxo_id['phylum'];
+                $new_class->subphylum = $arr_taxo_id['subphylum'];
+                $new_class->infraphylum = $arr_taxo_id['infraphylum'];
+                $new_class->superclass = $arr_taxo_id['superclass'];
+                $new_class->class = $arr_taxo_id['class'];
+                $new_class->subclass = $arr_taxo_id['subclass'];
+                $new_class->infraclass = $arr_taxo_id['infraclass'];
+                $new_class->superorder = $arr_taxo_id['superorder'];
+                $new_class->order_o = $arr_taxo_id['order_o'];
+                $new_class->suborder = $arr_taxo_id['suborder'];
+                $new_class->infraorder = $arr_taxo_id['infraorder'];
+                $new_class->superfamily = $arr_taxo_id['superfamily'];
+                $new_class->family = $arr_taxo_id['family'];
+                $new_class->subfamily = $arr_taxo_id['subfamily'];
+                $new_class->genus = $arr_taxo_id['genus'];
+                $new_class->subgenus = $arr_taxo_id['subgenus'];
+                $new_class->species = $arr_taxo_id['species'];
+                $new_class->subspecies = $arr_taxo_id['subspecies'];
+                $new_class->identification_qualifier = $this->wordingIdentificationQualifier($temp->identification_qualifier);
+                $new_class->protection_thai_law = $this->wordingProtectionIUCN($temp->protection_thai_law);
+                $new_class->protection_iucn_2019 = $this->wordingProtectionThaiLaw($temp->protection_iucn_2019);
+                $new_class->protection_cites = $this->wordingProtecitonCITES($temp->protection_cites);
+                $new_class->common_name = $temp->common_name;
+                $new_class->status = 2;
+                $new_class->migration_data = 1;
+                $new_class->created_by = \Auth::user()->id;
+                $new_class->updated_by = \Auth::user()->id;
+                $new_class->save();
+                $class = $new_class->id;
+            }else {
+                $class = $check_class->id;
+            }
+
             //find classification
             //if exist get id
             //else create and get id
-            $class = Classification::firstOrCreate(
-            [
-                // array for insert if not exist
-                'current_scientific_name' => AllMean::checkAndCutForNoneBackSpace( strip_tags( $this->convertUnderScore( $temp->current_scientific_name) ) ),
-                'current_scientific_name_format' => $this->convertUnderScore($temp->current_scientific_name),
-                'previous_scientific_name' => AllMean::checkAndCutForNoneBackSpace( strip_tags( $this->convertUnderScore( $temp->previous_scientific_name) ) ),
-                'previous_scientific_name_format' => $this->convertUnderScore($temp->previous_scientific_name),
-                'domain' => $arr_taxo_id['domain'],
-                'kingdom' => $arr_taxo_id['kingdom'],
-                'subkingdom' => $arr_taxo_id['subkingdom'],
-                'infrakingdom' => $arr_taxo_id['infrakingdom'],
-                'phylum' => $arr_taxo_id['phylum'],
-                'subphylum' => $arr_taxo_id['subphylum'],
-                'infraphylum' => $arr_taxo_id['infraphylum'],
-                'superclass' => $arr_taxo_id['superclass'],
-                'class' => $arr_taxo_id['class'],
-                'subclass' => $arr_taxo_id['subclass'],
-                'infraclass' => $arr_taxo_id['infraclass'],
-                'superorder' => $arr_taxo_id['superorder'],
-                'order_o' => $arr_taxo_id['order_o'],
-                'suborder' => $arr_taxo_id['suborder'],
-                'infraorder' => $arr_taxo_id['infraorder'],
-                'superfamily' => $arr_taxo_id['superfamily'],
-                'family' => $arr_taxo_id['family'],
-                'subfamily' => $arr_taxo_id['subfamily'],
-                'genus' => $arr_taxo_id['genus'],
-                'subgenus' => $arr_taxo_id['subgenus'],
-                'species' => $arr_taxo_id['species'],
-                'subspecies' => $arr_taxo_id['subspecies'],
-                'identification_qualifier' => $this->wordingIdentificationQualifier($temp->identification_qualifier),
-                'protection_thai_law' => $this->wordingProtectionIUCN($temp->protection_thai_law),
-                'protection_iucn_2019' => $this->wordingProtectionThaiLaw($temp->protection_iucn_2019),
-                'protection_cites' => $this->wordingProtecitonCITES($temp->protection_cites),
-                'common_name' => $temp->common_name,
-                'status' => '',
-                'migration_data' => 1,
-            ],
-            [ // array for check exist
-                'domain' => $arr_taxo_id['domain'],
-                'kingdom' => $arr_taxo_id['kingdom'],
-                'subkingdom' => $arr_taxo_id['subkingdom'],
-                'infrakingdom' => $arr_taxo_id['infrakingdom'],
-                'phylum' => $arr_taxo_id['phylum'],
-                'subphylum' => $arr_taxo_id['subphylum'],
-                'infraphylum' => $arr_taxo_id['infraphylum'],
-                'superclass' => $arr_taxo_id['superclass'],
-                'class' => $arr_taxo_id['class'],
-                'subclass' => $arr_taxo_id['subclass'],
-                'infraclass' => $arr_taxo_id['infraclass'],
-                'superorder' => $arr_taxo_id['superorder'],
-                'order_o' => $arr_taxo_id['order_o'],
-                'suborder' => $arr_taxo_id['suborder'],
-                'infraorder' => $arr_taxo_id['infraorder'],
-                'superfamily' => $arr_taxo_id['superfamily'],
-                'family' => $arr_taxo_id['family'],
-                'subfamily' => $arr_taxo_id['subfamily'],
-                'genus' => $arr_taxo_id['genus'],
-                'subgenus' => $arr_taxo_id['subgenus'],
-                'species' => $arr_taxo_id['species'],
-                'subspecies' => $arr_taxo_id['subspecies'],
-            ]);
+            // $class = Classification::firstOrCreate(
+            // [
+            //     // array for insert if not exist
+            //     'current_scientific_name' => AllMean::checkAndCutForNoneBackSpace( strip_tags( $this->convertUnderScore( $temp->current_scientific_name) ) ),
+            //     'current_scientific_name_format' => $this->convertUnderScore($temp->current_scientific_name),
+            //     'previous_scientific_name' => AllMean::checkAndCutForNoneBackSpace( strip_tags( $this->convertUnderScore( $temp->previous_scientific_name) ) ),
+            //     'previous_scientific_name_format' => $this->convertUnderScore($temp->previous_scientific_name),
+            //     'domain' => $arr_taxo_id['domain'],
+            //     'kingdom' => $arr_taxo_id['kingdom'],
+            //     'subkingdom' => $arr_taxo_id['subkingdom'],
+            //     'infrakingdom' => $arr_taxo_id['infrakingdom'],
+            //     'phylum' => $arr_taxo_id['phylum'],
+            //     'subphylum' => $arr_taxo_id['subphylum'],
+            //     'infraphylum' => $arr_taxo_id['infraphylum'],
+            //     'superclass' => $arr_taxo_id['superclass'],
+            //     'class' => $arr_taxo_id['class'],
+            //     'subclass' => $arr_taxo_id['subclass'],
+            //     'infraclass' => $arr_taxo_id['infraclass'],
+            //     'superorder' => $arr_taxo_id['superorder'],
+            //     'order_o' => $arr_taxo_id['order_o'],
+            //     'suborder' => $arr_taxo_id['suborder'],
+            //     'infraorder' => $arr_taxo_id['infraorder'],
+            //     'superfamily' => $arr_taxo_id['superfamily'],
+            //     'family' => $arr_taxo_id['family'],
+            //     'subfamily' => $arr_taxo_id['subfamily'],
+            //     'genus' => $arr_taxo_id['genus'],
+            //     'subgenus' => $arr_taxo_id['subgenus'],
+            //     'species' => $arr_taxo_id['species'],
+            //     'subspecies' => $arr_taxo_id['subspecies'],
+            //     'identification_qualifier' => $this->wordingIdentificationQualifier($temp->identification_qualifier),
+            //     'protection_thai_law' => $this->wordingProtectionIUCN($temp->protection_thai_law),
+            //     'protection_iucn_2019' => $this->wordingProtectionThaiLaw($temp->protection_iucn_2019),
+            //     'protection_cites' => $this->wordingProtecitonCITES($temp->protection_cites),
+            //     'common_name' => $temp->common_name,
+            //     'status' => '',
+            //     'migration_data' => 1,
+            // ],
+            // [ // array for check exist
+            //     'domain' => $arr_taxo_id['domain'],
+            //     'kingdom' => $arr_taxo_id['kingdom'],
+            //     'subkingdom' => $arr_taxo_id['subkingdom'],
+            //     'infrakingdom' => $arr_taxo_id['infrakingdom'],
+            //     'phylum' => $arr_taxo_id['phylum'],
+            //     'subphylum' => $arr_taxo_id['subphylum'],
+            //     'infraphylum' => $arr_taxo_id['infraphylum'],
+            //     'superclass' => $arr_taxo_id['superclass'],
+            //     'class' => $arr_taxo_id['class'],
+            //     'subclass' => $arr_taxo_id['subclass'],
+            //     'infraclass' => $arr_taxo_id['infraclass'],
+            //     'superorder' => $arr_taxo_id['superorder'],
+            //     'order_o' => $arr_taxo_id['order_o'],
+            //     'suborder' => $arr_taxo_id['suborder'],
+            //     'infraorder' => $arr_taxo_id['infraorder'],
+            //     'superfamily' => $arr_taxo_id['superfamily'],
+            //     'family' => $arr_taxo_id['family'],
+            //     'subfamily' => $arr_taxo_id['subfamily'],
+            //     'genus' => $arr_taxo_id['genus'],
+            //     'subgenus' => $arr_taxo_id['subgenus'],
+            //     'species' => $arr_taxo_id['species'],
+            //     'subspecies' => $arr_taxo_id['subspecies'],
+            // ]);
 
             // push class id to system
-            $this->class_id[] = $class->id;
+            $this->class_id[] = $class;
         }
     }
 
