@@ -9,10 +9,22 @@ trait WordingCheck {
         //ตรวจ EN เพิ่มคำ
         // 1 ภาษา
         if($wording_en !== ""){
-            $name_en = $wording_en;
-            $name_th = $wording_en;
-            $wording = Wording::firstOrCreate(['wording_type_id' => 1, 'name_en' => $name_en, 'name_th' => $name_th], ['wording_type_id' => 1, 'name_en' => $name_en]);
-            return !is_null($wording) ? $wording->id : null;
+            $wording = Wording::where('wording_type_id', 1)
+                        ->where('name_en', $wording_en)
+                        ->first();
+
+            if(is_null($wording)) {
+                $_wording = new Wording;
+                $_wording->name_en = $wording_en;
+                $_wording->name_th = $wording_en;
+                $_wording->status = 2;
+                $_wording->created_by = Auth::user()->id;
+                $_wording->updated_by = Auth::user()->id;
+                $_wording->save();
+                return $_wording->id;
+            }else {
+                return $wording->id;
+            }
         }
     }
 
@@ -20,10 +32,22 @@ trait WordingCheck {
         //ตรวจ EN เพิ่มคำ
         // 2 ภาษา
         if($wording_en !== "" && $wording_th !== ""){
-            $name_en = $wording_en;
-            $name_th = $wording_th;
-            $wording = Wording::firstOrCreate(['wording_type_id' => 2, 'name_en' => $name_en, 'name_th' => $name_th], ['wording_type_id' => 1, 'name_en' => $name_en]);
-            return !is_null($wording) ? $wording->id : null;
+            $wording = Wording::where('wording_type_id', 2)
+                        ->where('name_en', $wording_en)
+                        ->first();
+
+            if(is_null($wording)) {
+                $_wording = new Wording;
+                $_wording->name_en = $wording_en;
+                $_wording->name_th = $wording_th;
+                $_wording->status = 2;
+                $_wording->created_by = Auth::user()->id;
+                $_wording->updated_by = Auth::user()->id;
+                $_wording->save();
+                return $_wording->id;
+            }else {
+                return $wording->id;
+            }
         }
     }
 
@@ -31,10 +55,22 @@ trait WordingCheck {
         //ตรวจ EN เพิ่มคำ
         // 2 ภาษา
         if($wording_en !== "" && $wording_th !== ""){
-            $name_en = $wording_en;
-            $name_th = $wording_th;
-            $wording = Wording::firstOrCreate(['wording_type_id' => 3, 'name_en' => $name_en, 'name_th' => $name_th], ['wording_type_id' => 1, 'name_en' => $name_en]);
-            return !is_null($wording) ? $wording->id : null;
+            $wording = Wording::where('wording_type_id', 3)
+                        ->where('name_en', $wording_en)
+                        ->first();
+
+            if(is_null($wording)) {
+                $_wording = new Wording;
+                $_wording->name_en = $wording_en;
+                $_wording->name_th = $wording_th;
+                $_wording->status = 2;
+                $_wording->created_by = Auth::user()->id;
+                $_wording->updated_by = Auth::user()->id;
+                $_wording->save();
+                return $_wording->id;
+            }else {
+                return $wording->id;
+            }
         }
     }
 
@@ -42,10 +78,22 @@ trait WordingCheck {
         //ตรวจ EN เพิ่มคำ
         // 2 ภาษา
         if($wording_en !== "" && $wording_th !== ""){
-            $name_en = $wording_en;
-            $name_th = $wording_th;
-            $wording = Wording::firstOrCreate(['wording_type_id' => 4, 'name_en' => $name_en, 'name_th' => $name_th], ['wording_type_id' => 1, 'name_en' => $name_en]);
-            return !is_null($wording) ? $wording->id : null;
+            $wording = Wording::where('wording_type_id', 4)
+                        ->where('name_en', $wording_en)
+                        ->first();
+
+            if(is_null($wording)) {
+                $_wording = new Wording;
+                $_wording->name_en = $wording_en;
+                $_wording->name_th = $wording_th;
+                $_wording->status = 2;
+                $_wording->created_by = Auth::user()->id;
+                $_wording->updated_by = Auth::user()->id;
+                $_wording->save();
+                return $_wording->id;
+            }else {
+                return $wording->id;
+            }
         }
     }
 
@@ -53,10 +101,22 @@ trait WordingCheck {
         //ตรวจ EN เพิ่มคำ
         // 1 ภาษา
         if($wording_en !== ""){
-            $name_en = $wording_en;
-            $name_th = $wording_en;
-            $wording = Wording::firstOrCreate(['wording_type_id' => 5, 'name_en' => $name_en, 'name_th' => $name_th], ['wording_type_id' => 1, 'name_en' => $name_en]);
-            return !is_null($wording) ? $wording->id : null;
+            $wording = Wording::where('wording_type_id', 5)
+                        ->where('name_en', $wording_en)
+                        ->first();
+
+            if(is_null($wording)) {
+                $_wording = new Wording;
+                $_wording->name_en = $wording_en;
+                $_wording->name_th = $wording_en;
+                $_wording->status = 2;
+                $_wording->created_by = Auth::user()->id;
+                $_wording->updated_by = Auth::user()->id;
+                $_wording->save();
+                return $_wording->id;
+            }else {
+                return $wording->id;
+            }
         }
     }
 
@@ -64,10 +124,22 @@ trait WordingCheck {
         //ตรวจ EN เพิ่มคำ
         // 2 ภาษา
         if($wording_en !== "" && $wording_th !== ""){
-            $name_en = $wording_en;
-            $name_th = $wording_th;
-            $wording = Wording::firstOrCreate(['wording_type_id' => 6, 'name_en' => $name_en, 'name_th' => $name_th], ['wording_type_id' => 1, 'name_en' => $name_en]);
-            return !is_null($wording) ? $wording->id : null;
+            $wording = Wording::where('wording_type_id', 6)
+                        ->where('name_en', $wording_en)
+                        ->first();
+
+            if(is_null($wording)) {
+                $_wording = new Wording;
+                $_wording->name_en = $wording_en;
+                $_wording->name_th = $wording_th;
+                $_wording->status = 2;
+                $_wording->created_by = Auth::user()->id;
+                $_wording->updated_by = Auth::user()->id;
+                $_wording->save();
+                return $_wording->id;
+            }else {
+                return $wording->id;
+            }
         }
     }
 
@@ -75,10 +147,22 @@ trait WordingCheck {
         //ตรวจ EN เพิ่มคำ
         // 2 ภาษา
         if($wording_en !== "" && $wording_th !== ""){
-            $name_en = $wording_en;
-            $name_th = $wording_th;
-            $wording = Wording::firstOrCreate(['wording_type_id' => 7, 'name_en' => $name_en, 'name_th' => $name_th], ['wording_type_id' => 1, 'name_en' => $name_en]);
-            return !is_null($wording) ? $wording->id : null;
+            $wording = Wording::where('wording_type_id', 7)
+                        ->where('name_en', $wording_en)
+                        ->first();
+
+            if(is_null($wording)) {
+                $_wording = new Wording;
+                $_wording->name_en = $wording_en;
+                $_wording->name_th = $wording_th;
+                $_wording->status = 2;
+                $_wording->created_by = Auth::user()->id;
+                $_wording->updated_by = Auth::user()->id;
+                $_wording->save();
+                return $_wording->id;
+            }else {
+                return $wording->id;
+            }
         }
     }
 
@@ -86,10 +170,22 @@ trait WordingCheck {
         //ตรวจ EN เพิ่มคำ
         // 2 ภาษา
         if($wording_en !== "" && $wording_th !== ""){
-            $name_en = $wording_en;
-            $name_th = $wording_th;
-            $wording = Wording::firstOrCreate(['wording_type_id' => 8, 'name_en' => $name_en, 'name_th' => $name_th], ['wording_type_id' => 1, 'name_en' => $name_en]);
-            return !is_null($wording) ? $wording->id : null;
+            $wording = Wording::where('wording_type_id', 8)
+                        ->where('name_en', $wording_en)
+                        ->first();
+
+            if(is_null($wording)) {
+                $_wording = new Wording;
+                $_wording->name_en = $wording_en;
+                $_wording->name_th = $wording_th;
+                $_wording->status = 2;
+                $_wording->created_by = Auth::user()->id;
+                $_wording->updated_by = Auth::user()->id;
+                $_wording->save();
+                return $_wording->id;
+            }else {
+                return $wording->id;
+            }
         }
     }
 
@@ -97,10 +193,22 @@ trait WordingCheck {
         //ตรวจ EN เพิ่มคำ
         // 2 ภาษา
         if($wording_en !== "" && $wording_th !== ""){
-            $name_en = $wording_en;
-            $name_th = $wording_th;
-            $wording = Wording::firstOrCreate(['wording_type_id' => 9, 'name_en' => $name_en, 'name_th' => $name_th], ['wording_type_id' => 1, 'name_en' => $name_en]);
-            return !is_null($wording) ? $wording->id : null;
+            $wording = Wording::where('wording_type_id', 9)
+                        ->where('name_en', $wording_en)
+                        ->first();
+
+            if(is_null($wording)) {
+                $_wording = new Wording;
+                $_wording->name_en = $wording_en;
+                $_wording->name_th = $wording_th;
+                $_wording->status = 2;
+                $_wording->created_by = Auth::user()->id;
+                $_wording->updated_by = Auth::user()->id;
+                $_wording->save();
+                return $_wording->id;
+            }else {
+                return $wording->id;
+            }
         }
     }
 
@@ -108,10 +216,22 @@ trait WordingCheck {
         // ตรวจ EN เพิ่มคำ
         // 1 ภาษา
         if($wording_en !== ""){
-            $name_en = $wording_en;
-            $name_th = $wording_en;
-            $wording = Wording::firstOrCreate(['wording_type_id' => 10, 'name_en' => $name_en, 'name_th' => $name_th], ['wording_type_id' => 1, 'name_en' => $name_en]);
-            return !is_null($wording) ? $wording->id : null;
+            $wording = Wording::where('wording_type_id', 10)
+                        ->where('name_en', $wording_en)
+                        ->first();
+
+            if(is_null($wording)) {
+                $_wording = new Wording;
+                $_wording->name_en = $wording_en;
+                $_wording->name_th = $wording_en;
+                $_wording->status = 2;
+                $_wording->created_by = Auth::user()->id;
+                $_wording->updated_by = Auth::user()->id;
+                $_wording->save();
+                return $_wording->id;
+            }else {
+                return $wording->id;
+            }
         }
     }
 
@@ -119,10 +239,22 @@ trait WordingCheck {
         //ตรวจ EN เพิ่มคำ
         // 1 ภาษา
         if($wording_en !== ""){
-            $name_en = $wording_en;
-            $name_th = $wording_en;
-            $wording = Wording::firstOrCreate(['wording_type_id' => 11, 'name_en' => $name_en, 'name_th' => $name_th], ['wording_type_id' => 1, 'name_en' => $name_en]);
-            return !is_null($wording) ? $wording->id : null;
+            $wording = Wording::where('wording_type_id', 11)
+                        ->where('name_en', $wording_en)
+                        ->first();
+
+            if(is_null($wording)) {
+                $_wording = new Wording;
+                $_wording->name_en = $wording_en;
+                $_wording->name_th = $wording_en;
+                $_wording->status = 2;
+                $_wording->created_by = Auth::user()->id;
+                $_wording->updated_by = Auth::user()->id;
+                $_wording->save();
+                return $_wording->id;
+            }else {
+                return $wording->id;
+            }
         }
     }
 
@@ -130,8 +262,22 @@ trait WordingCheck {
         // ตรวจ EN ไม่เพิ่มคำ
         // 1 ภาษา
         if($wording_en !== ""){
-            $wording = Wording::where('name_en', $wording_en)->where('wording_type_id', 12)->first();
-            return !is_null($wording) ? $wording->id : null;
+            $wording = Wording::where('wording_type_id', 12)
+                        ->where('name_en', $wording_en)
+                        ->first();
+
+            if(is_null($wording)) {
+                $_wording = new Wording;
+                $_wording->name_en = $wording_en;
+                $_wording->name_th = $wording_en;
+                $_wording->status = 2;
+                $_wording->created_by = Auth::user()->id;
+                $_wording->updated_by = Auth::user()->id;
+                $_wording->save();
+                return $_wording->id;
+            }else {
+                return $wording->id;
+            }
         }
     }
 
@@ -139,10 +285,22 @@ trait WordingCheck {
         //ตรวจ TH เพิ่มคำ
         // 2 ภาษา
         if($wording_en !== "" && $wording_th !== ""){
-            $name_en = $wording_en;
-            $name_th = $wording_th;
-            $wording = Wording::firstOrCreate(['wording_type_id' => 13, 'name_en' => $name_en, 'name_th' => $name_th], ['wording_type_id' => 1, 'name_en' => $name_en]);
-            return !is_null($wording) ? $wording->id : null;
+            $wording = Wording::where('wording_type_id', 13)
+                        ->where('name_th', $wording_th)
+                        ->first();
+
+            if(is_null($wording)) {
+                $_wording = new Wording;
+                $_wording->name_en = $wording_en;
+                $_wording->name_th = $wording_th;
+                $_wording->status = 2;
+                $_wording->created_by = Auth::user()->id;
+                $_wording->updated_by = Auth::user()->id;
+                $_wording->save();
+                return $_wording->id;
+            }else {
+                return $wording->id;
+            }
         }
     }
 
@@ -170,10 +328,22 @@ trait WordingCheck {
         //ตรวจ TH เพิ่มคำ
         //1 ภาษา
         if($wording_th !== ""){
-            $name_en = $wording_th;
-            $name_th = $wording_th;
-            $wording = Wording::firstOrCreate(['wording_type_id' => 18, 'name_en' => $name_en, 'name_th' => $name_th], ['wording_type_id' => 1, 'name_en' => $name_en]);
-            return !is_null($wording) ? $wording->id : null;
+            $wording = Wording::where('wording_type_id', 18)
+                        ->where('name_th', $wording_th)
+                        ->first();
+
+            if(is_null($wording)) {
+                $_wording = new Wording;
+                $_wording->name_en = $wording_th;
+                $_wording->name_th = $wording_th;
+                $_wording->status = 2;
+                $_wording->created_by = Auth::user()->id;
+                $_wording->updated_by = Auth::user()->id;
+                $_wording->save();
+                return $_wording->id;
+            }else {
+                return $wording->id;
+            }
         }
     }
 
@@ -181,10 +351,22 @@ trait WordingCheck {
         //ตรวจ TH เพิ่มคำ
         //1 ภาษา
         if($wording_th !== ""){
-            $name_en = $wording_th;
-            $name_th = $wording_th;
-            $wording = Wording::firstOrCreate(['wording_type_id' => 18, 'name_en' => $name_en, 'name_th' => $name_th], ['wording_type_id' => 1, 'name_en' => $name_en]);
-            return !is_null($wording) ? $wording->id : null;
+            $wording = Wording::where('wording_type_id', 19)
+                        ->where('name_th', $wording_th)
+                        ->first();
+
+            if(is_null($wording)) {
+                $_wording = new Wording;
+                $_wording->name_en = $wording_th;
+                $_wording->name_th = $wording_th;
+                $_wording->status = 2;
+                $_wording->created_by = Auth::user()->id;
+                $_wording->updated_by = Auth::user()->id;
+                $_wording->save();
+                return $_wording->id;
+            }else {
+                return $wording->id;
+            }
         }
     }
 
@@ -192,10 +374,22 @@ trait WordingCheck {
         //ตรวจ TH เพิ่มคำ
         //1 ภาษา
         if($wording_th !== ""){
-            $name_en = $wording_th;
-            $name_th = $wording_th;
-            $wording = Wording::firstOrCreate(['wording_type_id' => 18, 'name_en' => $name_en, 'name_th' => $name_th], ['wording_type_id' => 1, 'name_en' => $name_en]);
-            return !is_null($wording) ? $wording->id : null;
+            $wording = Wording::where('wording_type_id', 20)
+                        ->where('name_th', $wording_th)
+                        ->first();
+
+            if(is_null($wording)) {
+                $_wording = new Wording;
+                $_wording->name_en = $wording_th;
+                $_wording->name_th = $wording_th;
+                $_wording->status = 2;
+                $_wording->created_by = Auth::user()->id;
+                $_wording->updated_by = Auth::user()->id;
+                $_wording->save();
+                return $_wording->id;
+            }else {
+                return $wording->id;
+            }
         }
     }
 
@@ -203,26 +397,52 @@ trait WordingCheck {
         //ตรวจ TH เพิ่มคำ
         //1 ภาษา
         if($wording_th !== ""){
-            $name_en = $wording_th;
-            $name_th = $wording_th;
-            $wording = Wording::firstOrCreate(['wording_type_id' => 18, 'name_en' => $name_en, 'name_th' => $name_th], ['wording_type_id' => 1, 'name_en' => $name_en]);
-            return !is_null($wording) ? $wording->id : null;
+            $wording = Wording::where('wording_type_id', 21)
+                        ->where('name_th', $wording_th)
+                        ->first();
+
+            if(is_null($wording)) {
+                $_wording = new Wording;
+                $_wording->name_en = $wording_th;
+                $_wording->name_th = $wording_th;
+                $_wording->status = 2;
+                $_wording->created_by = Auth::user()->id;
+                $_wording->updated_by = Auth::user()->id;
+                $_wording->save();
+                return $_wording->id;
+            }else {
+                return $wording->id;
+            }
         }
     }
 
     protected function wordingProtectionThaiLaw($wording_en) {
         // ตรวจ EN ไม่เพิ่มคำ
         if($wording_en !== ""){
-            $wording = Wording::where('name_en', $wording_en)->where('wording_type_id', 22)->first();
-            return !is_null($wording) ? $wording->id : null;
+            $wording = Wording::where('wording_type_id', 22)
+                        ->where('name_en', $wording_en)
+                        ->first();
+
+            if(is_null($wording)) {
+                return null;
+            }else {
+                return $wording->id;
+            }
         }
     }
 
     protected function wordingProtecitonCITES($wording_en) {
         // ตรวจ EN ไม่เพิ่มคำ
         if($wording_en !== ""){
-            $wording = Wording::where('name_en', $wording_en)->where('wording_type_id', 23)->first();
-            return !is_null($wording) ? $wording->id : null;
+            $wording = Wording::where('wording_type_id', 23)
+                        ->where('name_en', $wording_en)
+                        ->first();
+
+            if(is_null($wording)) {
+                return null;
+            }else {
+                return $wording->id;
+            }
         }
     }
 
@@ -231,9 +451,16 @@ trait WordingCheck {
         // record ภาษาไทย ไม่เพิ่มคำ
 
         //ตรวจ TH ไม่เพิ่มคำ
-        if($wording_th !== ""){
-            $wording = Wording::where('name_th', $wording_th)->where('wording_type_id', 24)->first();
-            return !is_null($wording) ? $wording->id : null;
+        if($wording_en !== ""){
+            $wording = Wording::where('wording_type_id', 24)
+                        ->where('name_th', $wording_th)
+                        ->first();
+
+            if(is_null($wording)) {
+                return null;
+            }else {
+                return $wording->id;
+            }
         }
     }
 
