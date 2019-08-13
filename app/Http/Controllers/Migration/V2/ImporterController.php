@@ -361,8 +361,8 @@ class ImporterController extends Controller
                 $new_class->species = $arr_taxo_id['species'];
                 $new_class->subspecies = $arr_taxo_id['subspecies'];
                 $new_class->identification_qualifier = $this->wordingIdentificationQualifier($temp->identification_qualifier);
-                $new_class->protection_thai_law = $this->wordingProtectionIUCN($temp->protection_thai_law);
-                $new_class->protection_iucn_2019 = $this->wordingProtectionThaiLaw($temp->protection_iucn_2019);
+                $new_class->protection_thai_law = $this->wordingProtectionThaiLaw($temp->protection_thai_law);
+                $new_class->protection_iucn_2019 = $this->wordingProtectionIUCN($temp->protection_iucn_2019);
                 $new_class->protection_cites = $this->wordingProtecitonCITES($temp->protection_cites);
                 $new_class->common_name = $temp->common_name;
                 $new_class->status = 2;
@@ -408,8 +408,8 @@ class ImporterController extends Controller
             //     'species' => $arr_taxo_id['species'],
             //     'subspecies' => $arr_taxo_id['subspecies'],
             //     'identification_qualifier' => $this->wordingIdentificationQualifier($temp->identification_qualifier),
-            //     'protection_thai_law' => $this->wordingProtectionIUCN($temp->protection_thai_law),
-            //     'protection_iucn_2019' => $this->wordingProtectionThaiLaw($temp->protection_iucn_2019),
+            //     'protection_thai_law' => $this->wordingProtectionThaiLaw($temp->protection_thai_law),
+            //     'protection_iucn_2019' => $this->wordingProtectionIUCN($temp->protection_iucn_2019),
             //     'protection_cites' => $this->wordingProtecitonCITES($temp->protection_cites),
             //     'common_name' => $temp->common_name,
             //     'status' => '',

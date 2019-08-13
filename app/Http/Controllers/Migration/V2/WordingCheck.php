@@ -15,11 +15,12 @@ trait WordingCheck {
 
             if(is_null($wording)) {
                 $_wording = new Wording;
+                $_wording->wording_type_id = 1;
                 $_wording->name_en = $wording_en;
                 $_wording->name_th = $wording_en;
                 $_wording->status = 2;
-                $_wording->created_by = Auth::user()->id;
-                $_wording->updated_by = Auth::user()->id;
+                $_wording->created_by = \Auth::user()->id;
+                $_wording->updated_by = \Auth::user()->id;
                 $_wording->save();
                 return $_wording->id;
             }else {
@@ -38,11 +39,12 @@ trait WordingCheck {
 
             if(is_null($wording)) {
                 $_wording = new Wording;
+                $_wording->wording_type_id = 2;
                 $_wording->name_en = $wording_en;
                 $_wording->name_th = $wording_th;
                 $_wording->status = 2;
-                $_wording->created_by = Auth::user()->id;
-                $_wording->updated_by = Auth::user()->id;
+                $_wording->created_by = \Auth::user()->id;
+                $_wording->updated_by = \Auth::user()->id;
                 $_wording->save();
                 return $_wording->id;
             }else {
@@ -61,11 +63,12 @@ trait WordingCheck {
 
             if(is_null($wording)) {
                 $_wording = new Wording;
+                $_wording->wording_type_id = 3;
                 $_wording->name_en = $wording_en;
                 $_wording->name_th = $wording_th;
                 $_wording->status = 2;
-                $_wording->created_by = Auth::user()->id;
-                $_wording->updated_by = Auth::user()->id;
+                $_wording->created_by = \Auth::user()->id;
+                $_wording->updated_by = \Auth::user()->id;
                 $_wording->save();
                 return $_wording->id;
             }else {
@@ -84,11 +87,12 @@ trait WordingCheck {
 
             if(is_null($wording)) {
                 $_wording = new Wording;
+                $_wording->wording_type_id = 4;
                 $_wording->name_en = $wording_en;
                 $_wording->name_th = $wording_th;
                 $_wording->status = 2;
-                $_wording->created_by = Auth::user()->id;
-                $_wording->updated_by = Auth::user()->id;
+                $_wording->created_by = \Auth::user()->id;
+                $_wording->updated_by = \Auth::user()->id;
                 $_wording->save();
                 return $_wording->id;
             }else {
@@ -107,11 +111,12 @@ trait WordingCheck {
 
             if(is_null($wording)) {
                 $_wording = new Wording;
+                $_wording->wording_type_id = 5;
                 $_wording->name_en = $wording_en;
                 $_wording->name_th = $wording_en;
                 $_wording->status = 2;
-                $_wording->created_by = Auth::user()->id;
-                $_wording->updated_by = Auth::user()->id;
+                $_wording->created_by = \Auth::user()->id;
+                $_wording->updated_by = \Auth::user()->id;
                 $_wording->save();
                 return $_wording->id;
             }else {
@@ -130,11 +135,12 @@ trait WordingCheck {
 
             if(is_null($wording)) {
                 $_wording = new Wording;
+                $_wording->wording_type_id = 6;
                 $_wording->name_en = $wording_en;
                 $_wording->name_th = $wording_th;
                 $_wording->status = 2;
-                $_wording->created_by = Auth::user()->id;
-                $_wording->updated_by = Auth::user()->id;
+                $_wording->created_by = \Auth::user()->id;
+                $_wording->updated_by = \Auth::user()->id;
                 $_wording->save();
                 return $_wording->id;
             }else {
@@ -153,11 +159,12 @@ trait WordingCheck {
 
             if(is_null($wording)) {
                 $_wording = new Wording;
+                $_wording->wording_type_id = 7;
                 $_wording->name_en = $wording_en;
                 $_wording->name_th = $wording_th;
                 $_wording->status = 2;
-                $_wording->created_by = Auth::user()->id;
-                $_wording->updated_by = Auth::user()->id;
+                $_wording->created_by = \Auth::user()->id;
+                $_wording->updated_by = \Auth::user()->id;
                 $_wording->save();
                 return $_wording->id;
             }else {
@@ -176,11 +183,12 @@ trait WordingCheck {
 
             if(is_null($wording)) {
                 $_wording = new Wording;
+                $_wording->wording_type_id = 8;
                 $_wording->name_en = $wording_en;
                 $_wording->name_th = $wording_th;
                 $_wording->status = 2;
-                $_wording->created_by = Auth::user()->id;
-                $_wording->updated_by = Auth::user()->id;
+                $_wording->created_by = \Auth::user()->id;
+                $_wording->updated_by = \Auth::user()->id;
                 $_wording->save();
                 return $_wording->id;
             }else {
@@ -199,11 +207,12 @@ trait WordingCheck {
 
             if(is_null($wording)) {
                 $_wording = new Wording;
+                $_wording->wording_type_id = 9;
                 $_wording->name_en = $wording_en;
                 $_wording->name_th = $wording_th;
                 $_wording->status = 2;
-                $_wording->created_by = Auth::user()->id;
-                $_wording->updated_by = Auth::user()->id;
+                $_wording->created_by = \Auth::user()->id;
+                $_wording->updated_by = \Auth::user()->id;
                 $_wording->save();
                 return $_wording->id;
             }else {
@@ -222,11 +231,12 @@ trait WordingCheck {
 
             if(is_null($wording)) {
                 $_wording = new Wording;
+                $_wording->wording_type_id = 10;
                 $_wording->name_en = $wording_en;
                 $_wording->name_th = $wording_en;
                 $_wording->status = 2;
-                $_wording->created_by = Auth::user()->id;
-                $_wording->updated_by = Auth::user()->id;
+                $_wording->created_by = \Auth::user()->id;
+                $_wording->updated_by = \Auth::user()->id;
                 $_wording->save();
                 return $_wording->id;
             }else {
@@ -245,11 +255,12 @@ trait WordingCheck {
 
             if(is_null($wording)) {
                 $_wording = new Wording;
+                $_wording->wording_type_id = 11;
                 $_wording->name_en = $wording_en;
                 $_wording->name_th = $wording_en;
                 $_wording->status = 2;
-                $_wording->created_by = Auth::user()->id;
-                $_wording->updated_by = Auth::user()->id;
+                $_wording->created_by = \Auth::user()->id;
+                $_wording->updated_by = \Auth::user()->id;
                 $_wording->save();
                 return $_wording->id;
             }else {
@@ -267,14 +278,7 @@ trait WordingCheck {
                         ->first();
 
             if(is_null($wording)) {
-                $_wording = new Wording;
-                $_wording->name_en = $wording_en;
-                $_wording->name_th = $wording_en;
-                $_wording->status = 2;
-                $_wording->created_by = Auth::user()->id;
-                $_wording->updated_by = Auth::user()->id;
-                $_wording->save();
-                return $_wording->id;
+                return null;
             }else {
                 return $wording->id;
             }
@@ -291,11 +295,12 @@ trait WordingCheck {
 
             if(is_null($wording)) {
                 $_wording = new Wording;
+                $_wording->wording_type_id = 13;
                 $_wording->name_en = $wording_en;
                 $_wording->name_th = $wording_th;
                 $_wording->status = 2;
-                $_wording->created_by = Auth::user()->id;
-                $_wording->updated_by = Auth::user()->id;
+                $_wording->created_by = \Auth::user()->id;
+                $_wording->updated_by = \Auth::user()->id;
                 $_wording->save();
                 return $_wording->id;
             }else {
@@ -334,11 +339,12 @@ trait WordingCheck {
 
             if(is_null($wording)) {
                 $_wording = new Wording;
+                $_wording->wording_type_id = 18;
                 $_wording->name_en = $wording_th;
                 $_wording->name_th = $wording_th;
                 $_wording->status = 2;
-                $_wording->created_by = Auth::user()->id;
-                $_wording->updated_by = Auth::user()->id;
+                $_wording->created_by = \Auth::user()->id;
+                $_wording->updated_by = \Auth::user()->id;
                 $_wording->save();
                 return $_wording->id;
             }else {
@@ -357,11 +363,12 @@ trait WordingCheck {
 
             if(is_null($wording)) {
                 $_wording = new Wording;
+                $_wording->wording_type_id = 19;
                 $_wording->name_en = $wording_th;
                 $_wording->name_th = $wording_th;
                 $_wording->status = 2;
-                $_wording->created_by = Auth::user()->id;
-                $_wording->updated_by = Auth::user()->id;
+                $_wording->created_by = \Auth::user()->id;
+                $_wording->updated_by = \Auth::user()->id;
                 $_wording->save();
                 return $_wording->id;
             }else {
@@ -380,11 +387,12 @@ trait WordingCheck {
 
             if(is_null($wording)) {
                 $_wording = new Wording;
+                $_wording->wording_type_id = 20;
                 $_wording->name_en = $wording_th;
                 $_wording->name_th = $wording_th;
                 $_wording->status = 2;
-                $_wording->created_by = Auth::user()->id;
-                $_wording->updated_by = Auth::user()->id;
+                $_wording->created_by = \Auth::user()->id;
+                $_wording->updated_by = \Auth::user()->id;
                 $_wording->save();
                 return $_wording->id;
             }else {
@@ -403,11 +411,12 @@ trait WordingCheck {
 
             if(is_null($wording)) {
                 $_wording = new Wording;
+                $_wording->wording_type_id = 21;
                 $_wording->name_en = $wording_th;
                 $_wording->name_th = $wording_th;
                 $_wording->status = 2;
-                $_wording->created_by = Auth::user()->id;
-                $_wording->updated_by = Auth::user()->id;
+                $_wording->created_by = \Auth::user()->id;
+                $_wording->updated_by = \Auth::user()->id;
                 $_wording->save();
                 return $_wording->id;
             }else {
@@ -451,7 +460,7 @@ trait WordingCheck {
         // record ภาษาไทย ไม่เพิ่มคำ
 
         //ตรวจ TH ไม่เพิ่มคำ
-        if($wording_en !== ""){
+        if($wording_th !== ""){
             $wording = Wording::where('wording_type_id', 24)
                         ->where('name_th', $wording_th)
                         ->first();
