@@ -57,3 +57,11 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## สำหรับ php version 7.1 ลงไป จะใช้ DomPDF ไม่ได้
+
+ให้ทำการแก้ดังนี้
+- ⁨vendor⁩/dompdf⁩/dompdf⁩/Dompdf.php บรรทัดที่ 610 และ 631 แก้จาก continue; เป็น continue 2;
+- ⁨vendor⁩/⁨dompdf⁩/⁨dompdf⁩/lib⁩/Cpdf.php บรรทัดที่ 467, 474, 481 และ 488 แก้จาก continue; เป็น continue 2;
+- vendor⁩/dompdf⁩/dompdf⁩/src⁩/Css⁩/Stylesheet.php บรรทัดที่ 1360 แก้จาก continue; เป็น continue 3;
+- vendor⁩/dompdf⁩/dompdf⁩/src⁩/Renderer⁩/Text.php บรรทัดที่ 140 แก้จาก continue; เป็น continue 2;
