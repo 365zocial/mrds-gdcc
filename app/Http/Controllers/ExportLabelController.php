@@ -27,6 +27,7 @@ class ExportLabelController extends Controller
         $inputs = array_filter($inputs['record_id']);
         if ( count($inputs) > 0 ) {
             $recordNotFound = ''; $records = '';
+            $records = [];
             foreach ($inputs as $key => $input) {
                 $record = Record::join('classification', 'record.classification_id', '=', 'classification.id')->where('related_catalog_item', $input)->where('language_id', 1)->where('record.status', 2)->first();
                 if ( empty($record) ) {
