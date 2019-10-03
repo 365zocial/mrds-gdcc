@@ -520,6 +520,7 @@ class SearchTypeCController extends Controller
                             'w4.name_th as ocean_sea_lake_th',
                             'pic.path_pic',
                             'r.unique_record'])->groupBy('r.unique_record')->get();
+                            // 'r.unique_record'])->groupBy('r.unique_record')->groupBy('classification.current_scientific_name')->get();  // ที่จะปรับแก้ไม่ให้แสดง record ซ้ำ (รอ confirm จ่ายเงินถึงค่อยทำ)
         return $data;
     }
 

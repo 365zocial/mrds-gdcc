@@ -173,7 +173,7 @@
                         <div class="row row-inform">
                             <div class="col-md-12">
                                 <p class="search-report-dropdown-header font-thai-resize">เอกสาร</p>
-                                <input type="text" class="form-control font-thai-resize" id="reference" placeholder="@if ($record->reference != 0 && $record->reference != null ) {{ Wording::getWording($record->reference)->name_th }} @else - @endif" readonly>
+                                <input type="text" class="form-control font-thai-resize" id="reference" placeholder="@if ( $references  != null ) {{ $references->ref_code }} / {{ substr($references->name_th , 0 , strpos( $references->name_th , ".", strpos( $references->name_th , ".") + strlen(".") ) ) }} @endif" readonly>
                             </div>
                         </div>
                         <div class="row row-inform">

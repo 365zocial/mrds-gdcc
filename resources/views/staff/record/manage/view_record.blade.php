@@ -645,7 +645,7 @@
 
         <div class="row">
           <div class="col-md-12">
-            <p class="record-label">Variey Name:
+            <p class="record-label">Variety Name:
               <span class="record-data">{{ AllMean::ReplaceNullWithDash( $record[1]->variety_name ) }}</span>
             </p>
           </div>

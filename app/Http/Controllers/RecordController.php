@@ -406,6 +406,8 @@ class RecordController extends Controller
 				$data['iq'] = $data['iq']->name_en;
 			}
 
+			$data['references'] 		= Reference::getReferenceByID($record->reference);
+
 			return view('staff.record.add.add_record_form_th', $data);
 		} else {
 			return redirect('staff/checkClassificationForm');
@@ -1068,6 +1070,7 @@ class RecordController extends Controller
 			}
 
 			$data['record'] = $record;
+			$data['references'] 		= Reference::getReferenceByID($record->reference);
 			$data['classification'] = Classification::getClassification($record->classification_id);
 			$data['marinecenter'] = Marinecenter::getMarineCenter($record->marinecenter_id)->marinecenter_code;
 			return view('staff.record.edit.edit_record_form_th', $data);
