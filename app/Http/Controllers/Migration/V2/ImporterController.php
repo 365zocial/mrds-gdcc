@@ -6,9 +6,9 @@
     - นำ file excel ไปแปลง csv ด้วย google แล้ว google จะสลับ "ว/ด/ป เป็น ด/ว/ป" ใน code ดักไว้แล้ว (สำหรับ file ที่เป็น date)
     - นำ file csv มาไว้ใน folder raw_data
     - กำหนดชื่อไฟล์ที่ต้องการจะ migrate ใน raw_data/list.txt โดยสามารถทำได้ทีละ 1 file (ประกอบไปด้วย 100 ตัว)
-    - เรียก url http://localhost/mrds_v2/public/staff/migdata/v2/import
-    - เปลี่ยนชื่อ file ไปเรื่อยๆ
-
+    - ใช้ url นี้ http://localhost/mrds_v2/public/staff/migdata/v2/import
+    - เปลี่ยนชื่อ file ใน raw_data/list.txt ไปเรื่อยๆ
+    - ไฟล์ไหน Migrate เรียบร้อยแล้ว ให้นำไปไว้ใน folder อื่น เช่น  raw_data/2020-3 เพื่อเก็บไว้ว่า file นี้ผ่านการ Migrate แล้ว
 */
 
 namespace App\Http\Controllers\Migration\V2;
