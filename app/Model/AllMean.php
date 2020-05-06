@@ -154,11 +154,12 @@ class AllMean
         }
     }
 
-    public static function dmstodecimal($d,$m,$s){
-        // TODO:
-        // w , s = -1
+    public static function dmstodecimal($d,$m,$s,$direction){
         $decimal = $d+($m/60)+($s/3600);
-        return sprintf("%.2f",$decimal);
+        if ( !empty($direction) && ($direction == "S" || $direction == "W") ) {
+            $decimal = $decimal*(-1);
+        }
+        return sprintf("%.6f",$decimal);
     }
 
     public static function checkAndCutForNoneBackSpace( $word ) {

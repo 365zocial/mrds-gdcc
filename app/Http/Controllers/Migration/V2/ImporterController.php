@@ -491,14 +491,34 @@ class ImporterController extends Controller
                 $rc->no_locality                        = $_no_locality;
                 $rc->related_reference_item             = $_related_reference_item;
                 $rc->individual_count                   = $temp->individual_count;
-                $rc->latitude                           = $temp->latitude;
+
+                if( empty($temp->latitude) && !empty($temp->verbatim_latitude) ) {
+                    $rc->latitude                       = $this->readVerbatim($temp->verbatim_latitude);
+                } else {
+                    $latitude = explode(" ",$temp->latitude);
+                    $rc->latitude                       = $latitude[0];
+                    // $rc->latitude                       = $temp->latitude;  // TODO: เขียน code ตัดอักษรออก
+                }
                 $rc->verbatim_latitude                  = $_verbatim_latitude;
-                $rc->start_latitude                     = $temp->start_latitude;
-                $rc->end_latitude                       = $temp->end_latitude;
-                $rc->longitude                          = $temp->longitude;
+                $start_latitude = explode(" ",$temp->start_latitude);
+                $rc->start_latitude                     = $start_latitude[0];
+                $end_latitude = explode(" ",$temp->end_latitude);
+                $rc->end_latitude                       = $end_latitude[0];
+
+                if( empty($temp->longitude) && !empty($temp->verbatim_longitude) ) {
+                    $rc->longitude                       = $this->readVerbatim($temp->verbatim_longitude);
+                } else {
+                    $longitude = explode(" ",$temp->longitude);
+                    $rc->latitude                       = $longitude[0];
+
+                    // $rc->longitude                          = $temp->longitude;  // TODO: เขียน code ตัดอักษรออก
+                }
                 $rc->verbatim_longitude                 = $_verbatim_longitude;
-                $rc->start_longitude                    = $temp->start_longitude;
-                $rc->end_longitude                      = $temp->end_longitude;
+                $start_longitude = explode(" ",$temp->start_longitude);
+                $rc->start_longitude                    = $start_longitude[0];
+                $end_longitude = explode(" ",$temp->end_longitude);
+                $rc->end_longitude                      = $end_longitude[0];
+
                 $rc->country                            = $_country;
                 $rc->province                           = $_province;
                 $rc->district                           = $_district;
@@ -610,9 +630,10 @@ class ImporterController extends Controller
         if($verbatim !== ""){
             $dms = explode(" ",$verbatim);
             $dms[0] = str_replace('°', '', $dms[0]);
-            $dms[1] = substr($dms[1], 0, -1);
-            $dms[2] = substr($dms[2], 0, -1);
-            return AllMean::dmstodecimal($dms[0],$dms[1],$dms[2]);
+            $dms[1] = str_replace("'", '', $dms[1]);
+            $dms[2] = str_replace('"', '', $dms[2]);    // ตัดเครื่องหมาย double qoute ออก 1 อัน
+            $dms[2] = str_replace('"', '', $dms[2]);    // ตัดเครื่องหมาย double qoute ออก 1 อัน (เพราะต้องตัด 2 อัน)
+            return AllMean::dmstodecimal($dms[0], $dms[1], $dms[2], $dms[3]);
         }else{
             return "";
         }
@@ -694,8 +715,8 @@ class ImporterController extends Controller
             $related_reference_item = $this->createRelatedReference($temp->marinecenter_code, $source, $temp->collection, $reference, $page, $no_species, $no_locality);
         }
 
-        $verbatim_latitude = $this->readVerbatim($temp->verbatim_latitude);
-        $verbatim_longitude = $this->readVerbatim($temp->verbatim_longitude);
+        $verbatim_latitude = $temp->verbatim_latitude;
+        $verbatim_longitude = $temp->verbatim_longitude;
 
         return [$uniq,
                 $marine_center,
