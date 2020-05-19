@@ -155,9 +155,9 @@
                 @if($is_map_show)
                 <div id="map" style="height:500px"></div>
                 @else
-                <label class="text-danger">
+                <div class="alert alert-danger" role="alert">
                     Records not display in this map are following
-                </label>
+                </div>
                 @endif
             </div>
         </div>
