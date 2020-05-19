@@ -152,7 +152,13 @@
 
         <div class="row table_result">
             <div class="col-md-12">
+                @if($is_map_show)
                 <div id="map" style="height:500px"></div>
+                @else
+                <label class="text-danger">
+                    Records not display in this map are following
+                </label>
+                @endif
             </div>
         </div>
 

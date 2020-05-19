@@ -31,9 +31,12 @@ class SearchTypeCController extends Controller
     public $group_permission_b;
     public $group_permission_c;
 
-    public function __construct(){ }
+    public function __construct()
+    {
+    }
 
-    private function getPermission(){
+    private function getPermission()
+    {
         $this->group_permission_a       = Group_Permission::getGroup_PermissionById(1)[0]->status_user;
         $this->group_permission_b       = Group_Permission::getGroup_PermissionById(2)[0]->status_user;
     }
@@ -44,7 +47,8 @@ class SearchTypeCController extends Controller
     //     return view('search_type_c.dashboardsearch', $data);
     // }
 
-    public function searchDiversity(){
+    public function searchDiversity()
+    {
         $this->getPermission();
 
         $data['lang']   = Session::get('language');
@@ -70,7 +74,8 @@ class SearchTypeCController extends Controller
         return view('search_type_c.diversity', $data);
     }
 
-    public function searchDistribution(){
+    public function searchDistribution()
+    {
         $this->getPermission();
 
         $data['lang']   = Session::get('language');
@@ -96,7 +101,8 @@ class SearchTypeCController extends Controller
         return view('search_type_c.distribution', $data);
     }
 
-    public function searchRecent(){
+    public function searchRecent()
+    {
         $this->getPermission();
 
         $data['lang']   = Session::get('language');
@@ -120,38 +126,45 @@ class SearchTypeCController extends Controller
         return view('search_type_c.recentrecord', $data);
     }
 
-    public function search(Request $input){
+    public function search(Request $input)
+    {
         $data = $this->search_base($input->chk_taxa, $input->chk_locality, $input->chk_expedition, $input->header_taxonomy, $input->domain, $input->kingdom, $input->phylum, $input->subphylum, $input->class, $input->order, $input->suborder, $input->infraorder, $input->family, $input->genus, $input->locality_type, $input->locality_country, $input->locality_province, $input->locality_district, $input->locality_county, $input->expan_id);
         return Response::json($data);
     }
 
-    public function getDistribution(Request $input){
+    public function getDistribution(Request $input)
+    {
         $this->getPermission();
-
         $data                           =   $this->search_distribution($input->chk_taxa, $input->chk_locality, $input->chk_expedition, $input->header_taxonomy, $input->family, $input->genus, $input->species, $input->locality_type, $input->locality_country, $input->locality_province, $input->locality_district, $input->locality_county, $input->expedition, $input->map_type);
         $data['lang']                   =   $data['lang_table'];
         $data['group_permission_a']     =   $this->group_permission_a;
         $data['group_permission_b']     =   $this->group_permission_b;
-
-        return view('search_type_c.result_distribute' ,$data);
+        //show map or not in change request#4 No1
+        $data['is_map_show']            =   true;
+        //if search locality but not in thailand
+        if ($input['locality_type'] && !$data['is_in_thailand']) {
+            $data['is_map_show'] = false;
+        }
+        return view('search_type_c.result_distribute', $data);
     }
 
-    public function search_distribution($chk_taxa, $chk_locality, $chk_expedition, $header_taxonomy, $family , $genus , $species , $locality_type, $locality_country, $locality_province, $locality_district, $locality_county, $expan_id, $map_type=""){
+    public function search_distribution($chk_taxa, $chk_locality, $chk_expedition, $header_taxonomy, $family, $genus, $species, $locality_type, $locality_country, $locality_province, $locality_district, $locality_county, $expan_id, $map_type = "")
+    {
         $lang = Session::get('language');
         $db = new Classification;
-        $db = $db->leftjoin('record as r','classification.id', '=', 'r.classification_id');
-        $db = $db->leftjoin('taxonomy as t1', 'classification.domain' ,'=', 't1.id');
-        $db = $db->leftjoin('taxonomy as t2', 'classification.kingdom' ,'=', 't2.id');
-        $db = $db->leftjoin('taxonomy as t3', 'classification.phylum' ,'=', 't3.id');
-        $db = $db->leftjoin('taxonomy as t4', 'classification.subphylum' ,'=', 't4.id');
-        $db = $db->leftjoin('taxonomy as t5', 'classification.class' ,'=', 't5.id');
-        $db = $db->leftjoin('taxonomy as t6', 'classification.order_o' ,'=', 't6.id');
-        $db = $db->leftjoin('taxonomy as t7', 'classification.suborder' ,'=', 't7.id');
-        $db = $db->leftjoin('taxonomy as t8', 'classification.infraorder' ,'=', 't8.id');
-        $db = $db->leftjoin('taxonomy as t9', 'classification.family' ,'=', 't9.id');
-        $db = $db->leftjoin('taxonomy as t10', 'classification.superfamily' ,'=', 't10.id');
-        $db = $db->leftjoin('taxonomy as t11', 'classification.genus' ,'=', 't11.id');
-        $db = $db->leftjoin('taxonomy as t12', 'classification.species' ,'=', 't12.id');
+        $db = $db->leftjoin('record as r', 'classification.id', '=', 'r.classification_id');
+        $db = $db->leftjoin('taxonomy as t1', 'classification.domain', '=', 't1.id');
+        $db = $db->leftjoin('taxonomy as t2', 'classification.kingdom', '=', 't2.id');
+        $db = $db->leftjoin('taxonomy as t3', 'classification.phylum', '=', 't3.id');
+        $db = $db->leftjoin('taxonomy as t4', 'classification.subphylum', '=', 't4.id');
+        $db = $db->leftjoin('taxonomy as t5', 'classification.class', '=', 't5.id');
+        $db = $db->leftjoin('taxonomy as t6', 'classification.order_o', '=', 't6.id');
+        $db = $db->leftjoin('taxonomy as t7', 'classification.suborder', '=', 't7.id');
+        $db = $db->leftjoin('taxonomy as t8', 'classification.infraorder', '=', 't8.id');
+        $db = $db->leftjoin('taxonomy as t9', 'classification.family', '=', 't9.id');
+        $db = $db->leftjoin('taxonomy as t10', 'classification.superfamily', '=', 't10.id');
+        $db = $db->leftjoin('taxonomy as t11', 'classification.genus', '=', 't11.id');
+        $db = $db->leftjoin('taxonomy as t12', 'classification.species', '=', 't12.id');
         $db = $db->leftjoin('province as p', 'r.province', '=', 'p.id');
         $db = $db->leftjoin('country as country', 'r.country', '=', 'country.id');
         $db = $db->leftjoin('wording as w1', 'r.expedition', '=', 'w1.id');
@@ -187,90 +200,94 @@ class SearchTypeCController extends Controller
         //     $id_taxa        = $infraorder;
         //     $db             = $db->where('classification.infraorder', $infraorder);
         // }
-        if($header_taxonomy == "family" && $family != ""){
+        if ($header_taxonomy == "family" && $family != "") {
             $id_taxa        = $family;
             $db             = $db->where('classification.family', $family);
-        }else if($header_taxonomy == "genus" && $genus != ""){
+        } else if ($header_taxonomy == "genus" && $genus != "") {
             $id_taxa        = $genus;
             $db             = $db->where('classification.genus', $genus);
-        }else if($header_taxonomy == "species" && $species != ""){
+        } else if ($header_taxonomy == "species" && $species != "") {
             $id_taxa        = $species;
             $db             = $db->where('classification.species', $species);
         }
 
-        if($header_taxonomy != "" && $id_taxa != 0){
+        if ($header_taxonomy != "" && $id_taxa != 0) {
             $taxa_full          = Taxonomy::getTaxonomyWording($id_taxa);
-            $taxa               = ucfirst($header_taxonomy)." - ".$taxa_full->name;
-        }else{
+            $taxa               = ucfirst($header_taxonomy) . " - " . $taxa_full->name;
+        } else {
             $taxa               = "-";
         }
 
         #-----------------------------------------------------------#
-
-        if($locality_type == "country" && $locality_country != ""){
+        if ($locality_type == "country" && $locality_country != "") {
             $locality_full  = Country::getCountryWording($locality_country);
-            $locality       = ucfirst($locality_type)." - ".$locality_full->country_en." (".$locality_full->country_th.")";
+            $is_in_thailand = $locality_full->country_id == 1;
+            $locality       = ucfirst($locality_type) . " - " . $locality_full->country_en . " (" . $locality_full->country_th . ")";
             $db             = $db->where('r.country', $locality_country);
-
-        }else if($locality_type == "province" && $locality_province != ""){
+        } else if ($locality_type == "province" && $locality_province != "") {
             $locality_full  = Province::getProvinceWording($locality_province);
-            $locality       = ucfirst($locality_type)." - ".$locality_full->province_en." (".$locality_full->province_th.")";
+            $is_in_thailand = $locality_full->country_id == 1;
+            $locality       = ucfirst($locality_type) . " - " . $locality_full->province_en . " (" . $locality_full->province_th . ")";
             $db             = $db->where('r.province', $locality_province);
-
-        }elseif($locality_type == "district" && $locality_district != ""){
+        } elseif ($locality_type == "district" && $locality_district != "") {
             $locality_full  = District::getDistrictWording($locality_district);
-            $locality       = ucfirst($locality_type)." - ".$locality_full->district_en." (".$locality_full->district_th.")";
+            $is_in_thailand = $locality_full->country_id == 1;
+            $locality       = ucfirst($locality_type) . " - " . $locality_full->district_en . " (" . $locality_full->district_th . ")";
             $db             = $db->where('r.county', $locality_district);
-
-        }elseif($locality_type == "county" && $locality_county != ""){
+        } elseif ($locality_type == "county" && $locality_county != "") {
             $locality_full  = County::getCountyWording($locality_county);
-            $locality       = ucfirst($locality_type)." - ".$locality_full->county_en." (".$locality_full->county_th.")";
+            $is_in_thailand = $locality_full->country_id == 1;
+            $locality       = ucfirst($locality_type) . " - " . $locality_full->county_en . " (" . $locality_full->county_th . ")";
             $db             = $db->where('r.county', $locality_county);
-        }else{
+        } else {
             $locality       = "-";
+            $is_in_thailand = false;
         }
 
-        if($expan_id != ""){
-            $expedition = Wording::getWording($expan_id)->name_en." (".Wording::getWording($expan_id)->name_th.")";
+
+
+
+        if ($expan_id != "") {
+            $expedition = Wording::getWording($expan_id)->name_en . " (" . Wording::getWording($expan_id)->name_th . ")";
             $db = $db->where('r.expedition', $expan_id);
-        }else{
+        } else {
             $expedition = "-";
         }
 
 
-        if($lang == 2){
-            $db = $db->where('r.language_id',2);
-        }else{
-            $db = $db->where('r.language_id',1);
+        if ($lang == 2) {
+            $db = $db->where('r.language_id', 2);
+        } else {
+            $db = $db->where('r.language_id', 1);
         }
 
         $db = $db->where('approve_status', 1);
-        $db = $db->where('r.status',2);
+        $db = $db->where('r.status', 2);
 
         $checkGetSearch = true;
-        if($chk_taxa == 1){
-            if($domain == "" && $kingdom == "" && $phylum == "" && $subphylum == "" && $class == "" && $order == "" && $infraorder == "" && $family == ""){
+        if ($chk_taxa == 1) {
+            if ($domain == "" && $kingdom == "" && $phylum == "" && $subphylum == "" && $class == "" && $order == "" && $infraorder == "" && $family == "") {
                 $data['result_searchs']             = null;
                 $data['map']                        = null;
                 $checkGetSearch                     = $checkGetSearch && false;
             }
         }
-        if($chk_locality == 1){
-            if($locality_country == "" && $locality_province == "" && $locality_district == "" && $locality_county == ""){
+        if ($chk_locality == 1) {
+            if ($locality_country == "" && $locality_province == "" && $locality_district == "" && $locality_county == "") {
                 $data['result_searchs']             = null;
                 $data['map']                        = null;
                 $checkGetSearch                     = $checkGetSearch && false;
             }
         }
-        if($chk_expedition == 1){
-            if($expan_id == ""){
+        if ($chk_expedition == 1) {
+            if ($expan_id == "") {
                 $data['result_searchs']             = null;
                 $data['map']                        = null;
                 $checkGetSearch                     = $checkGetSearch && false;
             }
         }
 
-        if($checkGetSearch){
+        if ($checkGetSearch) {
             $data['result_searchs']             = $this->Data_searchResult_distribution($db);
             $data['map']                        = $this->Data_searchMap($db);
         }
@@ -281,71 +298,77 @@ class SearchTypeCController extends Controller
         $data['locality']                       = $locality;
         $data['taxa']                           = $taxa;
         $data['map_type']                       = $map_type;
+        $data['is_in_thailand']                 = $is_in_thailand;
 
         $data_export['expedition']              = $expedition;
         $data_export['locality']                = $locality;
         $data_export['taxa']                    = $taxa;
         $data_export['result_searchs']          = $data['result_searchs'];
 
-        Session::put( 'search_result_a', json_encode($data_export) );
+        Session::put('search_result_a', json_encode($data_export));
         // dd($data);
         return $data;
     }
 
-    public function Data_searchResult_distribution($db){
-        $data               = $db->select(['classification.current_scientific_name_format',
-                            'classification.current_scientific_name',
-                            'classification.previous_scientific_name_format',
-                            'classification.previous_scientific_name',
-                            'r.related_catalog_item',
-                            'r.related_reference_item',
-                            'p.province_en',
-                            'p.province_th',
-                            'country.country_en',
-                            'country.country_th',
-                            't1.name as domain',
-                            't2.name as kingdom',
-                            't3.name as phylum',
-                            't4.name as subphylum',
-                            't5.name as class',
-                            't6.name as order_o',
-                            't7.name as suborder',
-                            't8.name as infraorder',
-                            't9.name as family',
-                            't10.name as superfamily',
-                            't11.name as genus',
-                            't12.name as species',
-                            'r.id as record_id',
-                            'r.locality',
-                            'r.identifier',
-                            'r.previous_identifier',
-                            'w2.name_en as type_status_en',
-                            'w2.name_th as type_status_th',
-                            'w3.name_en as habitat_en',
-                            'w3.name_th as habitat_th',
-                            'w1.name_en as expedition_en',
-                            'w1.name_th as expedition_th',
-                            'w4.name_en as ocean_sea_lake_en',
-                            'w4.name_th as ocean_sea_lake_th',
-                            'pic.path_pic',
-                            'r.unique_record'])->groupBy('r.unique_record')->get();
+    public function Data_searchResult_distribution($db)
+    {
+        $data               = $db->select([
+            'classification.current_scientific_name_format',
+            'classification.current_scientific_name',
+            'classification.previous_scientific_name_format',
+            'classification.previous_scientific_name',
+            'r.related_catalog_item',
+            'r.related_reference_item',
+            'p.province_en',
+            'p.province_th',
+            'country.id as country_id',
+            'country.country_en',
+            'country.country_th',
+            't1.name as domain',
+            't2.name as kingdom',
+            't3.name as phylum',
+            't4.name as subphylum',
+            't5.name as class',
+            't6.name as order_o',
+            't7.name as suborder',
+            't8.name as infraorder',
+            't9.name as family',
+            't10.name as superfamily',
+            't11.name as genus',
+            't12.name as species',
+            'r.id as record_id',
+            'r.locality',
+            'r.identifier',
+            'r.previous_identifier',
+            'w2.name_en as type_status_en',
+            'w2.name_th as type_status_th',
+            'w3.name_en as habitat_en',
+            'w3.name_th as habitat_th',
+            'w1.name_en as expedition_en',
+            'w1.name_th as expedition_th',
+            'w4.name_en as ocean_sea_lake_en',
+            'w4.name_th as ocean_sea_lake_th',
+            'pic.path_pic',
+            'r.unique_record'
+        ])->groupBy('r.unique_record')->get();
         return $data;
     }
 
-    public function search_base($chk_taxa, $chk_locality, $chk_expedition, $header_taxonomy, $domain , $kingdom , $phylum , $subphylum , $class , $order , $suborder , $infraorder , $family , $genus , $locality_type, $locality_country, $locality_province, $locality_district, $locality_county, $expan_id, $map_type=""){
+    public function search_base($chk_taxa, $chk_locality, $chk_expedition, $header_taxonomy, $domain, $kingdom, $phylum, $subphylum, $class, $order, $suborder, $infraorder, $family, $genus, $locality_type, $locality_country, $locality_province, $locality_district, $locality_county, $expan_id, $map_type = "")
+    {
         $lang = Session::get('language');
         $db = new Classification;
-        $db = $db->leftjoin('record as r','classification.id', '=', 'r.classification_id');
-        $db = $db->leftjoin('taxonomy as t1', 'classification.domain' ,'=', 't1.id');
-        $db = $db->leftjoin('taxonomy as t2', 'classification.kingdom' ,'=', 't2.id');
-        $db = $db->leftjoin('taxonomy as t3', 'classification.phylum' ,'=', 't3.id');
-        $db = $db->leftjoin('taxonomy as t4', 'classification.subphylum' ,'=', 't4.id');
-        $db = $db->leftjoin('taxonomy as t5', 'classification.class' ,'=', 't5.id');
-        $db = $db->leftjoin('taxonomy as t6', 'classification.order_o' ,'=', 't6.id');
-        $db = $db->leftjoin('taxonomy as t7', 'classification.suborder' ,'=', 't7.id');
-        $db = $db->leftjoin('taxonomy as t8', 'classification.infraorder' ,'=', 't8.id');
-        $db = $db->leftjoin('taxonomy as t9', 'classification.family' ,'=', 't9.id');
-        $db = $db->leftjoin('taxonomy as t10', 'classification.superfamily' ,'=', 't10.id');
+        $db = $db->leftjoin('record as r', 'classification.id', '=', 'r.classification_id');
+        $db = $db->leftjoin('taxonomy as t1', 'classification.domain', '=', 't1.id');
+        $db = $db->leftjoin('taxonomy as t2', 'classification.kingdom', '=', 't2.id');
+        $db = $db->leftjoin('taxonomy as t3', 'classification.phylum', '=', 't3.id');
+        $db = $db->leftjoin('taxonomy as t4', 'classification.subphylum', '=', 't4.id');
+        $db = $db->leftjoin('taxonomy as t5', 'classification.class', '=', 't5.id');
+        $db = $db->leftjoin('taxonomy as t6', 'classification.order_o', '=', 't6.id');
+        $db = $db->leftjoin('taxonomy as t7', 'classification.suborder', '=', 't7.id');
+        $db = $db->leftjoin('taxonomy as t8', 'classification.infraorder', '=', 't8.id');
+        $db = $db->leftjoin('taxonomy as t9', 'classification.family', '=', 't9.id');
+        $db = $db->leftjoin('taxonomy as t10', 'classification.superfamily', '=', 't10.id');
         $db = $db->leftjoin('province as p', 'r.province', '=', 'p.id');
         $db = $db->leftjoin('country as country', 'r.country', '=', 'country.id');
         $db = $db->leftjoin('wording as w1', 'r.expedition', '=', 'w1.id');
@@ -355,82 +378,79 @@ class SearchTypeCController extends Controller
         $db = $db->leftjoin('picture as pic', 'r.unique_record', '=', 'pic.unique_record');
 
         $id_taxa = 0;
-        if($header_taxonomy == "domain" && $domain != ""){
+        if ($header_taxonomy == "domain" && $domain != "") {
             $id_taxa        = $domain;
             $db             = $db->where('classification.domain', $domain);
-        }else if($header_taxonomy == "kingdom" && $kingdom != ""){
+        } else if ($header_taxonomy == "kingdom" && $kingdom != "") {
             $id_taxa        = $kingdom;
             $db             = $db->where('classification.kingdom', $kingdom);
-        }else if($header_taxonomy == "phylum" && $phylum != ""){
+        } else if ($header_taxonomy == "phylum" && $phylum != "") {
             $id_taxa        = $phylum;
             $db             = $db->where('classification.phylum', $phylum);
-        }else if($header_taxonomy == "subphylum" && $subphylum != ""){
+        } else if ($header_taxonomy == "subphylum" && $subphylum != "") {
             $id_taxa        = $subphylum;
             $db             = $db->where('classification.subphylum', $subphylum);
-        }else if($header_taxonomy == "class" && $class != ""){
+        } else if ($header_taxonomy == "class" && $class != "") {
             $id_taxa        = $class;
             $db             = $db->where('classification.class', $class);
-        }else if($header_taxonomy == "order" && $order != ""){
+        } else if ($header_taxonomy == "order" && $order != "") {
             $id_taxa        = $order;
             $db             = $db->where('classification.order_o', $order);
-        }else if($header_taxonomy == "suborder" && $suborder != ""){
+        } else if ($header_taxonomy == "suborder" && $suborder != "") {
             $id_taxa        = $suborder;
             $db             = $db->where('classification.suborder', $suborder);
-        }else if($header_taxonomy == "infraorder" && $infraorder != ""){
+        } else if ($header_taxonomy == "infraorder" && $infraorder != "") {
             $id_taxa        = $infraorder;
             $db             = $db->where('classification.infraorder', $infraorder);
-        }else if($header_taxonomy == "family" && $family != ""){
+        } else if ($header_taxonomy == "family" && $family != "") {
             $id_taxa        = $family;
             $db             = $db->where('classification.family', $family);
-        }else if($header_taxonomy == "genus" && $genus != ""){
+        } else if ($header_taxonomy == "genus" && $genus != "") {
             $id_taxa        = $genus;
             $db             = $db->where('classification.genus', $genus);
         }
 
-        if($header_taxonomy != "" && $id_taxa != 0){
+        if ($header_taxonomy != "" && $id_taxa != 0) {
             $taxa_full          = Taxonomy::getTaxonomyWording($id_taxa);
-            $taxa               = ucfirst($header_taxonomy)." - ".$taxa_full->name;
-        }else{
+            $taxa               = ucfirst($header_taxonomy) . " - " . $taxa_full->name;
+        } else {
             $taxa               = "-";
         }
 
         #-----------------------------------------------------------#
 
-        if($locality_type == "country" && $locality_country != ""){
+        if ($locality_type == "country" && $locality_country != "") {
             $locality_full  = Country::getCountryWording($locality_country);
-            $locality       = ucfirst($locality_type)." - ".$locality_full->country_en." (".$locality_full->country_th.")";
+            $locality       = ucfirst($locality_type) . " - " . $locality_full->country_en . " (" . $locality_full->country_th . ")";
             $db             = $db->where('r.country', $locality_country);
-
-        }else if($locality_type == "province" && $locality_province != ""){
+        } else if ($locality_type == "province" && $locality_province != "") {
             $locality_full  = Province::getProvinceWording($locality_province);
-            $locality       = ucfirst($locality_type)." - ".$locality_full->province_en." (".$locality_full->province_th.")";
+            $locality       = ucfirst($locality_type) . " - " . $locality_full->province_en . " (" . $locality_full->province_th . ")";
             $db             = $db->where('r.province', $locality_province);
-
-        }elseif($locality_type == "district" && $locality_district != ""){
+        } elseif ($locality_type == "district" && $locality_district != "") {
             $locality_full  = District::getDistrictWording($locality_district);
-            $locality       = ucfirst($locality_type)." - ".$locality_full->district_en." (".$locality_full->district_th.")";
+            $locality       = ucfirst($locality_type) . " - " . $locality_full->district_en . " (" . $locality_full->district_th . ")";
             $db             = $db->where('r.county', $locality_district);
-
-        }elseif($locality_type == "county" && $locality_county != ""){
+        } elseif ($locality_type == "county" && $locality_county != "") {
             $locality_full  = County::getCountyWording($locality_county);
-            $locality       = ucfirst($locality_type)." - ".$locality_full->county_en." (".$locality_full->county_th.")";
+            $locality       = ucfirst($locality_type) . " - " . $locality_full->county_en . " (" . $locality_full->county_th . ")";
             $db             = $db->where('r.county', $locality_county);
-        }else{
+        } else {
             $locality       = "-";
         }
 
-        if($expan_id != ""){
-            $expedition = Wording::getWording($expan_id)->name_en." (".Wording::getWording($expan_id)->name_th.")";
+        if ($expan_id != "") {
+            $expedition = Wording::getWording($expan_id)->name_en . " (" . Wording::getWording($expan_id)->name_th . ")";
             $db = $db->where('r.expedition', $expan_id);
-        }else{
+        } else {
             $expedition = "-";
         }
 
 
-        if($lang == 2){
-            $db = $db->where('r.language_id',2);
-        }else{
-            $db = $db->where('r.language_id',1);
+        if ($lang == 2) {
+            $db = $db->where('r.language_id', 2);
+        } else {
+            $db = $db->where('r.language_id', 1);
         }
 
         // if( Auth::user()->role_id == 3 ){
@@ -438,32 +458,32 @@ class SearchTypeCController extends Controller
         // }
 
         $db = $db->where('approve_status', 1);
-        $db = $db->where('r.status',2);
+        $db = $db->where('r.status', 2);
 
         $checkGetSearch = true;
-        if($chk_taxa == 1){
-            if($domain == "" && $kingdom == "" && $phylum == "" && $subphylum == "" && $class == "" && $order == "" && $infraorder == "" && $family == ""){
+        if ($chk_taxa == 1) {
+            if ($domain == "" && $kingdom == "" && $phylum == "" && $subphylum == "" && $class == "" && $order == "" && $infraorder == "" && $family == "") {
                 $data['result_searchs']             = null;
                 $data['map']                        = null;
                 $checkGetSearch                     = $checkGetSearch && false;
             }
         }
-        if($chk_locality == 1){
-            if($locality_country == "" && $locality_province == "" && $locality_district == "" && $locality_county == ""){
+        if ($chk_locality == 1) {
+            if ($locality_country == "" && $locality_province == "" && $locality_district == "" && $locality_county == "") {
                 $data['result_searchs']             = null;
                 $data['map']                        = null;
                 $checkGetSearch                     = $checkGetSearch && false;
             }
         }
-        if($chk_expedition == 1){
-            if($expan_id == ""){
+        if ($chk_expedition == 1) {
+            if ($expan_id == "") {
                 $data['result_searchs']             = null;
                 $data['map']                        = null;
                 $checkGetSearch                     = $checkGetSearch && false;
             }
         }
 
-        if($checkGetSearch){
+        if ($checkGetSearch) {
             $data['result_searchs']             = $this->Data_searchResult($db);
             $data['map']                        = $this->Data_searchMap($db);
         }
@@ -480,60 +500,66 @@ class SearchTypeCController extends Controller
         $data_export['taxa']                    = $taxa;
         $data_export['result_searchs']          = $data['result_searchs'];
 
-        Session::put( 'search_result_a', json_encode($data_export) );
+        Session::put('search_result_a', json_encode($data_export));
         // dd($data);
         return $data;
     }
 
-    public function Data_searchResult($db){
-        $data               = $db->select(['classification.current_scientific_name_format',
-                            'classification.current_scientific_name',
-                            'classification.previous_scientific_name_format',
-                            'classification.previous_scientific_name',
-                            'r.related_catalog_item',
-                            'r.related_reference_item',
-                            'p.province_en',
-                            'p.province_th',
-                            'country.country_en',
-                            'country.country_th',
-                            't1.name as domain',
-                            't2.name as kingdom',
-                            't3.name as phylum',
-                            't4.name as subphylum',
-                            't5.name as class',
-                            't6.name as order_o',
-                            't7.name as suborder',
-                            't8.name as infraorder',
-                            't9.name as family',
-                            't10.name as superfamily',
-                            'r.id as record_id',
-                            'r.locality',
-                            'r.identifier',
-                            'r.previous_identifier',
-                            'w2.name_en as type_status_en',
-                            'w2.name_th as type_status_th',
-                            'w3.name_en as habitat_en',
-                            'w3.name_th as habitat_th',
-                            'w1.name_en as expedition_en',
-                            'w1.name_th as expedition_th',
-                            'w4.name_en as ocean_sea_lake_en',
-                            'w4.name_th as ocean_sea_lake_th',
-                            'pic.path_pic',
-                            'r.unique_record'])->groupBy('r.unique_record')->get();
-                            // 'r.unique_record'])->groupBy('r.unique_record')->groupBy('classification.current_scientific_name')->get();  // ที่จะปรับแก้ไม่ให้แสดง record ซ้ำ (รอ confirm จ่ายเงินถึงค่อยทำ)
+    public function Data_searchResult($db)
+    {
+        $data               = $db->select([
+            'classification.current_scientific_name_format',
+            'classification.current_scientific_name',
+            'classification.previous_scientific_name_format',
+            'classification.previous_scientific_name',
+            'r.related_catalog_item',
+            'r.related_reference_item',
+            'p.province_en',
+            'p.province_th',
+            'country.country_en',
+            'country.country_th',
+            't1.name as domain',
+            't2.name as kingdom',
+            't3.name as phylum',
+            't4.name as subphylum',
+            't5.name as class',
+            't6.name as order_o',
+            't7.name as suborder',
+            't8.name as infraorder',
+            't9.name as family',
+            't10.name as superfamily',
+            'r.id as record_id',
+            'r.locality',
+            'r.identifier',
+            'r.previous_identifier',
+            'w2.name_en as type_status_en',
+            'w2.name_th as type_status_th',
+            'w3.name_en as habitat_en',
+            'w3.name_th as habitat_th',
+            'w1.name_en as expedition_en',
+            'w1.name_th as expedition_th',
+            'w4.name_en as ocean_sea_lake_en',
+            'w4.name_th as ocean_sea_lake_th',
+            'pic.path_pic',
+            'r.unique_record'
+        ])->groupBy('r.unique_record')->get();
+        // 'r.unique_record'])->groupBy('r.unique_record')->groupBy('classification.current_scientific_name')->get();  // ที่จะปรับแก้ไม่ให้แสดง record ซ้ำ (รอ confirm จ่ายเงินถึงค่อยทำ)
         return $data;
     }
 
-    public function Data_searchMap($db){
+    public function Data_searchMap($db)
+    {
 
-        $data       = $db->select(['r.related_catalog_item',
-                    'r.related_reference_item',
-                    'r.latitude',
-                    'r.longitude',
-                    'r.start_latitude',
-                    'r.end_latitude',
-                    'r.start_longitude',
-                    'r.end_longitude'])->get();
+        $data       = $db->select([
+            'r.related_catalog_item',
+            'r.related_reference_item',
+            'r.latitude',
+            'r.longitude',
+            'r.start_latitude',
+            'r.end_latitude',
+            'r.start_longitude',
+            'r.end_longitude'
+        ])->get();
 
         return $data;
     }
@@ -542,41 +568,42 @@ class SearchTypeCController extends Controller
     //Created : 11-6-61
     //Modified : 11-6-61
     # for search name form
-    public function searchByNameRecord() {
+    public function searchByNameRecord()
+    {
         $data['lang']   = Session::get('language');
         return view('search_type_c.search_by_name_record', $data);
     }
 
     //Chaloemphon
-	//Created : 11-6-61
-	//Modified : 11-6-61
-	# for search name
-    public function doSearchNameRecord( Request $input ) {
+    //Created : 11-6-61
+    //Modified : 11-6-61
+    # for search name
+    public function doSearchNameRecord(Request $input)
+    {
         // get value from form
         $way = $input->way;
 
         $name_type = $input->name_type;
         $search = $input->search;
 
-        if( $way == 1 ) {   // search
+        if ($way == 1) {   // search
             // get DB
-                if($input->name_type == 'localname'){
-                    $data['results'] = \App\Model\Record::leftjoin('classification', 'record.classification_id', 'classification.id')->where('record.local_name', 'like', '%'.$input->search.'%')->get();
-                }elseif($input->name_type == 'vernacularname'){
-                    $data['results'] = \App\Model\Record::leftjoin('classification', 'record.classification_id', 'classification.id')->where('record.vernacular_name', 'like', '%'.$input->search.'%')->get();
-                }elseif($input->name_type == 'commonname'){
-                    $data['results'] = \App\Model\Record::leftjoin('classification', 'record.classification_id', 'classification.id')->where('classification.common_name', 'like', '%'.$input->search.'%')->get();
-                }
+            if ($input->name_type == 'localname') {
+                $data['results'] = \App\Model\Record::leftjoin('classification', 'record.classification_id', 'classification.id')->where('record.local_name', 'like', '%' . $input->search . '%')->get();
+            } elseif ($input->name_type == 'vernacularname') {
+                $data['results'] = \App\Model\Record::leftjoin('classification', 'record.classification_id', 'classification.id')->where('record.vernacular_name', 'like', '%' . $input->search . '%')->get();
+            } elseif ($input->name_type == 'commonname') {
+                $data['results'] = \App\Model\Record::leftjoin('classification', 'record.classification_id', 'classification.id')->where('classification.common_name', 'like', '%' . $input->search . '%')->get();
+            }
             // ------
 
             $data['name_type'] = ucfirst($name_type);
             $data['search'] = $search;
 
-        	return Response::json($data);
+            return Response::json($data);
         } else {    //ajax
             // export excel
-            ExportRecordController::exportSearchByNameRecord( $name_type, $search );
+            ExportRecordController::exportSearchByNameRecord($name_type, $search);
         }
     }
-
 }
