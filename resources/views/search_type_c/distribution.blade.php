@@ -114,6 +114,8 @@
                         [$genuses,'genus'],
                         [$species,'species']
                     ];
+
+                    
                 ?>
 
                 <div class="submit_select" style="display: none;"><hr></div>
@@ -125,7 +127,7 @@
                             <option selected disabled="" value="0">Select</option>
                             <option value="family">Family</option>
                             <option value="genus">Genus</option>
-                            <option value="species">Species</option>
+                            <option value="classification">Species</option>
                         </select>
                     </div>
                     <div class="col-md-6">
@@ -137,7 +139,7 @@
                         </div>
                         @foreach($arr_taxos as $arr_taxo)
                             <div class="dd_taxa_sub" style="display:none;">
-                                <select class="form-control select2" name="{{ $arr_taxo[1] }}" id="">
+                                <select class="form-control select2" name="{{$arr_taxo[1]}}" id="">
                                     <option selected disabled="" value="0">Select</option>
                                     @foreach( $arr_taxo[0] as $value )
                                         <option value="{{ $value->id }}">{{ $value->name }}</option>
@@ -145,6 +147,15 @@
                                 </select>
                             </div>
                         @endforeach
+                        {{-- add classification  --}}
+                        <div class="dd_taxa_sub" style="display:none;">
+                            <select class="form-control select2" name="classification" id="">
+                                <option selected disabled="" value="0">Select</option>
+                                @foreach( $classification as $value )
+                                    <option value="{{ $value->id }}">{!! $value->current_scientific_name !!}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                 </div>
 

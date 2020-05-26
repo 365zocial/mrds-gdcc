@@ -114,7 +114,10 @@
                         [$orders,'order'],
                         [$suborders,'suborder'],
                         [$infraorders,'infraorder'],
-                        [$families,'family']
+                        [$families,'family'],
+                        [$genuses,'genus'],
+                        [$species,'species'],
+                        
                     ];
                 ?>
 
@@ -123,15 +126,9 @@
                         <p class="search-report-dropdown-header">@if($lang == 2){{'ค้นหาด้วยหมวดหมู่'}}@else{{'Search by Taxon'}}@endif</p>
                         <select class="form-control select2" name="header_taxonomy" id="taxa_header_id">
                             <option selected disabled="" value="0">Select</option>
-                            <option value="domain">Domain</option>
-                            <option value="kingdom">Kingdom</option>
-                            <option value="phylum">Phylum</option>
-                            <option value="subphylum">Subphylum</option>
-                            <option value="class">Class / Clade</option>
-                            <option value="order">Order / Clade</option>
-                            <option value="suborder">Suborder / Clade</option>
-                            <option value="infraorder">Infraorder / Clade</option>
-                            <option value="family">Family / Clade</option>
+                            <option value="family">Family</option>
+                            <option value="genus">Genus</option>
+                            <option value="classification">Species</option>
                         </select>
                     </div>
                     <div class="col-md-6">
@@ -151,6 +148,15 @@
                                 </select>
                             </div>
                         @endforeach
+                        {{-- add classification  --}}
+                        <div class="dd_taxa_sub" style="display:none;">
+                            <select class="form-control select2" name="classification" id="">
+                                <option selected disabled="" value="0">Select</option>
+                                @foreach( $classification as $value )
+                                    <option value="{{ $value->id }}">{!! $value->current_scientific_name !!}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                 </div>
 

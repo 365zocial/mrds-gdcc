@@ -79,6 +79,8 @@ class SearchTypeAController extends Controller
         $data['suborders']              =   Taxonomy::getSuborder();
         $data['infraorders']            =   Taxonomy::getInfraorder();
         $data['families']               =   Taxonomy::getFamily();
+        $data['genuses']                =   Taxonomy::getGenus();
+        $data['species']                =   Taxonomy::getSpecies();
         $data['group_permission_a']     =   $this->group_permission_a;
         $data['group_permission_b']     =   $this->group_permission_b;
 
@@ -146,7 +148,7 @@ class SearchTypeAController extends Controller
     {
         $this->getPermission();
 
-        $data                           =   $this->search_base($input->chk_taxa, $input->chk_locality, $input->chk_expedition, $input->header_taxonomy, $input->domain, $input->kingdom, $input->phylum, $input->subphylum, $input->class, $input->order, $input->suborder, $input->infraorder, $input->family, $input->locality_type, $input->locality_country, $input->locality_province, $input->locality_district, $input->locality_county, $input->expedition, $input->map_type);
+        $data                           =   $this->search_base($input->chk_taxa, $input->chk_locality, $input->chk_expedition, $input->header_taxonomy, $input->domain, $input->kingdom, $input->phylum, $input->subphylum, $input->class, $input->order, $input->suborder, $input->infraorder, $input->family, $input->locality_type, $input->locality_country, $input->locality_province, $input->locality_district, $input->locality_county, $input->expedition, $input->map_type, $input->genus, $input->species);
         $data['lang']                   =   $data['lang_table'];
         $data['group_permission_a']     =   $this->group_permission_a;
         $data['group_permission_b']     =   $this->group_permission_b;
@@ -159,7 +161,7 @@ class SearchTypeAController extends Controller
         return view('search_type_a.result_distribute', $data);
     }
 
-    public function search_base($chk_taxa, $chk_locality, $chk_expedition, $header_taxonomy, $domain, $kingdom, $phylum, $subphylum, $class, $order, $suborder, $infraorder, $family, $locality_type, $locality_country, $locality_province, $locality_district, $locality_county, $expan_id, $map_type = "")
+    public function search_base($chk_taxa, $chk_locality, $chk_expedition, $header_taxonomy, $domain, $kingdom, $phylum, $subphylum, $class, $order, $suborder, $infraorder, $family, $locality_type, $locality_country, $locality_province, $locality_district, $locality_county, $expan_id, $map_type = "", $genus = "", $species = "")
     {
         $lang = Session::get('language');
         $db = new Classification;
@@ -173,6 +175,9 @@ class SearchTypeAController extends Controller
         $db = $db->leftjoin('taxonomy as t7', 'classification.suborder', '=', 't7.id');
         $db = $db->leftjoin('taxonomy as t8', 'classification.infraorder', '=', 't8.id');
         $db = $db->leftjoin('taxonomy as t9', 'classification.family', '=', 't9.id');
+        $db = $db->leftjoin('taxonomy as t10', 'classification.superfamily', '=', 't10.id');
+        $db = $db->leftjoin('taxonomy as t11', 'classification.genus', '=', 't11.id');
+        $db = $db->leftjoin('taxonomy as t12', 'classification.species', '=', 't12.id');
         $db = $db->leftjoin('province as p', 'r.province', '=', 'p.id');
         $db = $db->leftjoin('country as country', 'r.country', '=', 'country.id');
         $db = $db->leftjoin('wording as w1', 'r.expedition', '=', 'w1.id');
@@ -209,6 +214,12 @@ class SearchTypeAController extends Controller
         } else if ($header_taxonomy == "family" && $family != "") {
             $id_taxa        = $family;
             $db             = $db->where('classification.family', $family);
+        } else if ($header_taxonomy == "genus" && $genus != "") {
+            $id_taxa        = $genus;
+            $db             = $db->where('classification.genus', $genus);
+        } else if ($header_taxonomy == "species" && $species != "") {
+            $id_taxa        = $species;
+            $db             = $db->where('classification.species', $species);
         }
 
         if ($header_taxonomy != "" && $id_taxa != 0) {
@@ -222,7 +233,7 @@ class SearchTypeAController extends Controller
 
         if ($locality_type == "country" && $locality_country != "") {
             $locality_full  = Country::getCountryWording($locality_country);
-            $is_in_thailand = $locality_full->country_id == 1;
+            $is_in_thailand = $locality_full->id == 1;
             $locality       = ucfirst($locality_type) . " - " . $locality_full->country_en . " (" . $locality_full->country_th . ")";
             $db             = $db->where('r.country', $locality_country);
         } else if ($locality_type == "province" && $locality_province != "") {
@@ -244,6 +255,8 @@ class SearchTypeAController extends Controller
             $locality       = "-";
             $is_in_thailand = false;
         }
+
+
 
         if ($expan_id != "") {
             $expedition = Wording::getWording($expan_id)->name_en . " (" . Wording::getWording($expan_id)->name_th . ")";
@@ -333,6 +346,9 @@ class SearchTypeAController extends Controller
             't7.name as suborder',
             't8.name as infraorder',
             't9.name as family',
+            't10.name as superfamily',
+            't11.name as genus',
+            't12.name as species',
             'r.id as record_id',
             'r.locality',
             'r.identifier',

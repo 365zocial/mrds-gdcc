@@ -153,6 +153,9 @@ class SearchTypeBController extends Controller
         $data['suborders']           =   Taxonomy::getSuborder();
         $data['infraorders']         =   Taxonomy::getInfraorder();
         $data['families']             =   Taxonomy::getFamily();
+        $data['genuses']                =   Taxonomy::getGenus();
+        $data['species']                =   Taxonomy::getSpecies();
+        $data['classification']         =   Classification::getClassificationBySciName();
         $data['group_permission_a_manager']         =   $this->group_permission_a_manager;
         $data['group_permission_a_user']            =   $this->group_permission_a_user;
         $data['group_permission_a_board']           =   $this->group_permission_a_board;
@@ -170,7 +173,6 @@ class SearchTypeBController extends Controller
     public function doSearchDistribution(Request $input)
     {
         $lang = Session::get('language');
-
         $header_taxonomy        = $input->header_taxonomy;
         $domain                 = $input->domain;
         $kingdom                = $input->kingdom;
@@ -181,6 +183,9 @@ class SearchTypeBController extends Controller
         $suborder               = $input->suborder;
         $infraorder             = $input->infraorder;
         $family                 = $input->family;
+        $genus                  = $input->genus;
+        $species                = $input->species;
+
         $locality_type          = $input->locality_type;
         $locality_country       = $input->locality_country;
         $locality_province      = $input->locality_province;
@@ -203,10 +208,14 @@ class SearchTypeBController extends Controller
         $db = $db->leftjoin('taxonomy as t7', 'classification.suborder', '=', 't7.id');
         $db = $db->leftjoin('taxonomy as t8', 'classification.infraorder', '=', 't8.id');
         $db = $db->leftjoin('taxonomy as t9', 'classification.family', '=', 't9.id');
+        $db = $db->leftjoin('taxonomy as t10', 'classification.superfamily', '=', 't10.id');
+        $db = $db->leftjoin('taxonomy as t11', 'classification.genus', '=', 't11.id');
+        $db = $db->leftjoin('taxonomy as t12', 'classification.species', '=', 't12.id');
         $db = $db->leftjoin('province as p', 'r.province', '=', 'p.id');
         $db = $db->leftjoin('wording as w1', 'r.expedition', '=', 'w1.id');
         $db = $db->leftjoin('wording as w2', 'r.type_status', '=', 'w2.id');
         $db = $db->leftjoin('wording as w3', 'r.habitat', '=', 'w3.id');
+        $db = $db->leftjoin('wording as w4', 'r.ocean_sea_lake', '=', 'w4.id');
         $db = $db->leftjoin('picture as pic', 'r.unique_record', '=', 'pic.unique_record');
 
         // dd($header_taxonomy);
@@ -238,6 +247,12 @@ class SearchTypeBController extends Controller
         } else if ($header_taxonomy == "family" && $family != "") {
             $id_taxa        = $family;
             $db             = $db->where('classification.family', $family);
+        } else if ($header_taxonomy == "genus" && $genus != "") {
+            $id_taxa        = $genus;
+            $db             = $db->where('classification.genus', $genus);
+        } else if ($header_taxonomy == "species" && $species != "") {
+            $id_taxa        = $species;
+            $db             = $db->where('classification.species', $species);
         }
 
         if ($header_taxonomy != "" && $id_taxa != 0) {
@@ -251,7 +266,7 @@ class SearchTypeBController extends Controller
 
         if ($locality_type == "country" && $locality_country != "") {
             $locality_full  = Country::getCountryWording($locality_country);
-            $is_in_thailand = $locality_full->country_id == 1;
+            $is_in_thailand = $locality_full->id == 1;
             $locality       = ucfirst($locality_type) . " - " . $locality_full->country_en . " (" . $locality_full->country_th . ")";
             $db             = $db->where('r.country', $locality_country);
         } else if ($locality_type == "province" && $locality_province != "") {
@@ -375,6 +390,9 @@ class SearchTypeBController extends Controller
             't7.name as suborder',
             't8.name as infraorder',
             't9.name as family',
+            't10.name as superfamily',
+            't11.name as genus',
+            't12.name as species',
             'r.locality',
             'r.identifier',
             'w2.name_en as type_status_en',
@@ -383,6 +401,8 @@ class SearchTypeBController extends Controller
             'w3.name_th as habitat_th',
             'w1.name_en as expedition_en',
             'w1.name_th as expedition_th',
+            'w4.name_en as ocean_sea_lake_en',
+            'w4.name_th as ocean_sea_lake_th',
             'pic.path_pic',
             'r.unique_record'
         ])->get();

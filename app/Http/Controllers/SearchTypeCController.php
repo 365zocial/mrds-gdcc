@@ -96,6 +96,7 @@ class SearchTypeCController extends Controller
         $data['families']               =   Taxonomy::getFamily();
         $data['genuses']                =   Taxonomy::getGenus();
         $data['species']                =   Taxonomy::getSpecies();
+        $data['classification']         =   Classification::getClassificationBySciName();
         $data['group_permission_a']     =   $this->group_permission_a;
         $data['group_permission_b']     =   $this->group_permission_b;
         return view('search_type_c.distribution', $data);
@@ -134,8 +135,9 @@ class SearchTypeCController extends Controller
 
     public function getDistribution(Request $input)
     {
+
         $this->getPermission();
-        $data                           =   $this->search_distribution($input->chk_taxa, $input->chk_locality, $input->chk_expedition, $input->header_taxonomy, $input->family, $input->genus, $input->species, $input->locality_type, $input->locality_country, $input->locality_province, $input->locality_district, $input->locality_county, $input->expedition, $input->map_type);
+        $data                           =   $this->search_distribution($input->chk_taxa, $input->chk_locality, $input->chk_expedition, $input->header_taxonomy, $input->family, $input->genus, $input->species, $input->locality_type, $input->locality_country, $input->locality_province, $input->locality_district, $input->locality_county, $input->expedition, $input->map_type, $input->classification);
         $data['lang']                   =   $data['lang_table'];
         $data['group_permission_a']     =   $this->group_permission_a;
         $data['group_permission_b']     =   $this->group_permission_b;
@@ -148,7 +150,7 @@ class SearchTypeCController extends Controller
         return view('search_type_c.result_distribute', $data);
     }
 
-    public function search_distribution($chk_taxa, $chk_locality, $chk_expedition, $header_taxonomy, $family, $genus, $species, $locality_type, $locality_country, $locality_province, $locality_district, $locality_county, $expan_id, $map_type = "")
+    public function search_distribution($chk_taxa, $chk_locality, $chk_expedition, $header_taxonomy, $family, $genus, $species, $locality_type, $locality_country, $locality_province, $locality_district, $locality_county, $expan_id, $map_type = "", $classification = "")
     {
         $lang = Session::get('language');
         $db = new Classification;
@@ -209,9 +211,16 @@ class SearchTypeCController extends Controller
         } else if ($header_taxonomy == "species" && $species != "") {
             $id_taxa        = $species;
             $db             = $db->where('classification.species', $species);
+        } else if ($header_taxonomy == "classification" && $classification != "") {
+            $id_taxa        = $classification;
+            $db             = $db->where('classification.id', $classification);
         }
 
-        if ($header_taxonomy != "" && $id_taxa != 0) {
+
+        if ($header_taxonomy == "classification" && $classification != "") {
+            $classification_full = Classification::getClassificationWording($id_taxa);
+            $taxa               = "Species" . " - " . $classification_full->current_scientific_name_format;
+        } else if ($header_taxonomy != "" && $id_taxa != 0) {
             $taxa_full          = Taxonomy::getTaxonomyWording($id_taxa);
             $taxa               = ucfirst($header_taxonomy) . " - " . $taxa_full->name;
         } else {
@@ -221,7 +230,7 @@ class SearchTypeCController extends Controller
         #-----------------------------------------------------------#
         if ($locality_type == "country" && $locality_country != "") {
             $locality_full  = Country::getCountryWording($locality_country);
-            $is_in_thailand = $locality_full->country_id == 1;
+            $is_in_thailand = $locality_full->id == 1;
             $locality       = ucfirst($locality_type) . " - " . $locality_full->country_en . " (" . $locality_full->country_th . ")";
             $db             = $db->where('r.country', $locality_country);
         } else if ($locality_type == "province" && $locality_province != "") {

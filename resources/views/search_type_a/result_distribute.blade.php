@@ -199,59 +199,27 @@
                     <table id="result" class="display" cellspacing="0">
                         <thead>
                             <th>IDCatalog/ IDRef</th>
-                            @if($group_permission_a == 2)
-                            <!-- <th>Domain</th>
-                            <th>Kingdom</th> -->
-                            <th>Phylum</th>
-                            <th>Subphylum</th>
-                            <th>Class (Clade)</th>
-                            <th>Order (Clade)</th>
-                            <th>Suborder (Clade)</th>
-                            <th>Infraorder (Clade)</th>
-                            <th>Family (Clade)</th>
-                            @endif
+                            <th>Family</th>
+                            <th>Genus</th>
                             <th>Current Name</th>
-                            <th>Previous Name</th>
-                            <th>Type</th>
-                            <th>Habitat</th>
-                            @if($group_permission_b == 2)
-                            <th>Locality</th>
-                            @endif
-                            <th>Picture</th>
-                            @if( Auth::user()->role_id == 3 )
-                            <th>Action</th>
-                            @endif
+                            <th>Ocean/Sea/Lake</th>
+                            <th>Country</th>
+                            <th>Province</th>
                         </thead>
                         <tbody>
                             @foreach( $result_searchs as $value)
                             <tr>
                                 <td>{{ $value->related_catalog_item."".$value->related_reference_item }}</td>
-                                @if($group_permission_a == 2)
-                                <!-- <td>{{ $value->domain }}</td>
-                                <td>{{ $value->kingdom }}</td> -->
-                                <td>{{ $value->phylum }}</td>
-                                <td>{{ $value->subphylum }}</td>
-                                <td>{{ $value->class }}</td>
-                                <td>{{ $value->order_o }}</td>
-                                <td>{{ $value->suborder }}</td>
-                                <td>{{ $value->infraorder }}</td>
                                 <td>{{ $value->family }}</td>
-                                @endif
+                                <td>{{ $value->genus }}</td>
                                 <td>{!! $value->current_scientific_name_format !!}</td>
-                                <td>{!! $value->previous_scientific_name_format !!}</td>
-                                <td>{{ $value->type_status_en }}</td>
-                                @if($lang == 2)
-                                <td>{{ $value->habitat_th }}</td>
-                                @else
-                                <td>{{ $value->habitat_en }}</td>
-                                @endif
-                                @if($group_permission_b == 2)
-                                <td>{{ $value->locality }}</td>
-                                @endif
+                                <td>{{ ($lang==1 ? $value->ocean_sea_lake_en : $value->ocean_sea_lake_th) }}</td>
+                                <td>{{ ($lang==1 ? $value->country_en : $value->country_th) }}</td>
+                                <td>{{ ($lang==1 ? $value->province_en  : $value->province_th)}}</td>
+                                @if(false)
                                 <td><a href='#' class='showPic' data-toggle='modal' data-target='#myModal' data-uniqueid='{{  $value->unique_record }}'><span class='glyphicon glyphicon-eye-open' aria-hidden='true'> View image</a></td>
-                                    @if( Auth::user()->role_id == 3 )
-                                    <td><a href="{{ url('staff/searchCategory/viewCard') }}/{{ base64_encode( base64_encode( base64_encode( $value->record_id ))) }}" target="_blank"><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span> View Card</a></td>
-                                    @endif
+                                <td><a href="{{ url('staff/searchCategory/viewCard') }}/{{ base64_encode( base64_encode( base64_encode( $value->record_id ))) }}" target="_blank"><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span> View Card</a></td>
+                                @endif
                             </tr>
                             @endforeach
                         </tbody>

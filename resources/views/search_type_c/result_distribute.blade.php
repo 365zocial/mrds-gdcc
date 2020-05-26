@@ -115,7 +115,7 @@
                 <p class="record-label">
                     @if($group_permission_a == 2)
                         @if($lang == 2){{'ค้นหาด้วยหมวดหมู่'}}@else{{'Taxon'}}@endif:
-                        <span class="record-data taxa_search" style="margin-right: 20px;">{{ $taxa }}</span>
+                        <span class="record-data taxa_search" style="margin-right: 20px;">{!! $taxa !!}</span>
                     @endif
                     @if($group_permission_b == 2)
                         @if($lang == 2){{'ค้นหาเชิงพื้นที่'}}@else{{'Locality'}}@endif:
@@ -158,7 +158,7 @@
                     <p class="content-header search-result">Search Result</p>
                     <p class="record-label search-result">
                         @if($group_permission_a == 2)
-                            @if($lang == 2){{'ค้นหาด้วยหมวดหมู่'}}@else{{'Taxon'}}@endif: <span class="record-data" style="margin-right: 30px;"><span class="taxa_search">{{$taxa}}</span></span>
+                            @if($lang == 2){{'ค้นหาด้วยหมวดหมู่'}}@else{{'Taxon'}}@endif: <span class="record-data" style="margin-right: 30px;"><span class="taxa_search">{!! $taxa !!}</span></span>
                         @endif
                         @if($group_permission_b == 2)
                             @if($lang == 2){{'ค้นหาเชิงพื้นที่'}}@else{{'Locality'}}@endif: <span class="record-data" style="margin-right: 30px;"><span class="locality_search">{{$locality}}</span></span>
@@ -180,53 +180,27 @@
                     <table id="result" class="display" cellspacing="0">
                         <thead>
                             <th>IDCatalog/ IDRef</th>
-                            @if($group_permission_a == 2)
-                            <!-- <th>Domain</th>
-                            <th>Kingdom</th> -->
-                            <th>Phylum</th>
-                            <th>Subphylum</th>
-                            <th>Class (Clade)</th>
-                            <th>Order (Clade)</th>
-                            <th>Suborder (Clade)</th>
-                            <th>Infraorder (Clade)</th>
-                            <th>Family (Clade)</th>
-                            @endif
+                            <th>Family</th>
+                            <th>Genus</th>
                             <th>Current Name</th>
-                            <th>Previous Name</th>
-                            <th>Type</th>
-                            <th>Habitat</th>
-                            @if($group_permission_b == 2)
-                            <th>Locality</th>
-                            @endif
-                            <th>Picture</th>
+                            <th>Ocean/Sea/Lake</th>
+                            <th>Country</th>
+                            <th>Province</th>
                         </thead>
                         <tbody>
                             @foreach( $result_searchs as $value)
                             <tr>
                                 <td>{{ $value->related_catalog_item."".$value->related_reference_item }}</td>
-                                @if($group_permission_a == 2)
-                                <!-- <td>{{ $value->domain }}</td>
-                                <td>{{ $value->kingdom }}</td> -->
-                                <td>{{ $value->phylum }}</td>
-                                <td>{{ $value->subphylum }}</td>
-                                <td>{{ $value->class }}</td>
-                                <td>{{ $value->order_o }}</td>
-                                <td>{{ $value->suborder }}</td>
-                                <td>{{ $value->infraorder }}</td>
                                 <td>{{ $value->family }}</td>
-                                @endif
+                                <td>{{ $value->genus }}</td>
                                 <td>{!! $value->current_scientific_name_format !!}</td>
-                                <td>{!! $value->previous_scientific_name_format !!}</td>
-                                <td>{{ $value->type_status_en }}</td>
-                                @if($lang == 2)
-                                <td>{{ $value->habitat_th }}</td>
-                                @else
-                                <td>{{ $value->habitat_en }}</td>
-                                @endif
-                                @if($group_permission_b == 2)
-                                <td>{{ $value->locality }}</td>
-                                @endif
+                                <td>{{ ($lang==1 ? $value->ocean_sea_lake_en : $value->ocean_sea_lake_th) }}</td>
+                                <td>{{ ($lang==1 ? $value->country_en : $value->country_th) }}</td>
+                                <td>{{ ($lang==1 ? $value->province_en  : $value->province_th)}}</td>
+                                @if(false)
                                 <td><a href='#' class='showPic' data-toggle='modal' data-target='#myModal' data-uniqueid='{{  $value->unique_record }}'><span class='glyphicon glyphicon-eye-open' aria-hidden='true'> View image</a></td>
+                                <td><a href="{{ url('staff/searchCategory/viewCard') }}/{{ base64_encode( base64_encode( base64_encode( $value->record_id ))) }}" target="_blank"><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span> View Card</a></td>
+                                @endif
                             </tr>
                             @endforeach
                         </tbody>
