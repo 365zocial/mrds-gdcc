@@ -57,7 +57,7 @@
                 @if($lang == 2)
                     ID กรณีอ้างอิงจากตัวอย่าง
                 @else
-                    ID, refer to specimen
+                    ID, when refer to specimen ID, when refer to specimen
                 @endif
             </p>
             <p class="content-header" style="text-transform: none; padding: 0px 30px;">
@@ -71,7 +71,7 @@
                 @if($lang == 2)
                     ID กรณีอ้างอิงจากเอกสาร
                 @else
-                    ID, refer to publication
+                    ID, when refer to publication
                 @endif
             </p>
             <p class="content-header" style="text-transform: none; padding: 0px 30px;">

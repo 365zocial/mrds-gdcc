@@ -194,6 +194,7 @@ Route::group(['middleware' => ['Authen']], function () {
 
                 Route::group(['prefix' => 'v2'], function() {
                     Route::get('import', 'Migration\V2\ImporterController@index');
+                    Route::get('MigratePicture', 'Migration\V2\ImporterController@MigratePicture');
                 });
             });
 
