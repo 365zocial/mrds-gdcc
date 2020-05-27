@@ -807,27 +807,31 @@ class ImporterController extends Controller
                     echo $name_file[0] . ' is not found in database.<br>';
                     exit;
                 } else {    //  store in database
-                    // เอา uniq record ไปเช็คว่ามีภาพแล้วหรือยัง
-                    $pic = Picture::where('unique_record', $data->unique_record)->orderBy('id', 'desc')->first();
+                    if ( $update_db_status ) {
+                        // เอา uniq record ไปเช็คว่ามีภาพแล้วหรือยัง
+                        $pic = Picture::where('unique_record', $data->unique_record)->orderBy('id', 'desc')->first();
 
-                    if( empty( $pic ) ) {    // ถ้าไม่มี ให้สร้างเป็น level และ selected_picture 1
-                        $pic_store = new Picture;
-                        $pic_store->unique_record = $data->unique_record;
-                        $pic_store->path_pic = $file;
-                        $pic_store->selected_picture = 1;
-                        $pic_store->level = 1;
-                        $pic_store->created_by = 1;
-                        $pic_store->updated_by = 1;
-                        $pic_store->save();
-                    } else {    // ถ้ามีให้สร้างเป็น level มากสุดบวก 1
-                        $pic_store = new Picture;
-                        $pic_store->unique_record = $data->unique_record;
-                        $pic_store->path_pic = $file;
-                        $pic_store->selected_picture = 1;
-                        $pic_store->level = $pic->level + 1;
-                        $pic_store->created_by = 1;
-                        $pic_store->updated_by = 1;
-                        $pic_store->save();
+                        if( empty( $pic ) ) {    // ถ้าไม่มี ให้สร้างเป็น level และ selected_picture 1
+                            $pic_store = new Picture;
+                            $pic_store->unique_record = $data->unique_record;
+                            $pic_store->path_pic = $file;
+                            $pic_store->selected_picture = 1;
+                            $pic_store->level = 1;
+                            $pic_store->created_by = 1;
+                            $pic_store->updated_by = 1;
+                            $pic_store->save();
+                        } else {    // ถ้ามีให้สร้างเป็น level มากสุดบวก 1
+                            $pic_store = new Picture;
+                            $pic_store->unique_record = $data->unique_record;
+                            $pic_store->path_pic = $file;
+                            $pic_store->selected_picture = 1;
+                            $pic_store->level = $pic->level + 1;
+                            $pic_store->created_by = 1;
+                            $pic_store->updated_by = 1;
+                            $pic_store->save();
+                        }
+                    } else {
+                        echo 'Update database is close. Pls change status at $update_db_status = 1';
                     }
                 }
             }
