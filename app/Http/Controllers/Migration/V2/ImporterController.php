@@ -31,6 +31,7 @@ use App\Model\Country;
 use App\Model\Province;
 use App\Model\District;
 use App\Model\County;
+use App\Model\Picture;
 
 class ImporterController extends Controller
 {
@@ -771,20 +772,25 @@ class ImporterController extends Controller
     // -----------------------
 
     /*
-        วิธีการ migrate ภาพ
+        # วิธีการ migrate ภาพ
         - ให้ทำการแบ่งภาพเป็น Folder ละ 200 ภาพ
-        - หลังจากทำการ Migrate แล้ว ค่อยลากไฟล์ไปไว้ใน Folder ภาพ
-        การทำงานของฟังก์ชัน
+        - หลังจากทำการ Migrate แล้ว ค่อยลากไฟล์ไปไว้ใน Folder ภาพ (raw_pic_data)
+
+        # การทำงานของฟังก์ชัน
         - ระบบจะนำชื่อภาพไปค้นหาใน Database หากมีจะบันทึกภาพลงใน Record ทันที แต่หากไม่มีข้อมูลจะทำการ exit
+        - เช่น ใน Folder มี 200 ภาพ มีการ exit ที่ 101 แสดงว่าภาพที่ 1-100 ได้ทำการ Update ใน Database แล้ว
         - ก่อน Migrate ภาพจะต้องตรวจภาพก่อน ว่ามีในชื่อภาพนี้อยู่ใน Record หรือไม่ ด้วยการทำบน Localhost (เพื่อทดสอบก่อนที่จะทำงานบน database จริงๆ )
     */
     public function MigratePicture(){
+        // เปิดการแก้ไข database
+        $update_db_status = 1;  // 0 คือ แค่ตรวจอย่างเดียว, 1 คือ ตรวจและบันทึกลงฐานข้อมูล
+
         // ทำการอ่านไฟล์ใน folder
         $dir    = base_path("raw_pic_data/W");
         $pic_files = scandir($dir);
         // print_r( count($pic_files) );
 
-        // เช็คว่ามีไฟล์ที่ค้นหาใน database แล้วไม่เจอหรือไม่
+        // Loop เช็คไฟล์ใน Folder
         foreach( $pic_files as $file ) {
             if( $file == '.' || $file == '..' || $file == '.DS_Store' ) {
                 // เอาไฟล์ที่ไม่ใช่ภาพออก คือ ., .. และ .DS_Store
@@ -793,49 +799,41 @@ class ImporterController extends Controller
                 $name_file = explode("_", $file);
                 $name_file = explode("_", $name_file[1]);   // ตัดคำที่ "_"
                 $name_file = explode("W", $name_file[0]);   // ตัดคำที่ "W", W คือ ภาพมีลายน้ำ
-                echo $name_file[0];
+                // echo $name_file[0];
 
                 $data = Record::where('catalog_number', $name_file[0])->orderBy('id', 'desc')->first();
 
-                if( empty($data) ) {    // ถ้าค้นหาใน database แล้วไม่เจอจะหยุดการทำงาน
+                if( empty( $data ) ) {    // ถ้าค้นหาใน database แล้วไม่เจอจะหยุดการทำงาน
                     echo $name_file[0] . ' is not found in database.<br>';
                     exit;
-                } else {
-                    //  store in database
-                }
+                } else {    //  store in database
+                    // เอา uniq record ไปเช็คว่ามีภาพแล้วหรือยัง
+                    $pic = Picture::where('unique_record', $data->unique_record)->orderBy('id', 'desc')->first();
 
-                // dd($data);
+                    if( empty( $pic ) ) {    // ถ้าไม่มี ให้สร้างเป็น level และ selected_picture 1
+                        $pic_store = new Picture;
+                        $pic_store->unique_record = $data->unique_record;
+                        $pic_store->path_pic = $file;
+                        $pic_store->selected_picture = 1;
+                        $pic_store->level = 1;
+                        $pic_store->created_by = 1;
+                        $pic_store->updated_by = 1;
+                        $pic_store->save();
+                    } else {    // ถ้ามีให้สร้างเป็น level มากสุดบวก 1
+                        $pic_store = new Picture;
+                        $pic_store->unique_record = $data->unique_record;
+                        $pic_store->path_pic = $file;
+                        $pic_store->selected_picture = 1;
+                        $pic_store->level = $pic->level + 1;
+                        $pic_store->created_by = 1;
+                        $pic_store->updated_by = 1;
+                        $pic_store->save();
+                    }
+                }
             }
         }
-
-        // ทำการบันทึกลง Database
-
-        // TODO: ทำถึงนี้
-
-
-        // $files = [];
-        // $lists = file(base_path('raw_data/list.txt'));
-        // foreach ($lists as $line) {
-        //     $files[] = $line;
-        // }
-        //
-        // foreach($files AS $file) {
-        //     echo $file."\r\n";
-        //     // select file
-        //     $path_to_file = base_path('raw_data/'.$file);
-        //     $this->importEachFile($path_to_file);
-        // }
+        echo 'Migrate Complete';
+        exit;
     }
-
-    private function importEachPictureFile($path_to_file) {
-        // $this->csvFile = file(str_replace("\n","",$path_to_file));
-        //
-        // // import to temp table
-        // $this->importDataToTemp();
-        //
-        // // insert data to classification and record
-        // $this->insertData();
-    }
-
 
 }
