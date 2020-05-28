@@ -185,6 +185,7 @@ class SearchTypeBController extends Controller
         $family                 = $input->family;
         $genus                  = $input->genus;
         $species                = $input->species;
+        $classification         = $input->classification;
 
         $locality_type          = $input->locality_type;
         $locality_country       = $input->locality_country;
@@ -218,7 +219,6 @@ class SearchTypeBController extends Controller
         $db = $db->leftjoin('wording as w4', 'r.ocean_sea_lake', '=', 'w4.id');
         $db = $db->leftjoin('picture as pic', 'r.unique_record', '=', 'pic.unique_record');
 
-        // dd($header_taxonomy);
         $id_taxa = 0;
         if ($header_taxonomy == "domain" && $domain != "") {
             $id_taxa        = $domain;
@@ -253,14 +253,21 @@ class SearchTypeBController extends Controller
         } else if ($header_taxonomy == "species" && $species != "") {
             $id_taxa        = $species;
             $db             = $db->where('classification.species', $species);
+        } else if ($header_taxonomy == "classification" && $classification != "") {
+            $id_taxa        = $classification;
+            $db             = $db->where('classification.id', $classification);
         }
 
-        if ($header_taxonomy != "" && $id_taxa != 0) {
+        if ($header_taxonomy == "classification" && $classification != "") {
+            $classification_full = Classification::getClassificationWording($id_taxa);
+            $taxa               = "Species" . " - " . $classification_full->current_scientific_name_format;
+        } else if ($header_taxonomy != "" && $id_taxa != 0) {
             $taxa_full          = Taxonomy::getTaxonomyWording($id_taxa);
             $taxa               = ucfirst($header_taxonomy) . " - " . $taxa_full->name;
         } else {
             $taxa               = "-";
         }
+
 
         #-----------------------------------------------------------#
 
@@ -288,6 +295,7 @@ class SearchTypeBController extends Controller
             $locality       = "-";
             $is_in_thailand = false;
         }
+
 
         if ($expan_id != "") {
             $expedition = Wording::getWording($expan_id)->name_en . " (" . Wording::getWording($expan_id)->name_th . ")";
@@ -367,6 +375,7 @@ class SearchTypeBController extends Controller
             $data['is_map_show'] = false;
         }
 
+
         return view('search_type_b.result_distribute', $data);
     }
 
@@ -405,7 +414,8 @@ class SearchTypeBController extends Controller
             'w4.name_th as ocean_sea_lake_th',
             'pic.path_pic',
             'r.unique_record'
-        ])->get();
+        ])->get(); //reduce data size with limit
+
 
         return $data;
     }

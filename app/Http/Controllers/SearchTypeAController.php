@@ -81,6 +81,7 @@ class SearchTypeAController extends Controller
         $data['families']               =   Taxonomy::getFamily();
         $data['genuses']                =   Taxonomy::getGenus();
         $data['species']                =   Taxonomy::getSpecies();
+        $data['classification']         =   Classification::getClassificationBySciName();
         $data['group_permission_a']     =   $this->group_permission_a;
         $data['group_permission_b']     =   $this->group_permission_b;
 
@@ -148,7 +149,7 @@ class SearchTypeAController extends Controller
     {
         $this->getPermission();
 
-        $data                           =   $this->search_base($input->chk_taxa, $input->chk_locality, $input->chk_expedition, $input->header_taxonomy, $input->domain, $input->kingdom, $input->phylum, $input->subphylum, $input->class, $input->order, $input->suborder, $input->infraorder, $input->family, $input->locality_type, $input->locality_country, $input->locality_province, $input->locality_district, $input->locality_county, $input->expedition, $input->map_type, $input->genus, $input->species);
+        $data                           =   $this->search_base($input->chk_taxa, $input->chk_locality, $input->chk_expedition, $input->header_taxonomy, $input->domain, $input->kingdom, $input->phylum, $input->subphylum, $input->class, $input->order, $input->suborder, $input->infraorder, $input->family, $input->locality_type, $input->locality_country, $input->locality_province, $input->locality_district, $input->locality_county, $input->expedition, $input->map_type, $input->genus, $input->species, $input->classification);
         $data['lang']                   =   $data['lang_table'];
         $data['group_permission_a']     =   $this->group_permission_a;
         $data['group_permission_b']     =   $this->group_permission_b;
@@ -161,7 +162,7 @@ class SearchTypeAController extends Controller
         return view('search_type_a.result_distribute', $data);
     }
 
-    public function search_base($chk_taxa, $chk_locality, $chk_expedition, $header_taxonomy, $domain, $kingdom, $phylum, $subphylum, $class, $order, $suborder, $infraorder, $family, $locality_type, $locality_country, $locality_province, $locality_district, $locality_county, $expan_id, $map_type = "", $genus = "", $species = "")
+    public function search_base($chk_taxa, $chk_locality, $chk_expedition, $header_taxonomy, $domain, $kingdom, $phylum, $subphylum, $class, $order, $suborder, $infraorder, $family, $locality_type, $locality_country, $locality_province, $locality_district, $locality_county, $expan_id, $map_type = "", $genus = "", $species = "", $classification = "")
     {
         $lang = Session::get('language');
         $db = new Classification;
@@ -220,9 +221,15 @@ class SearchTypeAController extends Controller
         } else if ($header_taxonomy == "species" && $species != "") {
             $id_taxa        = $species;
             $db             = $db->where('classification.species', $species);
+        } else if ($header_taxonomy == "classification" && $classification != "") {
+            $id_taxa        = $classification;
+            $db             = $db->where('classification.id', $classification);
         }
 
-        if ($header_taxonomy != "" && $id_taxa != 0) {
+        if ($header_taxonomy == "classification" && $classification != "") {
+            $classification_full = Classification::getClassificationWording($id_taxa);
+            $taxa               = "Species" . " - " . $classification_full->current_scientific_name_format;
+        } elseif ($header_taxonomy != "" && $id_taxa != 0) {
             $taxa_full          = Taxonomy::getTaxonomyWording($id_taxa);
             $taxa               = ucfirst($header_taxonomy) . " - " . $taxa_full->name;
         } else {

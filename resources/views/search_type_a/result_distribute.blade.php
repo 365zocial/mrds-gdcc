@@ -134,7 +134,7 @@
                 <p class="record-label">
                     @if($group_permission_a == 2)
                         @if($lang == 2){{'ค้นหาด้วยหมวดหมู่'}}@else{{'Taxon'}}@endif:
-                        <span class="record-data taxa_search" style="margin-right: 20px;">{{ $taxa }}</span>
+                        <span class="record-data taxa_search" style="margin-right: 20px;">{!! $taxa !!}</span>
                     @endif
                     @if($group_permission_b == 2)
                         @if($lang == 2){{'ค้นหาเชิงพื้นที่'}}@else{{'Locality'}}@endif:
@@ -177,7 +177,7 @@
                     <p class="content-header search-result">Search Result</p>
                     <p class="record-label search-result">
                         @if($group_permission_a == 2)
-                            @if($lang == 2){{'ค้นหาด้วยหมวดหมู่'}}@else{{'Taxon'}}@endif: <span class="record-data" style="margin-right: 30px;"><span class="taxa_search">{{$taxa}}</span></span>
+                            @if($lang == 2){{'ค้นหาด้วยหมวดหมู่'}}@else{{'Taxon'}}@endif: <span class="record-data" style="margin-right: 30px;"><span class="taxa_search">{!! $taxa !!}</span></span>
                         @endif
                         @if($group_permission_b == 2)
                             @if($lang == 2){{'ค้นหาเชิงพื้นที่'}}@else{{'Locality'}}@endif: <span class="record-data" style="margin-right: 30px;"><span class="locality_search">{{$locality}}</span></span>
