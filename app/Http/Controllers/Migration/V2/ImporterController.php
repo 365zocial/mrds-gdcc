@@ -783,15 +783,17 @@ class ImporterController extends Controller
     */
     public function MigratePicture(){
         // เปิดการแก้ไข database
-        $update_db_status = 1;  // 0 คือ แค่ตรวจอย่างเดียว, 1 คือ ตรวจและบันทึกลงฐานข้อมูล
+        $update_db_status = 0;  // 0 คือ แค่ตรวจอย่างเดียว, 1 คือ ตรวจและบันทึกลงฐานข้อมูล
 
         // ทำการอ่านไฟล์ใน folder
-        $dir    = base_path("raw_pic_data/W");
+        $dir    = base_path("raw_pic_data/W/Gastropoda_W_5");
+        echo $dir. "<br><br><br>";
+
         $pic_files = scandir($dir);
         // print_r( count($pic_files) );
 
         // Loop เช็คไฟล์ใน Folder
-        foreach( $pic_files as $file ) {
+        foreach( $pic_files as $key => $file ) {
             if( $file == '.' || $file == '..' || $file == '.DS_Store' ) {
                 // เอาไฟล์ที่ไม่ใช่ภาพออก คือ ., .. และ .DS_Store
             } else {
@@ -799,12 +801,13 @@ class ImporterController extends Controller
                 $name_file = explode("_", $file);
                 $name_file = explode("_", $name_file[1]);   // ตัดคำที่ "_"
                 $name_file = explode("W", $name_file[0]);   // ตัดคำที่ "W", W คือ ภาพมีลายน้ำ
-                // echo $name_file[0];
+                // echo $name_file[0]."<br>";
+                echo $key-1 . " - " . $file . "<br>";
 
                 $data = Record::where('catalog_number', $name_file[0])->orderBy('id', 'desc')->first();
 
                 if( empty( $data ) ) {    // ถ้าค้นหาใน database แล้วไม่เจอจะหยุดการทำงาน
-                    echo $name_file[0] . ' is not found in database.<br>';
+                    echo $key-1 . " - " .$name_file[0] . ' is not found in database.<br>';
                     exit;
                 } else {    //  store in database
                     if ( $update_db_status ) {
@@ -830,12 +833,15 @@ class ImporterController extends Controller
                             $pic_store->updated_by = 1;
                             $pic_store->save();
                         }
-                    } else {
-                        echo 'Update database is close. Pls change status at $update_db_status = 1';
                     }
                 }
             }
         }
+
+        if ( $update_db_status == 0 ) {
+            echo "<br><br>Update database is close. Pls change status at $update_db_status = 1" . "<br><br>";
+        }
+
         echo 'Migrate Complete';
         exit;
     }
