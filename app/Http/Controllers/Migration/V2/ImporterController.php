@@ -839,7 +839,7 @@ class ImporterController extends Controller
         }
 
         if ( $update_db_status == 0 ) {
-            echo "<br><br>Update database is close. Pls change status at $update_db_status = 1" . "<br><br>";
+            echo "<br><br>Update database is close. Pls change status at 'update_db_status' = 1" . "<br><br>";
         }
 
         echo 'Migrate Complete';
