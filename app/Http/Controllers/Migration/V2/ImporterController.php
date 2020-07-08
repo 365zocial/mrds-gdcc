@@ -773,20 +773,23 @@ class ImporterController extends Controller
 
     /*
         # วิธีการ migrate ภาพ
-        - ให้ทำการแบ่งภาพเป็น Folder ละ 200 ภาพ
+        - ให้ทำการแบ่งภาพเป็น Folder ละ 100 ภาพ
         - หลังจากทำการ Migrate แล้ว ค่อยลากไฟล์ไปไว้ใน Folder ภาพ (raw_pic_data)
 
         # การทำงานของฟังก์ชัน
+        - $update_db_status ถ้ามีค่าเป็น 0 คือ แค่ตรวจอย่างเดียว, 1 คือ ตรวจและบันทึกลงฐานข้อมูล
         - ระบบจะนำชื่อภาพไปค้นหาใน Database หากมีจะบันทึกภาพลงใน Record ทันที แต่หากไม่มีข้อมูลจะทำการ exit
         - เช่น ใน Folder มี 200 ภาพ มีการ exit ที่ 101 แสดงว่าภาพที่ 1-100 ได้ทำการ Update ใน Database แล้ว
         - ก่อน Migrate ภาพจะต้องตรวจภาพก่อน ว่ามีในชื่อภาพนี้อยู่ใน Record หรือไม่ ด้วยการทำบน Localhost (เพื่อทดสอบก่อนที่จะทำงานบน database จริงๆ )
     */
+
     public function MigratePicture(){
         // เปิดการแก้ไข database
         $update_db_status = 0;  // 0 คือ แค่ตรวจอย่างเดียว, 1 คือ ตรวจและบันทึกลงฐานข้อมูล
 
         // ทำการอ่านไฟล์ใน folder
-        $dir    = base_path("raw_pic_data/W/Gastropoda_W_5");
+        $dir    = base_path("raw_pic_data/W/Bivalvia_W_41");
+        $path_folder = "images_migrate/Bivalvia/W/Bivalvia_W_41/";
         echo $dir. "<br><br><br>";
 
         $pic_files = scandir($dir);
@@ -817,7 +820,7 @@ class ImporterController extends Controller
                         if( empty( $pic ) ) {    // ถ้าไม่มี ให้สร้างเป็น level และ selected_picture 1
                             $pic_store = new Picture;
                             $pic_store->unique_record = $data->unique_record;
-                            $pic_store->path_pic = $file;
+                            $pic_store->path_pic = $path_folder.$file;
                             $pic_store->selected_picture = 1;
                             $pic_store->level = 1;
                             $pic_store->created_by = 1;
@@ -826,7 +829,7 @@ class ImporterController extends Controller
                         } else {    // ถ้ามีให้สร้างเป็น level มากสุดบวก 1
                             $pic_store = new Picture;
                             $pic_store->unique_record = $data->unique_record;
-                            $pic_store->path_pic = $file;
+                            $pic_store->path_pic = $path_folder.$file;
                             $pic_store->selected_picture = 1;
                             $pic_store->level = $pic->level + 1;
                             $pic_store->created_by = 1;
