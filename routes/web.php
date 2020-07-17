@@ -198,6 +198,12 @@ Route::group(['middleware' => ['Authen']], function () {
                 });
             });
 
+            #-----------------#
+            # Disable Wording #
+            #-----------------#
+            Route::group(['prefix' => 'disableWording'], function(){
+                Route::get('/', 'WordingForCheckController@disableWording');
+            });
 
             #-------------------#
             # System Log Export #
