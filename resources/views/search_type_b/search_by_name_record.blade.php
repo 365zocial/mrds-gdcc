@@ -31,7 +31,17 @@
     <script src="{{ URL::asset('assets/script/select2/js/select2.min.js') }}">//for select2 script</script>
 
     <script type="text/javascript">
+
+        function getCurrentParam(){
+            return {
+                _token: "{{ csrf_token() }}",
+                name_type: $('#name_type').val(),
+                search: $('#search').val()
+            }
+        }
+
         $(document).ready(function() {
+            
 
             // Loader
             $('.loader').show();
@@ -41,6 +51,8 @@
 
             /* select2 */
             $(".select2").select2();
+
+
 
             // ajax get result
             $('#form').submit(function(e){
@@ -62,6 +74,7 @@
                     tb.clear().draw();
                     $count = 1;
 
+                    @if(false)
                     $.each(data['results'], function(i, data){
                         // data['related_catalog_item']data['related_reference_item'],
                         tb.row.add( [
@@ -75,6 +88,9 @@
                         $count++;
 
                     });
+                    @endif
+
+                    
 
                     name_result = data['name_type'] + ' : ' + data['search'];
 
@@ -82,6 +98,8 @@
                     $('.name_result').html(name_result);
 
                     $('.loader').hide();
+
+                    initDatatable()
                 });
             });
         });
@@ -94,6 +112,31 @@
         function CreateLink( id ) {
             var link = "<a href=<?php echo url("staff/searchCategory/viewRecord"); ?>" + '/' + window.btoa( window.btoa( window.btoa( id ))) + " target='_blank'><span class='glyphicon glyphicon-eye-open' aria-hidden='true'></span> View Detail</a>";
             return link;
+        }
+
+        var table = $('#recordDataTable').DataTable({});;
+        function initDatatable(){
+            table.destroy();
+            table = $('#recordDataTable').DataTable({
+                // order: [2, 'asc'],
+                // bFilter: true,
+                // bLengthChange: true,
+                // "paging": true,
+                // pagingType: "full_numbers",
+                processing: true,
+                serverSide: true,
+                ajax: {
+                method: "POST",
+                url: '{!! route('typeb.record.datatable') !!}',
+                data: getCurrentParam()
+                },
+                columns: [
+                    { data: 'DT_Row_Index', orderable: false, searchable: false },   
+                    { data: 'cate_ref', searchable: false, sortable : false },
+                    { data: 'current_scientific_name_format', name: 'classification.current_scientific_name_format'},
+                    { data: 'action',  searchable: false, sortable : false },
+                ],
+            });
         }
 
         // export record from result
@@ -209,14 +252,12 @@
 
     <div class="row table_result" style="display: none;">
         <div class="col-md-12">
-            <table id="result" class="display" cellspacing="0">
+            <table id="recordDataTable" class="display" cellspacing="0">
                 <thead>
-                    <tr>
                         <th>No.</th>
                         <th>IDCatalog / IDRef</th>
                         <th>Scientific Name</th>
                         <th style="text-align: center;">Action</th>
-                    </tr>
                 </thead>
             </table>
         </div>

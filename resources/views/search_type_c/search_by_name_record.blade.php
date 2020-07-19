@@ -31,6 +31,14 @@
     <script src="{{ URL::asset('assets/script/select2/js/select2.min.js') }}">//for select2 script</script>
 
     <script type="text/javascript">
+
+        function getCurrentParam(){
+            return {
+                _token: "{{ csrf_token() }}",
+                name_type: $('#name_type').val(),
+                search: $('#search').val()
+            }
+        }
         $(document).ready(function() {
 
             // Loader
@@ -52,16 +60,15 @@
                     method: "POST",
                     url: "<?php echo url('search/doNameRecord'); ?>",
                     data: {
-                        _token: "{{ csrf_token() }}",
                         way: 1, // 1 is search, 2 is ajax
-                        name_type: $('#name_type').val(),
-                        search: $('#search').val()
+                        ...getCurrentParam()
                     }
                 }).done(function( data ) {
                     $('.table_result').slideDown();
                     tb.clear().draw();
                     $count = 1;
 
+                    @if(false)
                     $.each(data['results'], function(i, data){
                         tb.row.add( [
                             $count,
@@ -71,6 +78,7 @@
                         $count++;
 
                     });
+                    @endif
 
                     name_result = data['name_type'] + ' : ' + data['search'];
 
@@ -78,9 +86,34 @@
                     $('.name_result').html(name_result);
 
                     $('.loader').hide();
+                    initDatatable()
                 });
             });
         });
+
+        // var table = $('#recordDataTable').DataTable({});;
+        function initDatatable(){
+            // table.destroy();
+            table = $('#recordDataTable').DataTable({
+                // order: [2, 'asc'],
+                // bFilter: true,
+                // bLengthChange: true,
+                // "paging": true,
+                // pagingType: "full_numbers",
+                processing: true,
+                serverSide: true,
+                ajax: {
+                method: "POST",
+                url: '{!! route('typec.record.datatable') !!}',
+                data: getCurrentParam()
+                },
+                columns: [
+                    { data: 'DT_Row_Index', orderable: false, searchable: false },   
+                    { data: 'cate_ref', searchable: false, sortable : false },
+                    { data: 'current_scientific_name_format', name: 'classification.current_scientific_name_format'},
+                ],
+            });
+        }
 
         // export record from result
         function exportRecord() {
@@ -89,10 +122,8 @@
                 method: "POST",
                 url: "<?php echo url('search/doNameRecord'); ?>",
                 data: {
-                    _token: "{{ csrf_token() }}",
                     way: 2, // 1 is search, 2 is ajax
-                    name_type: $('#name_type').val(),
-                    search: $('#search').val()
+                    ...getCurrentParam()
                 }
             }).done(function( data ) {
                 if ( data ) {
@@ -203,13 +234,11 @@
 
     <div class="row table_result" style="display: none;">
         <div class="col-md-12">
-            <table id="result" class="display" cellspacing="0">
+            <table id="recordDataTable" class="display" cellspacing="0">
                 <thead>
-                    <tr>
                         <th>No.</th>
                         <th>IDCatalog / IDRef</th>
                         <th>Scientific Name</th>
-                    </tr>
                 </thead>
             </table>
         </div>

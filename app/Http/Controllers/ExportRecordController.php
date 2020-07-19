@@ -25,59 +25,66 @@ use App\Model\ExportLog;
 use App\Model\Group_Permission;
 use Ifsnop\Mysqldump as IMysqldump;
 
+use App\Http\Controllers\SearchTypeAController;
+use App\Http\Controllers\SearchTypeBController;
+use App\Http\Controllers\SearchTypeCController;
+
 class ExportRecordController extends Controller
 {
 
     //Sorawit
-	//Created : 22-6-59
-	//Modified : -
+    //Created : 22-6-59
+    //Modified : -
     # form search record for export excel (PGCP)
-    public function exportRecord() {
+    public function exportRecord()
+    {
         return view('staff.export_record.export_record');
     }
 
-    public function deleteFileForExcelRecord( Request $input ) {
+    public function deleteFileForExcelRecord(Request $input)
+    {
         // get path file
-        File::delete('export_result_record/'.$input->name_file);
+        File::delete('export_result_record/' . $input->name_file);
     }
 
     //Sorawit
-	//Created : 2-7-59
-	//Modified : -
+    //Created : 2-7-59
+    //Modified : -
     # export result search by csv (PGCP)
-    public function doExportRecord( Request $input ) {
+    public function doExportRecord(Request $input)
+    {
         // get data
         $table_name = $input->db_table;
-        $start_date = date('Y-m-d', strtotime( $input->start_date ) );
-        $end_date = date('Y-m-d', strtotime( $input->end_date ) );
+        $start_date = date('Y-m-d', strtotime($input->start_date));
+        $end_date = date('Y-m-d', strtotime($input->end_date));
 
         // set end time
         $end_time = date_create('23:59:59');
-        $end_time = date_format( $end_time, 'H:i:s' );
-        $end_date = date('Y-m-d H:i:s', strtotime( $end_date.' '.$end_time ));
+        $end_time = date_format($end_time, 'H:i:s');
+        $end_date = date('Y-m-d H:i:s', strtotime($end_date . ' ' . $end_time));
 
         // created export date
         $date = date_create();
-		$date_export = date_format( $date, "d-m-Y H:i:s" );
-        $date_export_file_name = date_format( $date, "Y-m-d_H-i-s" );
+        $date_export = date_format($date, "d-m-Y H:i:s");
+        $date_export_file_name = date_format($date, "Y-m-d_H-i-s");
 
         // set name file
-        $name_file = 'table_'.$table_name.'_'.$date_export_file_name.'.csv';
+        $name_file = 'table_' . $table_name . '_' . $date_export_file_name . '.csv';
 
         // query db
-        $public_path = public_path('export_record_pgcp').'/'.$name_file;
+        $public_path = public_path('export_record_pgcp') . '/' . $name_file;
         $remark1 = '"';
         $remark2 = ',';
         $remark3 = '\n';
-        $result = DB::statement("SELECT * FROM ".$table_name." WHERE created_at BETWEEN '".$start_date."' AND '".$end_date."' INTO OUTFILE '".$public_path."' CHARACTER SET utf8 FIELDS TERMINATED BY '".$remark2."' ENCLOSED BY '".$remark1."' LINES TERMINATED BY '".$remark3."'");
+        $result = DB::statement("SELECT * FROM " . $table_name . " WHERE created_at BETWEEN '" . $start_date . "' AND '" . $end_date . "' INTO OUTFILE '" . $public_path . "' CHARACTER SET utf8 FIELDS TERMINATED BY '" . $remark2 . "' ENCLOSED BY '" . $remark1 . "' LINES TERMINATED BY '" . $remark3 . "'");
 
         // download file
         //$file = url('export_record_pgcp').'/'.$name_file;
 
         // save export log : 0 is excel, 1 is pdf, 2 is api
-        ExportLog::saveExportLog( 0, $name_file );
+        ExportLog::saveExportLog(0, $name_file);
 
-        return redirect('export_record_pgcp/'.$name_file);
+        return redirect('export_record_pgcp/' . $name_file);
 
         // header("Content-Description: File Transfer");
         // header('Content-Encoding: UTF-8');
@@ -101,223 +108,228 @@ class ExportRecordController extends Controller
     }
 
     //Sorawit
-	//Created : 7-9-59
-	//Modified : -
+    //Created : 7-9-59
+    //Modified : -
     # form export by sql
-    public function exportRecordSQL() {
+    public function exportRecordSQL()
+    {
         return view('staff.export_record.export_record_sql');
     }
 
     //Sorawit
-	//Created : 7-9-59
-	//Modified : -
+    //Created : 7-9-59
+    //Modified : -
     # form export by sql
-    public function doExportRecordSQL() {
+    public function doExportRecordSQL()
+    {
         // created export date
         $date = date_create();
-		$date_export = date_format( $date, "d-m-Y H:i:s" );
-        $date_export_file_name = date_format( $date, "Y-m-d_H-i-s" );
+        $date_export = date_format($date, "d-m-Y H:i:s");
+        $date_export_file_name = date_format($date, "Y-m-d_H-i-s");
 
         // set name file
-        $name_file = 'sql_'.$date_export_file_name.'.sql';
+        $name_file = 'sql_' . $date_export_file_name . '.sql';
 
         // query db
         // echo "mysqldump --user=".env('DB_USERNAME', 'root')." --password=".env('DB_PASSWORD', 'toor')." --host=".env('DB_HOST', 'localhost')." ".env('DB_DATABASE', 'mbds')." > export_record_pgcp/".$name_file;
         // exec("mysqldump --user=".env('DB_USERNAME', 'root')." --password=".env('DB_PASSWORD', 'toor')." --host=".env('DB_HOST', 'localhost')." ".env('DB_DATABASE', 'mbds')." > export_record_pgcp/".$name_file);
 
         try {
-            $dump = new IMysqldump\Mysqldump('mysql:host='.env('DB_HOST', 'localhost').';dbname='.env('DB_DATABASE', 'mbds'), env('DB_USERNAME', 'root'), env('DB_PASSWORD', 'toor'));
-            $dump->start("export_record_pgcp/".$name_file);
+            $dump = new IMysqldump\Mysqldump('mysql:host=' . env('DB_HOST', 'localhost') . ';dbname=' . env('DB_DATABASE', 'mbds'), env('DB_USERNAME', 'root'), env('DB_PASSWORD', 'toor'));
+            $dump->start("export_record_pgcp/" . $name_file);
         } catch (\Exception $e) {
             echo 'mysqldump-php error: ' . $e->getMessage();
         }
 
         // save export log : 0 is excel, 1 is pdf, 2 is api
-        ExportLog::saveExportLog( 0, $name_file );
+        ExportLog::saveExportLog(0, $name_file);
 
-        return redirect('export_record_pgcp/'.$name_file);
+        return redirect('export_record_pgcp/' . $name_file);
     }
 
     //Sorawit
-	//Created : 7-7-59
-	//Modified : -
+    //Created : 7-7-59
+    //Modified : -
     # Search By Date for export excel
-    public static function exportSearchByDate( $source, $start_date, $end_date, $date_type ) {
-        $start_date = date('Y-m-d', strtotime( $start_date ) );
-        $end_date = date('Y-m-d', strtotime( $end_date ) );
+    public static function exportSearchByDate($source, $start_date, $end_date, $date_type)
+    {
+        $start_date = date('Y-m-d', strtotime($start_date));
+        $end_date = date('Y-m-d', strtotime($end_date));
 
         // set end time
         $end_time = date_create('23:59:59');
-        $end_time = date_format( $end_time, 'H:i:s' );
-        $end_date = date('Y-m-d H:i:s', strtotime( $end_date.' '.$end_time ));
+        $end_time = date_format($end_time, 'H:i:s');
+        $end_date = date('Y-m-d H:i:s', strtotime($end_date . ' ' . $end_time));
 
         // created export date
         $date = date_create();
-        $date_export = date_format( $date, "d-m-Y H:i:s" );
-        $date_export_file_name = date_format( $date, "Y-m-d_H-i-s" );
+        $date_export = date_format($date, "d-m-Y H:i:s");
+        $date_export_file_name = date_format($date, "Y-m-d_H-i-s");
 
         // set source
-        if ( $source == 1 ) $source_name = 'Specimen';
+        if ($source == 1) $source_name = 'Specimen';
         else $source_name = 'Publication';
 
         //---- make file excel ----
-        $name_file = 'Excel_Record_Search_By_Date'.'_'.$source_name.'_'.$date_export_file_name;
-        Excel::create( $name_file, function( $excel ) use ( $source, $start_date, $end_date, $date_type, $date_export ) {
-            $excel->sheet( 'Record Data', function( $sheet ) use ( $source, $start_date, $end_date, $date_type, $date_export ) {
+        $name_file = 'Excel_Record_Search_By_Date' . '_' . $source_name . '_' . $date_export_file_name;
+        Excel::create($name_file, function ($excel) use ($source, $start_date, $end_date, $date_type, $date_export) {
+            $excel->sheet('Record Data', function ($sheet) use ($source, $start_date, $end_date, $date_type, $date_export) {
 
-               //--- Set Parameter ---
-                   $user_name = Auth::user()->first_name.' '.Auth::user()->last_name.' ('.Auth::user()->telephone.') ('.Auth::user()->email.')';
-                   $start_date_header = date('d-m-Y', strtotime( $start_date ) );
-                   $end_date_header = date('d-m-Y', strtotime( $end_date ) );
+                //--- Set Parameter ---
+                $user_name = Auth::user()->first_name . ' ' . Auth::user()->last_name . ' (' . Auth::user()->telephone . ') (' . Auth::user()->email . ')';
+                $start_date_header = date('d-m-Y', strtotime($start_date));
+                $end_date_header = date('d-m-Y', strtotime($end_date));
 
-                   $from_date_format = date('Y-m-d', strtotime($start_date));
-               	   $to_date_format = date('Y-m-d', strtotime($end_date));
+                $from_date_format = date('Y-m-d', strtotime($start_date));
+                $to_date_format = date('Y-m-d', strtotime($end_date));
 
-                   // set $source
-                   if( $source == 1 ) $source_name = 'Specimen';
-                   else $source_name = 'Publication';
+                // set $source
+                if ($source == 1) $source_name = 'Specimen';
+                else $source_name = 'Publication';
 
-                   // check condition
-                   if( $date_type == 1 ) { // Collected Date
-                       $date_type_name = 'record.collected_date';
-                       $date_type_column = 'Collected Date';    //make header
-                   } else { // Identified Date
-                       $date_type_name = 'record.identified_date';
-                       $date_type_column = 'Identified Date';   //make header
-                   }
+                // check condition
+                if ($date_type == 1) { // Collected Date
+                    $date_type_name = 'record.collected_date';
+                    $date_type_column = 'Collected Date';    //make header
+                } else { // Identified Date
+                    $date_type_name = 'record.identified_date';
+                    $date_type_column = 'Identified Date';   //make header
+                }
 
-                   if ( $start_date != null && $end_date != null ) {
-                       // query db
-                       $db = new Record;
-                       $db = $db->leftjoin('classification as c','record.classification_id', '=', 'c.id');
-                       if( $date_type == 1 ) {  // collected_date
-                           $db = $db->where('record.language_id', 1)->where('record.status', 2)->where('record.approve_status', 1)->where('record.source', $source)->whereBetween($date_type_name, [$from_date_format, $end_date])->orderBy('collected_date', 'desc');
-                           $results = $db->select([
-                               'c.current_scientific_name',
-                               'record.related_catalog_item',
-                               'record.related_reference_item',
-                               'record.collected_date as date'
-                           ])->get();
-                       } else {  // identified_date
-                           $db = $db->where('record.language_id', 1)->where('record.status', 2)->where('record.approve_status', 1)->where('record.source', $source)->whereBetween($date_type_name, [$from_date_format, $end_date])->orderBy('identified_date', 'desc');
-                           $results = $db->select([
-                               'c.current_scientific_name',
-                               'record.related_catalog_item',
-                               'record.related_reference_item',
-                               'record.identified_date as date'
-                           ])->get();
-                       }
+                if ($start_date != null && $end_date != null) {
+                    // query db
+                    $db = new Record;
+                    $db = $db->leftjoin('classification as c', 'record.classification_id', '=', 'c.id');
+                    if ($date_type == 1) {  // collected_date
+                        $db = $db->where('record.language_id', 1)->where('record.status', 2)->where('record.approve_status', 1)->where('record.source', $source)->whereBetween($date_type_name, [$from_date_format, $end_date])->orderBy('collected_date', 'desc');
+                        $results = $db->select([
+                            'c.current_scientific_name',
+                            'record.related_catalog_item',
+                            'record.related_reference_item',
+                            'record.collected_date as date'
+                        ])->get();
+                    } else {  // identified_date
+                        $db = $db->where('record.language_id', 1)->where('record.status', 2)->where('record.approve_status', 1)->where('record.source', $source)->whereBetween($date_type_name, [$from_date_format, $end_date])->orderBy('identified_date', 'desc');
+                        $results = $db->select([
+                            'c.current_scientific_name',
+                            'record.related_catalog_item',
+                            'record.related_reference_item',
+                            'record.identified_date as date'
+                        ])->get();
+                    }
 
-                       //--- Set Layout and Style ---
-                           $sheet->mergeCells( 'A2:D2' );
-                           $sheet->mergeCells( 'A3:D3' );
-                           $sheet->mergeCells( 'A4:D4' );
-                           $sheet->mergeCells( 'A5:D5' );
-                           $sheet->mergeCells( 'A6:D6' );
-                           $sheet->mergeCells( 'A7:D7' );
-                           $sheet->mergeCells( 'A8:D8' );
-                           $sheet->mergeCells( 'A9:D9' );
-                           $sheet->mergeCells( 'A10:D10' );
-                           $sheet->mergeCells( 'A11:D11' );
+                    //--- Set Layout and Style ---
+                    $sheet->mergeCells('A2:D2');
+                    $sheet->mergeCells('A3:D3');
+                    $sheet->mergeCells('A4:D4');
+                    $sheet->mergeCells('A5:D5');
+                    $sheet->mergeCells('A6:D6');
+                    $sheet->mergeCells('A7:D7');
+                    $sheet->mergeCells('A8:D8');
+                    $sheet->mergeCells('A9:D9');
+                    $sheet->mergeCells('A10:D10');
+                    $sheet->mergeCells('A11:D11');
 
-                           $sheet->setHeight( 2, 30 );
-                           $sheet->setHeight( 6, 30 );
-                           $sheet->setHeight( 12, 30 );
+                    $sheet->setHeight(2, 30);
+                    $sheet->setHeight(6, 30);
+                    $sheet->setHeight(12, 30);
 
-                           $sheet->row( 2, function( $row ) {
-                               $row->setBackground( '#FE9529' );
-                           });
-                           $sheet->row( 6, function( $row ) {
-                               $row->setBackground('#FE9529');
-                           });
-                           $sheet->row( 13, function( $row ) {
-                               $row->setBackground( '#FE9529' );
-                           });
+                    $sheet->row(2, function ($row) {
+                        $row->setBackground('#FE9529');
+                    });
+                    $sheet->row(6, function ($row) {
+                        $row->setBackground('#FE9529');
+                    });
+                    $sheet->row(13, function ($row) {
+                        $row->setBackground('#FE9529');
+                    });
 
-                           $sheet->cell( 'A2:D2', function( $cells ) {
-                               $cells->setFontSize( 20 );
-                           });
-                           $sheet->cell( 'A6:D6', function( $cells ) {
-                               $cells->setFontSize( 20 );
-                           });
-                           $sheet->cell( 'A13:D13', function( $cells ) {
-                               $cells->setFontSize( 16 );
-                           });
+                    $sheet->cell('A2:D2', function ($cells) {
+                        $cells->setFontSize(20);
+                    });
+                    $sheet->cell('A6:D6', function ($cells) {
+                        $cells->setFontSize(20);
+                    });
+                    $sheet->cell('A13:D13', function ($cells) {
+                        $cells->setFontSize(16);
+                    });
 
-                           $sheet->cells( 'A2:D2', function( $cells ) {
-                               $cells->setFontWeight( 'bold' );
-                           });
-                           $sheet->cells( 'A6:D6', function( $cells ) {
-                               $cells->setFontWeight( 'bold' );
-                           });
-                           $sheet->cells( 'A13:D13', function( $cells ) {
-                               $cells->setFontWeight( 'bold' );
-                               $cells->setAlignment( 'center' );
-                               $cells->setValignment( 'middle' );
-                           });
+                    $sheet->cells('A2:D2', function ($cells) {
+                        $cells->setFontWeight('bold');
+                    });
+                    $sheet->cells('A6:D6', function ($cells) {
+                        $cells->setFontWeight('bold');
+                    });
+                    $sheet->cells('A13:D13', function ($cells) {
+                        $cells->setFontWeight('bold');
+                        $cells->setAlignment('center');
+                        $cells->setValignment('middle');
+                    });
 
-                           $sheet->setBorder( 'A13:D13', 'thin' );
-                       //--- -------------------- ---
+                    $sheet->setBorder('A13:D13', 'thin');
+                    //--- -------------------- ---
 
-                       //--- Header Part ---
-                           $sheet->row( 2, array( 'Export Information' ) );
-                           $sheet->row( 3, array( 'Export By: '.$user_name ) );
-                           $sheet->row( 4, array( 'Date Export: '.$date_export ) );
-                           $sheet->row( 6, array( 'Data Information' ) );
-                           $sheet->row( 7, array( 'Search Type: Search By Date' ) );
-                           $sheet->row( 8, array( 'Source: '.$source_name ) );
-                           $sheet->row( 9, array( 'Date Type: '.$date_type_column ) );
-                           $sheet->row( 10, array( 'Data Start Date: '.$start_date_header ) );
-                           $sheet->row( 11, array( 'Data End Date: '.$end_date_header ) );
-                       //--- ----------- ---
+                    //--- Header Part ---
+                    $sheet->row(2, array('Export Information'));
+                    $sheet->row(3, array('Export By: ' . $user_name));
+                    $sheet->row(4, array('Date Export: ' . $date_export));
+                    $sheet->row(6, array('Data Information'));
+                    $sheet->row(7, array('Search Type: Search By Date'));
+                    $sheet->row(8, array('Source: ' . $source_name));
+                    $sheet->row(9, array('Date Type: ' . $date_type_column));
+                    $sheet->row(10, array('Data Start Date: ' . $start_date_header));
+                    $sheet->row(11, array('Data End Date: ' . $end_date_header));
+                    //--- ----------- ---
 
-                       //--- Header Table Part ---
-                           $sheet->row(13, array(
-                               'No.', 'IDCatalog / IDRef', 'Scientific Name', 'Date'
-                           ));
-                       //--- ----------------- ---
+                    //--- Header Table Part ---
+                    $sheet->row(13, array(
+                        'No.', 'IDCatalog / IDRef', 'Scientific Name', 'Date'
+                    ));
+                    //--- ----------------- ---
 
-                       //--- Content Part ---
-                           // display data
-                               $row_number = 14;   // start line
-                               $count_line = 1;   // count line for No.
-                               if ( $source == 1 ) {
-                                   foreach ( $results as $data ) {
-                                        $sheet->row( $row_number, array(
-                                            $count_line, $data->related_catalog_item, html_entity_decode($data->current_scientific_name), date('d-m-Y', strtotime( $data->date ) )
-                                           ));
-                                       //--- Set Layout and Style ---
-                                           $sheet->setBorder('A'.$row_number.':D'.$row_number, 'thin');
-                                       //--- -------------------- ---
-                                       $row_number++; $count_line++;
-                                   }
-                               } else {
-                                   foreach ( $results as $data ) {
-                                        $sheet->row( $row_number, array(
-                                            $count_line, $data->related_reference_item, html_entity_decode($data->current_scientific_name), date('d-m-Y', strtotime( $data->date ) )
-                                           ));
-                                       //--- Set Layout and Style ---
-                                           $sheet->setBorder('A'.$row_number.':D'.$row_number, 'thin');
-                                       //--- -------------------- ---
-                                       $row_number++; $count_line++;
-                                   }
-                               }
-                       //--- ------------ ---
+                    //--- Content Part ---
+                    // display data
+                    $row_number = 14;   // start line
+                    $count_line = 1;   // count line for No.
+                    if ($source == 1) {
+                        foreach ($results as $data) {
+                            $sheet->row($row_number, array(
+                                $count_line, $data->related_catalog_item, html_entity_decode($data->current_scientific_name), date('d-m-Y', strtotime($data->date))
+                            ));
+                            //--- Set Layout and Style ---
+                            $sheet->setBorder('A' . $row_number . ':D' . $row_number, 'thin');
+                            //--- -------------------- ---
+                            $row_number++;
+                            $count_line++;
+                        }
+                    } else {
+                        foreach ($results as $data) {
+                            $sheet->row($row_number, array(
+                                $count_line, $data->related_reference_item, html_entity_decode($data->current_scientific_name), date('d-m-Y', strtotime($data->date))
+                            ));
+                            //--- Set Layout and Style ---
+                            $sheet->setBorder('A' . $row_number . ':D' . $row_number, 'thin');
+                            //--- -------------------- ---
+                            $row_number++;
+                            $count_line++;
+                        }
+                    }
+                    //--- ------------ ---
 
-                   } else {
-                       $results = null;
-                   }
+                } else {
+                    $results = null;
+                }
 
-               //--- ------------- ---
+                //--- ------------- ---
 
-           });
-       })->store('csv', Config::get('path.export_record_file_path'));
+            });
+        })->store('csv', Config::get('path.export_record_file_path'));
 
         // save export log : 0 is excel, 1 is pdf, 2 is api
-        ExportLog::saveExportLog( 0, $name_file );
+        ExportLog::saveExportLog(0, $name_file);
 
         // sent name_file for download
-        echo $name_file.'.csv';
+        echo $name_file . '.csv';
     }
 
 
@@ -325,30 +337,31 @@ class ExportRecordController extends Controller
     //Created : 8-7-59
     //Modified : -
     # Search By ID for export excel
-    public static function exportSearchByID( $source, $related_id ) {
+    public static function exportSearchByID($source, $related_id)
+    {
         // created export date
         $date = date_create();
-        $date_export = date_format( $date, "d-m-Y H:i:s" );
-        $date_export_file_name = date_format( $date, "Y-m-d_H-i-s" );
+        $date_export = date_format($date, "d-m-Y H:i:s");
+        $date_export_file_name = date_format($date, "Y-m-d_H-i-s");
 
         // set source
-        if ( $source == 1 ) $source_name = 'Specimen';
+        if ($source == 1) $source_name = 'Specimen';
         else $source_name = 'Publication';
 
         //---- make file excel ----
-        $name_file = 'Excel_Record_Search_By_ID'.'_'.$source_name.'_'.$date_export_file_name;
-        Excel::create( $name_file, function( $excel ) use ( $source, $related_id, $date_export ) {
-        $excel->sheet( 'Record Data', function( $sheet ) use ( $source, $related_id, $date_export ) {
+        $name_file = 'Excel_Record_Search_By_ID' . '_' . $source_name . '_' . $date_export_file_name;
+        Excel::create($name_file, function ($excel) use ($source, $related_id, $date_export) {
+            $excel->sheet('Record Data', function ($sheet) use ($source, $related_id, $date_export) {
 
-            //--- Set Parameter ---
-                $user_name = Auth::user()->first_name.' '.Auth::user()->last_name.' ('.Auth::user()->telephone.') ('.Auth::user()->email.')';
+                //--- Set Parameter ---
+                $user_name = Auth::user()->first_name . ' ' . Auth::user()->last_name . ' (' . Auth::user()->telephone . ') (' . Auth::user()->email . ')';
 
                 // set $source
-                if( $source == 1 ) $source_name = 'Specimen';
+                if ($source == 1) $source_name = 'Specimen';
                 else $source_name = 'Publication';
 
                 // check condition
-                if( $source == 1 ) { // 1 is specimens
+                if ($source == 1) { // 1 is specimens
                     $related_name = 'record.related_catalog_item';
                 } else {  // 2 is publication
                     $related_name = 'record.related_reference_item';
@@ -356,9 +369,9 @@ class ExportRecordController extends Controller
 
                 // query db
                 $db = new Record;
-                $db = $db->leftjoin('classification as c','record.classification_id', '=', 'c.id');
-                $db = $db->where('record.language_id', 1)->where('record.status', 2)->where('record.approve_status', 1)->where('record.source', $source)->where($related_name, 'like', '%'.$related_id.'%');
-                if ( $related_id != null ) {
+                $db = $db->leftjoin('classification as c', 'record.classification_id', '=', 'c.id');
+                $db = $db->where('record.language_id', 1)->where('record.status', 2)->where('record.approve_status', 1)->where('record.source', $source)->where($related_name, 'like', '%' . $related_id . '%');
+                if ($related_id != null) {
                     $results = $db->select([
                         'c.current_scientific_name',
                         'record.id',
@@ -367,145 +380,147 @@ class ExportRecordController extends Controller
                     ])->get();
 
                     //--- Set Layout and Style ---
-                        $sheet->mergeCells( 'A2:C2' );
-                        $sheet->mergeCells( 'A3:C3' );
-                        $sheet->mergeCells( 'A4:C4' );
-                        $sheet->mergeCells( 'A5:C5' );
-                        $sheet->mergeCells( 'A6:C6' );
-                        $sheet->mergeCells( 'A7:C7' );
-                        $sheet->mergeCells( 'A8:C8' );
-                        $sheet->mergeCells( 'A9:C9' );
-                        $sheet->mergeCells( 'A10:C10' );
+                    $sheet->mergeCells('A2:C2');
+                    $sheet->mergeCells('A3:C3');
+                    $sheet->mergeCells('A4:C4');
+                    $sheet->mergeCells('A5:C5');
+                    $sheet->mergeCells('A6:C6');
+                    $sheet->mergeCells('A7:C7');
+                    $sheet->mergeCells('A8:C8');
+                    $sheet->mergeCells('A9:C9');
+                    $sheet->mergeCells('A10:C10');
 
-                        $sheet->setHeight( 2, 30 );
-                        $sheet->setHeight( 6, 30 );
-                        $sheet->setHeight( 11, 30 );
+                    $sheet->setHeight(2, 30);
+                    $sheet->setHeight(6, 30);
+                    $sheet->setHeight(11, 30);
 
-                        $sheet->row( 2, function( $row ) {
-                        $row->setBackground( '#FE9529' );
-                        });
-                        $sheet->row( 6, function( $row ) {
+                    $sheet->row(2, function ($row) {
                         $row->setBackground('#FE9529');
-                        });
-                        $sheet->row( 11, function( $row ) {
-                        $row->setBackground( '#FE9529' );
-                        });
+                    });
+                    $sheet->row(6, function ($row) {
+                        $row->setBackground('#FE9529');
+                    });
+                    $sheet->row(11, function ($row) {
+                        $row->setBackground('#FE9529');
+                    });
 
-                        $sheet->cell( 'A2:C2', function( $cells ) {
-                        $cells->setFontSize( 20 );
-                        });
-                        $sheet->cell( 'A6:C6', function( $cells ) {
-                        $cells->setFontSize( 20 );
-                        });
-                        $sheet->cell( 'A11:C11', function( $cells ) {
-                        $cells->setFontSize( 16 );
-                        });
+                    $sheet->cell('A2:C2', function ($cells) {
+                        $cells->setFontSize(20);
+                    });
+                    $sheet->cell('A6:C6', function ($cells) {
+                        $cells->setFontSize(20);
+                    });
+                    $sheet->cell('A11:C11', function ($cells) {
+                        $cells->setFontSize(16);
+                    });
 
-                        $sheet->cells( 'A2:C2', function( $cells ) {
-                        $cells->setFontWeight( 'bold' );
-                        });
-                        $sheet->cells( 'A6:C6', function( $cells ) {
-                        $cells->setFontWeight( 'bold' );
-                        });
-                        $sheet->cells( 'A11:C11', function( $cells ) {
-                        $cells->setFontWeight( 'bold' );
-                        $cells->setAlignment( 'center' );
-                        $cells->setValignment( 'middle' );
-                        });
+                    $sheet->cells('A2:C2', function ($cells) {
+                        $cells->setFontWeight('bold');
+                    });
+                    $sheet->cells('A6:C6', function ($cells) {
+                        $cells->setFontWeight('bold');
+                    });
+                    $sheet->cells('A11:C11', function ($cells) {
+                        $cells->setFontWeight('bold');
+                        $cells->setAlignment('center');
+                        $cells->setValignment('middle');
+                    });
 
-                        $sheet->setBorder( 'A11:C11', 'thin' );
+                    $sheet->setBorder('A11:C11', 'thin');
                     //--- -------------------- ---
 
                     //--- Header Part ---
-                        $sheet->row( 2, array( 'Export Information' ) );
-                        $sheet->row( 3, array( 'Export By: '.$user_name ) );
-                        $sheet->row( 4, array( 'Date Export: '.$date_export ) );
-                        $sheet->row( 6, array( 'Data Information' ) );
-                        $sheet->row( 7, array( 'Search Type: Search By ID' ) );
-                        $sheet->row( 8, array( 'Source: '.$source_name ) );
-                        $sheet->row( 9, array( 'Search ID: '.$related_id ) );
+                    $sheet->row(2, array('Export Information'));
+                    $sheet->row(3, array('Export By: ' . $user_name));
+                    $sheet->row(4, array('Date Export: ' . $date_export));
+                    $sheet->row(6, array('Data Information'));
+                    $sheet->row(7, array('Search Type: Search By ID'));
+                    $sheet->row(8, array('Source: ' . $source_name));
+                    $sheet->row(9, array('Search ID: ' . $related_id));
                     //--- ----------- ---
 
                     //--- Header Table Part ---
-                        $sheet->row(11, array(
-                            'No.', 'IDCatalog / IDRef', 'Scientific Name'
-                        ));
+                    $sheet->row(11, array(
+                        'No.', 'IDCatalog / IDRef', 'Scientific Name'
+                    ));
                     //--- ----------------- ---
 
                     //--- Content Part ---
-                        // display data
-                        $row_number = 12;   // start line
-                        $count_line = 1;   // count line for No.
-                        if ( $source == 1 ) {
-                            foreach ( $results as $data ) {
-                                $sheet->row( $row_number, array(
-                                    $count_line, $data->related_catalog_item, html_entity_decode($data->current_scientific_name)
-                                ));
+                    // display data
+                    $row_number = 12;   // start line
+                    $count_line = 1;   // count line for No.
+                    if ($source == 1) {
+                        foreach ($results as $data) {
+                            $sheet->row($row_number, array(
+                                $count_line, $data->related_catalog_item, html_entity_decode($data->current_scientific_name)
+                            ));
 
-                                //--- Set Layout and Style ---
-                                    $sheet->setBorder('A'.$row_number.':C'.$row_number, 'thin');
-                                //--- -------------------- ---
+                            //--- Set Layout and Style ---
+                            $sheet->setBorder('A' . $row_number . ':C' . $row_number, 'thin');
+                            //--- -------------------- ---
 
-                                $row_number++; $count_line++;
-                            }
-                        } else {
-                            foreach ( $results as $data ) {
-                                $sheet->row( $row_number, array(
-                                    $count_line, $data->related_reference_item, html_entity_decode($data->current_scientific_name)
-                                ));
-
-                                //--- Set Layout and Style ---
-                                    $sheet->setBorder('A'.$row_number.':C'.$row_number, 'thin');
-                                //--- -------------------- ---
-
-                                $row_number++; $count_line++;
-                            }
+                            $row_number++;
+                            $count_line++;
                         }
+                    } else {
+                        foreach ($results as $data) {
+                            $sheet->row($row_number, array(
+                                $count_line, $data->related_reference_item, html_entity_decode($data->current_scientific_name)
+                            ));
+
+                            //--- Set Layout and Style ---
+                            $sheet->setBorder('A' . $row_number . ':C' . $row_number, 'thin');
+                            //--- -------------------- ---
+
+                            $row_number++;
+                            $count_line++;
+                        }
+                    }
                     //--- ------------ ---
                 } else {
                     $results = null;
                 }
-            //--- ------------- ---
+                //--- ------------- ---
 
             });
         })->store('csv', Config::get('path.export_record_file_path'));
 
         // save export log : 0 is excel, 1 is pdf, 2 is api
-        ExportLog::saveExportLog( 0, $name_file );
+        ExportLog::saveExportLog(0, $name_file);
 
         // sent name_file for download
-        echo $name_file.'.csv';
-
+        echo $name_file . '.csv';
     }
 
     //Sorawit
     //Created : 8-7-59
     //Modified : -
     # Search By Name for export excel
-    public static function exportSearchByName( $source, $name_type, $name_people ) {
+    public static function exportSearchByName($source, $name_type, $name_people)
+    {
         // created export date
         $date = date_create();
-        $date_export = date_format( $date, "d-m-Y H:i:s" );
-        $date_export_file_name = date_format( $date, "Y-m-d_H-i-s" );
+        $date_export = date_format($date, "d-m-Y H:i:s");
+        $date_export_file_name = date_format($date, "Y-m-d_H-i-s");
 
         // set source
-        if ( $source == 1 ) $source_name = 'Specimen';
+        if ($source == 1) $source_name = 'Specimen';
         else $source_name = 'Publication';
 
         //---- make file excel ----
-        $name_file = 'Excel_Record_Search_By_Name'.'_'.$source_name.'_'.$date_export_file_name;
-        Excel::create( $name_file, function( $excel ) use ( $source, $name_type, $name_people, $date_export ) {
-        $excel->sheet( 'Record Data', function( $sheet ) use ( $source, $name_type, $name_people, $date_export ) {
+        $name_file = 'Excel_Record_Search_By_Name' . '_' . $source_name . '_' . $date_export_file_name;
+        Excel::create($name_file, function ($excel) use ($source, $name_type, $name_people, $date_export) {
+            $excel->sheet('Record Data', function ($sheet) use ($source, $name_type, $name_people, $date_export) {
 
-            //--- Set Parameter ---
-                $user_name = Auth::user()->first_name.' '.Auth::user()->last_name.' ('.Auth::user()->telephone.') ('.Auth::user()->email.')';
+                //--- Set Parameter ---
+                $user_name = Auth::user()->first_name . ' ' . Auth::user()->last_name . ' (' . Auth::user()->telephone . ') (' . Auth::user()->email . ')';
 
                 // set $source
-                if( $source == 1 ) $source_name = 'Specimen';
+                if ($source == 1) $source_name = 'Specimen';
                 else $source_name = 'Publication';
 
                 // check condition
-                if( $name_type == 1 ) { // 1 is Collector
+                if ($name_type == 1) { // 1 is Collector
                     $name_type_format = 'record.collector';
                     $name_type_column = 'Collector';    //make header
                 } else { // 2 is Identifier
@@ -515,10 +530,10 @@ class ExportRecordController extends Controller
 
                 // query db
                 $db = new Record;
-                $db = $db->leftjoin('classification as c','record.classification_id', '=', 'c.id');
-                if ( $name_people != null && $name_people != ' ' ) {
-                    if ( $name_type == 1 ) {
-                        $db = $db->where('record.language_id', 1)->where('record.status', 2)->where('record.approve_status', 1)->where('record.source', $source)->where($name_type_format, 'like', '%'.$name_people.'%')->orderBy('collector', 'asc');
+                $db = $db->leftjoin('classification as c', 'record.classification_id', '=', 'c.id');
+                if ($name_people != null && $name_people != ' ') {
+                    if ($name_type == 1) {
+                        $db = $db->where('record.language_id', 1)->where('record.status', 2)->where('record.approve_status', 1)->where('record.source', $source)->where($name_type_format, 'like', '%' . $name_people . '%')->orderBy('collector', 'asc');
                         $results = $db->select([
                             'c.current_scientific_name',
                             'record.collector as name',
@@ -527,7 +542,7 @@ class ExportRecordController extends Controller
                             'record.related_reference_item'
                         ])->get();
                     } else {
-                        $db = $db->where('record.language_id', 1)->where('record.status', 2)->where('record.approve_status', 1)->where('record.source', $source)->where($name_type_format, 'like', '%'.$name_people.'%')->orderBy('identifier', 'asc');
+                        $db = $db->where('record.language_id', 1)->where('record.status', 2)->where('record.approve_status', 1)->where('record.source', $source)->where($name_type_format, 'like', '%' . $name_people . '%')->orderBy('identifier', 'asc');
                         $results = $db->select([
                             'c.current_scientific_name',
                             'record.identifier as name',
@@ -538,138 +553,140 @@ class ExportRecordController extends Controller
                     }
 
                     //--- Set Layout and Style ---
-                        $sheet->mergeCells( 'A2:D2' );
-                        $sheet->mergeCells( 'A3:D3' );
-                        $sheet->mergeCells( 'A4:D4' );
-                        $sheet->mergeCells( 'A5:D5' );
-                        $sheet->mergeCells( 'A6:D6' );
-                        $sheet->mergeCells( 'A7:D7' );
-                        $sheet->mergeCells( 'A8:D8' );
-                        $sheet->mergeCells( 'A9:D9' );
-                        $sheet->mergeCells( 'A10:D10' );
-                        $sheet->mergeCells( 'A11:D11' );
+                    $sheet->mergeCells('A2:D2');
+                    $sheet->mergeCells('A3:D3');
+                    $sheet->mergeCells('A4:D4');
+                    $sheet->mergeCells('A5:D5');
+                    $sheet->mergeCells('A6:D6');
+                    $sheet->mergeCells('A7:D7');
+                    $sheet->mergeCells('A8:D8');
+                    $sheet->mergeCells('A9:D9');
+                    $sheet->mergeCells('A10:D10');
+                    $sheet->mergeCells('A11:D11');
 
-                        $sheet->setHeight( 2, 30 );
-                        $sheet->setHeight( 6, 30 );
-                        $sheet->setHeight( 12, 30 );
+                    $sheet->setHeight(2, 30);
+                    $sheet->setHeight(6, 30);
+                    $sheet->setHeight(12, 30);
 
-                        $sheet->row( 2, function( $row ) {
-                        $row->setBackground( '#FE9529' );
-                        });
-                        $sheet->row( 6, function( $row ) {
+                    $sheet->row(2, function ($row) {
                         $row->setBackground('#FE9529');
-                        });
-                        $sheet->row( 12, function( $row ) {
-                        $row->setBackground( '#FE9529' );
-                        });
+                    });
+                    $sheet->row(6, function ($row) {
+                        $row->setBackground('#FE9529');
+                    });
+                    $sheet->row(12, function ($row) {
+                        $row->setBackground('#FE9529');
+                    });
 
-                        $sheet->cell( 'A2:D2', function( $cells ) {
-                        $cells->setFontSize( 20 );
-                        });
-                        $sheet->cell( 'A6:D6', function( $cells ) {
-                        $cells->setFontSize( 20 );
-                        });
-                        $sheet->cell( 'A12:D12', function( $cells ) {
-                        $cells->setFontSize( 16 );
-                        });
+                    $sheet->cell('A2:D2', function ($cells) {
+                        $cells->setFontSize(20);
+                    });
+                    $sheet->cell('A6:D6', function ($cells) {
+                        $cells->setFontSize(20);
+                    });
+                    $sheet->cell('A12:D12', function ($cells) {
+                        $cells->setFontSize(16);
+                    });
 
-                        $sheet->cells( 'A2:D2', function( $cells ) {
-                        $cells->setFontWeight( 'bold' );
-                        });
-                        $sheet->cells( 'A6:D6', function( $cells ) {
-                        $cells->setFontWeight( 'bold' );
-                        });
-                        $sheet->cells( 'A12:D12', function( $cells ) {
-                        $cells->setFontWeight( 'bold' );
-                        $cells->setAlignment( 'center' );
-                        $cells->setValignment( 'middle' );
-                        });
+                    $sheet->cells('A2:D2', function ($cells) {
+                        $cells->setFontWeight('bold');
+                    });
+                    $sheet->cells('A6:D6', function ($cells) {
+                        $cells->setFontWeight('bold');
+                    });
+                    $sheet->cells('A12:D12', function ($cells) {
+                        $cells->setFontWeight('bold');
+                        $cells->setAlignment('center');
+                        $cells->setValignment('middle');
+                    });
 
-                        $sheet->setBorder( 'A12:D12', 'thin' );
+                    $sheet->setBorder('A12:D12', 'thin');
                     //--- -------------------- ---
 
                     //--- Header Part ---
-                        $sheet->row( 2, array( 'Export Information' ) );
-                        $sheet->row( 3, array( 'Export By: '.$user_name ) );
-                        $sheet->row( 4, array( 'Date Export: '.$date_export ) );
-                        $sheet->row( 6, array( 'Data Information' ) );
-                        $sheet->row( 7, array( 'Search Type: Search By Name' ) );
-                        $sheet->row( 8, array( 'Source: '.$source_name ) );
-                        $sheet->row( 9, array( 'Name Type: '.$name_type_column ) );
-                        $sheet->row( 10, array( 'Search Name: '.$name_people ) );
+                    $sheet->row(2, array('Export Information'));
+                    $sheet->row(3, array('Export By: ' . $user_name));
+                    $sheet->row(4, array('Date Export: ' . $date_export));
+                    $sheet->row(6, array('Data Information'));
+                    $sheet->row(7, array('Search Type: Search By Name'));
+                    $sheet->row(8, array('Source: ' . $source_name));
+                    $sheet->row(9, array('Name Type: ' . $name_type_column));
+                    $sheet->row(10, array('Search Name: ' . $name_people));
                     //--- ----------- ---
 
                     //--- Header Table Part ---
-                        $sheet->row(12, array(
-                            'No.', 'IDCatalog / IDRef', 'Scientific Name', 'Name'
-                        ));
+                    $sheet->row(12, array(
+                        'No.', 'IDCatalog / IDRef', 'Scientific Name', 'Name'
+                    ));
                     //--- ----------------- ---
 
                     //--- Content Part ---
-                        // display data
-                        $row_number = 13;   // start line
-                        $count_line = 1;   // count line for No.
-                        if ( $source == 1 ) {
-                            foreach ( $results as $data ) {
-                                $sheet->row( $row_number, array(
-                                    $count_line, $data->related_catalog_item, html_entity_decode($data->current_scientific_name), $data->name
-                                ));
+                    // display data
+                    $row_number = 13;   // start line
+                    $count_line = 1;   // count line for No.
+                    if ($source == 1) {
+                        foreach ($results as $data) {
+                            $sheet->row($row_number, array(
+                                $count_line, $data->related_catalog_item, html_entity_decode($data->current_scientific_name), $data->name
+                            ));
 
-                                //--- Set Layout and Style ---
-                                    $sheet->setBorder('A'.$row_number.':D'.$row_number, 'thin');
-                                //--- -------------------- ---
+                            //--- Set Layout and Style ---
+                            $sheet->setBorder('A' . $row_number . ':D' . $row_number, 'thin');
+                            //--- -------------------- ---
 
-                                $row_number++; $count_line++;
-                            }
-                        } else {
-                            foreach ( $results as $data ) {
-                                $sheet->row( $row_number, array(
-                                    $count_line, $data->related_reference_item, html_entity_decode($data->current_scientific_name), $data->name
-                                ));
-
-                                //--- Set Layout and Style ---
-                                    $sheet->setBorder('A'.$row_number.':D'.$row_number, 'thin');
-                                //--- -------------------- ---
-
-                                $row_number++; $count_line++;
-                            }
+                            $row_number++;
+                            $count_line++;
                         }
+                    } else {
+                        foreach ($results as $data) {
+                            $sheet->row($row_number, array(
+                                $count_line, $data->related_reference_item, html_entity_decode($data->current_scientific_name), $data->name
+                            ));
+
+                            //--- Set Layout and Style ---
+                            $sheet->setBorder('A' . $row_number . ':D' . $row_number, 'thin');
+                            //--- -------------------- ---
+
+                            $row_number++;
+                            $count_line++;
+                        }
+                    }
                     //--- ------------ ---
                 } else {
                     $results = null;
                 }
-            //--- ------------- ---
+                //--- ------------- ---
 
             });
         })->store('csv', Config::get('path.export_record_file_path'));
 
         // save export log : 0 is excel, 1 is pdf, 2 is api
-        ExportLog::saveExportLog( 0, $name_file );
+        ExportLog::saveExportLog(0, $name_file);
 
         // sent name_file for download
-        echo $name_file.'.csv';
-
+        echo $name_file . '.csv';
     }
 
     //Chaloemphon
     //Created : 11-6-61
     //Modified : -
     # Search By Name Record for export excel
-    public static function exportSearchByNameRecord( $name_type, $search ) {
+    public static function exportSearchByNameRecord($name_type, $search)
+    {
         // created export date
         $date = date_create();
-        $date_export = date_format( $date, "d-m-Y H:i:s" );
-        $date_export_file_name = date_format( $date, "Y-m-d_H-i-s" );
+        $date_export = date_format($date, "d-m-Y H:i:s");
+        $date_export_file_name = date_format($date, "Y-m-d_H-i-s");
 
 
         //---- make file excel ----
-        $name_file = 'Excel_Record_Search_By_Name_Record'.'_'.$name_type.'_'.$date_export_file_name;
-        Excel::create( $name_file, function( $excel ) use ( $name_type, $search, $date_export ) {
-        $excel->sheet( 'Record Data', function( $sheet ) use ( $name_type, $search, $date_export ) {
+        $name_file = 'Excel_Record_Search_By_Name_Record' . '_' . $name_type . '_' . $date_export_file_name;
+        Excel::create($name_file, function ($excel) use ($name_type, $search, $date_export) {
+            $excel->sheet('Record Data', function ($sheet) use ($name_type, $search, $date_export) {
 
-            //--- Set Parameter ---
-                if ( Auth::check() ) {
-                    $user_name = Auth::user()->first_name.' '.Auth::user()->last_name.' ('.Auth::user()->telephone.') ('.Auth::user()->email.')';
+                //--- Set Parameter ---
+                if (Auth::check()) {
+                    $user_name = Auth::user()->first_name . ' ' . Auth::user()->last_name . ' (' . Auth::user()->telephone . ') (' . Auth::user()->email . ')';
                 } else {
                     $user_name = "Unknown";
                 }
@@ -677,186 +694,187 @@ class ExportRecordController extends Controller
                 $name_type_column = ucfirst($name_type);
 
                 // query db
-                if ( $name_type != null && $search != '' ) {
-                    if($name_type == 'localname'){
-                        $results = \App\Model\Record::leftjoin('classification', 'record.classification_id', 'classification.id')->where('record.local_name', 'like', '%'.$search.'%')->get();
-                    }elseif($name_type == 'vernacularname'){
-                        $results = \App\Model\Record::leftjoin('classification', 'record.classification_id', 'classification.id')->where('record.vernacular_name', 'like', '%'.$search.'%')->get();
-                    }elseif($name_type == 'commonname'){
-                        $results = \App\Model\Record::leftjoin('classification', 'record.classification_id', 'classification.id')->where('classification.common_name', 'like', '%'.$search.'%')->get();
+                if ($name_type != null && $search != '') {
+                    if ($name_type == 'localname') {
+                        $results = \App\Model\Record::leftjoin('classification', 'record.classification_id', 'classification.id')->where('record.local_name', 'like', '%' . $search . '%')->get();
+                    } elseif ($name_type == 'vernacularname') {
+                        $results = \App\Model\Record::leftjoin('classification', 'record.classification_id', 'classification.id')->where('record.vernacular_name', 'like', '%' . $search . '%')->get();
+                    } elseif ($name_type == 'commonname') {
+                        $results = \App\Model\Record::leftjoin('classification', 'record.classification_id', 'classification.id')->where('classification.common_name', 'like', '%' . $search . '%')->get();
                     }
 
                     //--- Set Layout and Style ---
-                        $sheet->mergeCells( 'A2:D2' );
-                        $sheet->mergeCells( 'A3:D3' );
-                        $sheet->mergeCells( 'A4:D4' );
-                        $sheet->mergeCells( 'A5:D5' );
-                        $sheet->mergeCells( 'A6:D6' );
-                        $sheet->mergeCells( 'A7:D7' );
-                        $sheet->mergeCells( 'A8:D8' );
-                        $sheet->mergeCells( 'A9:D9' );
-                        $sheet->mergeCells( 'A10:D10' );
-                        $sheet->mergeCells( 'A11:D11' );
+                    $sheet->mergeCells('A2:D2');
+                    $sheet->mergeCells('A3:D3');
+                    $sheet->mergeCells('A4:D4');
+                    $sheet->mergeCells('A5:D5');
+                    $sheet->mergeCells('A6:D6');
+                    $sheet->mergeCells('A7:D7');
+                    $sheet->mergeCells('A8:D8');
+                    $sheet->mergeCells('A9:D9');
+                    $sheet->mergeCells('A10:D10');
+                    $sheet->mergeCells('A11:D11');
 
-                        $sheet->setHeight( 2, 30 );
-                        $sheet->setHeight( 6, 30 );
-                        $sheet->setHeight( 12, 30 );
+                    $sheet->setHeight(2, 30);
+                    $sheet->setHeight(6, 30);
+                    $sheet->setHeight(12, 30);
 
-                        $sheet->row( 2, function( $row ) {
-                        $row->setBackground( '#FE9529' );
-                        });
-                        $sheet->row( 6, function( $row ) {
+                    $sheet->row(2, function ($row) {
                         $row->setBackground('#FE9529');
-                        });
-                        $sheet->row( 12, function( $row ) {
-                        $row->setBackground( '#FE9529' );
-                        });
+                    });
+                    $sheet->row(6, function ($row) {
+                        $row->setBackground('#FE9529');
+                    });
+                    $sheet->row(12, function ($row) {
+                        $row->setBackground('#FE9529');
+                    });
 
-                        $sheet->cell( 'A2:D2', function( $cells ) {
-                        $cells->setFontSize( 20 );
-                        });
-                        $sheet->cell( 'A6:D6', function( $cells ) {
-                        $cells->setFontSize( 20 );
-                        });
-                        $sheet->cell( 'A12:D12', function( $cells ) {
-                        $cells->setFontSize( 16 );
-                        });
+                    $sheet->cell('A2:D2', function ($cells) {
+                        $cells->setFontSize(20);
+                    });
+                    $sheet->cell('A6:D6', function ($cells) {
+                        $cells->setFontSize(20);
+                    });
+                    $sheet->cell('A12:D12', function ($cells) {
+                        $cells->setFontSize(16);
+                    });
 
-                        $sheet->cells( 'A2:D2', function( $cells ) {
-                        $cells->setFontWeight( 'bold' );
-                        });
-                        $sheet->cells( 'A6:D6', function( $cells ) {
-                        $cells->setFontWeight( 'bold' );
-                        });
-                        $sheet->cells( 'A12:D12', function( $cells ) {
-                        $cells->setFontWeight( 'bold' );
-                        $cells->setAlignment( 'center' );
-                        $cells->setValignment( 'middle' );
-                        });
+                    $sheet->cells('A2:D2', function ($cells) {
+                        $cells->setFontWeight('bold');
+                    });
+                    $sheet->cells('A6:D6', function ($cells) {
+                        $cells->setFontWeight('bold');
+                    });
+                    $sheet->cells('A12:D12', function ($cells) {
+                        $cells->setFontWeight('bold');
+                        $cells->setAlignment('center');
+                        $cells->setValignment('middle');
+                    });
 
-                        $sheet->setBorder( 'A12:D12', 'thin' );
+                    $sheet->setBorder('A12:D12', 'thin');
                     //--- -------------------- ---
 
                     //--- Header Part ---
-                        $sheet->row( 2, array( 'Export Information' ) );
-                        $sheet->row( 3, array( 'Export By: '.$user_name ) );
-                        $sheet->row( 4, array( 'Date Export: '.$date_export ) );
-                        $sheet->row( 6, array( 'Data Information' ) );
-                        $sheet->row( 7, array( 'Search Type: Search By Name' ) );
-                        $sheet->row( 9, array( 'Name Type: '.$name_type_column ) );
-                        $sheet->row( 10, array( 'Search Name: '.$search ) );
+                    $sheet->row(2, array('Export Information'));
+                    $sheet->row(3, array('Export By: ' . $user_name));
+                    $sheet->row(4, array('Date Export: ' . $date_export));
+                    $sheet->row(6, array('Data Information'));
+                    $sheet->row(7, array('Search Type: Search By Name'));
+                    $sheet->row(9, array('Name Type: ' . $name_type_column));
+                    $sheet->row(10, array('Search Name: ' . $search));
                     //--- ----------- ---
 
                     //--- Header Table Part ---
-                        $sheet->row(12, array(
-                            'No.', 'IDCatalog / IDRef', 'Scientific Name', 'Name'
-                        ));
+                    $sheet->row(12, array(
+                        'No.', 'IDCatalog / IDRef', 'Scientific Name', 'Name'
+                    ));
                     //--- ----------------- ---
 
                     //--- Content Part ---
-                        // display data
-                        $row_number = 13;   // start line
-                        $count_line = 1;   // count line for No.
+                    // display data
+                    $row_number = 13;   // start line
+                    $count_line = 1;   // count line for No.
 
-                            foreach ( $results as $data ) {
-                                if ($data->source == 1) {
-                                    $sheet->row( $row_number, array(
-                                        $count_line, $data->related_catalog_item, html_entity_decode($data->current_scientific_name), $data->name
-                                    ));
-                                } else {
-                                    $sheet->row( $row_number, array(
-                                        $count_line, $data->related_reference_item, html_entity_decode($data->current_scientific_name), $data->name
-                                    ));
-                                }
+                    foreach ($results as $data) {
+                        if ($data->source == 1) {
+                            $sheet->row($row_number, array(
+                                $count_line, $data->related_catalog_item, html_entity_decode($data->current_scientific_name), $data->name
+                            ));
+                        } else {
+                            $sheet->row($row_number, array(
+                                $count_line, $data->related_reference_item, html_entity_decode($data->current_scientific_name), $data->name
+                            ));
+                        }
 
-                                //--- Set Layout and Style ---
-                                    $sheet->setBorder('A'.$row_number.':D'.$row_number, 'thin');
-                                //--- -------------------- ---
+                        //--- Set Layout and Style ---
+                        $sheet->setBorder('A' . $row_number . ':D' . $row_number, 'thin');
+                        //--- -------------------- ---
 
-                                $row_number++; $count_line++;
-                            }
+                        $row_number++;
+                        $count_line++;
+                    }
 
                     //--- ------------ ---
                 } else {
                     $results = null;
                 }
-            //--- ------------- ---
+                //--- ------------- ---
 
             });
         })->store('csv', Config::get('path.export_record_file_path'));
 
         // save export log : 0 is excel, 1 is pdf, 2 is api
-        ExportLog::saveExportLog( 0, $name_file );
+        ExportLog::saveExportLog(0, $name_file);
 
         // sent name_file for download
-        echo $name_file.'.csv';
-
+        echo $name_file . '.csv';
     }
 
     //Sorawit
     //Created : 11-7-59
     //Modified : -
     # Search By Locality for export excel
-    public static function exportSearchByLocality( $source, $locality_type, $locality_value ) {
+    public static function exportSearchByLocality($source, $locality_type, $locality_value)
+    {
         // created export date
         $date = date_create();
-        $date_export = date_format( $date, "d-m-Y H:i:s" );
-        $date_export_file_name = date_format( $date, "Y-m-d_H-i-s" );
+        $date_export = date_format($date, "d-m-Y H:i:s");
+        $date_export_file_name = date_format($date, "Y-m-d_H-i-s");
 
         // set source
-        if ( $source == 1 ) $source_name = 'Specimen';
+        if ($source == 1) $source_name = 'Specimen';
         else $source_name = 'Publication';
 
         //---- make file excel ----
-        $name_file = 'Excel_Record_Search_By_Locality'.'_'.$source_name.'_'.$date_export_file_name;
-        Excel::create( $name_file, function( $excel ) use ( $source, $locality_type, $locality_value, $date_export ) {
-        $excel->sheet( 'Record Data', function( $sheet ) use ( $source, $locality_type, $locality_value, $date_export ) {
+        $name_file = 'Excel_Record_Search_By_Locality' . '_' . $source_name . '_' . $date_export_file_name;
+        Excel::create($name_file, function ($excel) use ($source, $locality_type, $locality_value, $date_export) {
+            $excel->sheet('Record Data', function ($sheet) use ($source, $locality_type, $locality_value, $date_export) {
 
-            //--- Set Parameter ---
-                $user_name = Auth::user()->first_name.' '.Auth::user()->last_name.' ('.Auth::user()->telephone.') ('.Auth::user()->email.')';
+                //--- Set Parameter ---
+                $user_name = Auth::user()->first_name . ' ' . Auth::user()->last_name . ' (' . Auth::user()->telephone . ') (' . Auth::user()->email . ')';
 
                 // set $source
-                if( $source == 1 ) $source_name = 'Specimen';
+                if ($source == 1) $source_name = 'Specimen';
                 else $source_name = 'Publication';
 
                 // query db
                 $db = new Record;
-                $db = $db->leftjoin('classification as c','record.classification_id', '=', 'c.id');
+                $db = $db->leftjoin('classification as c', 'record.classification_id', '=', 'c.id');
                 $db = $db->where('record.language_id', 1)->where('record.status', 2)->where('record.approve_status', 1)->orderBy('record.id', 'asc');
 
                 // check condition
-                if ( $locality_type == 1 ) {    // ocean_sea_lake
+                if ($locality_type == 1) {    // ocean_sea_lake
                     $db = $db->where('record.ocean_sea_lake', $locality_value);
                     $wording = Wording::getWording($locality_value);
                     $content_header = 'Ocean/Sea/Lake';
-                    $content_result = $wording->name_en.'/'.$wording->name_th;
-                } elseif ( $locality_type == 2 ) {  // country
+                    $content_result = $wording->name_en . '/' . $wording->name_th;
+                } elseif ($locality_type == 2) {  // country
                     $db = $db->where('record.country', $locality_value);
                     $wording = Country::getCountryWording($locality_value);
                     $content_header = 'Country';
-                    $content_result = $wording->country_en.'/'.$wording->country_th;
-                } elseif ( $locality_type == 3 ) {  // province
+                    $content_result = $wording->country_en . '/' . $wording->country_th;
+                } elseif ($locality_type == 3) {  // province
                     $db = $db->where('record.province', $locality_value);
                     $wording = Province::getProvinceWording($locality_value);
                     $content_header = 'Province';
-                    $content_result = $wording->province_en.'/'.$wording->province_th;
-                } elseif ( $locality_type == 4 ) {  // district
+                    $content_result = $wording->province_en . '/' . $wording->province_th;
+                } elseif ($locality_type == 4) {  // district
                     $db = $db->where('record.district', $locality_value);
                     $wording = District::getDistrictWording($locality_value);
                     $content_header = 'District';
-                    $content_result = $wording->district_en.'/'.$wording->district_th;
-                } elseif ( $locality_type == 5 ) {  // county
+                    $content_result = $wording->district_en . '/' . $wording->district_th;
+                } elseif ($locality_type == 5) {  // county
                     $db = $db->where('record.county', $locality_value);
                     $wording = County::getCountyWording($locality_value);
                     $content_header = 'County';
-                    $content_result = $wording->county_en.'/'.$wording->county_th;
+                    $content_result = $wording->county_en . '/' . $wording->county_th;
                 } else {    // locality
-                    $db = $db->where('record.locality', 'like', '%'.$locality_value.'%');
+                    $db = $db->where('record.locality', 'like', '%' . $locality_value . '%');
                     $content_header = 'Locality';
                     $content_result = $locality_value;
                 }
 
-                if ( !empty( $locality_value ) && $locality_value != ' ' ) {
+                if (!empty($locality_value) && $locality_value != ' ') {
                     $results = $db->select([
                         'c.current_scientific_name',
                         'record.id',
@@ -866,358 +884,364 @@ class ExportRecordController extends Controller
                     ])->get();
 
                     //--- Set Layout and Style ---
-                        $sheet->mergeCells( 'A2:D2' );
-                        $sheet->mergeCells( 'A3:D3' );
-                        $sheet->mergeCells( 'A4:D4' );
-                        $sheet->mergeCells( 'A5:D5' );
-                        $sheet->mergeCells( 'A6:D6' );
-                        $sheet->mergeCells( 'A7:D7' );
-                        $sheet->mergeCells( 'A8:D8' );
-                        $sheet->mergeCells( 'A9:D9' );
-                        $sheet->mergeCells( 'A10:D10' );
-                        $sheet->mergeCells( 'A11:D11' );
+                    $sheet->mergeCells('A2:D2');
+                    $sheet->mergeCells('A3:D3');
+                    $sheet->mergeCells('A4:D4');
+                    $sheet->mergeCells('A5:D5');
+                    $sheet->mergeCells('A6:D6');
+                    $sheet->mergeCells('A7:D7');
+                    $sheet->mergeCells('A8:D8');
+                    $sheet->mergeCells('A9:D9');
+                    $sheet->mergeCells('A10:D10');
+                    $sheet->mergeCells('A11:D11');
 
-                        $sheet->setHeight( 2, 30 );
-                        $sheet->setHeight( 6, 30 );
-                        $sheet->setHeight( 12, 30 );
+                    $sheet->setHeight(2, 30);
+                    $sheet->setHeight(6, 30);
+                    $sheet->setHeight(12, 30);
 
-                        $sheet->row( 2, function( $row ) {
-                        $row->setBackground( '#FE9529' );
-                        });
-                        $sheet->row( 6, function( $row ) {
+                    $sheet->row(2, function ($row) {
                         $row->setBackground('#FE9529');
-                        });
-                        $sheet->row( 12, function( $row ) {
-                        $row->setBackground( '#FE9529' );
-                        });
+                    });
+                    $sheet->row(6, function ($row) {
+                        $row->setBackground('#FE9529');
+                    });
+                    $sheet->row(12, function ($row) {
+                        $row->setBackground('#FE9529');
+                    });
 
-                        $sheet->cell( 'A2:D2', function( $cells ) {
-                        $cells->setFontSize( 20 );
-                        });
-                        $sheet->cell( 'A6:D6', function( $cells ) {
-                        $cells->setFontSize( 20 );
-                        });
-                        $sheet->cell( 'A12:D12', function( $cells ) {
-                        $cells->setFontSize( 16 );
-                        });
+                    $sheet->cell('A2:D2', function ($cells) {
+                        $cells->setFontSize(20);
+                    });
+                    $sheet->cell('A6:D6', function ($cells) {
+                        $cells->setFontSize(20);
+                    });
+                    $sheet->cell('A12:D12', function ($cells) {
+                        $cells->setFontSize(16);
+                    });
 
-                        $sheet->cells( 'A2:D2', function( $cells ) {
-                        $cells->setFontWeight( 'bold' );
-                        });
-                        $sheet->cells( 'A6:D6', function( $cells ) {
-                        $cells->setFontWeight( 'bold' );
-                        });
-                        $sheet->cells( 'A12:D12', function( $cells ) {
-                        $cells->setFontWeight( 'bold' );
-                        $cells->setAlignment( 'center' );
-                        $cells->setValignment( 'middle' );
-                        });
+                    $sheet->cells('A2:D2', function ($cells) {
+                        $cells->setFontWeight('bold');
+                    });
+                    $sheet->cells('A6:D6', function ($cells) {
+                        $cells->setFontWeight('bold');
+                    });
+                    $sheet->cells('A12:D12', function ($cells) {
+                        $cells->setFontWeight('bold');
+                        $cells->setAlignment('center');
+                        $cells->setValignment('middle');
+                    });
 
-                        $sheet->setBorder( 'A12:D12', 'thin' );
+                    $sheet->setBorder('A12:D12', 'thin');
                     //--- -------------------- ---
 
                     //--- Header Part ---
-                        $sheet->row( 2, array( 'Export Information' ) );
-                        $sheet->row( 3, array( 'Export By: '.$user_name ) );
-                        $sheet->row( 4, array( 'Date Export: '.$date_export ) );
-                        $sheet->row( 6, array( 'Data Information' ) );
-                        $sheet->row( 7, array( 'Search Type: Search By Locality' ) );
-                        $sheet->row( 8, array( 'Source: '.$source_name ) );
-                        $sheet->row( 9, array( 'Data Type: '.$content_header ) );
-                        $sheet->row( 10, array( 'Search By: '.$content_result ) );
+                    $sheet->row(2, array('Export Information'));
+                    $sheet->row(3, array('Export By: ' . $user_name));
+                    $sheet->row(4, array('Date Export: ' . $date_export));
+                    $sheet->row(6, array('Data Information'));
+                    $sheet->row(7, array('Search Type: Search By Locality'));
+                    $sheet->row(8, array('Source: ' . $source_name));
+                    $sheet->row(9, array('Data Type: ' . $content_header));
+                    $sheet->row(10, array('Search By: ' . $content_result));
                     //--- ----------- ---
 
                     //--- Header Table Part ---
-                        $sheet->row(12, array(
-                            'No.', 'IDCatalog / IDRef', 'Scientific Name', 'Information'
-                        ));
+                    $sheet->row(12, array(
+                        'No.', 'IDCatalog / IDRef', 'Scientific Name', 'Information'
+                    ));
                     //--- ----------------- ---
 
                     //--- Content Part ---
-                        // display data
-                        $row_number = 13;   // start line
-                        $count_line = 1;   // count line for No.
-                        if ( $source == 1 ) {
-                            if ( $locality_type > 0 && $locality_type < 6 ) {
-                                foreach ( $results as $data ) {
-                                    $sheet->row( $row_number, array(
-                                        $count_line, $data->related_catalog_item, html_entity_decode($data->current_scientific_name), $content_result
-                                    ));
+                    // display data
+                    $row_number = 13;   // start line
+                    $count_line = 1;   // count line for No.
+                    if ($source == 1) {
+                        if ($locality_type > 0 && $locality_type < 6) {
+                            foreach ($results as $data) {
+                                $sheet->row($row_number, array(
+                                    $count_line, $data->related_catalog_item, html_entity_decode($data->current_scientific_name), $content_result
+                                ));
 
-                                    //--- Set Layout and Style ---
-                                        $sheet->setBorder('A'.$row_number.':D'.$row_number, 'thin');
-                                    //--- -------------------- ---
+                                //--- Set Layout and Style ---
+                                $sheet->setBorder('A' . $row_number . ':D' . $row_number, 'thin');
+                                //--- -------------------- ---
 
-                                    $row_number++; $count_line++;
-                                }
-                            } else {
-                                foreach ( $results as $data ) {
-                                    $sheet->row( $row_number, array(
-                                        $count_line, $data->related_catalog_item, html_entity_decode($data->current_scientific_name), $data->locality
-                                    ));
-
-                                    //--- Set Layout and Style ---
-                                        $sheet->setBorder('A'.$row_number.':D'.$row_number, 'thin');
-                                    //--- -------------------- ---
-
-                                    $row_number++; $count_line++;
-                                }
+                                $row_number++;
+                                $count_line++;
                             }
                         } else {
-                            if ( $locality_type > 0 && $locality_type < 6 ) {
-                                foreach ( $results as $data ) {
-                                    $sheet->row( $row_number, array(
-                                        $count_line, $data->related_reference_item, html_entity_decode($data->current_scientific_name), $content_result
-                                    ));
+                            foreach ($results as $data) {
+                                $sheet->row($row_number, array(
+                                    $count_line, $data->related_catalog_item, html_entity_decode($data->current_scientific_name), $data->locality
+                                ));
 
-                                    //--- Set Layout and Style ---
-                                        $sheet->setBorder('A'.$row_number.':D'.$row_number, 'thin');
-                                    //--- -------------------- ---
+                                //--- Set Layout and Style ---
+                                $sheet->setBorder('A' . $row_number . ':D' . $row_number, 'thin');
+                                //--- -------------------- ---
 
-                                    $row_number++; $count_line++;
-                                }
-                            } else {
-                                foreach ( $results as $data ) {
-                                    $sheet->row( $row_number, array(
-                                        $count_line, $data->related_reference_item, html_entity_decode($data->current_scientific_name), $data->locality
-                                    ));
-
-                                    //--- Set Layout and Style ---
-                                        $sheet->setBorder('A'.$row_number.':D'.$row_number, 'thin');
-                                    //--- -------------------- ---
-
-                                    $row_number++; $count_line++;
-                                }
+                                $row_number++;
+                                $count_line++;
                             }
                         }
+                    } else {
+                        if ($locality_type > 0 && $locality_type < 6) {
+                            foreach ($results as $data) {
+                                $sheet->row($row_number, array(
+                                    $count_line, $data->related_reference_item, html_entity_decode($data->current_scientific_name), $content_result
+                                ));
+
+                                //--- Set Layout and Style ---
+                                $sheet->setBorder('A' . $row_number . ':D' . $row_number, 'thin');
+                                //--- -------------------- ---
+
+                                $row_number++;
+                                $count_line++;
+                            }
+                        } else {
+                            foreach ($results as $data) {
+                                $sheet->row($row_number, array(
+                                    $count_line, $data->related_reference_item, html_entity_decode($data->current_scientific_name), $data->locality
+                                ));
+
+                                //--- Set Layout and Style ---
+                                $sheet->setBorder('A' . $row_number . ':D' . $row_number, 'thin');
+                                //--- -------------------- ---
+
+                                $row_number++;
+                                $count_line++;
+                            }
+                        }
+                    }
                     //--- ------------ ---
                 } else {
                     $results = null;
                 }
-            //--- ------------- ---
+                //--- ------------- ---
 
             });
         })->store('csv', Config::get('path.export_record_file_path'));
 
         // save export log : 0 is excel, 1 is pdf, 2 is api
-        ExportLog::saveExportLog( 0, $name_file );
+        ExportLog::saveExportLog(0, $name_file);
 
         // sent name_file for download
-        echo $name_file.'.csv';
-
+        echo $name_file . '.csv';
     }
 
     //Sorawit
     //Created : 11-7-59
     //Modified : -
     # Search By Taxonomy for export excel
-    public static function exportSearchByTaxanomy( $source, $header_taxonomy_id, $taxonomy_id ) {
+    public static function exportSearchByTaxanomy($source, $header_taxonomy_id, $taxonomy_id)
+    {
         // created export date
         $date = date_create();
-        $date_export = date_format( $date, "d-m-Y H:i:s" );
-        $date_export_file_name = date_format( $date, "Y-m-d_H-i-s" );
+        $date_export = date_format($date, "d-m-Y H:i:s");
+        $date_export_file_name = date_format($date, "Y-m-d_H-i-s");
 
         // set source
-        if ( $source == 1 ) $source_name = 'Specimen';
+        if ($source == 1) $source_name = 'Specimen';
         else $source_name = 'Publication';
 
         //---- make file excel ----
-        $name_file = 'Excel_Record_Search_By_Taxonomy'.'_'.$source_name.'_'.$date_export_file_name;
-        Excel::create( $name_file, function( $excel ) use ( $source, $header_taxonomy_id, $taxonomy_id, $date_export ) {
-        $excel->sheet( 'Record Data', function( $sheet ) use ( $source, $header_taxonomy_id, $taxonomy_id, $date_export ) {
+        $name_file = 'Excel_Record_Search_By_Taxonomy' . '_' . $source_name . '_' . $date_export_file_name;
+        Excel::create($name_file, function ($excel) use ($source, $header_taxonomy_id, $taxonomy_id, $date_export) {
+            $excel->sheet('Record Data', function ($sheet) use ($source, $header_taxonomy_id, $taxonomy_id, $date_export) {
 
-            //--- Set Parameter ---
-                $user_name = Auth::user()->first_name.' '.Auth::user()->last_name.' ('.Auth::user()->telephone.') ('.Auth::user()->email.')';
+                //--- Set Parameter ---
+                $user_name = Auth::user()->first_name . ' ' . Auth::user()->last_name . ' (' . Auth::user()->telephone . ') (' . Auth::user()->email . ')';
 
                 // set $source
-                if( $source == 1 ) $source_name = 'Specimen';
+                if ($source == 1) $source_name = 'Specimen';
                 else $source_name = 'Publication';
 
                 // query db
                 // get header taxonomy
                 $header_taxonomy = Header_Taxonomy::getHeaderTaxonomy($header_taxonomy_id);
-        		// convert small word
-        		$header_taxonomy = strtolower($header_taxonomy);
-        		// change order to order_o for column search
-        		if( $header_taxonomy == 'order' ) $header_taxonomy = 'order_o';
+                // convert small word
+                $header_taxonomy = strtolower($header_taxonomy);
+                // change order to order_o for column search
+                if ($header_taxonomy == 'order') $header_taxonomy = 'order_o';
 
                 // query db
                 $db = new Classification;
-                $db = $db->leftjoin('record as r','classification.id', '=', 'r.classification_id');
+                $db = $db->leftjoin('record as r', 'classification.id', '=', 'r.classification_id');
                 $db = $db->where('r.language_id', 1)->where('r.status', 2)->where('r.approve_status', 1)->where('r.source', $source)->orderBy('r.id', 'asc');
-                if ( $taxonomy_id != 0 ) {
-                    $db = $db->where('classification.'.$header_taxonomy, $taxonomy_id);
+                if ($taxonomy_id != 0) {
+                    $db = $db->where('classification.' . $header_taxonomy, $taxonomy_id);
                     $results = $db->select(
                         'classification.current_scientific_name',
                         'r.id',
                         'r.related_catalog_item',
                         'r.related_reference_item'
-                     )->get();
+                    )->get();
                     $taxonomy = Taxonomy::getTaxonomyWording($taxonomy_id)->name;
 
                     // get header taxonomy for display
                     $header_taxonomy = Header_Taxonomy::getHeaderTaxonomy($header_taxonomy_id);
 
                     //--- Set Layout and Style ---
-                        $sheet->mergeCells( 'A2:D2' );
-                        $sheet->mergeCells( 'A3:D3' );
-                        $sheet->mergeCells( 'A4:D4' );
-                        $sheet->mergeCells( 'A5:D5' );
-                        $sheet->mergeCells( 'A6:D6' );
-                        $sheet->mergeCells( 'A7:D7' );
-                        $sheet->mergeCells( 'A8:D8' );
-                        $sheet->mergeCells( 'A9:D9' );
-                        $sheet->mergeCells( 'A10:D10' );
-                        $sheet->mergeCells( 'A11:D11' );
+                    $sheet->mergeCells('A2:D2');
+                    $sheet->mergeCells('A3:D3');
+                    $sheet->mergeCells('A4:D4');
+                    $sheet->mergeCells('A5:D5');
+                    $sheet->mergeCells('A6:D6');
+                    $sheet->mergeCells('A7:D7');
+                    $sheet->mergeCells('A8:D8');
+                    $sheet->mergeCells('A9:D9');
+                    $sheet->mergeCells('A10:D10');
+                    $sheet->mergeCells('A11:D11');
 
-                        $sheet->setHeight( 2, 30 );
-                        $sheet->setHeight( 6, 30 );
-                        $sheet->setHeight( 12, 30 );
+                    $sheet->setHeight(2, 30);
+                    $sheet->setHeight(6, 30);
+                    $sheet->setHeight(12, 30);
 
-                        $sheet->row( 2, function( $row ) {
-                        $row->setBackground( '#FE9529' );
-                        });
-                        $sheet->row( 6, function( $row ) {
+                    $sheet->row(2, function ($row) {
                         $row->setBackground('#FE9529');
-                        });
-                        $sheet->row( 12, function( $row ) {
-                        $row->setBackground( '#FE9529' );
-                        });
+                    });
+                    $sheet->row(6, function ($row) {
+                        $row->setBackground('#FE9529');
+                    });
+                    $sheet->row(12, function ($row) {
+                        $row->setBackground('#FE9529');
+                    });
 
-                        $sheet->cell( 'A2:D2', function( $cells ) {
-                        $cells->setFontSize( 20 );
-                        });
-                        $sheet->cell( 'A6:D6', function( $cells ) {
-                        $cells->setFontSize( 20 );
-                        });
-                        $sheet->cell( 'A12:D12', function( $cells ) {
-                        $cells->setFontSize( 16 );
-                        });
+                    $sheet->cell('A2:D2', function ($cells) {
+                        $cells->setFontSize(20);
+                    });
+                    $sheet->cell('A6:D6', function ($cells) {
+                        $cells->setFontSize(20);
+                    });
+                    $sheet->cell('A12:D12', function ($cells) {
+                        $cells->setFontSize(16);
+                    });
 
-                        $sheet->cells( 'A2:D2', function( $cells ) {
-                        $cells->setFontWeight( 'bold' );
-                        });
-                        $sheet->cells( 'A6:D6', function( $cells ) {
-                        $cells->setFontWeight( 'bold' );
-                        });
-                        $sheet->cells( 'A12:D12', function( $cells ) {
-                        $cells->setFontWeight( 'bold' );
-                        $cells->setAlignment( 'center' );
-                        $cells->setValignment( 'middle' );
-                        });
+                    $sheet->cells('A2:D2', function ($cells) {
+                        $cells->setFontWeight('bold');
+                    });
+                    $sheet->cells('A6:D6', function ($cells) {
+                        $cells->setFontWeight('bold');
+                    });
+                    $sheet->cells('A12:D12', function ($cells) {
+                        $cells->setFontWeight('bold');
+                        $cells->setAlignment('center');
+                        $cells->setValignment('middle');
+                    });
 
-                        $sheet->setBorder( 'A12:D12', 'thin' );
+                    $sheet->setBorder('A12:D12', 'thin');
                     //--- -------------------- ---
 
                     //--- Header Part ---
-                        $sheet->row( 2, array( 'Export Information' ) );
-                        $sheet->row( 3, array( 'Export By: '.$user_name ) );
-                        $sheet->row( 4, array( 'Date Export: '.$date_export ) );
-                        $sheet->row( 6, array( 'Data Information' ) );
-                        $sheet->row( 7, array( 'Search Type: Search By Taxonomy' ) );
-                        $sheet->row( 8, array( 'Source: '.$source_name ) );
-                        $sheet->row( 9, array( 'Taxonomy Type: '.$header_taxonomy ) );
-                        $sheet->row( 10, array( 'Taxonomy Name: '.$taxonomy ) );
+                    $sheet->row(2, array('Export Information'));
+                    $sheet->row(3, array('Export By: ' . $user_name));
+                    $sheet->row(4, array('Date Export: ' . $date_export));
+                    $sheet->row(6, array('Data Information'));
+                    $sheet->row(7, array('Search Type: Search By Taxonomy'));
+                    $sheet->row(8, array('Source: ' . $source_name));
+                    $sheet->row(9, array('Taxonomy Type: ' . $header_taxonomy));
+                    $sheet->row(10, array('Taxonomy Name: ' . $taxonomy));
                     //--- ----------- ---
 
                     //--- Header Table Part ---
-                        $sheet->row(12, array(
-                            'No.', 'IDCatalog / IDRef', 'Scientific Name', 'Taxonomy'
-                        ));
+                    $sheet->row(12, array(
+                        'No.', 'IDCatalog / IDRef', 'Scientific Name', 'Taxonomy'
+                    ));
                     //--- ----------------- ---
 
                     //--- Content Part ---
-                        // display data
-                        $row_number = 13;   // start line
-                        $count_line = 1;   // count line for No.
-                        if ( $source == 1 ) {
-                            foreach ( $results as $data ) {
-                                $sheet->row( $row_number, array(
-                                    $count_line, $data->related_catalog_item, html_entity_decode($data->current_scientific_name), $header_taxonomy.'-'.$taxonomy
-                                ));
+                    // display data
+                    $row_number = 13;   // start line
+                    $count_line = 1;   // count line for No.
+                    if ($source == 1) {
+                        foreach ($results as $data) {
+                            $sheet->row($row_number, array(
+                                $count_line, $data->related_catalog_item, html_entity_decode($data->current_scientific_name), $header_taxonomy . '-' . $taxonomy
+                            ));
 
-                                //--- Set Layout and Style ---
-                                    $sheet->setBorder('A'.$row_number.':D'.$row_number, 'thin');
-                                //--- -------------------- ---
+                            //--- Set Layout and Style ---
+                            $sheet->setBorder('A' . $row_number . ':D' . $row_number, 'thin');
+                            //--- -------------------- ---
 
-                                $row_number++; $count_line++;
-                            }
-                        } else {
-                            foreach ( $results as $data ) {
-                                $sheet->row( $row_number, array(
-                                    $count_line, $data->related_reference_item, html_entity_decode($data->current_scientific_name), $header_taxonomy.'-'.$taxonomy
-                                ));
-
-                                //--- Set Layout and Style ---
-                                    $sheet->setBorder('A'.$row_number.':D'.$row_number, 'thin');
-                                //--- -------------------- ---
-
-                                $row_number++; $count_line++;
-                            }
+                            $row_number++;
+                            $count_line++;
                         }
+                    } else {
+                        foreach ($results as $data) {
+                            $sheet->row($row_number, array(
+                                $count_line, $data->related_reference_item, html_entity_decode($data->current_scientific_name), $header_taxonomy . '-' . $taxonomy
+                            ));
+
+                            //--- Set Layout and Style ---
+                            $sheet->setBorder('A' . $row_number . ':D' . $row_number, 'thin');
+                            //--- -------------------- ---
+
+                            $row_number++;
+                            $count_line++;
+                        }
+                    }
                     //--- ------------ ---
                 } else {
                     $results = null;
                     $taxonomy = '-';
                 }
-            //--- ------------- ---
+                //--- ------------- ---
 
             });
         })->store('csv', Config::get('path.export_record_file_path'));
 
         // save export log : 0 is excel, 1 is pdf, 2 is api
-        ExportLog::saveExportLog( 0, $name_file );
+        ExportLog::saveExportLog(0, $name_file);
 
         // sent name_file for download
-        echo $name_file.'.csv';
-
+        echo $name_file . '.csv';
     }
 
     //Sorawit
     //Created : 25-7-59
     //Modified : -
     # Search By Keyword for export excel
-    public static function exportSearchByKeyword( $source, $keyword1, $keyword2, $keyword3 ) {
+    public static function exportSearchByKeyword($source, $keyword1, $keyword2, $keyword3)
+    {
         // created export date
         $date = date_create();
-        $date_export = date_format( $date, "d-m-Y H:i:s" );
-        $date_export_file_name = date_format( $date, "Y-m-d_H-i-s" );
+        $date_export = date_format($date, "d-m-Y H:i:s");
+        $date_export_file_name = date_format($date, "Y-m-d_H-i-s");
 
         // set source
-        if ( $source == 1 ) $source_name = 'Specimen';
+        if ($source == 1) $source_name = 'Specimen';
         else $source_name = 'Publication';
 
         //---- make file excel ----
-        $name_file = 'Excel_Record_Search_By_Keyword'.'_'.$source_name.'_'.$date_export_file_name;
-        Excel::create( $name_file, function( $excel ) use ( $source, $keyword1, $keyword2, $keyword3, $date_export ) {
-        $excel->sheet( 'Record Data', function( $sheet ) use ( $source, $keyword1, $keyword2, $keyword3, $date_export ) {
+        $name_file = 'Excel_Record_Search_By_Keyword' . '_' . $source_name . '_' . $date_export_file_name;
+        Excel::create($name_file, function ($excel) use ($source, $keyword1, $keyword2, $keyword3, $date_export) {
+            $excel->sheet('Record Data', function ($sheet) use ($source, $keyword1, $keyword2, $keyword3, $date_export) {
 
-            //--- Set Parameter ---
-                $user_name = Auth::user()->first_name.' '.Auth::user()->last_name.' ('.Auth::user()->telephone.') ('.Auth::user()->email.')';
+                //--- Set Parameter ---
+                $user_name = Auth::user()->first_name . ' ' . Auth::user()->last_name . ' (' . Auth::user()->telephone . ') (' . Auth::user()->email . ')';
 
                 // set $source
-                if( $source == 1 ) $source_name = 'Specimen';
+                if ($source == 1) $source_name = 'Specimen';
                 else $source_name = 'Publication';
 
                 // query db
-                if ( $keyword1 != null || $keyword2 != null || $keyword3 != null ) {
+                if ($keyword1 != null || $keyword2 != null || $keyword3 != null) {
                     $db = new Record;
-                    $db = $db->leftjoin('classification as c','record.classification_id', '=', 'c.id');
+                    $db = $db->leftjoin('classification as c', 'record.classification_id', '=', 'c.id');
                     $db = $db->where('record.status', 2)->where('record.approve_status', 1)->where('record.source', $source)->orderBy('record.id', 'asc')->groupBy('unique_record');
 
-                    if( $keyword1 !== "" ){
-                        $db = $db->where('record.note_collector','LIKE',"%$keyword1%");
-                        $db = $db->orWhere('record.description','LIKE',"%$keyword1%");
+                    if ($keyword1 !== "") {
+                        $db = $db->where('record.note_collector', 'LIKE', "%$keyword1%");
+                        $db = $db->orWhere('record.description', 'LIKE', "%$keyword1%");
                     }
 
-                    if( $keyword2 !== "" ){
-                        $db = $db->where('record.note_collector','LIKE',"%$keyword2%");
-                        $db = $db->orWhere('record.description','LIKE',"%$keyword2%");
+                    if ($keyword2 !== "") {
+                        $db = $db->where('record.note_collector', 'LIKE', "%$keyword2%");
+                        $db = $db->orWhere('record.description', 'LIKE', "%$keyword2%");
                     }
 
-                    if( $keyword3 !== "" ){
-                        $db = $db->where('record.note_collector','LIKE',"%$keyword3%");
-                        $db = $db->orWhere('record.description','LIKE',"%$keyword3%");
+                    if ($keyword3 !== "") {
+                        $db = $db->where('record.note_collector', 'LIKE', "%$keyword3%");
+                        $db = $db->orWhere('record.description', 'LIKE', "%$keyword3%");
                     }
 
                     $results = $db->select(
@@ -1229,131 +1253,133 @@ class ExportRecordController extends Controller
                     )->get();
 
                     //--- Set Layout and Style ---
-                        $sheet->mergeCells( 'A2:C2' );
-                        $sheet->mergeCells( 'A3:C3' );
-                        $sheet->mergeCells( 'A4:C4' );
-                        $sheet->mergeCells( 'A5:C5' );
-                        $sheet->mergeCells( 'A6:C6' );
-                        $sheet->mergeCells( 'A7:C7' );
-                        $sheet->mergeCells( 'A8:C8' );
-                        $sheet->mergeCells( 'A9:C9' );
-                        $sheet->mergeCells( 'A10:C10' );
-                        $sheet->mergeCells( 'A11:C11' );
-                        $sheet->mergeCells( 'A12:C12' );
+                    $sheet->mergeCells('A2:C2');
+                    $sheet->mergeCells('A3:C3');
+                    $sheet->mergeCells('A4:C4');
+                    $sheet->mergeCells('A5:C5');
+                    $sheet->mergeCells('A6:C6');
+                    $sheet->mergeCells('A7:C7');
+                    $sheet->mergeCells('A8:C8');
+                    $sheet->mergeCells('A9:C9');
+                    $sheet->mergeCells('A10:C10');
+                    $sheet->mergeCells('A11:C11');
+                    $sheet->mergeCells('A12:C12');
 
-                        $sheet->setHeight( 2, 30 );
-                        $sheet->setHeight( 6, 30 );
-                        $sheet->setHeight( 13, 30 );
+                    $sheet->setHeight(2, 30);
+                    $sheet->setHeight(6, 30);
+                    $sheet->setHeight(13, 30);
 
-                        $sheet->row( 2, function( $row ) {
-                        $row->setBackground( '#FE9529' );
-                        });
-                        $sheet->row( 6, function( $row ) {
+                    $sheet->row(2, function ($row) {
                         $row->setBackground('#FE9529');
-                        });
-                        $sheet->row( 13, function( $row ) {
-                        $row->setBackground( '#FE9529' );
-                        });
+                    });
+                    $sheet->row(6, function ($row) {
+                        $row->setBackground('#FE9529');
+                    });
+                    $sheet->row(13, function ($row) {
+                        $row->setBackground('#FE9529');
+                    });
 
-                        $sheet->cell( 'A2:C2', function( $cells ) {
-                        $cells->setFontSize( 20 );
-                        });
-                        $sheet->cell( 'A6:C6', function( $cells ) {
-                        $cells->setFontSize( 20 );
-                        });
-                        $sheet->cell( 'A12:C12', function( $cells ) {
-                        $cells->setFontSize( 16 );
-                        });
+                    $sheet->cell('A2:C2', function ($cells) {
+                        $cells->setFontSize(20);
+                    });
+                    $sheet->cell('A6:C6', function ($cells) {
+                        $cells->setFontSize(20);
+                    });
+                    $sheet->cell('A12:C12', function ($cells) {
+                        $cells->setFontSize(16);
+                    });
 
-                        $sheet->cells( 'A2:C2', function( $cells ) {
-                        $cells->setFontWeight( 'bold' );
-                        });
-                        $sheet->cells( 'A6:C6', function( $cells ) {
-                        $cells->setFontWeight( 'bold' );
-                        });
-                        $sheet->cells( 'A13:C13', function( $cells ) {
-                        $cells->setFontWeight( 'bold' );
-                        $cells->setAlignment( 'center' );
-                        $cells->setValignment( 'middle' );
-                        });
+                    $sheet->cells('A2:C2', function ($cells) {
+                        $cells->setFontWeight('bold');
+                    });
+                    $sheet->cells('A6:C6', function ($cells) {
+                        $cells->setFontWeight('bold');
+                    });
+                    $sheet->cells('A13:C13', function ($cells) {
+                        $cells->setFontWeight('bold');
+                        $cells->setAlignment('center');
+                        $cells->setValignment('middle');
+                    });
 
-                        $sheet->setBorder( 'A13:C13', 'thin' );
+                    $sheet->setBorder('A13:C13', 'thin');
                     //--- -------------------- ---
 
                     //--- Header Part ---
-                        $sheet->row( 2, array( 'Export Information' ) );
-                        $sheet->row( 3, array( 'Export By: '.$user_name ) );
-                        $sheet->row( 4, array( 'Date Export: '.$date_export ) );
-                        $sheet->row( 6, array( 'Data Information' ) );
-                        $sheet->row( 7, array( 'Search Type: Search By Keyword' ) );
-                        $sheet->row( 8, array( 'Source: '.$source_name ) );
-                        $sheet->row( 9, array( 'Keyword1: '.$keyword1 ) );
-                        $sheet->row( 10, array( 'Keyword2: '.$keyword2 ) );
-                        $sheet->row( 11, array( 'Keyword3: '.$keyword3 ) );
+                    $sheet->row(2, array('Export Information'));
+                    $sheet->row(3, array('Export By: ' . $user_name));
+                    $sheet->row(4, array('Date Export: ' . $date_export));
+                    $sheet->row(6, array('Data Information'));
+                    $sheet->row(7, array('Search Type: Search By Keyword'));
+                    $sheet->row(8, array('Source: ' . $source_name));
+                    $sheet->row(9, array('Keyword1: ' . $keyword1));
+                    $sheet->row(10, array('Keyword2: ' . $keyword2));
+                    $sheet->row(11, array('Keyword3: ' . $keyword3));
                     //--- ----------- ---
 
                     //--- Header Table Part ---
-                        $sheet->row(13, array(
-                            'No.', 'IDCatalog / IDRef', 'Scientific Name'
-                        ));
+                    $sheet->row(13, array(
+                        'No.', 'IDCatalog / IDRef', 'Scientific Name'
+                    ));
                     //--- ----------------- ---
 
                     //--- Content Part ---
-                        // display data
-                        $row_number = 14;   // start line
-                        $count_line = 1;   // count line for No.
-                        if ( $source == 1 ) {
-                            foreach ( $results as $data ) {
-                                $sheet->row( $row_number, array(
-                                    $count_line, $data->related_catalog_item, html_entity_decode($data->current_scientific_name)
-                                ));
+                    // display data
+                    $row_number = 14;   // start line
+                    $count_line = 1;   // count line for No.
+                    if ($source == 1) {
+                        foreach ($results as $data) {
+                            $sheet->row($row_number, array(
+                                $count_line, $data->related_catalog_item, html_entity_decode($data->current_scientific_name)
+                            ));
 
-                                //--- Set Layout and Style ---
-                                    $sheet->setBorder('A'.$row_number.':C'.$row_number, 'thin');
-                                //--- -------------------- ---
+                            //--- Set Layout and Style ---
+                            $sheet->setBorder('A' . $row_number . ':C' . $row_number, 'thin');
+                            //--- -------------------- ---
 
-                                $row_number++; $count_line++;
-                            }
-                        } else {
-                            foreach ( $results as $data ) {
-                                $sheet->row( $row_number, array(
-                                    $count_line, $data->related_reference_item, html_entity_decode($data->current_scientific_name)
-                                ));
-
-                                //--- Set Layout and Style ---
-                                    $sheet->setBorder('A'.$row_number.':C'.$row_number, 'thin');
-                                //--- -------------------- ---
-
-                                $row_number++; $count_line++;
-                            }
+                            $row_number++;
+                            $count_line++;
                         }
+                    } else {
+                        foreach ($results as $data) {
+                            $sheet->row($row_number, array(
+                                $count_line, $data->related_reference_item, html_entity_decode($data->current_scientific_name)
+                            ));
+
+                            //--- Set Layout and Style ---
+                            $sheet->setBorder('A' . $row_number . ':C' . $row_number, 'thin');
+                            //--- -------------------- ---
+
+                            $row_number++;
+                            $count_line++;
+                        }
+                    }
                     //--- ------------ ---
 
                 } else {
                     $results = null;
                 }
-            //--- ------------- ---
+                //--- ------------- ---
 
             });
         })->store('csv', Config::get('path.export_record_file_path'));
 
         // save export log : 0 is excel, 1 is pdf, 2 is api
-        ExportLog::saveExportLog( 0, $name_file );
+        ExportLog::saveExportLog(0, $name_file);
 
         // sent name_file for download
-        echo $name_file.'.csv';
-
+        echo $name_file . '.csv';
     }
 
     //Sorawit
     //Created : 13-7-59
     //Modified : 22-8-59(Sorawit)
     # Search Type A (and Distribution Search in type B) for export excel
-    public static function exportSearchTypeA( Request $input ) {
+    public static function exportSearchTypeA(Request $input)
+    {
         $way = $input->way;
 
         // get session and decode json
-        if ( Session::has('search_result_a') ) {
+        if (Session::has('search_result_a')) {
             $session_results = Session::get('search_result_a');
             $results = json_decode($session_results);
         } else {
@@ -1362,158 +1388,158 @@ class ExportRecordController extends Controller
 
         // created export date
         $date = date_create();
-        $date_export = date_format( $date, "d-m-Y H:i:s" );
-        $date_export_file_name = date_format( $date, "Y-m-d_H-i-s" );
+        $date_export = date_format($date, "d-m-Y H:i:s");
+        $date_export_file_name = date_format($date, "Y-m-d_H-i-s");
 
         //---- make file excel ----
-        $name_file = 'Excel_Record_'.$way.'_'.$date_export_file_name;
-        Excel::create( $name_file, function( $excel ) use ( $results, $way, $date_export ) {
-        $excel->sheet( 'Record Data', function( $sheet ) use ( $results, $way, $date_export ) {
+        $name_file = 'Excel_Record_' . $way . '_' . $date_export_file_name;
+        Excel::create($name_file, function ($excel) use ($results, $way, $date_export) {
+            $excel->sheet('Record Data', function ($sheet) use ($results, $way, $date_export) {
 
-            //--- Set Parameter ---
-                if( Auth::check() ) {
-                    $user_name = Auth::user()->first_name.' '.Auth::user()->last_name.' ('.Auth::user()->telephone.') ('.Auth::user()->email.')';
+                //--- Set Parameter ---
+                if (Auth::check()) {
+                    $user_name = Auth::user()->first_name . ' ' . Auth::user()->last_name . ' (' . Auth::user()->telephone . ') (' . Auth::user()->email . ')';
 
                     //--- Get Permission Group ---
-                        $role_id = Auth::user()->role_id;
-                        if ( $role_id == 2 ) {  // administrator
-                            $group_permission_a = 2;
-                            $group_permission_b = 2;
-                        } elseif ( $role_id == 6 ) {   // pgcp
-                            $group_permission_a = Group_Permission::getGroup_PermissionById(1)[0]->status_pgcp;
-                            $group_permission_b = Group_Permission::getGroup_PermissionById(2)[0]->status_pgcp;
-                        } elseif ( $role_id == 3 ) {   // manager
-                            $group_permission_a   = Group_Permission::getGroup_PermissionById(1)[0]->status_manager;
-                            $group_permission_b   = Group_Permission::getGroup_PermissionById(2)[0]->status_manager;
-                        } elseif ( $role_id == 4 ) {   // board
-                            $group_permission_a = Group_Permission::getGroup_PermissionById(1)[0]->status_board;
-                            $group_permission_b = Group_Permission::getGroup_PermissionById(2)[0]->status_board;
-                        } else {    // user
-                            $group_permission_a = Group_Permission::getGroup_PermissionById(1)[0]->status_user;
-                            $group_permission_b = Group_Permission::getGroup_PermissionById(2)[0]->status_user;
-                        }
+                    $role_id = Auth::user()->role_id;
+                    if ($role_id == 2) {  // administrator
+                        $group_permission_a = 2;
+                        $group_permission_b = 2;
+                    } elseif ($role_id == 6) {   // pgcp
+                        $group_permission_a = Group_Permission::getGroup_PermissionById(1)[0]->status_pgcp;
+                        $group_permission_b = Group_Permission::getGroup_PermissionById(2)[0]->status_pgcp;
+                    } elseif ($role_id == 3) {   // manager
+                        $group_permission_a   = Group_Permission::getGroup_PermissionById(1)[0]->status_manager;
+                        $group_permission_b   = Group_Permission::getGroup_PermissionById(2)[0]->status_manager;
+                    } elseif ($role_id == 4) {   // board
+                        $group_permission_a = Group_Permission::getGroup_PermissionById(1)[0]->status_board;
+                        $group_permission_b = Group_Permission::getGroup_PermissionById(2)[0]->status_board;
+                    } else {    // user
+                        $group_permission_a = Group_Permission::getGroup_PermissionById(1)[0]->status_user;
+                        $group_permission_b = Group_Permission::getGroup_PermissionById(2)[0]->status_user;
+                    }
                     //--- --- ---------- ----- ---
                 } else {
                     $user_name = "Unknown";
                     $group_permission_a = Group_Permission::getGroup_PermissionById(1)[0]->status_user;
                     $group_permission_b = Group_Permission::getGroup_PermissionById(2)[0]->status_user;
                 }
-            //--- ------------- ---
+                //--- ------------- ---
 
-            # For Diversity Search
-            if ( $way == 'Diversity_Search' ) {
-                //--- Set Layout and Style ---
-                    $sheet->mergeCells( 'A2:K2' );
-                    $sheet->mergeCells( 'A3:K3' );
-                    $sheet->mergeCells( 'A4:K4' );
-                    $sheet->mergeCells( 'A5:K5' );
-                    $sheet->mergeCells( 'A6:K6' );
-                    $sheet->mergeCells( 'A7:K7' );
-                    $sheet->mergeCells( 'A8:K8' );
-                    $sheet->mergeCells( 'A9:K9' );
-                    $sheet->mergeCells( 'A10:K10' );
-                    $sheet->mergeCells( 'A11:K11' );
+                # For Diversity Search
+                if ($way == 'Diversity_Search') {
+                    //--- Set Layout and Style ---
+                    $sheet->mergeCells('A2:K2');
+                    $sheet->mergeCells('A3:K3');
+                    $sheet->mergeCells('A4:K4');
+                    $sheet->mergeCells('A5:K5');
+                    $sheet->mergeCells('A6:K6');
+                    $sheet->mergeCells('A7:K7');
+                    $sheet->mergeCells('A8:K8');
+                    $sheet->mergeCells('A9:K9');
+                    $sheet->mergeCells('A10:K10');
+                    $sheet->mergeCells('A11:K11');
 
-                    $sheet->setHeight( 2, 30 );
-                    $sheet->setHeight( 6, 30 );
-                    $sheet->setHeight( 12, 30 );
+                    $sheet->setHeight(2, 30);
+                    $sheet->setHeight(6, 30);
+                    $sheet->setHeight(12, 30);
 
-                    $sheet->row( 2, function( $row ) {
-                    $row->setBackground( '#FE9529' );
+                    $sheet->row(2, function ($row) {
+                        $row->setBackground('#FE9529');
                     });
-                    $sheet->row( 6, function( $row ) {
-                    $row->setBackground('#FE9529');
+                    $sheet->row(6, function ($row) {
+                        $row->setBackground('#FE9529');
                     });
-                    $sheet->row( 12, function( $row ) {
-                    $row->setBackground( '#FE9529' );
-                    });
-
-                    $sheet->cell( 'A2:K2', function( $cells ) {
-                    $cells->setFontSize( 20 );
-                    });
-                    $sheet->cell( 'A6:K6', function( $cells ) {
-                    $cells->setFontSize( 20 );
-                    });
-                    $sheet->cell( 'A12:K12', function( $cells ) {
-                    $cells->setFontSize( 16 );
+                    $sheet->row(12, function ($row) {
+                        $row->setBackground('#FE9529');
                     });
 
-                    $sheet->cells( 'A2:K2', function( $cells ) {
-                    $cells->setFontWeight( 'bold' );
+                    $sheet->cell('A2:K2', function ($cells) {
+                        $cells->setFontSize(20);
                     });
-                    $sheet->cells( 'A6:K6', function( $cells ) {
-                    $cells->setFontWeight( 'bold' );
+                    $sheet->cell('A6:K6', function ($cells) {
+                        $cells->setFontSize(20);
                     });
-                    $sheet->cells( 'A12:K12', function( $cells ) {
-                    $cells->setFontWeight( 'bold' );
-                    $cells->setAlignment( 'center' );
-                    $cells->setValignment( 'middle' );
+                    $sheet->cell('A12:K12', function ($cells) {
+                        $cells->setFontSize(16);
                     });
 
-                    $sheet->setBorder( 'A12:K12', 'thin' );
-                //--- -------------------- ---
+                    $sheet->cells('A2:K2', function ($cells) {
+                        $cells->setFontWeight('bold');
+                    });
+                    $sheet->cells('A6:K6', function ($cells) {
+                        $cells->setFontWeight('bold');
+                    });
+                    $sheet->cells('A12:K12', function ($cells) {
+                        $cells->setFontWeight('bold');
+                        $cells->setAlignment('center');
+                        $cells->setValignment('middle');
+                    });
 
-                //--- Header Part ---
-                    if ( $results == null ) {
+                    $sheet->setBorder('A12:K12', 'thin');
+                    //--- -------------------- ---
+
+                    //--- Header Part ---
+                    if ($results == null) {
                         $results->taxa = '-';
                         $$results->locality = '-';
                         $results->expedition = '-';
                     }
-                    $sheet->row( 2, array( 'Export Information' ) );
-                    $sheet->row( 3, array( 'Export By: '.$user_name ) );
-                    $sheet->row( 4, array( 'Date Export: '.$date_export ) );
-                    $sheet->row( 6, array( 'Data Information' ) );
-                    $sheet->row( 7, array( 'Search Type: '.$way ) );
-                    $sheet->row( 8, array( 'Taxonomy: '.$results->taxa ) );
-                    $sheet->row( 9, array( 'Locality: '.$results->locality ) );
-                    $sheet->row( 10, array( 'Expedition: '.$results->expedition ) );
-                //--- ----------- ---
+                    $sheet->row(2, array('Export Information'));
+                    $sheet->row(3, array('Export By: ' . $user_name));
+                    $sheet->row(4, array('Date Export: ' . $date_export));
+                    $sheet->row(6, array('Data Information'));
+                    $sheet->row(7, array('Search Type: ' . $way));
+                    $sheet->row(8, array('Taxonomy: ' . $results->taxa));
+                    $sheet->row(9, array('Locality: ' . $results->locality));
+                    $sheet->row(10, array('Expedition: ' . $results->expedition));
+                    //--- ----------- ---
 
-                //--- Header Table Part ---
+                    //--- Header Table Part ---
                     $arr_header = array();
-                    if ( $group_permission_a == 2 && $group_permission_b == 2 ) {
+                    if ($group_permission_a == 2 && $group_permission_b == 2) {
                         $arr_header = ['No.', 'Phylum', 'Subphylum', 'Class (Clade)', 'Order (Clade)', 'Suborder (Clade)', 'Infraorder (Clade)', 'Family (Clade)', 'Current Name', 'Ocean/Sea/Lake', 'Country', 'Province', 'Expendition'];
-                    } elseif ( $group_permission_a == 2 && $group_permission_b == 1 ) {
+                    } elseif ($group_permission_a == 2 && $group_permission_b == 1) {
                         $arr_header = ['No.', 'Phylum', 'Subphylum', 'Class (Clade)', 'Order (Clade)', 'Suborder (Clade)', 'Infraorder (Clade)', 'Family (Clade)', 'Current Name', 'Expendition'];
-                    } elseif ( $group_permission_a == 1 && $group_permission_b == 2 ) {
+                    } elseif ($group_permission_a == 1 && $group_permission_b == 2) {
                         $arr_header = ['No.', 'Current Name', 'Ocean/Sea/Lake', 'Country', 'Province', 'Expendition'];
                     } else {
                         $arr_header = ['No.', 'Current Name', 'Expendition'];
                     }
                     $sheet->row(12, $arr_header);
-                //--- ----------------- ---
+                    //--- ----------------- ---
 
-                //--- Content Part ---
+                    //--- Content Part ---
                     // display data
                     $row_number = 13;   // start line
                     $count_line = 1;   // count line for No.
-                    if ( $results != null ) {
-                        foreach ( $results->result_searchs as $data ) {
+                    if ($results != null) {
+                        foreach ($results->result_searchs as $data) {
                             // check expedition_en
-                            if( $data->expedition_en == null && $data->expedition_th == null ) {
+                            if ($data->expedition_en == null && $data->expedition_th == null) {
                                 $expedition = '';
                             } else {
-                                $expedition = $data->expedition_en.'/'.$data->expedition_th;
+                                $expedition = $data->expedition_en . '/' . $data->expedition_th;
                             }
 
                             // make array content
                             $arr_content = array();
-                            if ( $group_permission_a == 2 && $group_permission_b == 2 ) {
+                            if ($group_permission_a == 2 && $group_permission_b == 2) {
                                 $arr_content = [
                                     $count_line, $data->phylum, $data->subphylum, $data->class,
                                     $data->order_o, $data->suborder, $data->infraorder, $data->family,
-                                    html_entity_decode($data->current_scientific_name), $data->ocean_sea_lake_en.'/'.$data->ocean_sea_lake_th, $data->country_en.'/'.$data->country_th, $data->province_en.'/'.$data->province_th,
+                                    html_entity_decode($data->current_scientific_name), $data->ocean_sea_lake_en . '/' . $data->ocean_sea_lake_th, $data->country_en . '/' . $data->country_th, $data->province_en . '/' . $data->province_th,
                                     $expedition
                                 ];
-                            } elseif ( $group_permission_a == 2 && $group_permission_b == 1 ) {
+                            } elseif ($group_permission_a == 2 && $group_permission_b == 1) {
                                 $arr_content = [
                                     $count_line, $data->phylum, $data->subphylum, $data->class,
                                     $data->order_o, $data->suborder, $data->infraorder, $data->family,
                                     html_entity_decode($data->current_scientific_name), $expedition
                                 ];
-                            } elseif ( $group_permission_a == 1 && $group_permission_b == 2 ) {
+                            } elseif ($group_permission_a == 1 && $group_permission_b == 2) {
                                 $arr_content = [
-                                    $count_line, html_entity_decode($data->current_scientific_name), $data->ocean_sea_lake_en.'/'.$data->ocean_sea_lake_th, $data->country_en.'/'.$data->country_th, $data->province_en.'/'.$data->province_th, $expedition
+                                    $count_line, html_entity_decode($data->current_scientific_name), $data->ocean_sea_lake_en . '/' . $data->ocean_sea_lake_th, $data->country_en . '/' . $data->country_th, $data->province_en . '/' . $data->province_th, $expedition
                                 ];
                             } else {
                                 $arr_content = [
@@ -1522,294 +1548,782 @@ class ExportRecordController extends Controller
                             }
 
                             // write in file
-                            $sheet->row( $row_number, $arr_content );
+                            $sheet->row($row_number, $arr_content);
 
                             //--- Set Layout and Style ---
-                                $sheet->setBorder('A'.$row_number.':K'.$row_number, 'thin');
+                            $sheet->setBorder('A' . $row_number . ':K' . $row_number, 'thin');
                             //--- -------------------- ---
 
-                            $row_number++; $count_line++;
+                            $row_number++;
+                            $count_line++;
                         }
                     }
-                //--- ------------ ---
-            }
+                    //--- ------------ ---
+                }
 
-            # Recent Record
-            elseif ( $way == 'Recent_Record' ) {
-                //--- Set Layout and Style ---
-                    $sheet->mergeCells( 'A2:M2' );
-                    $sheet->mergeCells( 'A3:M3' );
-                    $sheet->mergeCells( 'A4:M4' );
-                    $sheet->mergeCells( 'A5:M5' );
-                    $sheet->mergeCells( 'A6:M6' );
-                    $sheet->mergeCells( 'A7:M7' );
-                    $sheet->mergeCells( 'A8:M8' );
-                    $sheet->mergeCells( 'A9:M9' );
-                    $sheet->mergeCells( 'A10:M10' );
-                    $sheet->mergeCells( 'A11:M11' );
+                # Recent Record
+                elseif ($way == 'Recent_Record') {
+                    //--- Set Layout and Style ---
+                    $sheet->mergeCells('A2:M2');
+                    $sheet->mergeCells('A3:M3');
+                    $sheet->mergeCells('A4:M4');
+                    $sheet->mergeCells('A5:M5');
+                    $sheet->mergeCells('A6:M6');
+                    $sheet->mergeCells('A7:M7');
+                    $sheet->mergeCells('A8:M8');
+                    $sheet->mergeCells('A9:M9');
+                    $sheet->mergeCells('A10:M10');
+                    $sheet->mergeCells('A11:M11');
 
-                    $sheet->setHeight( 2, 30 );
-                    $sheet->setHeight( 6, 30 );
-                    $sheet->setHeight( 12, 30 );
+                    $sheet->setHeight(2, 30);
+                    $sheet->setHeight(6, 30);
+                    $sheet->setHeight(12, 30);
 
-                    $sheet->row( 2, function( $row ) {
-                    $row->setBackground( '#FE9529' );
+                    $sheet->row(2, function ($row) {
+                        $row->setBackground('#FE9529');
                     });
-                    $sheet->row( 6, function( $row ) {
-                    $row->setBackground('#FE9529');
+                    $sheet->row(6, function ($row) {
+                        $row->setBackground('#FE9529');
                     });
-                    $sheet->row( 12, function( $row ) {
-                    $row->setBackground( '#FE9529' );
-                    });
-
-                    $sheet->cell( 'A2:M2', function( $cells ) {
-                    $cells->setFontSize( 20 );
-                    });
-                    $sheet->cell( 'A6:M6', function( $cells ) {
-                    $cells->setFontSize( 20 );
-                    });
-                    $sheet->cell( 'A12:M12', function( $cells ) {
-                    $cells->setFontSize( 16 );
+                    $sheet->row(12, function ($row) {
+                        $row->setBackground('#FE9529');
                     });
 
-                    $sheet->cells( 'A2:M2', function( $cells ) {
-                    $cells->setFontWeight( 'bold' );
+                    $sheet->cell('A2:M2', function ($cells) {
+                        $cells->setFontSize(20);
                     });
-                    $sheet->cells( 'A6:M6', function( $cells ) {
-                    $cells->setFontWeight( 'bold' );
+                    $sheet->cell('A6:M6', function ($cells) {
+                        $cells->setFontSize(20);
                     });
-                    $sheet->cells( 'A12:M12', function( $cells ) {
-                    $cells->setFontWeight( 'bold' );
-                    $cells->setAlignment( 'center' );
-                    $cells->setValignment( 'middle' );
+                    $sheet->cell('A12:M12', function ($cells) {
+                        $cells->setFontSize(16);
                     });
 
-                    $sheet->setBorder( 'A12:M12', 'thin' );
-                //--- -------------------- ---
+                    $sheet->cells('A2:M2', function ($cells) {
+                        $cells->setFontWeight('bold');
+                    });
+                    $sheet->cells('A6:M6', function ($cells) {
+                        $cells->setFontWeight('bold');
+                    });
+                    $sheet->cells('A12:M12', function ($cells) {
+                        $cells->setFontWeight('bold');
+                        $cells->setAlignment('center');
+                        $cells->setValignment('middle');
+                    });
 
-                //--- Header Part ---
-                    if ( $results == null ) {
+                    $sheet->setBorder('A12:M12', 'thin');
+                    //--- -------------------- ---
+
+                    //--- Header Part ---
+                    if ($results == null) {
                         $results->taxa = '-';
                         $$results->locality = '-';
                         $results->expedition = '-';
                     }
-                    $sheet->row( 2, array( 'Export Information' ) );
-                    $sheet->row( 3, array( 'Export By: '.$user_name ) );
-                    $sheet->row( 4, array( 'Date Export: '.$date_export ) );
-                    $sheet->row( 6, array( 'Data Information' ) );
-                    $sheet->row( 7, array( 'Search Type: '.$way ) );
-                    $sheet->row( 8, array( 'Taxonomy: '.$results->taxa ) );
-                    $sheet->row( 9, array( 'Locality: '.$results->locality ) );
-                    $sheet->row( 10, array( 'Expedition: '.$results->expedition ) );
-                //--- ----------- ---
+                    $sheet->row(2, array('Export Information'));
+                    $sheet->row(3, array('Export By: ' . $user_name));
+                    $sheet->row(4, array('Date Export: ' . $date_export));
+                    $sheet->row(6, array('Data Information'));
+                    $sheet->row(7, array('Search Type: ' . $way));
+                    $sheet->row(8, array('Taxonomy: ' . $results->taxa));
+                    $sheet->row(9, array('Locality: ' . $results->locality));
+                    $sheet->row(10, array('Expedition: ' . $results->expedition));
+                    //--- ----------- ---
 
-                //--- Header Table Part ---
+                    //--- Header Table Part ---
                     $arr_header = array();
-                    if ( $group_permission_a == 2 && $group_permission_b == 2 ) {
+                    if ($group_permission_a == 2 && $group_permission_b == 2) {
                         $arr_header = ['ID', 'Phylum', 'Subphylum', 'Class (Clade)', 'Order (Clade)', 'Suborder (Clade)', 'Infraorder (Clade)', 'Family (Clade)', 'Current Name', 'Previous Name', 'Type', 'Current Indentifier', 'Province', 'Picture'];
-                    } elseif ( $group_permission_a == 2 && $group_permission_b == 1 ) {
+                    } elseif ($group_permission_a == 2 && $group_permission_b == 1) {
                         $arr_header = ['ID', 'Phylum', 'Subphylum', 'Class (Clade)', 'Order (Clade)', 'Suborder (Clade)', 'Infraorder (Clade)', 'Family (Clade)', 'Current Name', 'Previous Name', 'Type', 'Current Indentifier', 'Picture'];
-                    } elseif ( $group_permission_a == 1 && $group_permission_b == 2 ) {
+                    } elseif ($group_permission_a == 1 && $group_permission_b == 2) {
                         $arr_header = ['ID', 'Current Name', 'Previous Name', 'Type', 'Current Indentifier', 'Province', 'Picture'];
                     } else {
                         $arr_header = ['ID', 'Current Name', 'Previous Name', 'Type', 'Current Indentifier', 'Picture'];
                     }
                     $sheet->row(12, $arr_header);
-                //--- ----------------- ---
+                    //--- ----------------- ---
 
-                //--- Content Part ---
+                    //--- Content Part ---
                     // display data
                     $row_number = 13;   // start line
-                    if ( $results != null ) {
-                        foreach ( $results->result_searchs as $data ) {
+                    if ($results != null) {
+                        foreach ($results->result_searchs as $data) {
 
                             // make array content and check permission
                             $arr_content = array();
-                            if ( $group_permission_a == 2 && $group_permission_b == 2 ) {
+                            if ($group_permission_a == 2 && $group_permission_b == 2) {
                                 $arr_content = [
-                                    $data->related_catalog_item.''.$data->related_reference_item, $data->phylum, $data->subphylum, $data->class,
+                                    $data->related_catalog_item . '' . $data->related_reference_item, $data->phylum, $data->subphylum, $data->class,
                                     $data->order_o, $data->suborder, $data->infraorder, $data->family,
                                     html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->identifier,
-                                    $data->province_en.'/'.$data->province_th
+                                    $data->province_en . '/' . $data->province_th
                                 ];
-                            } elseif ( $group_permission_a == 2 && $group_permission_b == 1 ) {
+                            } elseif ($group_permission_a == 2 && $group_permission_b == 1) {
                                 $arr_content = [
-                                    $data->related_catalog_item.''.$data->related_reference_item, $data->phylum, $data->subphylum, $data->class,
+                                    $data->related_catalog_item . '' . $data->related_reference_item, $data->phylum, $data->subphylum, $data->class,
                                     $data->order_o, $data->suborder, $data->infraorder, $data->family,
                                     html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->identifier,
                                 ];
-                            } elseif ( $group_permission_a == 1 && $group_permission_b == 2 ) {
+                            } elseif ($group_permission_a == 1 && $group_permission_b == 2) {
                                 $arr_content = [
-                                    $data->related_catalog_item.''.$data->related_reference_item,
+                                    $data->related_catalog_item . '' . $data->related_reference_item,
                                     html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->identifier,
-                                    $data->province_en.'/'.$data->province_th
+                                    $data->province_en . '/' . $data->province_th
                                 ];
                             } else {
                                 $arr_content = [
-                                    $data->related_catalog_item.''.$data->related_reference_item,
+                                    $data->related_catalog_item . '' . $data->related_reference_item,
                                     html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->identifier
                                 ];
                             }
 
                             // write in file
-                            $sheet->row( $row_number, $arr_content );
+                            $sheet->row($row_number, $arr_content);
 
                             //--- Set Layout and Style ---
-                                $sheet->setBorder('A'.$row_number.':M'.$row_number, 'thin');
+                            $sheet->setBorder('A' . $row_number . ':M' . $row_number, 'thin');
                             //--- -------------------- ---
 
                             $row_number++;
                         }
                     }
-                //--- ------------ ---
-            }
+                    //--- ------------ ---
+                }
 
-            # Distribution Search
-            elseif ( $way == 'Distribution_Search' ) {
-                //--- Set Layout and Style ---
-                    $sheet->mergeCells( 'A2:M2' );
-                    $sheet->mergeCells( 'A3:M3' );
-                    $sheet->mergeCells( 'A4:M4' );
-                    $sheet->mergeCells( 'A5:M5' );
-                    $sheet->mergeCells( 'A6:M6' );
-                    $sheet->mergeCells( 'A7:M7' );
-                    $sheet->mergeCells( 'A8:M8' );
-                    $sheet->mergeCells( 'A9:M9' );
-                    $sheet->mergeCells( 'A10:M10' );
-                    $sheet->mergeCells( 'A11:M11' );
+                # Distribution Search
+                elseif ($way == 'Distribution_Search') {
+                    //--- Set Layout and Style ---
+                    $sheet->mergeCells('A2:M2');
+                    $sheet->mergeCells('A3:M3');
+                    $sheet->mergeCells('A4:M4');
+                    $sheet->mergeCells('A5:M5');
+                    $sheet->mergeCells('A6:M6');
+                    $sheet->mergeCells('A7:M7');
+                    $sheet->mergeCells('A8:M8');
+                    $sheet->mergeCells('A9:M9');
+                    $sheet->mergeCells('A10:M10');
+                    $sheet->mergeCells('A11:M11');
 
-                    $sheet->setHeight( 2, 30 );
-                    $sheet->setHeight( 6, 30 );
-                    $sheet->setHeight( 12, 30 );
+                    $sheet->setHeight(2, 30);
+                    $sheet->setHeight(6, 30);
+                    $sheet->setHeight(12, 30);
 
-                    $sheet->row( 2, function( $row ) {
-                    $row->setBackground( '#FE9529' );
+                    $sheet->row(2, function ($row) {
+                        $row->setBackground('#FE9529');
                     });
-                    $sheet->row( 6, function( $row ) {
-                    $row->setBackground('#FE9529');
+                    $sheet->row(6, function ($row) {
+                        $row->setBackground('#FE9529');
                     });
-                    $sheet->row( 12, function( $row ) {
-                    $row->setBackground( '#FE9529' );
-                    });
-
-                    $sheet->cell( 'A2:M2', function( $cells ) {
-                    $cells->setFontSize( 20 );
-                    });
-                    $sheet->cell( 'A6:M6', function( $cells ) {
-                    $cells->setFontSize( 20 );
-                    });
-                    $sheet->cell( 'A12:M12', function( $cells ) {
-                    $cells->setFontSize( 16 );
+                    $sheet->row(12, function ($row) {
+                        $row->setBackground('#FE9529');
                     });
 
-                    $sheet->cells( 'A2:M2', function( $cells ) {
-                    $cells->setFontWeight( 'bold' );
+                    $sheet->cell('A2:M2', function ($cells) {
+                        $cells->setFontSize(20);
                     });
-                    $sheet->cells( 'A6:M6', function( $cells ) {
-                    $cells->setFontWeight( 'bold' );
+                    $sheet->cell('A6:M6', function ($cells) {
+                        $cells->setFontSize(20);
                     });
-                    $sheet->cells( 'A12:M12', function( $cells ) {
-                    $cells->setFontWeight( 'bold' );
-                    $cells->setAlignment( 'center' );
-                    $cells->setValignment( 'middle' );
+                    $sheet->cell('A12:M12', function ($cells) {
+                        $cells->setFontSize(16);
                     });
 
-                    $sheet->setBorder( 'A12:M12', 'thin' );
-                //--- -------------------- ---
+                    $sheet->cells('A2:M2', function ($cells) {
+                        $cells->setFontWeight('bold');
+                    });
+                    $sheet->cells('A6:M6', function ($cells) {
+                        $cells->setFontWeight('bold');
+                    });
+                    $sheet->cells('A12:M12', function ($cells) {
+                        $cells->setFontWeight('bold');
+                        $cells->setAlignment('center');
+                        $cells->setValignment('middle');
+                    });
 
-                //--- Header Part ---
-                    if ( $results == null ) {
+                    $sheet->setBorder('A12:M12', 'thin');
+                    //--- -------------------- ---
+
+                    //--- Header Part ---
+                    if ($results == null) {
                         $results->taxa = '-';
                         $$results->locality = '-';
                         $results->expedition = '-';
                     }
-                    $sheet->row( 2, array( 'Export Information' ) );
-                    $sheet->row( 3, array( 'Export By: '.$user_name ) );
-                    $sheet->row( 4, array( 'Date Export: '.$date_export ) );
-                    $sheet->row( 6, array( 'Data Information' ) );
-                    $sheet->row( 7, array( 'Search Type: '.$way ) );
-                    $sheet->row( 8, array( 'Taxonomy: '.$results->taxa ) );
-                    $sheet->row( 9, array( 'Locality: '.$results->locality ) );
-                    $sheet->row( 10, array( 'Expedition: '.$results->expedition ) );
-                //--- ----------- ---
+                    $sheet->row(2, array('Export Information'));
+                    $sheet->row(3, array('Export By: ' . $user_name));
+                    $sheet->row(4, array('Date Export: ' . $date_export));
+                    $sheet->row(6, array('Data Information'));
+                    $sheet->row(7, array('Search Type: ' . $way));
+                    $sheet->row(8, array('Taxonomy: ' . $results->taxa));
+                    $sheet->row(9, array('Locality: ' . $results->locality));
+                    $sheet->row(10, array('Expedition: ' . $results->expedition));
+                    //--- ----------- ---
 
-                //--- Header Table Part ---
+                    //--- Header Table Part ---
                     $arr_header = array();
-                    if ( $group_permission_a == 2 && $group_permission_b == 2 ) {
+                    if ($group_permission_a == 2 && $group_permission_b == 2) {
                         $arr_header = ['ID', 'Phylum', 'Subphylum', 'Class (Clade)', 'Order (Clade)', 'Suborder (Clade)', 'Infraorder (Clade)', 'Family (Clade)', 'Current Name', 'Previous Name', 'Type', 'Habitat', 'Current Indentifier', 'Locality'];
-                    } elseif ( $group_permission_a == 2 && $group_permission_b == 1 ) {
+                    } elseif ($group_permission_a == 2 && $group_permission_b == 1) {
                         $arr_header = ['ID', 'Phylum', 'Subphylum', 'Class (Clade)', 'Order (Clade)', 'Suborder (Clade)', 'Infraorder (Clade)', 'Family (Clade)', 'Current Name', 'Previous Name', 'Type', 'Habitat', 'Current Indentifier'];
-                    } elseif ( $group_permission_a == 1 && $group_permission_b == 2 ) {
+                    } elseif ($group_permission_a == 1 && $group_permission_b == 2) {
                         $arr_header = ['ID', 'Current Name', 'Previous Name', 'Type', 'Habitat', 'Current Indentifier', 'Locality'];
                     } else {
                         $arr_header = ['ID', 'Current Name', 'Previous Name', 'Type', 'Habitat', 'Current Indentifier'];
                     }
                     $sheet->row(12, $arr_header);
-                //--- ----------------- ---
+                    //--- ----------------- ---
 
-                //--- Content Part ---
+                    //--- Content Part ---
                     // display data
                     $row_number = 13;   // start line
-                    if ( $results != null ) {
-                        foreach ( $results->result_searchs as $data ) {
+                    if ($results != null) {
+                        foreach ($results->result_searchs as $data) {
 
                             // make array content and check permission
                             $arr_content = array();
-                            if ( $group_permission_a == 2 && $group_permission_b == 2 ) {
+                            if ($group_permission_a == 2 && $group_permission_b == 2) {
                                 $arr_content = [
-                                    $data->related_catalog_item.''.$data->related_reference_item, $data->phylum, $data->subphylum, $data->class,
+                                    $data->related_catalog_item . '' . $data->related_reference_item, $data->phylum, $data->subphylum, $data->class,
                                     $data->order_o, $data->suborder, $data->infraorder, $data->family,
                                     html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->habitat_en, $data->identifier,
                                     $data->locality
                                 ];
-                            } elseif ( $group_permission_a == 2 && $group_permission_b == 1 ) {
+                            } elseif ($group_permission_a == 2 && $group_permission_b == 1) {
                                 $arr_content = [
-                                    $data->related_catalog_item.''.$data->related_reference_item, $data->phylum, $data->subphylum, $data->class,
+                                    $data->related_catalog_item . '' . $data->related_reference_item, $data->phylum, $data->subphylum, $data->class,
                                     $data->order_o, $data->suborder, $data->infraorder, $data->family,
                                     html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->habitat_en, $data->identifier,
                                 ];
-                            } elseif ( $group_permission_a == 1 && $group_permission_b == 2 ) {
+                            } elseif ($group_permission_a == 1 && $group_permission_b == 2) {
                                 $arr_content = [
-                                    $data->related_catalog_item.''.$data->related_reference_item,
+                                    $data->related_catalog_item . '' . $data->related_reference_item,
                                     html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->habitat_en, $data->identifier,
                                     $data->locality
                                 ];
                             } else {
                                 $arr_content = [
-                                    $data->related_catalog_item.''.$data->related_reference_item,
+                                    $data->related_catalog_item . '' . $data->related_reference_item,
                                     html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->habitat_en, $data->identifier
                                 ];
                             }
 
                             // write in file
-                            $sheet->row( $row_number, $arr_content );
+                            $sheet->row($row_number, $arr_content);
 
                             //--- Set Layout and Style ---
-                                $sheet->setBorder('A'.$row_number.':M'.$row_number, 'thin');
+                            $sheet->setBorder('A' . $row_number . ':M' . $row_number, 'thin');
                             //--- -------------------- ---
 
                             $row_number++;
                         }
                     }
-                //--- ------------ ---
-            }
-
+                    //--- ------------ ---
+                }
             });
         })->store('csv', Config::get('path.export_record_file_path'));
 
         // save export log : 0 is excel, 1 is pdf, 2 is api
-        ExportLog::saveExportLog( 0, $name_file );
+        ExportLog::saveExportLog(0, $name_file);
 
         // sent name_file for download
-        echo $name_file.'.csv';
+        echo $name_file . '.csv';
+    }
 
+
+    //supakorn
+    //Created : 15-7-63
+    # Distribution Search in type A 
+    # also use in Diversity + Recent record
+    public static function exportTypeADistributionSearch(Request $input)
+    {
+        $way = $input->way;
+        $results = (object) SearchTypeAController::dataDistribution($input);
+        //export data require array
+        $results->result_searchs = $results->result_searchs->get();
+        ExportRecordController::printDistribution($results, $way);
+    }
+
+    //supakorn
+    //Created : 15-7-63
+    # Distribution Search in type B
+    public static function exportTypeBDistributionSearch(Request $input)
+    {
+        $way = $input->way;
+        $results = (object) SearchTypeBController::dataDistribution($input);
+        //export data require array
+        $results->result_searchs = $results->result_searchs->get();
+        ExportRecordController::printDistribution($results, $way);
+    }
+
+
+    //supakorn
+    //Created : 15-7-63
+    # Distribution Search in type C 
+    # also use in Diversity + Recent record
+    public static function exportDistributionSearch(Request $input)
+    {
+        $way = $input->way;
+        $results = (object) SearchTypeCController::dataDistribution($input);
+        //export data require array
+        $results->result_searchs = $results->result_searchs->get();
+        ExportRecordController::printDistribution($results, $way);
+    }
+
+    //supakorn
+    //Created : 15-7-63
+    # printing method copy from exportSearchTypeA because session full problem
+    public static function printDistribution($results, $way)
+    {
+        // created export date
+        $date = date_create();
+        $date_export = date_format($date, "d-m-Y H:i:s");
+        $date_export_file_name = date_format($date, "Y-m-d_H-i-s");
+
+        //---- make file excel ----
+        $name_file = 'Excel_Record_' . $way . '_' . $date_export_file_name;
+        Excel::create($name_file, function ($excel) use ($results, $way, $date_export) {
+            $excel->sheet('Record Data', function ($sheet) use ($results, $way, $date_export) {
+
+                //--- Set Parameter ---
+                if (Auth::check()) {
+                    $user_name = Auth::user()->first_name . ' ' . Auth::user()->last_name . ' (' . Auth::user()->telephone . ') (' . Auth::user()->email . ')';
+
+                    //--- Get Permission Group ---
+                    $role_id = Auth::user()->role_id;
+                    if ($role_id == 2) {  // administrator
+                        $group_permission_a = 2;
+                        $group_permission_b = 2;
+                    } elseif ($role_id == 6) {   // pgcp
+                        $group_permission_a = Group_Permission::getGroup_PermissionById(1)[0]->status_pgcp;
+                        $group_permission_b = Group_Permission::getGroup_PermissionById(2)[0]->status_pgcp;
+                    } elseif ($role_id == 3) {   // manager
+                        $group_permission_a   = Group_Permission::getGroup_PermissionById(1)[0]->status_manager;
+                        $group_permission_b   = Group_Permission::getGroup_PermissionById(2)[0]->status_manager;
+                    } elseif ($role_id == 4) {   // board
+                        $group_permission_a = Group_Permission::getGroup_PermissionById(1)[0]->status_board;
+                        $group_permission_b = Group_Permission::getGroup_PermissionById(2)[0]->status_board;
+                    } else {    // user
+                        $group_permission_a = Group_Permission::getGroup_PermissionById(1)[0]->status_user;
+                        $group_permission_b = Group_Permission::getGroup_PermissionById(2)[0]->status_user;
+                    }
+                    //--- --- ---------- ----- ---
+                } else {
+                    $user_name = "Unknown";
+                    $group_permission_a = Group_Permission::getGroup_PermissionById(1)[0]->status_user;
+                    $group_permission_b = Group_Permission::getGroup_PermissionById(2)[0]->status_user;
+                }
+                //--- ------------- ---
+
+                # For Diversity Search
+                if ($way == 'Diversity_Search') {
+                    //--- Set Layout and Style ---
+                    $sheet->mergeCells('A2:K2');
+                    $sheet->mergeCells('A3:K3');
+                    $sheet->mergeCells('A4:K4');
+                    $sheet->mergeCells('A5:K5');
+                    $sheet->mergeCells('A6:K6');
+                    $sheet->mergeCells('A7:K7');
+                    $sheet->mergeCells('A8:K8');
+                    $sheet->mergeCells('A9:K9');
+                    $sheet->mergeCells('A10:K10');
+                    $sheet->mergeCells('A11:K11');
+
+                    $sheet->setHeight(2, 30);
+                    $sheet->setHeight(6, 30);
+                    $sheet->setHeight(12, 30);
+
+                    $sheet->row(2, function ($row) {
+                        $row->setBackground('#FE9529');
+                    });
+                    $sheet->row(6, function ($row) {
+                        $row->setBackground('#FE9529');
+                    });
+                    $sheet->row(12, function ($row) {
+                        $row->setBackground('#FE9529');
+                    });
+
+                    $sheet->cell('A2:K2', function ($cells) {
+                        $cells->setFontSize(20);
+                    });
+                    $sheet->cell('A6:K6', function ($cells) {
+                        $cells->setFontSize(20);
+                    });
+                    $sheet->cell('A12:K12', function ($cells) {
+                        $cells->setFontSize(16);
+                    });
+
+                    $sheet->cells('A2:K2', function ($cells) {
+                        $cells->setFontWeight('bold');
+                    });
+                    $sheet->cells('A6:K6', function ($cells) {
+                        $cells->setFontWeight('bold');
+                    });
+                    $sheet->cells('A12:K12', function ($cells) {
+                        $cells->setFontWeight('bold');
+                        $cells->setAlignment('center');
+                        $cells->setValignment('middle');
+                    });
+
+                    $sheet->setBorder('A12:K12', 'thin');
+                    //--- -------------------- ---
+
+                    //--- Header Part ---
+                    if ($results == null) {
+                        $results->taxa = '-';
+                        $$results->locality = '-';
+                        $results->expedition = '-';
+                    }
+                    $sheet->row(2, array('Export Information'));
+                    $sheet->row(3, array('Export By: ' . $user_name));
+                    $sheet->row(4, array('Date Export: ' . $date_export));
+                    $sheet->row(6, array('Data Information'));
+                    $sheet->row(7, array('Search Type: ' . $way));
+                    $sheet->row(8, array('Taxonomy: ' . $results->taxa));
+                    $sheet->row(9, array('Locality: ' . $results->locality));
+                    $sheet->row(10, array('Expedition: ' . $results->expedition));
+                    //--- ----------- ---
+
+                    //--- Header Table Part ---
+                    $arr_header = array();
+                    if ($group_permission_a == 2 && $group_permission_b == 2) {
+                        $arr_header = ['No.', 'Phylum', 'Subphylum', 'Class (Clade)', 'Order (Clade)', 'Suborder (Clade)', 'Infraorder (Clade)', 'Family (Clade)', 'Current Name', 'Ocean/Sea/Lake', 'Country', 'Province', 'Expendition'];
+                    } elseif ($group_permission_a == 2 && $group_permission_b == 1) {
+                        $arr_header = ['No.', 'Phylum', 'Subphylum', 'Class (Clade)', 'Order (Clade)', 'Suborder (Clade)', 'Infraorder (Clade)', 'Family (Clade)', 'Current Name', 'Expendition'];
+                    } elseif ($group_permission_a == 1 && $group_permission_b == 2) {
+                        $arr_header = ['No.', 'Current Name', 'Ocean/Sea/Lake', 'Country', 'Province', 'Expendition'];
+                    } else {
+                        $arr_header = ['No.', 'Current Name', 'Expendition'];
+                    }
+                    $sheet->row(12, $arr_header);
+                    //--- ----------------- ---
+
+                    //--- Content Part ---
+                    // display data
+                    $row_number = 13;   // start line
+                    $count_line = 1;   // count line for No.
+                    if ($results != null) {
+                        foreach ($results->result_searchs as $data) {
+                            // check expedition_en
+                            if ($data->expedition_en == null && $data->expedition_th == null) {
+                                $expedition = '';
+                            } else {
+                                $expedition = $data->expedition_en . '/' . $data->expedition_th;
+                            }
+
+                            // make array content
+                            $arr_content = array();
+                            if ($group_permission_a == 2 && $group_permission_b == 2) {
+                                $arr_content = [
+                                    $count_line, $data->phylum, $data->subphylum, $data->class,
+                                    $data->order_o, $data->suborder, $data->infraorder, $data->family,
+                                    html_entity_decode($data->current_scientific_name), $data->ocean_sea_lake_en . '/' . $data->ocean_sea_lake_th, $data->country_en . '/' . $data->country_th, $data->province_en . '/' . $data->province_th,
+                                    $expedition
+                                ];
+                            } elseif ($group_permission_a == 2 && $group_permission_b == 1) {
+                                $arr_content = [
+                                    $count_line, $data->phylum, $data->subphylum, $data->class,
+                                    $data->order_o, $data->suborder, $data->infraorder, $data->family,
+                                    html_entity_decode($data->current_scientific_name), $expedition
+                                ];
+                            } elseif ($group_permission_a == 1 && $group_permission_b == 2) {
+                                $arr_content = [
+                                    $count_line, html_entity_decode($data->current_scientific_name), $data->ocean_sea_lake_en . '/' . $data->ocean_sea_lake_th, $data->country_en . '/' . $data->country_th, $data->province_en . '/' . $data->province_th, $expedition
+                                ];
+                            } else {
+                                $arr_content = [
+                                    $count_line, html_entity_decode($data->current_scientific_name), $expedition
+                                ];
+                            }
+
+                            // write in file
+                            $sheet->row($row_number, $arr_content);
+
+                            //--- Set Layout and Style ---
+                            $sheet->setBorder('A' . $row_number . ':K' . $row_number, 'thin');
+                            //--- -------------------- ---
+
+                            $row_number++;
+                            $count_line++;
+                        }
+                    }
+                    //--- ------------ ---
+                }
+
+                # Recent Record
+                elseif ($way == 'Recent_Record') {
+                    //--- Set Layout and Style ---
+                    $sheet->mergeCells('A2:M2');
+                    $sheet->mergeCells('A3:M3');
+                    $sheet->mergeCells('A4:M4');
+                    $sheet->mergeCells('A5:M5');
+                    $sheet->mergeCells('A6:M6');
+                    $sheet->mergeCells('A7:M7');
+                    $sheet->mergeCells('A8:M8');
+                    $sheet->mergeCells('A9:M9');
+                    $sheet->mergeCells('A10:M10');
+                    $sheet->mergeCells('A11:M11');
+
+                    $sheet->setHeight(2, 30);
+                    $sheet->setHeight(6, 30);
+                    $sheet->setHeight(12, 30);
+
+                    $sheet->row(2, function ($row) {
+                        $row->setBackground('#FE9529');
+                    });
+                    $sheet->row(6, function ($row) {
+                        $row->setBackground('#FE9529');
+                    });
+                    $sheet->row(12, function ($row) {
+                        $row->setBackground('#FE9529');
+                    });
+
+                    $sheet->cell('A2:M2', function ($cells) {
+                        $cells->setFontSize(20);
+                    });
+                    $sheet->cell('A6:M6', function ($cells) {
+                        $cells->setFontSize(20);
+                    });
+                    $sheet->cell('A12:M12', function ($cells) {
+                        $cells->setFontSize(16);
+                    });
+
+                    $sheet->cells('A2:M2', function ($cells) {
+                        $cells->setFontWeight('bold');
+                    });
+                    $sheet->cells('A6:M6', function ($cells) {
+                        $cells->setFontWeight('bold');
+                    });
+                    $sheet->cells('A12:M12', function ($cells) {
+                        $cells->setFontWeight('bold');
+                        $cells->setAlignment('center');
+                        $cells->setValignment('middle');
+                    });
+
+                    $sheet->setBorder('A12:M12', 'thin');
+                    //--- -------------------- ---
+
+                    //--- Header Part ---
+                    if ($results == null) {
+                        $results->taxa = '-';
+                        $$results->locality = '-';
+                        $results->expedition = '-';
+                    }
+                    $sheet->row(2, array('Export Information'));
+                    $sheet->row(3, array('Export By: ' . $user_name));
+                    $sheet->row(4, array('Date Export: ' . $date_export));
+                    $sheet->row(6, array('Data Information'));
+                    $sheet->row(7, array('Search Type: ' . $way));
+                    $sheet->row(8, array('Taxonomy: ' . $results->taxa));
+                    $sheet->row(9, array('Locality: ' . $results->locality));
+                    $sheet->row(10, array('Expedition: ' . $results->expedition));
+                    //--- ----------- ---
+
+                    //--- Header Table Part ---
+                    $arr_header = array();
+                    if ($group_permission_a == 2 && $group_permission_b == 2) {
+                        $arr_header = ['ID', 'Phylum', 'Subphylum', 'Class (Clade)', 'Order (Clade)', 'Suborder (Clade)', 'Infraorder (Clade)', 'Family (Clade)', 'Current Name', 'Previous Name', 'Type', 'Current Indentifier', 'Province', 'Picture'];
+                    } elseif ($group_permission_a == 2 && $group_permission_b == 1) {
+                        $arr_header = ['ID', 'Phylum', 'Subphylum', 'Class (Clade)', 'Order (Clade)', 'Suborder (Clade)', 'Infraorder (Clade)', 'Family (Clade)', 'Current Name', 'Previous Name', 'Type', 'Current Indentifier', 'Picture'];
+                    } elseif ($group_permission_a == 1 && $group_permission_b == 2) {
+                        $arr_header = ['ID', 'Current Name', 'Previous Name', 'Type', 'Current Indentifier', 'Province', 'Picture'];
+                    } else {
+                        $arr_header = ['ID', 'Current Name', 'Previous Name', 'Type', 'Current Indentifier', 'Picture'];
+                    }
+                    $sheet->row(12, $arr_header);
+                    //--- ----------------- ---
+
+                    //--- Content Part ---
+                    // display data
+                    $row_number = 13;   // start line
+                    if ($results != null) {
+                        foreach ($results->result_searchs as $data) {
+
+                            // make array content and check permission
+                            $arr_content = array();
+                            if ($group_permission_a == 2 && $group_permission_b == 2) {
+                                $arr_content = [
+                                    $data->related_catalog_item . '' . $data->related_reference_item, $data->phylum, $data->subphylum, $data->class,
+                                    $data->order_o, $data->suborder, $data->infraorder, $data->family,
+                                    html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->identifier,
+                                    $data->province_en . '/' . $data->province_th
+                                ];
+                            } elseif ($group_permission_a == 2 && $group_permission_b == 1) {
+                                $arr_content = [
+                                    $data->related_catalog_item . '' . $data->related_reference_item, $data->phylum, $data->subphylum, $data->class,
+                                    $data->order_o, $data->suborder, $data->infraorder, $data->family,
+                                    html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->identifier,
+                                ];
+                            } elseif ($group_permission_a == 1 && $group_permission_b == 2) {
+                                $arr_content = [
+                                    $data->related_catalog_item . '' . $data->related_reference_item,
+                                    html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->identifier,
+                                    $data->province_en . '/' . $data->province_th
+                                ];
+                            } else {
+                                $arr_content = [
+                                    $data->related_catalog_item . '' . $data->related_reference_item,
+                                    html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->identifier
+                                ];
+                            }
+
+                            // write in file
+                            $sheet->row($row_number, $arr_content);
+
+                            //--- Set Layout and Style ---
+                            $sheet->setBorder('A' . $row_number . ':M' . $row_number, 'thin');
+                            //--- -------------------- ---
+
+                            $row_number++;
+                        }
+                    }
+                    //--- ------------ ---
+                }
+
+                # Distribution Search
+                elseif ($way == 'Distribution_Search') {
+                    //--- Set Layout and Style ---
+                    $sheet->mergeCells('A2:M2');
+                    $sheet->mergeCells('A3:M3');
+                    $sheet->mergeCells('A4:M4');
+                    $sheet->mergeCells('A5:M5');
+                    $sheet->mergeCells('A6:M6');
+                    $sheet->mergeCells('A7:M7');
+                    $sheet->mergeCells('A8:M8');
+                    $sheet->mergeCells('A9:M9');
+                    $sheet->mergeCells('A10:M10');
+                    $sheet->mergeCells('A11:M11');
+
+                    $sheet->setHeight(2, 30);
+                    $sheet->setHeight(6, 30);
+                    $sheet->setHeight(12, 30);
+
+                    $sheet->row(2, function ($row) {
+                        $row->setBackground('#FE9529');
+                    });
+                    $sheet->row(6, function ($row) {
+                        $row->setBackground('#FE9529');
+                    });
+                    $sheet->row(12, function ($row) {
+                        $row->setBackground('#FE9529');
+                    });
+
+                    $sheet->cell('A2:M2', function ($cells) {
+                        $cells->setFontSize(20);
+                    });
+                    $sheet->cell('A6:M6', function ($cells) {
+                        $cells->setFontSize(20);
+                    });
+                    $sheet->cell('A12:M12', function ($cells) {
+                        $cells->setFontSize(16);
+                    });
+
+                    $sheet->cells('A2:M2', function ($cells) {
+                        $cells->setFontWeight('bold');
+                    });
+                    $sheet->cells('A6:M6', function ($cells) {
+                        $cells->setFontWeight('bold');
+                    });
+                    $sheet->cells('A12:M12', function ($cells) {
+                        $cells->setFontWeight('bold');
+                        $cells->setAlignment('center');
+                        $cells->setValignment('middle');
+                    });
+
+                    $sheet->setBorder('A12:M12', 'thin');
+                    //--- -------------------- ---
+
+                    //--- Header Part ---
+                    if ($results == null) {
+                        $results->taxa = '-';
+                        $$results->locality = '-';
+                        $results->expedition = '-';
+                    }
+                    $sheet->row(2, array('Export Information'));
+                    $sheet->row(3, array('Export By: ' . $user_name));
+                    $sheet->row(4, array('Date Export: ' . $date_export));
+                    $sheet->row(6, array('Data Information'));
+                    $sheet->row(7, array('Search Type: ' . $way));
+                    $sheet->row(8, array('Taxonomy: ' . $results->taxa));
+                    $sheet->row(9, array('Locality: ' . $results->locality));
+                    $sheet->row(10, array('Expedition: ' . $results->expedition));
+                    //--- ----------- ---
+
+                    //--- Header Table Part ---
+                    $arr_header = array();
+                    if ($group_permission_a == 2 && $group_permission_b == 2) {
+                        $arr_header = ['ID', 'Phylum', 'Subphylum', 'Class (Clade)', 'Order (Clade)', 'Suborder (Clade)', 'Infraorder (Clade)', 'Family (Clade)', 'Current Name', 'Previous Name', 'Type', 'Habitat', 'Current Indentifier', 'Locality'];
+                    } elseif ($group_permission_a == 2 && $group_permission_b == 1) {
+                        $arr_header = ['ID', 'Phylum', 'Subphylum', 'Class (Clade)', 'Order (Clade)', 'Suborder (Clade)', 'Infraorder (Clade)', 'Family (Clade)', 'Current Name', 'Previous Name', 'Type', 'Habitat', 'Current Indentifier'];
+                    } elseif ($group_permission_a == 1 && $group_permission_b == 2) {
+                        $arr_header = ['ID', 'Current Name', 'Previous Name', 'Type', 'Habitat', 'Current Indentifier', 'Locality'];
+                    } else {
+                        $arr_header = ['ID', 'Current Name', 'Previous Name', 'Type', 'Habitat', 'Current Indentifier'];
+                    }
+                    $sheet->row(12, $arr_header);
+                    //--- ----------------- ---
+
+                    //--- Content Part ---
+                    // display data
+                    $row_number = 13;   // start line
+                    if ($results != null) {
+                        foreach ($results->result_searchs as $data) {
+
+                            // make array content and check permission
+                            $arr_content = array();
+                            if ($group_permission_a == 2 && $group_permission_b == 2) {
+                                $arr_content = [
+                                    $data->related_catalog_item . '' . $data->related_reference_item, $data->phylum, $data->subphylum, $data->class,
+                                    $data->order_o, $data->suborder, $data->infraorder, $data->family,
+                                    html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->habitat_en, $data->identifier,
+                                    $data->locality
+                                ];
+                            } elseif ($group_permission_a == 2 && $group_permission_b == 1) {
+                                $arr_content = [
+                                    $data->related_catalog_item . '' . $data->related_reference_item, $data->phylum, $data->subphylum, $data->class,
+                                    $data->order_o, $data->suborder, $data->infraorder, $data->family,
+                                    html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->habitat_en, $data->identifier,
+                                ];
+                            } elseif ($group_permission_a == 1 && $group_permission_b == 2) {
+                                $arr_content = [
+                                    $data->related_catalog_item . '' . $data->related_reference_item,
+                                    html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->habitat_en, $data->identifier,
+                                    $data->locality
+                                ];
+                            } else {
+                                $arr_content = [
+                                    $data->related_catalog_item . '' . $data->related_reference_item,
+                                    html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->habitat_en, $data->identifier
+                                ];
+                            }
+
+                            // write in file
+                            $sheet->row($row_number, $arr_content);
+
+                            //--- Set Layout and Style ---
+                            $sheet->setBorder('A' . $row_number . ':M' . $row_number, 'thin');
+                            //--- -------------------- ---
+
+                            $row_number++;
+                        }
+                    }
+                    //--- ------------ ---
+                }
+            });
+        })->store('csv', Config::get('path.export_record_file_path'));
+
+        // save export log : 0 is excel, 1 is pdf, 2 is api
+        ExportLog::saveExportLog(0, $name_file);
+
+        // sent name_file for download
+        echo $name_file . '.csv';
     }
 
     // ห้ามลบ
 
     // //Sorawit
-	// //Created : 22-6-59
-	// //Modified : -
+    // //Created : 22-6-59
+    // //Modified : -
     // # export result search by excel
     // public function doExportRecord( Request $input ) {
     //     $language = $input->language;
@@ -1823,7 +2337,7 @@ class ExportRecordController extends Controller
     //
     //     // created export date
     //     $date = date_create();
-	// 	$date_export = date_format( $date, "d-m-Y H:i:s" );
+    // 	$date_export = date_format( $date, "d-m-Y H:i:s" );
     //     $date_export_file_name = date_format( $date, "Y-m-d_H-i-s" );
     //
     //     // set language

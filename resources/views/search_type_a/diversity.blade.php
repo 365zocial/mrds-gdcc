@@ -8,187 +8,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/search-category.css') }}" media="screen" title="no title" charset="utf-8">
 @endsection
 
-@section('script')
-    @include('base_wording_js')
 
-    <script src="{{ URL::asset('assets/script/select2/js/select2.min.js') }}">//for select2 script</script>
-    <script type="text/javascript">
-        var useAjax = true;
-    </script>
-    <script src="{{ URL::asset('assets/script/search_script.js') }}" type="text/javascript"></script>
-    <script type="text/javascript">
-
-        $(".select2").select2();
-
-        function getDataAjax(){
-
-            var chk_taxa = "";
-            var chk_locality = "";
-            var chk_expedition = "";
-
-            if( $('#taxa_chkbox').is(":checked") ){
-                chk_taxa        = $('#taxa_chkbox').val();
-            }
-            if( $('#local_chkbox').is(":checked") ){
-                chk_locality    = $('#local_chkbox').val();
-            }
-            if( $('#expan_chkbox').is(":checked") ){
-                chk_expedition  = $('#expan_chkbox').val();
-            }
-
-            $.ajax({
-                method: "POST",
-                <?php if(Auth::user()->role_id == 5){ ?>
-                    url: "<?php echo url('user/search/searchdata'); ?>",
-                <?php }elseif(in_array(Auth::user()->role_id,[3,6])){ ?>
-                    url: "<?php echo url('staff/searchCategory/searchdata'); ?>",
-                <?php } ?>
-                data: {
-                        _token: "{{ csrf_token() }}",
-                        header_taxonomy: $('#taxa_header_id').val(),
-                        domain: $('#domain').val(),
-                        kingdom: $('#kingdom').val(),
-                        phylum: $('#phylum').val(),
-                        subphylum: $('#subphylum').val(),
-                        class: $('#class').val(),
-                        order: $('#order').val(),
-                        suborder: $('#suborder').val(),
-                        infraorder: $('#infraorder').val(),
-                        family: $('#family').val(),
-
-                        chk_taxa: chk_taxa,
-                        chk_locality: chk_locality,
-                        chk_expedition: chk_expedition,
-
-                        locality_type: $('#dd_locality').val(),
-                        locality_country: $('#locality_country').val(),
-                        locality_province: $('#locality_province').val(),
-                        locality_district: $('#locality_district').val(),
-                        locality_county: $('#locality_county').val(),
-
-                        expan_id : $('#expan_id').val(),
-                    }
-            }).done(function( data ) {
-
-                $('.loader').fadeOut();
-                $('.table_result').slideDown();
-                tb.clear().draw();
-
-                var province = "";
-                var country = "";
-                var expedition = "";
-                var ocean_sea_lake = "";
-
-                var lang = data['lang_table'];
-
-                $.each(data['result_searchs'], function(i, data){
-                    if(lang == 2){
-                        province = data['province_th'];
-                        country = data['country_th'];
-                        expedition = data['expedition_th'];
-                        ocean_sea_lake = data['ocean_sea_lake_th'];
-                    }else{
-                        province = data['province_en'];
-                        country = data['country_en'];
-                        expedition = data['expedition_en'];
-                        ocean_sea_lake = data['ocean_sea_lake_en'];
-                    }
-                    if(data['related_catalog_item'] != null){
-                        re_cat_no = data['related_catalog_item'];
-                    }else{
-                        re_cat_no = "";
-                    }
-                    if(data['related_reference_item'] != null){
-                        re_item_no = data['related_reference_item'];
-                    }else{
-                        re_item_no = "";
-                    }
-                    tb.row.add( [
-                        re_cat_no+""+re_item_no,
-                        @if(Auth::user()->role_id == 3)
-                            @if($group_permission_a == 2)
-                                // data['domain'],
-                                // data['kingdom'],
-                                data['phylum'],
-                                data['subphylum'],
-                                data['class'],
-                                data['order_o'],
-                                data['suborder'],
-                                data['infraorder'],
-                                data['family'],
-                            @endif
-                                data['current_scientific_name_format'],
-                            @if($group_permission_b == 2)
-                                ocean_sea_lake,
-                                country,
-                                province,
-                            @endif
-                                expedition,
-                                CreateView( data['record_id'] )
-                        @else
-                            @if($group_permission_a == 2)
-                                // data['domain'],
-                                // data['kingdom'],
-                                data['phylum'],
-                                data['subphylum'],
-                                data['class'],
-                                data['order_o'],
-                                data['suborder'],
-                                data['infraorder'],
-                                data['family'],
-                            @endif
-                                data['current_scientific_name_format'],
-                            @if($group_permission_b == 2)
-                                ocean_sea_lake,
-                                country,
-                                province,
-                            @endif
-                                expedition,
-                        @endif
-                   ] ).draw();
-                });
-
-                $('.locality_search').html(data['locality']);
-                $('.taxa_search').html(data['taxa']);
-                $('.expedition_search').html(data['expedition']);
-
-            });
-        }
-
-        function CreateView( id ) {
-            var view = "<a href=<?php echo url("staff/searchCategory/viewCard"); ?>" + '/' + window.btoa( window.btoa( window.btoa( id ))) + " target='_blank'><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span> View Card</a>";
-            return view;
-        }
-
-        // export record from result
-        function exportRecord() {
-            $('.loader').show();
-            $.ajax({
-                method: "POST",
-                url: "<?php echo url('exportSearchTypeA'); ?>",
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    way: 'Diversity_Search',
-                }
-            }).done(function( data ) {
-                if ( data ) {
-                    window.location.href = '<?php echo url('/export_result_record') ?>'+ '/' + data;
-
-                    // // delete file
-                    // $.ajax({
-                    //     method: "POST",
-                    //     url: "<?php //echo url('deleteFileForExcelRecord'); ?>",
-                    //     data: {
-                    //         name_file: data
-                    //     }
-                    // });
-                }
-                $('.loader').hide();
-            });
-        }
-
-    </script>
-@endsection
 
 @section('header')
     <?php
@@ -498,7 +318,7 @@
 
     <div class="row row-inform table_result" style="display:none;">
         <div class="col-md-12">
-            <table id="result" class="display" cellspacing="0">
+            <table id="distributeDataTable" class="display" cellspacing="0">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -532,20 +352,269 @@
 </div>
 
 
-<script type="text/javascript">
-function printContent(redirect){
 
-    $('#remove-when-print').remove();
 
-    var html = $('#print-area').html();
-    var style = '<style media="screen"> table#result.display.dataTable.no-footer thead tr th:last-child , table#result.display.dataTable.no-footer tbody tr td:last-child { text-align: left; } </style>';
-    var printcontent = html + style;
+@endsection
 
-    document.body.innerHTML = printcontent;
-    window.print();
-    window.location.href = redirect;
 
-}
-</script>
+@section('script')
+    @include('base_wording_js')
 
+    <script src="{{ URL::asset('assets/script/select2/js/select2.min.js') }}">//for select2 script</script>
+    <script type="text/javascript">
+        var useAjax = true;
+    </script>
+    <script src="{{ URL::asset('assets/script/search_script.js') }}" type="text/javascript"></script>
+    
+    <script type="text/javascript">
+        function printContent(redirect){
+        
+            $('#remove-when-print').remove();
+        
+            var html = $('#print-area').html();
+            var style = '<style media="screen"> table#result.display.dataTable.no-footer thead tr th:last-child , table#result.display.dataTable.no-footer tbody tr td:last-child { text-align: left; } </style>';
+            var printcontent = html + style;
+        
+            document.body.innerHTML = printcontent;
+            window.print();
+            window.location.href = redirect;
+        
+        }
+
+        $(".select2").select2();
+
+        function getCurrentParam(){
+            var chk_taxa = "";
+            var chk_locality = "";
+            var chk_expedition = "";
+            if( $('#taxa_chkbox').is(":checked") ){
+                chk_taxa        = $('#taxa_chkbox').val();
+            }
+            if( $('#local_chkbox').is(":checked") ){
+                chk_locality    = $('#local_chkbox').val();
+            }
+            if( $('#expan_chkbox').is(":checked") ){
+                chk_expedition  = $('#expan_chkbox').val();
+            }
+
+            let params = {
+                        _token: "{{ csrf_token() }}",
+                        header_taxonomy: $('#taxa_header_id').val(),
+                        domain: $('#domain').val(),
+                        kingdom: $('#kingdom').val(),
+                        phylum: $('#phylum').val(),
+                        subphylum: $('#subphylum').val(),
+                        class: $('#class').val(),
+                        order: $('#order').val(),
+                        suborder: $('#suborder').val(),
+                        infraorder: $('#infraorder').val(),
+                        family: $('#family').val(),
+
+                        chk_taxa: chk_taxa,
+                        chk_locality: chk_locality,
+                        chk_expedition: chk_expedition,
+
+                        locality_type: $('#dd_locality').val(),
+                        locality_country: $('#locality_country').val(),
+                        locality_province: $('#locality_province').val(),
+                        locality_district: $('#locality_district').val(),
+                        locality_county: $('#locality_county').val(),
+
+                        expan_id : $('#expan_id').val(),
+                    }
+
+                    return params;
+        }
+
+        function getDataAjax(){
+            $.ajax({
+                method: "POST",
+                <?php if(Auth::user()->role_id == 5){ ?>
+                    url: "<?php echo url('user/search/searchdata'); ?>",
+                <?php }elseif(in_array(Auth::user()->role_id,[3,6])){ ?>
+                    url: "<?php echo url('staff/searchCategory/searchdata'); ?>",
+                <?php } ?>
+                data: getCurrentParam()
+            }).done(function( data ) {
+
+                $('.loader').fadeOut();
+                $('.table_result').slideDown();
+                tb.clear().draw();
+
+                var province = "";
+                var country = "";
+                var expedition = "";
+                var ocean_sea_lake = "";
+
+                var lang = data['lang_table'];
+                $('.locality_search').html(data['locality']);
+                $('.taxa_search').html(data['taxa']);
+                $('.expedition_search').html(data['expedition']);
+
+                initDatatable(getCurrentParam());
+                // $.each(data['result_searchs'], function(i,data){
+                //     if(lang == 2){
+                //         province = data['province_th'];
+                //         country = data['country_th'];
+                //         expedition = data['expedition_th'];
+                //         ocean_sea_lake = data['ocean_sea_lake_th'];
+                //     }else{
+                //         province = data['province_en'];
+                //         country = data['country_en'];
+                //         expedition = data['expedition_en'];
+                //         ocean_sea_lake = data['ocean_sea_lake_en'];
+                //     }
+                //     if(data['related_catalog_item'] != null){
+                //         re_cat_no = data['related_catalog_item'];
+                //     }else{
+                //         re_cat_no = "";
+                //     }
+                //     if(data['related_reference_item'] != null){
+                //         re_item_no = data['related_reference_item'];
+                //     }else{
+                //         re_item_no = "";
+                //     }
+                //     tb.row.add([
+                //         re_cat_no+""+re_item_no,
+                        // @if(Auth::user()->role_id == 3)
+                        //     @if($group_permission_a == 2)
+                        //         // data['domain'],
+                        //         // data['kingdom'],
+                        //         data['phylum'],
+                        //         data['subphylum'],
+                        //         data['class'],
+                        //         data['order_o'],
+                        //         data['suborder'],
+                        //         data['infraorder'],
+                        //         data['family'],
+                        //     @endif
+                        //         data['current_scientific_name_format'],
+                        //     @if($group_permission_b == 2)
+                        //         ocean_sea_lake,
+                        //         country,
+                        //         province,
+                        //     @endif
+                        //         expedition,
+                        //         CreateView( data['record_id'] )
+                        // @else
+                        //     @if($group_permission_a == 2)
+                        //         // data['domain'],
+                        //         // data['kingdom'],
+                        //         data['phylum'],
+                        //         data['subphylum'],
+                        //         data['class'],
+                        //         data['order_o'],
+                        //         data['suborder'],
+                        //         data['infraorder'],
+                        //         data['family'],
+                        //     @endif
+                        //         data['current_scientific_name_format'],
+                        //     @if($group_permission_b == 2)
+                        //         ocean_sea_lake,
+                        //         country,
+                        //         province,
+                        //     @endif
+                        //         expedition,
+                        // @endif
+                //    ] ).draw();
+                // });
+
+                
+
+            });
+        }
+
+        function initDatatable(params){
+
+            let showColumn = [
+                    { data: 'cate_ref', orderable: false, searchable: false },   
+                    
+                        @if(Auth::user()->role_id == 3)
+                            @if($group_permission_a == 2)
+                                { data: 'phylum', name: 't3.name'},
+                                { data: 'subphylum', name: 't4.name'},
+                                { data: 'class', name: 't5.name'},
+                                { data: 'order_o', name: 't6.name'},
+                                { data: 'suborder', name: 't7.name'},
+                                { data: 'infraorder', name: 't8.name'},
+                                { data: 'family', name: 't9.name'},
+                            @endif
+                                { data: 'current_scientific_name_format', name: 'classification.current_scientific_name_format'},
+                            @if($group_permission_b == 2)
+                            { data: `{{ ($lang==1 ? 'ocean_sea_lake_en' : 'ocean_sea_lake_th') }}`, name: `{{ ($lang==1 ? 'w4.name_en' : 'w4.name_th') }}`},
+                            { data: `{{ ($lang==1 ? 'country_en' : 'country_th') }}`, name: `{{ ($lang==1 ? 'country.country_en' : 'country.country_th') }}`},
+                            { data: `{{ ($lang==1 ? 'province_en' : 'province_th') }}`, name: `{{ ($lang==1 ? 'p.province_en' : 'p.province_th') }}`},
+                            @endif
+                                { data: `{{ ($lang==1 ? 'expedition_en' : 'expedition_th') }}`, name: `{{ ($lang==1 ? 'w1.name_en' : 'w1.name_th') }}`},
+                                { data: 'action', orderable: false, searchable: false },   
+                        @else
+                            @if($group_permission_a == 2)
+                                { data: 'phylum', name: 't3.name'},
+                                { data: 'subphylum', name: 't4.name'},
+                                { data: 'class', name: 't5.name'},
+                                { data: 'order_o', name: 't6.name'},
+                                { data: 'suborder', name: 't7.name'},
+                                { data: 'infraorder', name: 't8.name'},
+                                { data: 'family', name: 't9.name'},
+                            @endif
+                                { data: 'current_scientific_name_format', name: 'classification.current_scientific_name_format'},
+                            @if($group_permission_b == 2)
+                            { data: `{{ ($lang==1 ? 'ocean_sea_lake_en' : 'ocean_sea_lake_th') }}`, name: `{{ ($lang==1 ? 'w4.name_en' : 'w4.name_th') }}`},
+                            { data: `{{ ($lang==1 ? 'country_en' : 'country_th') }}`, name: `{{ ($lang==1 ? 'country.country_en' : 'country.country_th') }}`},
+                            { data: `{{ ($lang==1 ? 'province_en' : 'province_th') }}`, name: `{{ ($lang==1 ? 'p.province_en' : 'p.province_th') }}`},
+                            @endif
+                            { data: `{{ ($lang==1 ? 'expedition_en' : 'expedition_th') }}`, name: `{{ ($lang==1 ? 'w1.name_en' : 'w1.name_th') }}`},
+                        @endif
+            ]
+            $('#distributeDataTable').DataTable({
+                order: [2, 'asc'],
+                // bFilter: true,
+                // bLengthChange: true,
+                // "paging": true,
+                // pagingType: "full_numbers",
+                processing: true,
+                serverSide: true,
+                ajax: {
+                method: "POST",
+                url: '{!! route('typea.diversity.datatable') !!}',
+                data: params
+                },
+                columns: showColumn,
+            });
+        }
+
+        function CreateView( id ) {
+            var view = "<a href=<?php echo url("staff/searchCategory/viewCard"); ?>" + '/' + window.btoa( window.btoa( window.btoa( id ))) + " target='_blank'><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span> View Card</a>";
+            return view;
+        }
+
+        // export record from result
+        function exportRecord() {
+            $('.loader').show();
+            $.ajax({
+                method: "POST",
+                url: '{!! route('typea.distribution.export') !!}',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    way: 'Diversity_Search',
+                    ...getCurrentParam()
+                }
+            }).done(function( data ) {
+                if ( data ) {
+                    window.location.href = '<?php echo url('/export_result_record') ?>'+ '/' + data;
+
+                    // // delete file
+                    // $.ajax({
+                    //     method: "POST",
+                    //     url: "<?php //echo url('deleteFileForExcelRecord'); ?>",
+                    //     data: {
+                    //         name_file: data
+                    //     }
+                    // });
+                }
+                $('.loader').hide();
+            });
+        }
+
+    </script>
 @endsection

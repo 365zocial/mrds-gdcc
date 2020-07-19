@@ -31,6 +31,15 @@
     <script src="{{ URL::asset('assets/script/select2/js/select2.min.js') }}">//for select2 script</script>
 
     <script type="text/javascript">
+
+        function getCurrentParam(){
+            return {
+                _token: "{{ csrf_token() }}",
+                name_type: $('#name_type').val(),
+                search: $('#search').val()
+            }
+        }
+        
         $(document).ready(function() {
 
             // Loader
@@ -52,35 +61,31 @@
                     method: "POST",
                     url: "<?php echo url('staff/searchCategory/doNameRecord'); ?>",
                     data: {
-                        _token: "{{ csrf_token() }}",
                         way: 1, // 1 is search, 2 is ajax
-                        name_type: $('#name_type').val(),
-                        search: $('#search').val()
+                        ...getCurrentParam()
                     }
                 }).done(function( data ) {
                     $('.table_result').slideDown();
+                    name_result = data['name_type'] + ' : ' + data['search'];
+                    $('.name_result').html(name_result);
+                    $('.loader').hide();
+                    initDatatable();
+
+                    @if(false)
                     tb.clear().draw();
                     $count = 1;
-
                     $.each(data['results'], function(i, data){
                         tb.row.add( [
                             $count,
                             (typeof data['related_catalog_item'] === "string") ? data['related_catalog_item'] : ""  + (typeof data['related_reference_item'] === "string") ? data['related_reference_item'] : "",
                             data['current_scientific_name_format'],
-                            CreateView( data['id'] ) +
+                                CreateView( data['id'] ) +
                                 '<span class="between"> | </span>' +
                                 CreateLink( data['id'] )
                         ] ).draw();
                         $count++;
-
                     });
-
-                    name_result = data['name_type'] + ' : ' + data['search'];
-
-                    // $('.source_result').html(source);
-                    $('.name_result').html(name_result);
-
-                    $('.loader').hide();
+                    @endif
                 });
             });
         });
@@ -95,6 +100,31 @@
             return link;
         }
 
+        var table = $('#recordDataTable').DataTable({});;
+        function initDatatable(){
+            table.destroy();
+            table = $('#recordDataTable').DataTable({
+                // order: [2, 'asc'],
+                // bFilter: true,
+                // bLengthChange: true,
+                // "paging": true,
+                // pagingType: "full_numbers",
+                processing: true,
+                serverSide: true,
+                ajax: {
+                method: "POST",
+                url: '{!! route('typea.record.datatable') !!}',
+                data: getCurrentParam()
+                },
+                columns: [
+                    { data: 'DT_Row_Index', orderable: false, searchable: false },   
+                    { data: 'cate_ref', searchable: false, sortable : false },
+                    { data: 'current_scientific_name_format', name: 'classification.current_scientific_name_format'},
+                    { data: 'action',  searchable: false, sortable : false },
+                ],
+            });
+        }
+
         // export record from result
         function exportRecord() {
             $('.loader').show();
@@ -102,10 +132,8 @@
                 method: "POST",
                 url: "<?php echo url('staff/searchCategory/doNameRecord'); ?>",
                 data: {
-                    _token: "{{ csrf_token() }}",
                     way: 2, // 1 is search, 2 is ajax
-                    name_type: $('#name_type').val(),
-                    search: $('#search').val()
+                    ...getCurrentParam()
                 }
             }).done(function( data ) {
                 if ( data ) {
@@ -226,14 +254,12 @@
 
     <div class="row table_result" style="display: none;">
         <div class="col-md-12">
-            <table id="result" class="display" cellspacing="0">
+            <table id="recordDataTable" class="display" cellspacing="0">
                 <thead>
-                    <tr>
                         <th>No.</th>
                         <th>IDCatalog / IDRef</th>
                         <th>Scientific Name</th>
                         <th style="text-align: center;">Action</th>
-                    </tr>
                 </thead>
             </table>
         </div>

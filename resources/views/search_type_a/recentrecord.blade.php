@@ -42,7 +42,7 @@
 
         $(".select2").select2();
 
-        function getDataAjax(){
+        function getCurrentParam(){
 
             var chk_taxa = "";
             var chk_locality = "";
@@ -58,14 +58,7 @@
                 chk_expedition  = $('#expan_chkbox').val();
             }
 
-            $.ajax({
-                method: "POST",
-                <?php if(Auth::user()->role_id == 5){ ?>
-                    url: "<?php echo url('user/search/searchdata'); ?>",
-                <?php }elseif(in_array(Auth::user()->role_id,[3,6])){ ?>
-                    url: "<?php echo url('staff/searchCategory/searchdata'); ?>",
-                <?php } ?>
-                data: {
+            return {
                         _token: "{{ csrf_token() }}",
                         header_taxonomy: $('#taxa_header_id').val(),
                         domain: $('#domain').val(),
@@ -91,6 +84,16 @@
                         expan_id : $('#expan_id').val(),
                         lang: 'en'
                     }
+        }
+        function getDataAjax(){
+             $.ajax({
+                method: "POST",
+                <?php if(Auth::user()->role_id == 5){ ?>
+                    url: "<?php echo url('user/search/searchdata'); ?>",
+                <?php }elseif(in_array(Auth::user()->role_id,[3,6])){ ?>
+                    url: "<?php echo url('staff/searchCategory/searchdata'); ?>",
+                <?php } ?>
+                data: getCurrentParam(),
             }).done(function( data ) {
 
                 $('.loader').fadeOut();
@@ -104,6 +107,14 @@
 
                 var lang = data['lang_table'];
 
+                $('.locality_search').html(data['locality']);
+                $('.taxa_search').html(data['taxa']);
+                $('.expedition_search').html(data['expedition']);
+
+                initDatatable(getCurrentParam());
+
+                @if(false)
+                //not use anymore beacause error memory
                 $.each(data['result_searchs'], function(i, data){
 
                     if(lang == 2){
@@ -128,6 +139,7 @@
                         re_item_no = "";
                     }
 
+                    
                     tb.row.add( [
                             re_cat_no+""+re_item_no,
                         @if(Auth::user()->role_id == 3)
@@ -183,14 +195,53 @@
                         @endif
                     ] ).draw();
                 });
-
-                $('.locality_search').html(data['locality']);
-                $('.taxa_search').html(data['taxa']);
-                $('.expedition_search').html(data['expedition']);
-
+                @endif
 
             });
         }
+        function initDatatable(params){
+
+
+$('#distributeDataTable').DataTable({
+    order: [2, 'asc'],
+    // bFilter: true,
+    // bLengthChange: true,
+    // "paging": true,
+    // pagingType: "full_numbers",
+    processing: true,
+    serverSide: true,
+    ajax: {
+    method: "POST",
+    url: '{!! route('typea.recent.datatable') !!}',
+    data: params
+    },
+    columns: [
+        { data: 'cate_ref', orderable: false, searchable: false },
+        @if($group_permission_a == 2)
+                    { data: 'phylum', name: 't3.name'},
+                    { data: 'subphylum', name: 't4.name'},
+                    { data: 'class', name: 't5.name'},
+                    { data: 'order_o', name: 't6.name'},
+                    { data: 'suborder', name: 't7.name'},
+                    { data: 'infraorder', name: 't8.name'},
+                    { data: 'family', name: 't9.name'},
+        @endif
+                { data: 'current_scientific_name_format', name: 'classification.current_scientific_name_format'},
+                { data: 'previous_scientific_name_format', name: 'classification.previous_scientific_name_format'},
+                { data: 'type_status_en', name: 'w2.name_en'},
+                { data: 'identifier', name: 'r.identifier'},
+                { data: 'previous_identifier', name: 'r.previous_identifier'},
+        @if($group_permission_b == 2)
+                { data: `{{ ($lang==1 ? 'ocean_sea_lake_en' : 'ocean_sea_lake_th') }}`, name: `{{ ($lang==1 ? 'w4.name_en' : 'w4.name_th') }}`},
+                { data: `{{ ($lang==1 ? 'country_en' : 'country_th') }}`, name: `{{ ($lang==1 ? 'country.country_en' : 'country.country_th') }}`},
+                { data: `{{ ($lang==1 ? 'province_en' : 'province_th') }}`, name: `{{ ($lang==1 ? 'p.province_en' : 'p.province_th') }}`},
+        @endif
+        { data: `{{ ($lang==1 ? 'expedition_en' : 'expedition_th') }}`, name: `{{ ($lang==1 ? 'w1.name_en' : 'w1.name_th') }}`},
+        { data: 'showpic', orderable: false, searchable: false },
+        { data: 'action', orderable: false, searchable: false },
+    ],
+    });
+}
 
         function CreateView( id ) {
             var view = "<a href=<?php echo url("staff/searchCategory/viewCard"); ?>" + '/' + window.btoa( window.btoa( window.btoa( id ))) + " target='_blank'><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span> View Card</a>";
@@ -202,10 +253,10 @@
             $('.loader').show();
             $.ajax({
                 method: "POST",
-                url: "<?php echo url('exportSearchTypeA'); ?>",
+                url: '{!! route('typea.distribution.export') !!}',
                 data: {
-                    _token: "{{ csrf_token() }}",
                     way: 'Recent_Record',
+                    ...getCurrentParam()
                 }
             }).done(function( data ) {
                 if ( data ) {
@@ -552,12 +603,10 @@
 
     <div class="row row-inform table_result" style="display:none;">
         <div class="col-md-12">
-            <table id="result" class="display" cellspacing="0">
+            <table id="distributeDataTable" class="display" cellspacing="0">
                 <thead>
                     <th>ID</th>
                     @if($group_permission_a == 2)
-                        <!-- <th>Domain</th>
-                        <th>Kingdom</th> -->
                         <th>Phylum</th>
                         <th>Subphylum</th>
                         <th>Class (Clade)</th>

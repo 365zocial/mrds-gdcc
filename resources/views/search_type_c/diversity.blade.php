@@ -20,7 +20,7 @@
 
         $(".select2").select2();
 
-        function getDataAjax(){
+        function getCurrentParam(){
 
             var chk_taxa = "";
             var chk_locality = "";
@@ -35,11 +35,7 @@
             if( $('#expan_chkbox').is(":checked") ){
                 chk_expedition  = $('#expan_chkbox').val();
             }
-
-            $.ajax({
-                method: "POST",
-                url: "<?php echo url('search/searchdata'); ?>",
-                data: {
+            return {
                         _token: "{{ csrf_token() }}",
                         header_taxonomy: $('#taxa_header_id').val(),
                         domain: $('#domain').val(),
@@ -65,6 +61,13 @@
 
                         expan_id : $('#expan_id').val(),
                     }
+        }
+
+        function getDataAjax(){
+            $.ajax({
+                method: "POST",
+                url: "<?php echo url('search/searchdata'); ?>",
+                data: getCurrentParam()
             }).done(function( data ) {
 
                 $('.loader').fadeOut();
@@ -77,48 +80,49 @@
                 var ocean_sea_lake = "";
 
                 var lang = data['lang_table'];
-
-                $.each(data['result_searchs'], function(i, data){
-                    if(lang == 2){
-                        province = data['province_th'];
-                        country = data['country_th'];
-                        expedition = data['expedition_th'];
-                        ocean_sea_lake = data['ocean_sea_lake_th'];
-                    }else{
-                        province = data['province_en'];
-                        country = data['country_en'];
-                        expedition = data['expedition_en'];
-                        ocean_sea_lake = data['ocean_sea_lake_en'];
-                    }
-                    if(data['related_catalog_item'] != null){
-                        re_cat_no = data['related_catalog_item'];
-                    }else{
-                        re_cat_no = "";
-                    }
-                    if(data['related_reference_item'] != null){
-                        re_item_no = data['related_reference_item'];
-                    }else{
-                        re_item_no = "";
-                    }
-                    tb.row.add( [
-                        re_cat_no+""+re_item_no,
-                        @if($group_permission_a == 2)
-                            data['phylum'],
-                            data['subphylum'],
-                            data['class'],
-                            data['order_o'],
-                            data['suborder'],
-                            data['infraorder'],
-                            data['superfamily'],
-                            data['family'],
-                        @endif
-                            data['current_scientific_name_format'],
-                   ] ).draw();
-                });
-
                 $('.locality_search').html(data['locality']);
                 $('.taxa_search').html(data['taxa']);
                 $('.expedition_search').html(data['expedition']);
+                initDatatable(getCurrentParam());
+                // $.each(data['result_searchs'], function(i, data){
+                //     if(lang == 2){
+                //         province = data['province_th'];
+                //         country = data['country_th'];
+                //         expedition = data['expedition_th'];
+                //         ocean_sea_lake = data['ocean_sea_lake_th'];
+                //     }else{
+                //         province = data['province_en'];
+                //         country = data['country_en'];
+                //         expedition = data['expedition_en'];
+                //         ocean_sea_lake = data['ocean_sea_lake_en'];
+                //     }
+                //     if(data['related_catalog_item'] != null){
+                //         re_cat_no = data['related_catalog_item'];
+                //     }else{
+                //         re_cat_no = "";
+                //     }
+                //     if(data['related_reference_item'] != null){
+                //         re_item_no = data['related_reference_item'];
+                //     }else{
+                //         re_item_no = "";
+                //     }
+                //     tb.row.add( [
+                //         re_cat_no+""+re_item_no,
+                //         @if($group_permission_a == 2)
+                //             data['phylum'],
+                //             data['subphylum'],
+                //             data['class'],
+                //             data['order_o'],
+                //             data['suborder'],
+                //             data['infraorder'],
+                //             data['superfamily'],
+                //             data['family'],
+                //         @endif
+                //             data['current_scientific_name_format'],
+                //    ] ).draw();
+                // });
+
+                
 
             });
         }
@@ -128,10 +132,10 @@
             $('.loader').show();
             $.ajax({
                 method: "POST",
-                url: "<?php echo url('search/exportSearchTypeA'); ?>",
+                url: '{!! route('typec.distribution.export') !!}',
                 data: {
-                    _token: "{{ csrf_token() }}",
                     way: 'Diversity_Search',
+                    ...getCurrentParam()
                 }
             }).done(function( data ) {
                 if ( data ) {
@@ -149,6 +153,38 @@
                 $('.loader').hide();
             });
         }
+
+        function initDatatable(params){
+            $('#distributeDataTable').DataTable({
+    order: [2, 'asc'],
+    // bFilter: true,
+    // bLengthChange: true,
+    // "paging": true,
+    // pagingType: "full_numbers",
+    processing: true,
+    serverSide: true,
+    ajax: {
+    method: "POST",
+    url: '{!! route('typec.diversity.datatable') !!}',
+    data: params
+    },
+    columns: [
+            { data: 'cate_ref', orderable: false, searchable: false },   
+                @if($group_permission_a == 2)
+                    { data: 'phylum', name: 't3.name'},
+                    { data: 'subphylum', name: 't4.name'},
+                    { data: 'class', name: 't5.name'},
+                    { data: 'order_o', name: 't6.name'},
+                    { data: 'suborder', name: 't7.name'},
+                    { data: 'infraorder', name: 't8.name'},
+                    { data: 'superfamily', name: 't10.name'},
+                    { data: 'family', name: 't9.name'},
+                @endif
+                { data: 'current_scientific_name_format', name: 'classification.current_scientific_name_format'},
+            ],
+});
+
+}
 
     </script>
 @endsection
@@ -449,7 +485,7 @@
 
     <div class="row row-inform table_result" style="display:none;">
         <div class="col-md-12">
-            <table id="result" class="display" cellspacing="0">
+            <table id="distributeDataTable" class="display" cellspacing="0">
                 <thead>
                     <tr>
                         <th>ID</th>

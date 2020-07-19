@@ -42,8 +42,7 @@
 
         $(".select2").select2();
 
-        function getDataAjax(){
-
+        function getCurrentParam(){
             var chk_taxa = "";
             var chk_locality = "";
             var chk_expedition = "";
@@ -58,10 +57,7 @@
                 chk_expedition  = $('#expan_chkbox').val();
             }
 
-            $.ajax({
-                method: "POST",
-                url: "<?php echo url('search/searchdata'); ?>",
-                data: {
+            return {
                         _token: "{{ csrf_token() }}",
                         header_taxonomy: $('#taxa_header_id').val(),
                         domain: $('#domain').val(),
@@ -87,7 +83,16 @@
                         expan_id : $('#expan_id').val(),
                         lang: 'en'
                     }
+        }
+        function getDataAjax(){
+            $.ajax({
+                method: "POST",
+                url: "<?php echo url('search/searchdata'); ?>",
+                data: getCurrentParam()
             }).done(function( data ) {
+                $('.locality_search').html(data['locality']);
+                $('.taxa_search').html(data['taxa']);
+                $('.expedition_search').html(data['expedition']);
 
                 $('.loader').fadeOut();
                 $('.table_result').slideDown();
@@ -100,6 +105,8 @@
 
                 var lang = data['lang_table'];
 
+                initDatatable(getCurrentParam())
+                @if(false)
                 $.each(data['result_searchs'], function(i, data){
 
                     if(lang == 2){
@@ -151,24 +158,63 @@
                         "<a href='#' class='showPic' data-toggle='modal' data-target='#myModal' data-uniqueid='"+data['unique_record']+"' ><span class='glyphicon glyphicon-eye-open' aria-hidden='true'> View image</a>",
                     ] ).draw();
                 });
-
-                $('.locality_search').html(data['locality']);
-                $('.taxa_search').html(data['taxa']);
-                $('.expedition_search').html(data['expedition']);
-
+                @endif
 
             });
         }
+
+        function initDatatable(params){
+
+
+$('#distributeDataTable').DataTable({
+    order: [2, 'asc'],
+    // bFilter: true,
+    // bLengthChange: true,
+    // "paging": true,
+    // pagingType: "full_numbers",
+    processing: true,
+    serverSide: true,
+    ajax: {
+    method: "POST",
+    url: '{!! route('typec.recent.datatable') !!}',
+    data: params
+    },
+    columns: [
+        { data: 'cate_ref', orderable: false, searchable: false },
+        @if($group_permission_a == 2)
+                    { data: 'phylum', name: 't3.name'},
+                    { data: 'subphylum', name: 't4.name'},
+                    { data: 'class', name: 't5.name'},
+                    { data: 'order_o', name: 't6.name'},
+                    { data: 'suborder', name: 't7.name'},
+                    { data: 'infraorder', name: 't8.name'},
+                    { data: 'family', name: 't9.name'},
+        @endif
+                { data: 'current_scientific_name_format', name: 'classification.current_scientific_name_format'},
+                { data: 'previous_scientific_name_format', name: 'classification.previous_scientific_name_format'},
+                { data: 'type_status_en', name: 'w2.name_en'},
+                { data: 'identifier', name: 'r.identifier'},
+                { data: 'previous_identifier', name: 'r.previous_identifier'},
+        @if($group_permission_b == 2)
+                { data: `{{ ($lang==1 ? 'ocean_sea_lake_en' : 'ocean_sea_lake_th') }}`, name: `{{ ($lang==1 ? 'w4.name_en' : 'w4.name_th') }}`},
+                { data: `{{ ($lang==1 ? 'country_en' : 'country_th') }}`, name: `{{ ($lang==1 ? 'country.country_en' : 'country.country_th') }}`},
+                { data: `{{ ($lang==1 ? 'province_en' : 'province_th') }}`, name: `{{ ($lang==1 ? 'p.province_en' : 'p.province_th') }}`},
+        @endif
+        { data: `{{ ($lang==1 ? 'expedition_en' : 'expedition_th') }}`, name: `{{ ($lang==1 ? 'w1.name_en' : 'w1.name_th') }}`},
+        { data: 'showpic', orderable: false, searchable: false },
+    ],
+    });
+}
 
         // export record from result
         function exportRecord() {
             $('.loader').show();
             $.ajax({
                 method: "POST",
-                url: "<?php echo url('search/exportSearchTypeA'); ?>",
+                url: '{!! route('typec.distribution.export') !!}',
                 data: {
-                    _token: "{{ csrf_token() }}",
                     way: 'Recent_Record',
+                    ...getCurrentParam()
                 }
             }).done(function( data ) {
                 if ( data ) {
@@ -502,12 +548,10 @@
 
     <div class="row row-inform table_result" style="display:none;">
         <div class="col-md-12">
-            <table id="result" class="display" cellspacing="0">
+            <table id="distributeDataTable" class="display" cellspacing="0">
                 <thead>
                     <th>ID</th>
                     @if($group_permission_a == 2)
-                        <!-- <th>Domain</th>
-                        <th>Kingdom</th> -->
                         <th>Phylum</th>
                         <th>Subphylum</th>
                         <th>Class (Clade)</th>

@@ -31,12 +31,18 @@ Route::group(['middleware' => ['CheckAuthened']], function () {
         Route::get('diversity', 'SearchTypeCController@searchDiversity');
         Route::get('distribution', 'SearchTypeCController@searchDistribution');
         Route::post('distribution', 'SearchTypeCController@getDistribution');
+        Route::post('distributiondatatable', 'SearchTypeCController@distributionAsDataTable')->name('distribution.datatable'); //Ajax
+        Route::post('diversityCAsDataTable', 'SearchTypeCController@diversityCAsDataTable')->name('typec.diversity.datatable'); //Ajax
+        Route::post('recentRecordCAsDataTable', 'SearchTypeCController@recentRecordCAsDataTable')->name('typec.recent.datatable'); //Ajax
+        Route::post('nameRecordCAsDataTable', 'SearchTypeCController@nameRecordCAsDataTable')->name('typec.record.datatable'); //Ajax
         Route::get('recentrecord', 'SearchTypeCController@searchRecent');
         Route::post('searchdata', 'SearchTypeCController@search'); //Ajax
         Route::get('NameRecord', 'SearchTypeCController@searchByNameRecord');
         Route::post('doNameRecord', 'SearchTypeCController@doSearchNameRecord'); //Ajax
 
         Route::post('exportSearchTypeA', 'ExportRecordController@exportSearchTypeA'); //Ajax
+        Route::post('exportDistributionSearch', 'ExportRecordController@exportDistributionSearch')->name('typec.distribution.export'); //Ajax
+
     });
 
     Route::group(['prefix' => 'abbreviation'], function () {
@@ -320,7 +326,7 @@ Route::group(['middleware' => ['Authen']], function () {
                 Route::get('searchByDate', 'SearchTypeBController@searchByDate');
                 Route::post('doSearchDate', 'SearchTypeBController@doSearchDate'); //Ajax
                 Route::get('searchByDistribution', 'SearchTypeBController@searchByDistribution');
-                Route::post('doSearchDistribution', 'SearchTypeBController@doSearchDistribution');
+                Route::post('doSearchDistribution', 'SearchTypeBController@doSearchDistribution2');
                 Route::get('searchByID', 'SearchTypeBController@searchByID');
                 Route::post('doSearchID', 'SearchTypeBController@doSearchID'); //Ajax
                 Route::get('searchByKeyword', 'SearchTypeBController@searchByKeyword');
@@ -335,6 +341,9 @@ Route::group(['middleware' => ['Authen']], function () {
                 Route::post('doSearchTaxonomy', 'SearchTypeBController@doSearchTaxonomy'); //Ajax
                 Route::post('getTaxonomyFromHeaderTaxonomy', 'AjaxController@getTaxonomyFromHeaderTaxonomy'); //AjaxController
                 Route::post('getDataLocalityBySearch', 'AjaxController@getDataLocalityBySearch'); //AjaxController
+                Route::post('distributiondatatable', 'SearchTypeBController@distributionBAsDataTable')->name('typeb.distribution.datatable'); //Ajax
+                Route::post('exportTypeBDistributionSearch', 'ExportRecordController@exportTypeBDistributionSearch')->name('typeb.distribution.export'); //Ajax
+                Route::post('nameRecordBAsDataTable', 'SearchTypeBController@nameRecordBAsDataTable')->name('typeb.record.datatable'); //Ajax
             });
         });
         /*-- end CheckAdminBoard --*/
@@ -409,12 +418,18 @@ Route::group(['middleware' => ['Authen']], function () {
                 Route::post('getTaxonomyName', 'AjaxController@getTaxonomyName'); //AjaxController
                 Route::get('dashboard', 'SearchTypeAController@searchADashboard');
                 Route::get('diversity', 'SearchTypeAController@searchDiversity');
+                Route::post('diversityAAsDataTable', 'SearchTypeAController@diversityAAsDataTable')->name('typea.diversity.datatable'); //Ajax
                 Route::get('distribution', 'SearchTypeAController@searchDistribution');
                 Route::post('distribution', 'SearchTypeAController@getDistribution');
                 Route::get('recentrecord', 'SearchTypeAController@searchRecent');
                 Route::post('searchdata', 'SearchTypeAController@search'); //Ajax
                 Route::get('NameRecord', 'SearchTypeAController@searchByNameRecord');
                 Route::post('doNameRecord', 'SearchTypeAController@doSearchNameRecord'); //Ajax
+                Route::post('distributionAAsDataTable', 'SearchTypeAController@distributionAAsDataTable')->name('typea.distribution.datatable'); //Ajax
+                Route::post('nameRecordAAsDataTable', 'SearchTypeAController@nameRecordAAsDataTable')->name('typea.record.datatable'); //Ajax
+                Route::post('recentRecordAAsDataTable', 'SearchTypeAController@recentRecordAAsDataTable')->name('typea.recent.datatable'); //Ajax
+
+                Route::post('exportTypeADistributionSearch', 'ExportRecordController@exportTypeADistributionSearch')->name('typea.distribution.export'); //Ajax
 
             });
         });

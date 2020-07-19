@@ -26,47 +26,7 @@
 
 @endsection
 
-@section('script')
-    @include('base_wording_js')
-    @include('googlemap')
 
-    <script>
-        // function CreateView( id ) {
-        //     var view = "<a href=<?php echo url("staff/searchCategory/viewCard"); ?>" + '/' + window.btoa( window.btoa( window.btoa( id ))) + " target='_blank'><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span> View Card</a>";
-        //     return view;
-        // }
-
-        // export record from result
-        function exportRecord() {
-            $('.loader').show();
-            $.ajax({
-                method: "POST",
-                url: "<?php echo url('exportSearchTypeA'); ?>",
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    way: 'Distribution_Search',
-                }
-            }).done(function( data ) {
-                if ( data ) {
-                    window.location.href = '<?php echo "/export_result_record" ?>'+ '/' + data;
-
-                    // // delete file
-                    // $.ajax({
-                    //     method: "POST",
-                    //     url: "<?php //echo url('deleteFileForExcelRecord'); ?>",
-                    //     data: {
-                    //         name_file: data
-                    //     }
-                    // });
-                }
-                $('.loader').hide();
-            });
-        }
-
-    </script>
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key={{ Config::get('api.google_map') }}&callback=initMap"></script>
-
-@endsection
 
 @section('header')
     <?php
@@ -196,9 +156,10 @@
 
             <div class="row">
                 <div class="col-md-12">
-                    <table id="result" class="display" cellspacing="0">
+                    <table id="distributeDataTable" class="display" cellspacing="0">
                         <thead>
-                            <th>IDCatalog/ IDRef</th>
+                            <th>No.</th>
+                            <th>IDCatalog/IDRef</th>
                             <th>Family</th>
                             <th>Genus</th>
                             <th>Current Name</th>
@@ -206,6 +167,7 @@
                             <th>Country</th>
                             <th>Province</th>
                         </thead>
+                        @if(false)
                         <tbody>
                             @foreach( $result_searchs as $value)
                             <tr>
@@ -223,31 +185,109 @@
                             </tr>
                             @endforeach
                         </tbody>
+                        @endif
                     </table>
                 </div>
             </div>
-
+            
         </div>
     </div>
 
 </div>
 
 
-<script type="text/javascript">
-function printContent(redirect){
 
-    $('table#result.display.dataTable.no-footer thead tr th:last-child').remove();
-    $('table#result.display.dataTable.no-footer tbody tr td:last-child').remove();
-    $('#remove-when-print').remove();
 
-    var html = $('#print-area').html();
-    var style = '<style media="screen"> @page { size: landscape; } table#result.display.dataTable.no-footer thead tr th:last-child , table#result.display.dataTable.no-footer tbody tr td:last-child { text-align: left; } </style>';
-    var printcontent = html + style;
+@endsection
 
-    document.body.innerHTML = printcontent;
-    window.print();
-    window.location.href = redirect;
-}
-</script>
+
+@section('script')
+    @include('base_wording_js')
+    @include('googlemap')
+
+    <script type="text/javascript">
+        function printContent(redirect){
+        
+            $('table#result.display.dataTable.no-footer thead tr th:last-child').remove();
+            $('table#result.display.dataTable.no-footer tbody tr td:last-child').remove();
+            $('#remove-when-print').remove();
+        
+            var html = $('#print-area').html();
+            var style = '<style media="screen"> @page { size: landscape; } table#result.display.dataTable.no-footer thead tr th:last-child , table#result.display.dataTable.no-footer tbody tr td:last-child { text-align: left; } </style>';
+            var printcontent = html + style;
+        
+            document.body.innerHTML = printcontent;
+            window.print();
+            window.location.href = redirect;
+        }
+        // function CreateView( id ) {
+        //     var view = "<a href=<?php echo url("staff/searchCategory/viewCard"); ?>" + '/' + window.btoa( window.btoa( window.btoa( id ))) + " target='_blank'><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span> View Card</a>";
+        //     return view;
+        // }
+
+        // export record from result
+        function exportRecord() {
+            $('.loader').show();
+            $.ajax({
+                method: "POST",
+                url: '{!! route('typea.distribution.export') !!}',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    ...{!! json_encode($request) !!},
+                    way: 'Distribution_Search',
+                }
+            }).done(function( data ) {
+                if ( data ) {
+                    window.location.href = '<?php echo "/export_result_record" ?>'+ '/' + data;
+
+                    // // delete file
+                    // $.ajax({
+                    //     method: "POST",
+                    //     url: "<?php //echo url('deleteFileForExcelRecord'); ?>",
+                    //     data: {
+                    //         name_file: data
+                    //     }
+                    // });
+                }
+                $('.loader').hide();
+            });
+        }
+
+        function initDatatable(){
+            $('#distributeDataTable').DataTable({
+                order: [2, 'asc'],
+                // bFilter: true,
+                // bLengthChange: true,
+                // "paging": true,
+                // pagingType: "full_numbers",
+                processing: true,
+                serverSide: true,
+                ajax: {
+                method: "POST",
+                url: '{!! route('typea.distribution.datatable') !!}',
+                data: {
+                    ...{!! json_encode($request) !!},
+                    _token: "{{ csrf_token() }}",
+                }
+                },
+                columns: [
+                    { data: 'DT_Row_Index', orderable: false, searchable: false },   
+                    { data: 'cate_ref', name: 'cate_ref', searchable: false, sortable : false },
+                    { data: 'family', name: 't9.name'},
+                    { data: 'genus', name: 't11.name'},
+                    { data: 'current_scientific_name_format', name: 'classification.current_scientific_name_format'},
+                    { data: `{{ ($lang==1 ? 'ocean_sea_lake_en' : 'ocean_sea_lake_th') }}`, name: `{{ ($lang==1 ? 'w4.name_en' : 'w4.name_th') }}`},
+                    { data: `{{ ($lang==1 ? 'country_en' : 'country_th') }}`, name: `{{ ($lang==1 ? 'country.country_en' : 'country.country_th') }}`},
+                    { data: `{{ ($lang==1 ? 'province_en' : 'province_th') }}`, name: `{{ ($lang==1 ? 'p.province_en' : 'p.province_th') }}`},
+                ]
+            });
+        }
+
+        $(function() {
+            initDatatable();
+        });
+
+    </script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key={{ Config::get('api.google_map') }}&callback=initMap"></script>
 
 @endsection
