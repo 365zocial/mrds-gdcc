@@ -365,7 +365,7 @@ class SearchTypeAController extends Controller
             'r.end_latitude',
             'r.start_longitude',
             'r.end_longitude'
-        ])->groupBy('r.unique_record');
+        ]);
 
 
 
@@ -429,7 +429,7 @@ class SearchTypeAController extends Controller
         }
 
         if ($checkGetSearch) {
-            $data['map']                        = $dataDistribution['result_searchs']->get();
+            $data['map']                        = $dataDistribution['result_searchs']->skip(0)->take(100)->get();
         }
 
         // $data['map']                            = json_encode($data['map']);
@@ -703,7 +703,9 @@ class SearchTypeAController extends Controller
     {
         $data  = $this->dataDistribution($input);
         $btn = '';
-        return Datatables::of($data['result_searchs'])
+        //supakorn 
+        //diversity must show only current name in change request#4 No11
+        return Datatables::of($data['result_searchs']->groupBy('classification.current_scientific_name'))
             ->addColumn('cate_ref', function ($row) {
                 return $row->related_catalog_item . $row->related_reference_item;
             })
@@ -738,6 +740,11 @@ class SearchTypeAController extends Controller
     public function searchByNameRecord()
     {
         $data['lang']   = Session::get('language');
+        $data['local_name'] = Record::getLocalName();
+        $data['vernacular_name'] = Record::getVernacularName();
+        $data['common_name'] = Classification::getCommonName();
+        $data['collector'] = Record::getCollector();
+        $data['identifier'] = Record::getIdentifier();
         return view('search_type_a.search_by_name_record', $data);
     }
 
@@ -755,51 +762,92 @@ class SearchTypeAController extends Controller
         // get value from form
         $way = $input->way;
 
+        if ($input->name_type == 'collector') {
+            $search = $input->collector;
+        } else if ($input->name_type == 'identifier') {
+            $search = $input->identifier;
+        }
+
+        if ($input->name_record_type == 'local_name') {
+            $search_record = $input->local_name;
+        } else if ($input->name_record_type == 'vernacular_name') {
+            $search_record = $input->vernacular_name;
+        } else if ($input->name_record_type == 'common_name') {
+            $search_record = $input->common_name;
+        }
+
         $name_type = $input->name_type;
-        $search = $input->search;
+        $name_record_type = $input->name_record_type;
 
         if ($way == 1) {   // search
             $data['name_type'] = ucfirst($name_type);
             $data['search'] = $search;
+            $data['name_record_type'] = ucfirst($name_record_type);
+            $data['search_record'] = $search_record;
             return Response::json($data);
         } else {    //ajax
             // export excel
-            ExportRecordController::exportSearchByNameRecord($name_type, $search);
+            ExportRecordController::exportSearchByNameRecord($input);
         }
     }
 
 
     //supakorn
     //Created : 11-6-61
-    #แยก query ของ name record ออกมา
+    #แยก query ของ name record ออกมา 
+    #change request#4 No6
+    #change request#4 No7
     public function nameRecordAAsDataTable(Request $input)
     {
         $db = new Record;
         $db = $db->leftjoin('classification', 'record.classification_id', 'classification.id');
+        $db = $db->leftjoin('picture as pic', 'record.unique_record', '=', 'pic.unique_record');
+
         // get DB
-        if ($input->name_type == 'localname') {
-            $db = $db->where('record.local_name', 'like', '%' . $input->search . '%');
-        } else if ($input->name_type == 'vernacularname') {
-            $db = $db->where('record.vernacular_name', 'like', '%' . $input->search . '%');
-        } else if ($input->name_type == 'commonname') {
-            $db = $db->where('classification.common_name', 'like', '%' . $input->search . '%');
+        if ($input->name_record_type == 'local_name') {
+            if (!empty($input->local_name)) {
+                $db = $db->where('record.local_name', 'like', '%' . $input->local_name . '%');
+            }
+        } else if ($input->name_record_type == 'vernacular_name') {
+            if (!empty($input->vernacular_name)) {
+                $db = $db->where('record.vernacular_name', 'like', '%' . $input->vernacular_name . '%');
+            }
+        } else if ($input->name_record_type == 'common_name') {
+            if (!empty($input->common_name)) {
+                $db = $db->where('classification.common_name', 'like', '%' . $input->common_name . '%');
+            }
         }
+
+        if ($input->name_type == 'collector') {
+            if (!empty($input->collector)) {
+                $db = $db->where('record.collector', 'like', '%' . $input->collector . '%');
+            }
+        } else if ($input->name_type == 'identifier') {
+            if (!empty($input->identifier)) {
+                $db = $db->where('record.identifier', 'like', '%' . $input->identifier . '%');
+            }
+        }
+
         $db->select([
             'record.id as record_id',
             'record.related_catalog_item',
             'record.related_reference_item',
+            'classification.current_scientific_name_format',
+            'classification.current_scientific_name',
             'record.local_name',
             'record.vernacular_name',
             'classification.common_name',
-            'classification.current_scientific_name_format',
-            'classification.current_scientific_name',
+            'pic.unique_record',
+            'pic.path_pic'
         ]);
         return Datatables::of($db)
             ->addColumn('cate_ref', function ($row) {
                 return $row->related_catalog_item . $row->related_reference_item;
             })
+
             ->addColumn('action', function ($row) {
-                return '
+                return "<a href='#' class='showPic' data-toggle='modal' data-target='#myModal' data-uniqueid='" . $row->unique_record . "' ><span class='glyphicon glyphicon-eye-open' aria-hidden='true'> View Image</a>" .
+                    '<span class="between"> | </span>
                 <a href="' . url("staff/searchCategory/viewCard") . '/' . base64_encode(base64_encode(base64_encode($row->record_id))) . '" target="_blank"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> View Card</a>
                 ';
             })

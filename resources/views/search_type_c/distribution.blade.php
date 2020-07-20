@@ -114,8 +114,6 @@
                         [$genuses,'genus'],
                         [$species,'species']
                     ];
-
-                    
                 ?>
 
                 <div class="submit_select" style="display: none;"><hr></div>

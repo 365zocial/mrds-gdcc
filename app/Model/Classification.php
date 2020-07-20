@@ -260,4 +260,9 @@ class Classification extends Model
 	{
 		return Classification::where('id', $classification_id)->first();
 	}
+
+	public static function getCommonName()
+	{
+		return Classification::select(['common_name as name'])->distinct('common_name')->where('status', 2)->orderBy('common_name', 'asc')->get();
+	}
 }

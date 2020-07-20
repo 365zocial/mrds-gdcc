@@ -163,7 +163,9 @@
             });
         }
 
+        var table = $('#distributeDataTable').DataTable({});;
         function initDatatable(params){
+            table.destroy();
 
 
 $('#distributeDataTable').DataTable({

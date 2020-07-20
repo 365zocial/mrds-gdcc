@@ -199,8 +199,9 @@
 
             });
         }
+        var table = $('#distributeDataTable').DataTable({});;
         function initDatatable(params){
-
+            table.destroy();
 
 $('#distributeDataTable').DataTable({
     order: [2, 'asc'],

@@ -253,7 +253,9 @@
             });
         }
 
+        var table = $('#distributeDataTable').DataTable({});;
         function initDatatable(){
+            table.destroy();
             $('#distributeDataTable').DataTable({
                 order: [2, 'asc'],
                 // bFilter: true,

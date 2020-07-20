@@ -523,7 +523,7 @@
 
             });
         }
-
+        var table = $('#distributeDataTable').DataTable({});;
         function initDatatable(params){
 
             let showColumn = [
@@ -566,6 +566,7 @@
                             { data: `{{ ($lang==1 ? 'expedition_en' : 'expedition_th') }}`, name: `{{ ($lang==1 ? 'w1.name_en' : 'w1.name_th') }}`},
                         @endif
             ]
+            table.destroy();
             $('#distributeDataTable').DataTable({
                 order: [2, 'asc'],
                 // bFilter: true,
