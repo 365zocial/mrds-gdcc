@@ -16,5 +16,8 @@ class AlterTableSeeder extends Seeder
         DB::statement('ALTER TABLE district DROP PRIMARY KEY, ADD PRIMARY KEY(id ,province_id)');
         DB::statement('ALTER TABLE county DROP PRIMARY KEY, ADD PRIMARY KEY(id, district_id)');
         DB::statement('ALTER TABLE picture DROP PRIMARY KEY, ADD PRIMARY KEY(id, unique_record)');
+
+        DB::statement('ALTER TABLE record_utilizations DROP PRIMARY KEY, ADD PRIMARY KEY(record_unique_id, utilization_id)');
+        DB::statement('ALTER TABLE record_places DROP PRIMARY KEY, ADD PRIMARY KEY(record_unique_id, place_id)');
     }
 }
