@@ -199,9 +199,22 @@ Route::group(['middleware' => ['Authen']], function () {
 
                 Route::group(['prefix' => 'v2'], function () {
                     Route::get('import', 'Migration\V2\ImporterController@index');
+                    Route::get('MigratePicture', 'Migration\V2\ImporterController@MigratePicture');
                 });
             });
 
+            #-----------------#
+            # Disable Wording #
+            #-----------------#
+            Route::group(['prefix' => 'disableWording'], function(){
+                Route::get('/', 'WordingForCheckController@disableWording');
+            });
+            #-------------------------------------------#
+            # Chage sex field from downdrop to checkbox #
+            #-------------------------------------------#
+            Route::group(['prefix' => 'changeTypeSexField'], function(){
+                Route::get('/', 'WordingForCheckController@changeTypeSexField');
+            });
 
             #-------------------#
             # System Log Export #

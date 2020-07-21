@@ -6,9 +6,9 @@
     - นำ file excel ไปแปลง csv ด้วย google แล้ว google จะสลับ "ว/ด/ป เป็น ด/ว/ป" ใน code ดักไว้แล้ว (สำหรับ file ที่เป็น date)
     - นำ file csv มาไว้ใน folder raw_data
     - กำหนดชื่อไฟล์ที่ต้องการจะ migrate ใน raw_data/list.txt โดยสามารถทำได้ทีละ 1 file (ประกอบไปด้วย 100 ตัว)
-    - เรียก url http://localhost/mrds_v2/public/staff/migdata/v2/import
-    - เปลี่ยนชื่อ file ไปเรื่อยๆ
-
+    - ใช้ url นี้ http://localhost/mrds_v2/public/staff/migdata/v2/import
+    - เปลี่ยนชื่อ file ใน raw_data/list.txt ไปเรื่อยๆ
+    - ไฟล์ไหน Migrate เรียบร้อยแล้ว ให้นำไปไว้ใน folder อื่น เช่น  raw_data/2020-3 เพื่อเก็บไว้ว่า file นี้ผ่านการ Migrate แล้ว
 */
 
 namespace App\Http\Controllers\Migration\V2;
@@ -31,6 +31,7 @@ use App\Model\Country;
 use App\Model\Province;
 use App\Model\District;
 use App\Model\County;
+use App\Model\Picture;
 
 class ImporterController extends Controller
 {
@@ -491,14 +492,34 @@ class ImporterController extends Controller
                 $rc->no_locality                        = $_no_locality;
                 $rc->related_reference_item             = $_related_reference_item;
                 $rc->individual_count                   = $temp->individual_count;
-                $rc->latitude                           = $temp->latitude;
+
+                if( empty($temp->latitude) && !empty($temp->verbatim_latitude) ) {
+                    $rc->latitude                       = $this->readVerbatim($temp->verbatim_latitude);
+                } else {
+                    $latitude = explode(" ",$temp->latitude);
+                    $rc->latitude                       = $latitude[0];
+                    // $rc->latitude                       = $temp->latitude;  // TODO: เขียน code ตัดอักษรออก
+                }
                 $rc->verbatim_latitude                  = $_verbatim_latitude;
-                $rc->start_latitude                     = $temp->start_latitude;
-                $rc->end_latitude                       = $temp->end_latitude;
-                $rc->longitude                          = $temp->longitude;
+                $start_latitude = explode(" ",$temp->start_latitude);
+                $rc->start_latitude                     = $start_latitude[0];
+                $end_latitude = explode(" ",$temp->end_latitude);
+                $rc->end_latitude                       = $end_latitude[0];
+
+                if( empty($temp->longitude) && !empty($temp->verbatim_longitude) ) {
+                    $rc->longitude                       = $this->readVerbatim($temp->verbatim_longitude);
+                } else {
+                    $longitude = explode(" ",$temp->longitude);
+                    $rc->latitude                       = $longitude[0];
+
+                    // $rc->longitude                          = $temp->longitude;  // TODO: เขียน code ตัดอักษรออก
+                }
                 $rc->verbatim_longitude                 = $_verbatim_longitude;
-                $rc->start_longitude                    = $temp->start_longitude;
-                $rc->end_longitude                      = $temp->end_longitude;
+                $start_longitude = explode(" ",$temp->start_longitude);
+                $rc->start_longitude                    = $start_longitude[0];
+                $end_longitude = explode(" ",$temp->end_longitude);
+                $rc->end_longitude                      = $end_longitude[0];
+
                 $rc->country                            = $_country;
                 $rc->province                           = $_province;
                 $rc->district                           = $_district;
@@ -610,9 +631,10 @@ class ImporterController extends Controller
         if($verbatim !== ""){
             $dms = explode(" ",$verbatim);
             $dms[0] = str_replace('°', '', $dms[0]);
-            $dms[1] = substr($dms[1], 0, -1);
-            $dms[2] = substr($dms[2], 0, -1);
-            return AllMean::dmstodecimal($dms[0],$dms[1],$dms[2]);
+            $dms[1] = str_replace("'", '', $dms[1]);
+            $dms[2] = str_replace('"', '', $dms[2]);    // ตัดเครื่องหมาย double qoute ออก 1 อัน
+            $dms[2] = str_replace('"', '', $dms[2]);    // ตัดเครื่องหมาย double qoute ออก 1 อัน (เพราะต้องตัด 2 อัน)
+            return AllMean::dmstodecimal($dms[0], $dms[1], $dms[2], $dms[3]);
         }else{
             return "";
         }
@@ -694,8 +716,8 @@ class ImporterController extends Controller
             $related_reference_item = $this->createRelatedReference($temp->marinecenter_code, $source, $temp->collection, $reference, $page, $no_species, $no_locality);
         }
 
-        $verbatim_latitude = $this->readVerbatim($temp->verbatim_latitude);
-        $verbatim_longitude = $this->readVerbatim($temp->verbatim_longitude);
+        $verbatim_latitude = $temp->verbatim_latitude;
+        $verbatim_longitude = $temp->verbatim_longitude;
 
         return [$uniq,
                 $marine_center,
@@ -746,4 +768,85 @@ class ImporterController extends Controller
         return $merge_string;
     }
     // utility function
+
+    // -----------------------
+
+    /*
+        # วิธีการ migrate ภาพ
+        - ให้ทำการแบ่งภาพเป็น Folder ละ 100 ภาพ
+        - หลังจากทำการ Migrate แล้ว ค่อยลากไฟล์ไปไว้ใน Folder ภาพ (raw_pic_data)
+
+        # การทำงานของฟังก์ชัน
+        - $update_db_status ถ้ามีค่าเป็น 0 คือ แค่ตรวจอย่างเดียว, 1 คือ ตรวจและบันทึกลงฐานข้อมูล
+        - ระบบจะนำชื่อภาพไปค้นหาใน Database หากมีจะบันทึกภาพลงใน Record ทันที แต่หากไม่มีข้อมูลจะทำการ exit
+        - เช่น ใน Folder มี 200 ภาพ มีการ exit ที่ 101 แสดงว่าภาพที่ 1-100 ได้ทำการ Update ใน Database แล้ว
+        - ก่อน Migrate ภาพจะต้องตรวจภาพก่อน ว่ามีในชื่อภาพนี้อยู่ใน Record หรือไม่ ด้วยการทำบน Localhost (เพื่อทดสอบก่อนที่จะทำงานบน database จริงๆ )
+    */
+
+    public function MigratePicture(){
+        // เปิดการแก้ไข database
+        $update_db_status = 0;  // 0 คือ แค่ตรวจอย่างเดียว, 1 คือ ตรวจและบันทึกลงฐานข้อมูล
+
+        // ทำการอ่านไฟล์ใน folder
+        $dir    = base_path("raw_pic_data/W/Bivalvia_W_41");
+        $path_folder = "images_migrate/Bivalvia/W/Bivalvia_W_41/";
+        echo $dir. "<br><br><br>";
+
+        $pic_files = scandir($dir);
+        // print_r( count($pic_files) );
+
+        // Loop เช็คไฟล์ใน Folder
+        foreach( $pic_files as $key => $file ) {
+            if( $file == '.' || $file == '..' || $file == '.DS_Store' ) {
+                // เอาไฟล์ที่ไม่ใช่ภาพออก คือ ., .. และ .DS_Store
+            } else {
+                $name_file = [];
+                $name_file = explode("_", $file);
+                $name_file = explode("_", $name_file[1]);   // ตัดคำที่ "_"
+                $name_file = explode("W", $name_file[0]);   // ตัดคำที่ "W", W คือ ภาพมีลายน้ำ
+                // echo $name_file[0]."<br>";
+                echo $key-1 . " - " . $file . "<br>";
+
+                $data = Record::where('catalog_number', $name_file[0])->orderBy('id', 'desc')->first();
+
+                if( empty( $data ) ) {    // ถ้าค้นหาใน database แล้วไม่เจอจะหยุดการทำงาน
+                    echo $key-1 . " - " .$name_file[0] . ' is not found in database.<br>';
+                    exit;
+                } else {    //  store in database
+                    if ( $update_db_status ) {
+                        // เอา uniq record ไปเช็คว่ามีภาพแล้วหรือยัง
+                        $pic = Picture::where('unique_record', $data->unique_record)->orderBy('id', 'desc')->first();
+
+                        if( empty( $pic ) ) {    // ถ้าไม่มี ให้สร้างเป็น level และ selected_picture 1
+                            $pic_store = new Picture;
+                            $pic_store->unique_record = $data->unique_record;
+                            $pic_store->path_pic = $path_folder.$file;
+                            $pic_store->selected_picture = 1;
+                            $pic_store->level = 1;
+                            $pic_store->created_by = 1;
+                            $pic_store->updated_by = 1;
+                            $pic_store->save();
+                        } else {    // ถ้ามีให้สร้างเป็น level มากสุดบวก 1
+                            $pic_store = new Picture;
+                            $pic_store->unique_record = $data->unique_record;
+                            $pic_store->path_pic = $path_folder.$file;
+                            $pic_store->selected_picture = 1;
+                            $pic_store->level = $pic->level + 1;
+                            $pic_store->created_by = 1;
+                            $pic_store->updated_by = 1;
+                            $pic_store->save();
+                        }
+                    }
+                }
+            }
+        }
+
+        if ( $update_db_status == 0 ) {
+            echo "<br><br>Update database is close. Pls change status at 'update_db_status' = 1" . "<br><br>";
+        }
+
+        echo 'Migrate Complete';
+        exit;
+    }
+
 }
