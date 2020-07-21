@@ -321,7 +321,7 @@ class RecordController extends Controller
 
 			RecordSex::where('record_unique_id', $db->unique_record)->delete();
 			if (count((array) $sexs) > 0) {
-				dd($sexs);
+				// dd($sexs);
 				foreach ($sexs as $value) {
 					// $recordSex = new RecordSex;
 					// $recordSex->record_unique_id = $db->unique_record;
