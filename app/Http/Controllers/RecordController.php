@@ -23,6 +23,7 @@ use App\Model\Classification;
 use App\Model\Taxonomy;
 use App\Model\Marinecenter;
 use App\Model\RecordUtilization;
+use App\Model\RecordSex;
 use App\Model\RecordPlace;
 use App\Model\Record;
 use App\Model\Language;
@@ -318,15 +319,16 @@ class RecordController extends Controller
 
 			$lastId = CatchException::catcherAdd($db);
 
-			// RecordUtilization::where('record_unique_id', $db->unique_record)->delete();
-			// if (count((array) $sexs) > 0) {
-			// 	foreach ($sexs as $value) {
-			// 		$recordutil = new RecordUtilization;
-			// 		$recordutil->record_unique_id = $db->unique_record;
-			// 		$recordutil->utilization_id = $value;
-			// 		$recordutil->save();
-			// 	}
-			// }
+			RecordSex::where('record_unique_id', $db->unique_record)->delete();
+			if (count((array) $sexs) > 0) {
+				dd($sexs);
+				foreach ($sexs as $value) {
+					// $recordSex = new RecordSex;
+					// $recordSex->record_unique_id = $db->unique_record;
+					// $recordSex->sex_id = $value;
+					// $recordSex->save();
+				}
+			}
 
 			//log setting
 			if ($lastId) {
