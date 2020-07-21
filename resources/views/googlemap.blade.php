@@ -15,7 +15,9 @@
     var stack_polygon = [];
     var color_fill = ['#FF0000','#0000ff','#00cc00','#ff3399','#000000','#006699','#cc00cc','#ff9900','#00ffff','#999966'];
     var count = 0;
-
+    var icons = ["{{url('assets/images/icon_map_marker/red_pin_1.png')}}","{{url('assets/images/icon_map_marker/red_pin_2.png')}}","{{url('assets/images/icon_map_marker/red_pin_3.png')}}","{{url('assets/images/icon_map_marker/red_pin_4.png')}}","{{url('assets/images/icon_map_marker/red_pin_5.png')}}","{{url('assets/images/icon_map_marker/red_pin_6.png')}}","{{url('assets/images/icon_map_marker/red_pin_7.png')}}","{{url('assets/images/icon_map_marker/red_pin_8.png')}}","{{url('assets/images/icon_map_marker/red_pin_9.png')}}","{{url('assets/images/icon_map_marker/red_pin_10.png')}}","{{url('assets/images/icon_map_marker/red_pin_11.png')}}","{{url('assets/images/icon_map_marker/red_pin_12.png')}}","{{url('assets/images/icon_map_marker/red_pin_13.png')}}","{{url('assets/images/icon_map_marker/red_pin_14.png')}}","{{url('assets/images/icon_map_marker/red_pin_15.png')}}","{{url('assets/images/icon_map_marker/red_pin_16.png')}}","{{url('assets/images/icon_map_marker/red_pin_17.png')}}","{{url('assets/images/icon_map_marker/red_pin_18.png')}}","{{url('assets/images/icon_map_marker/red_pin_19.png')}}","{{url('assets/images/icon_map_marker/red_pin_20.png')}}"];
+    
+    
     function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
           zoom: 6,
@@ -23,32 +25,44 @@
           mapTypeId: google.maps.MapTypeId.roadmap
         });
 
+        //request 4 if marker more than 20 show text
+        if(data_map!== null && data_map.length > 20){
+          $('#map').before('It is complicate to display, plase scaledown your searching') 
+        } 
+
     }
-
+    
+    
+    
     $.each(data_map, function(i, data_map){
-        if(data_map['related_catalog_item'] != null){
-            var id_related = data_map['related_catalog_item'];
-        }else if(data_map['related_reference_item'] != null){
-            var id_related = data_map['related_reference_item'];
-        }
-        info[i] = id_related;
-
-        if(data_map['latitude'] && data_map['longitude']){
-            markers[count] = {"lat": Number(data_map['latitude']), "lng": Number(data_map['longitude']) };
-        }
-       if( Number(data_map['start_latitude']) != "" && Number(data_map['start_longitude']) != "" && Number(data_map['end_latitude']) != "" && Number(data_map['end_longitude']) ){
-           area[count] = [
-                    {lat: Number(data_map['start_latitude']), lng: Number(data_map['start_longitude'])},
-                    {lat: Number(data_map['start_latitude']), lng: Number(data_map['end_longitude'])},
-                    {lat: Number(data_map['end_latitude']), lng: Number(data_map['end_longitude'])},
-                    {lat: Number(data_map['end_latitude']), lng: Number(data_map['start_longitude'])}
-                ];
-       }else{
-           area[count] = null;
+        if(i < 20){
+            if(data_map['related_catalog_item'] != null){
+                var id_related = data_map['related_catalog_item'];
+            }else if(data_map['related_reference_item'] != null){
+                var id_related = data_map['related_reference_item'];
+            }
+            info[i] = id_related;
+            if(data_map['latitude'] && data_map['longitude']){
+                markers[count] = {
+                    "position": {"lat": Number(data_map['latitude']), "lng": Number(data_map['longitude']) },
+                    "icon": icons[i%20]
+                };
+                
+                
+                
+            }
+            if( Number(data_map['start_latitude']) != "" && Number(data_map['start_longitude']) != "" && Number(data_map['end_latitude']) != "" && Number(data_map['end_longitude']) ){
+                area[count] = [
+                            {lat: Number(data_map['start_latitude']), lng: Number(data_map['start_longitude'])},
+                            {lat: Number(data_map['start_latitude']), lng: Number(data_map['end_longitude'])},
+                            {lat: Number(data_map['end_latitude']), lng: Number(data_map['end_longitude'])},
+                            {lat: Number(data_map['end_latitude']), lng: Number(data_map['start_longitude'])}
+                        ];
+            }else{
+                area[count] = null;
+            }
        }
-
        count++;
-
     });
 
     setTimeout( function(){
@@ -57,8 +71,8 @@
             clearPolygon();
             plotMarker();
         }else if(map_type == "area"){
-            clearPolygon();
             clearMarkers();
+            clearPolygon();
             plotPolygon();
         }
     }, 5000);
@@ -66,16 +80,19 @@
     //---------------- Marker -------------------
     function plotMarker(){
         for(var i = 0; i < markers.length; i++){
-            addMarkers(markers[i], i);
+            if(markers[i]){
+            addMarkers(markers[i].position, i,markers[i].icon);
+            }
         }
         markers = [];
     }
 
-    function addMarkers(latlng, i){
+    function addMarkers(latlng, i,icon){
         var marker = new google.maps.Marker({
           map: map,
           animation: google.maps.Animation.DROP,
-          position: latlng
+          position: latlng,
+          icon: icon
         });
 
         var infowindow = new google.maps.InfoWindow;

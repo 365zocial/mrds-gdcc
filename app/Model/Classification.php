@@ -15,20 +15,52 @@ use App\Model\Header_Taxonomy;
 class Classification extends Model
 {
 	protected $table = 'classification';
-	protected $fillable = [ 'current_scientific_name', 'current_scientific_name_format', 'previous_scientific_name', 'previous_scientific_name_format', 'domain', 'kingdom', 'subkingdom', 'infrakingdom', 'phylum', 'subphylum', 'infraphylum', 'superclass', 'class', 'subclass', 'infraclass', 'superorder', 'order_o', 'suborder', 'infraorder', 'superfamily', 'family', 'subfamily', 'genus', 'subgenus', 'species', 'subspecies', 'identification_qualifier', 'protection_thai_law', 'protection_iucn_2019', 'protection_cites', 'common_name', 'status', 'migration_data'];
+	protected $fillable = ['current_scientific_name', 'current_scientific_name_format', 'previous_scientific_name', 'previous_scientific_name_format', 'domain', 'kingdom', 'subkingdom', 'infrakingdom', 'phylum', 'subphylum', 'infraphylum', 'superclass', 'class', 'subclass', 'infraclass', 'superorder', 'order_o', 'suborder', 'infraorder', 'superfamily', 'family', 'subfamily', 'genus', 'subgenus', 'species', 'subspecies', 'identification_qualifier', 'protection_thai_law', 'protection_iucn_2019', 'protection_cites', 'common_name', 'status', 'migration_data'];
 
-	public static function addClassification($cur_sci_name, $iq, $pre_sci_name, $domain, $kingdom, $subkingdom, $infrakingdom, $phylum, $subphylum, $infraphylum, $superclass, $class, $subclass, $infraclass, $superorder, $order_o, $suborder, $infraorder, $superfamily, $family, $subfamily, $genus, $subgenus, $species,
-	$subspecies, $common_name, $protection_thai_law, $protection_iucn_2019, $protection_cites, $invasive_species, $living, $migrate = false) {
+	public static function addClassification(
+		$cur_sci_name,
+		$iq,
+		$pre_sci_name,
+		$domain,
+		$kingdom,
+		$subkingdom,
+		$infrakingdom,
+		$phylum,
+		$subphylum,
+		$infraphylum,
+		$superclass,
+		$class,
+		$subclass,
+		$infraclass,
+		$superorder,
+		$order_o,
+		$suborder,
+		$infraorder,
+		$superfamily,
+		$family,
+		$subfamily,
+		$genus,
+		$subgenus,
+		$species,
+		$subspecies,
+		$common_name,
+		$protection_thai_law,
+		$protection_iucn_2019,
+		$protection_cites,
+		$invasive_species,
+		$living,
+		$migrate = false
+	) {
 
 		//get $created_by
-		$count_classduplicate = Classification::where('current_scientific_name', AllMean::checkAndCutForNoneBackSpace( strip_tags($cur_sci_name) ) )
-						->count();
+		$count_classduplicate = Classification::where('current_scientific_name', AllMean::checkAndCutForNoneBackSpace(strip_tags($cur_sci_name)))
+			->count();
 
-		if($count_classduplicate == 0){
+		if ($count_classduplicate == 0) {
 			$db = new Classification;
-			$db->current_scientific_name 			= 	AllMean::checkAndCutForNoneBackSpace( strip_tags($cur_sci_name) );
+			$db->current_scientific_name 			= 	AllMean::checkAndCutForNoneBackSpace(strip_tags($cur_sci_name));
 			$db->current_scientific_name_format 	= 	$cur_sci_name;
-			$db->previous_scientific_name 			= 	AllMean::checkAndCutForNoneBackSpace( strip_tags($pre_sci_name) );
+			$db->previous_scientific_name 			= 	AllMean::checkAndCutForNoneBackSpace(strip_tags($pre_sci_name));
 			$db->previous_scientific_name_format 	= 	$pre_sci_name;
 			$db->domain 							= 	$domain;
 			$db->kingdom 							= 	$kingdom;
@@ -66,35 +98,67 @@ class Classification extends Model
 			if (Auth::check()) {
 				$db->created_by         =   Auth::user()->id;
 				$db->updated_by         =   Auth::user()->id;
-			}else{
+			} else {
 				$db->created_by         =   1;
 				$db->updated_by         =   1;
 			}
 
 			return CatchException::catcherAdd($db);
-		}else{
-			Session::put('exception_catcher','Classification '.$cur_sci_name.' is Duplicate. Please check this classification in Manage Classification list');
-            return false;
+		} else {
+			Session::put('exception_catcher', 'Classification ' . $cur_sci_name . ' is Duplicate. Please check this classification in Manage Classification list');
+			return false;
 		}
+	}
 
-    }
-
-	public static function updateClassification($id, $cur_sci_name, $iq, $pre_sci_name, $domain, $kingdom, $subkingdom, $infrakingdom, $phylum, $subphylum, $infraphylum, $superclass, $class, $subclass, $infraclass, $superorder, $order_o, $suborder, $infraorder, $superfamily, $family, $subfamily, $genus, $subgenus, $species,
-	$subspecies, $status, $common_name, $protection_thai_law, $protection_iucn_2019, $protection_cites, $invasive_species, $living){
+	public static function updateClassification(
+		$id,
+		$cur_sci_name,
+		$iq,
+		$pre_sci_name,
+		$domain,
+		$kingdom,
+		$subkingdom,
+		$infrakingdom,
+		$phylum,
+		$subphylum,
+		$infraphylum,
+		$superclass,
+		$class,
+		$subclass,
+		$infraclass,
+		$superorder,
+		$order_o,
+		$suborder,
+		$infraorder,
+		$superfamily,
+		$family,
+		$subfamily,
+		$genus,
+		$subgenus,
+		$species,
+		$subspecies,
+		$status,
+		$common_name,
+		$protection_thai_law,
+		$protection_iucn_2019,
+		$protection_cites,
+		$invasive_species,
+		$living
+	) {
 
 		//get $created_by
-    	$created_by 					=	Auth::user()->id;
+		$created_by 					=	Auth::user()->id;
 
 		// ตรวจสอบว่าชื่อซ้ำและไม่ใช่ id ตัวเองหรือไม่ ถ้ามี จะแก้ไข classification ไม่ได้
-		$count_classduplicate = Classification::where('current_scientific_name', AllMean::checkAndCutForNoneBackSpace( strip_tags( $cur_sci_name ) ) )->where('id', '!=', $id)->count();
+		$count_classduplicate = Classification::where('current_scientific_name', AllMean::checkAndCutForNoneBackSpace(strip_tags($cur_sci_name)))->where('id', '!=', $id)->count();
 
-		if ( $count_classduplicate == 0 ) {
-	    	$db 							=	Classification::find($id);
+		if ($count_classduplicate == 0) {
+			$db 							=	Classification::find($id);
 			System_Log::setOldData($db->toArray());
 
-			$db->current_scientific_name 			= AllMean::checkAndCutForNoneBackSpace( strip_tags($cur_sci_name) );
+			$db->current_scientific_name 			= AllMean::checkAndCutForNoneBackSpace(strip_tags($cur_sci_name));
 			$db->current_scientific_name_format 	= $cur_sci_name;
-			$db->previous_scientific_name 			= AllMean::checkAndCutForNoneBackSpace(strip_tags($pre_sci_name) );
+			$db->previous_scientific_name 			= AllMean::checkAndCutForNoneBackSpace(strip_tags($pre_sci_name));
 			$db->previous_scientific_name_format 	= $pre_sci_name;
 			$db->domain 							= 	$domain;
 			$db->kingdom 							= 	$kingdom;
@@ -129,32 +193,36 @@ class Classification extends Model
 			$db->created_by 						= 	$created_by;
 			$db->updated_by 						= 	$created_by;
 		} else {
-			Session::put('exception_catcher','Classification is Dupliicate. Please check this classification in Manage Classification list');
+			Session::put('exception_catcher', 'Classification is Dupliicate. Please check this classification in Manage Classification list');
 			return false;
 		}
 
 		return CatchException::catcherEdit($db);
 	}
 
-    //for autocomplete
-    public static function getNameAndIDClassification() {
-    	return Classification::select('id', 'current_scientific_name', 'current_scientific_name_format')->where('status', 2)->get();
-    }
+	//for autocomplete
+	public static function getNameAndIDClassification()
+	{
+		return Classification::select('id', 'current_scientific_name', 'current_scientific_name_format')->where('status', 2)->get();
+	}
 
-    public static function getClassification($classification_id) {
-    	return Classification::where('id', $classification_id)->first();
-    }
+	public static function getClassification($classification_id)
+	{
+		return Classification::where('id', $classification_id)->first();
+	}
 
-	public static function getClassificationList(){
+	public static function getClassificationList()
+	{
 		return Classification::orderBy('id', 'asc')->get();
 	}
 
-	public static function getClassificationListEnableSearchReport(){
+	public static function getClassificationListEnableSearchReport()
+	{
 		return Classification::select('id', 'current_scientific_name as name')->where('status', 2)->orderBy('id', 'asc')->get();
 	}
 
-	public static function getClassificationByHeaderTaxonomy(){
-
+	public static function getClassificationByHeaderTaxonomy()
+	{
 	}
 
 	public static function getWithRecord()
@@ -165,19 +233,36 @@ class Classification extends Model
 	public static function CheckDuplicateClassification($class_name)
 	{
 
-		return Classification::where('current_scientific_name' ,str_replace("_","",$class_name))->first();
+		return Classification::where('current_scientific_name', str_replace("_", "", $class_name))->first();
 	}
 
-	public static function getClassificationByTaxonomy( $header_taxonomy_id, $taxonomy_id ) {
+	public static function getClassificationByTaxonomy($header_taxonomy_id, $taxonomy_id)
+	{
 		$header_taxonomy = Header_Taxonomy::getHeaderTaxonomy($header_taxonomy_id);
 
 		// convert small word
 		$header_taxonomy = strtolower($header_taxonomy);
 
 		// change order to order_o for column search
-		if( $header_taxonomy == 'order' ) $header_taxonomy = 'order_o';
+		if ($header_taxonomy == 'order') $header_taxonomy = 'order_o';
 
 		return Classification::where('status', 2)->where($header_taxonomy, $taxonomy_id)->get();
 	}
 
+	//get current name to show as species search 
+	//in request#4 No.9
+	public static function getClassificationBySciName()
+	{
+		return Classification::select(['id', 'current_scientific_name_format as name'])->orderBy('current_scientific_name_format', 'asc')->get();
+	}
+
+	public static function getClassificationWording($classification_id)
+	{
+		return Classification::where('id', $classification_id)->first();
+	}
+
+	public static function getCommonName()
+	{
+		return Classification::select(['common_name as name'])->distinct('common_name')->where('status', 2)->orderBy('common_name', 'asc')->get();
+	}
 }

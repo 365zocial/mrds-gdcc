@@ -18,43 +18,49 @@
 # For Reclaim Loan Specimen.
 Route::get('reclaim/loan_specimen', 'LoanController@emailReclaim');
 
-Route::group(['middleware' => ['CheckAuthened']], function() {
+Route::group(['middleware' => ['CheckAuthened']], function () {
     # เข้าใช้งาน โดย user (คนทั่วไป) ไม่ต้อง login
-    Route::get('/','UserController@dashboard');
+    Route::get('/', 'UserController@dashboard');
     Route::post('sendEmailToAdmin', 'MailboxController@sendEmailToAdmin'); //Ajax
 
-    Route::group(['prefix' => 'search'], function(){
+    Route::group(['prefix' => 'search'], function () {
         #------------------------#
         # Search Category C Type #
         #------------------------#
-        Route::post('getTaxonomyName','AjaxController@getTaxonomyName'); //AjaxController
-        Route::get('diversity','SearchTypeCController@searchDiversity');
-        Route::get('distribution','SearchTypeCController@searchDistribution');
-        Route::post('distribution','SearchTypeCController@getDistribution');
-        Route::get('recentrecord','SearchTypeCController@searchRecent');
-        Route::post('searchdata','SearchTypeCController@search'); //Ajax
+        Route::post('getTaxonomyName', 'AjaxController@getTaxonomyName'); //AjaxController
+        Route::get('diversity', 'SearchTypeCController@searchDiversity');
+        Route::get('distribution', 'SearchTypeCController@searchDistribution');
+        Route::post('distribution', 'SearchTypeCController@getDistribution');
+        Route::post('distributiondatatable', 'SearchTypeCController@distributionAsDataTable')->name('distribution.datatable'); //Ajax
+        Route::post('diversityCAsDataTable', 'SearchTypeCController@diversityCAsDataTable')->name('typec.diversity.datatable'); //Ajax
+        Route::post('recentRecordCAsDataTable', 'SearchTypeCController@recentRecordCAsDataTable')->name('typec.recent.datatable'); //Ajax
+        Route::post('nameRecordCAsDataTable', 'SearchTypeCController@nameRecordCAsDataTable')->name('typec.record.datatable'); //Ajax
+        Route::get('recentrecord', 'SearchTypeCController@searchRecent');
+        Route::post('searchdata', 'SearchTypeCController@search'); //Ajax
         Route::get('NameRecord', 'SearchTypeCController@searchByNameRecord');
         Route::post('doNameRecord', 'SearchTypeCController@doSearchNameRecord'); //Ajax
 
         Route::post('exportSearchTypeA', 'ExportRecordController@exportSearchTypeA'); //Ajax
+        Route::post('exportDistributionSearch', 'ExportRecordController@exportDistributionSearch')->name('typec.distribution.export'); //Ajax
+
     });
 
-    Route::group(['prefix' => 'abbreviation'], function(){
-        Route::get('/','UserController@dashboardAbbreviation');
+    Route::group(['prefix' => 'abbreviation'], function () {
+        Route::get('/', 'UserController@dashboardAbbreviation');
         Route::get('referenceLoan', 'WordingController@referenceLoan');
         Route::get('collectionCode', 'WordingController@collectionForUser');
         Route::get('MarineCenter', 'WordingController@MarineCenterForUser');
     });
 });
 
-Route::get('setLangThai','AuthenController@setLanguageTH');
-Route::get('setLangEng','AuthenController@setLanguageEN');
+Route::get('setLangThai', 'AuthenController@setLanguageTH');
+Route::get('setLangEng', 'AuthenController@setLanguageEN');
 
-Route::get('profile','UserController@viewProfile');
-Route::get('editprofile','UserController@editProfile');
-Route::post('editprofile','UserController@doEditProfile');
-Route::get('editpassword','UserController@editPassword');
-Route::post('editpassword','UserController@doEditPassword');
+Route::get('profile', 'UserController@viewProfile');
+Route::get('editprofile', 'UserController@editProfile');
+Route::post('editprofile', 'UserController@doEditProfile');
+Route::get('editpassword', 'UserController@editPassword');
+Route::post('editpassword', 'UserController@doEditPassword');
 
 # For show img when search
 Route::post('recordPicture', 'AjaxController@getRecordPicture');    //AjaxController
@@ -65,30 +71,30 @@ Route::group(['middleware' => ['Authen']], function () {
     Route::post('exportSearchTypeA', 'ExportRecordController@exportSearchTypeA'); //Ajax
     Route::post('deleteFileForExcelRecord', 'ExportRecordController@deleteFileForExcelRecord'); //Ajax
 
-    Route::group(['prefix' => 'staff'], function(){
+    Route::group(['prefix' => 'staff'], function () {
         Route::post('getInfoClassification', 'AjaxController@getInfoClassification'); //AjaxController
-        Route::post('getTaxonomyName','AjaxController@getTaxonomyName'); //AjaxController
+        Route::post('getTaxonomyName', 'AjaxController@getTaxonomyName'); //AjaxController
         Route::post('searchname', 'StaffController@searchByName');
         //Route::post('getNospecies', 'AjaxController@getLastDuplicationPublication');  //AjaxController
 
-        Route::get('dashboard','StaffController@dashboard');
+        Route::get('dashboard', 'StaffController@dashboard');
 
         /*
         *
         * CheckAdmin
         *
         */
-        Route::group(['middleware' => 'CheckAdmin'], function() {
+        Route::group(['middleware' => 'CheckAdmin'], function () {
             #-------------#
             # Manage User #
             #-------------#
-            Route::get('list','StaffController@listUser');
-            Route::get('add','StaffController@addStaff');
-            Route::get('edit/{id}','StaffController@editStaffById')->where('id','[0-9]+');
-            Route::get('resume/{id}','StaffController@resumeUserById')->where('id','[0-9]+');
-            Route::get('delete/{id}','StaffController@deleteUserById')->where('id','[0-9]+');
-            Route::post('add','StaffController@addStaffAction');
-            Route::post('edit/{id}','StaffController@editStaffByIdAction')->where('id','[0-9]+');
+            Route::get('list', 'StaffController@listUser');
+            Route::get('add', 'StaffController@addStaff');
+            Route::get('edit/{id}', 'StaffController@editStaffById')->where('id', '[0-9]+');
+            Route::get('resume/{id}', 'StaffController@resumeUserById')->where('id', '[0-9]+');
+            Route::get('delete/{id}', 'StaffController@deleteUserById')->where('id', '[0-9]+');
+            Route::post('add', 'StaffController@addStaffAction');
+            Route::post('edit/{id}', 'StaffController@editStaffByIdAction')->where('id', '[0-9]+');
 
             #-----------------------#
             # Manage classification #
@@ -105,7 +111,7 @@ Route::group(['middleware' => ['Authen']], function () {
             # Manage wording #
             #----------------#
             Route::get('mainWording', 'WordingController@mainWording');
-            Route::group(['prefix' => 'wording'], function(){
+            Route::group(['prefix' => 'wording'], function () {
                 //taxonomy
                 Route::get('taxonomyList', 'WordingController@taxonomyList');
                 Route::get('list-taxonomy', 'WordingController@getTaxonomyDataTable')->name('list.taxonomy.datatable');
@@ -162,7 +168,7 @@ Route::group(['middleware' => ['Authen']], function () {
             #------------------#
             # Mailbox By Admin #
             #------------------#
-            Route::group(['prefix' => 'mailbox'], function(){
+            Route::group(['prefix' => 'mailbox'], function () {
                 Route::get('dashboard', 'MailboxController@dashboard');
                 Route::get('detailMailboxStaff/{id}', 'MailboxController@detailMailboxStaff');
             });
@@ -170,14 +176,13 @@ Route::group(['middleware' => ['Authen']], function () {
             #------------#
             # Log System #
             #------------#
-            Route::group(['prefix' => 'log'], function(){
-
+            Route::group(['prefix' => 'log'], function () {
             });
 
             #------------------#
             # Group Permission #
             #------------------#
-            Route::group(['prefix' => 'permission'], function(){
+            Route::group(['prefix' => 'permission'], function () {
                 Route::get('view', 'GroupPermissionController@viewGroup_Permission');
                 Route::post('doUpdatePermission', 'GroupPermissionController@updateGroup_Permission');
             });
@@ -185,14 +190,14 @@ Route::group(['middleware' => ['Authen']], function () {
             #--------------#
             # Migrate Data #
             #--------------#
-            Route::group(['prefix' => 'migdata'], function(){
+            Route::group(['prefix' => 'migdata'], function () {
                 Route::get('addfile', 'Migration\Migrate_old_data@index');
                 Route::post('uploadsourcedata', 'Migration\Migrate_old_data@getFile');
                 Route::get('map', 'Migration\Migrate_old_data@mapUnique_record_picture_record');
                 Route::get('addfilethai', 'Migration\MigrateMissingThai@index');
                 Route::get('checkfile', 'Migration\Migrate_check@index');
 
-                Route::group(['prefix' => 'v2'], function() {
+                Route::group(['prefix' => 'v2'], function () {
                     Route::get('import', 'Migration\V2\ImporterController@index');
                     Route::get('MigratePicture', 'Migration\V2\ImporterController@MigratePicture');
                 });
@@ -214,16 +219,16 @@ Route::group(['middleware' => ['Authen']], function () {
             #-------------------#
             # System Log Export #
             #-------------------#
-            Route::group(['prefix' => 'systemlog'], function(){
+            Route::group(['prefix' => 'systemlog'], function () {
                 Route::get('search', 'SystemLogController@searchView');
                 Route::post('search', 'SystemLogController@getSystemLog');
-                Route::get('getLog', function(){
-                    $file = public_path('export_systemlog')."/log.txt";
+                Route::get('getLog', function () {
+                    $file = public_path('export_systemlog') . "/log.txt";
                     $download_name = basename($file);
                     if (file_exists($file)) {
                         header('Content-Type: application/octet-stream');
-                        header('Content-Disposition: attachment; filename='.$download_name);
-                        header('X-Sendfile: '.$file);
+                        header('Content-Disposition: attachment; filename=' . $download_name);
+                        header('X-Sendfile: ' . $file);
                         readfile($file);
                     }
                 });
@@ -237,7 +242,7 @@ Route::group(['middleware' => ['Authen']], function () {
         * CheckAdminManager
         *
         */
-        Route::group(['middleware' => 'CheckAdminManager'], function() {
+        Route::group(['middleware' => 'CheckAdminManager'], function () {
             #-----------------------#
             # Manage classification #
             #-----------------------#
@@ -269,23 +274,23 @@ Route::group(['middleware' => ['Authen']], function () {
             Route::get('approveRecord', 'RecordController@approveRecord');
             Route::get('approveViewRecord/{id?}', 'RecordController@approveViewRecord');
             Route::get('doApproveRecord/{id}', 'RecordController@doApproveRecord');
-            Route::post('checkCatalog','AjaxController@HeadcheckCatalogIsEmpty');
+            Route::post('checkCatalog', 'AjaxController@HeadcheckCatalogIsEmpty');
 
             #--------------#
             # Ajax Wording #
             #--------------#
-            Route::group(['prefix' => 'wording'], function(){
+            Route::group(['prefix' => 'wording'], function () {
                 Route::post('getProvinceInCountry', 'AjaxController@getProvinceInCountry'); //AjaxController
                 Route::post('getDistrictInProvince', 'AjaxController@getDistrictInProvince'); //AjaxController
                 Route::post('getCountyInDistrict', 'AjaxController@getCountyInDistrict'); //AjaxController
-                Route::post('getReferenceByMarineCenterID' , 'AjaxController@getReferenceByMarineCenterID'); //AjaxController
+                Route::post('getReferenceByMarineCenterID', 'AjaxController@getReferenceByMarineCenterID'); //AjaxController
 
             });
 
             #--------------#
             # Export Label #
             #--------------#
-            Route::group(['prefix' => 'export_label'], function(){
+            Route::group(['prefix' => 'export_label'], function () {
                 Route::get('form', 'ExportLabelController@form');
                 Route::post('export', 'ExportLabelController@export');
             });
@@ -297,27 +302,24 @@ Route::group(['middleware' => ['Authen']], function () {
         * CheckManager
         *
         */
-        Route::group(['middleware' => 'CheckManager'], function() {
+        Route::group(['middleware' => 'CheckManager'], function () {
             #--------------------------#
             # Loan Specimen By Manager #
             #--------------------------#
-            Route::group(['prefix' => 'loan'], function(){
+            Route::group(['prefix' => 'loan'], function () {
                 # Show Loan Specimen List
-                Route::get('dashboard','LoanController@managerDashboard');
+                Route::get('dashboard', 'LoanController@managerDashboard');
                 # View Loan Specimen Data and Read Comment
-                Route::get('view_request/{record_loan_id}','LoanController@managerViewRequest');
+                Route::get('view_request/{record_loan_id}', 'LoanController@managerViewRequest');
                 # Insert Comment to database
-                Route::post('view_request/{record_loan_id}','LoanController@managerViewRequestInsert');
+                Route::post('view_request/{record_loan_id}', 'LoanController@managerViewRequestInsert');
                 # View Loan Specimen List
-                Route::post('update_status/{record_loan_id}','LoanController@managerUpdateStatus');
+                Route::post('update_status/{record_loan_id}', 'LoanController@managerUpdateStatus');
                 # View Loan Specimen List
-                Route::get('export_loan','ExportLoanController@exportLoanManager');
+                Route::get('export_loan', 'ExportLoanController@exportLoanManager');
                 # Reclaim Record
                 Route::post('reclaim/loan_specimen', 'LoanController@emailReclaimRecord');
             });
-
-
-
         });
 
         /*-- end CheckManager --*/
@@ -327,17 +329,17 @@ Route::group(['middleware' => ['Authen']], function () {
         * CheckAdminBoard
         *
         */
-        Route::group(['middleware' => 'CheckAdminBoard'], function() {
+        Route::group(['middleware' => 'CheckAdminBoard'], function () {
             #------------------------#
             # Search Category B Type #
             #------------------------#
-            Route::group(['prefix' => 'searchCategory'], function(){
+            Route::group(['prefix' => 'searchCategory'], function () {
                 Route::get('viewRecord/{id}', 'SearchTypeBController@viewRecord');
                 Route::get('searchDashboard', 'SearchTypeBController@searchBDashboard');
                 Route::get('searchByDate', 'SearchTypeBController@searchByDate');
                 Route::post('doSearchDate', 'SearchTypeBController@doSearchDate'); //Ajax
                 Route::get('searchByDistribution', 'SearchTypeBController@searchByDistribution');
-                Route::post('doSearchDistribution', 'SearchTypeBController@doSearchDistribution');
+                Route::post('doSearchDistribution', 'SearchTypeBController@doSearchDistribution2');
                 Route::get('searchByID', 'SearchTypeBController@searchByID');
                 Route::post('doSearchID', 'SearchTypeBController@doSearchID'); //Ajax
                 Route::get('searchByKeyword', 'SearchTypeBController@searchByKeyword');
@@ -352,6 +354,9 @@ Route::group(['middleware' => ['Authen']], function () {
                 Route::post('doSearchTaxonomy', 'SearchTypeBController@doSearchTaxonomy'); //Ajax
                 Route::post('getTaxonomyFromHeaderTaxonomy', 'AjaxController@getTaxonomyFromHeaderTaxonomy'); //AjaxController
                 Route::post('getDataLocalityBySearch', 'AjaxController@getDataLocalityBySearch'); //AjaxController
+                Route::post('distributiondatatable', 'SearchTypeBController@distributionBAsDataTable')->name('typeb.distribution.datatable'); //Ajax
+                Route::post('exportTypeBDistributionSearch', 'ExportRecordController@exportTypeBDistributionSearch')->name('typeb.distribution.export'); //Ajax
+                Route::post('nameRecordBAsDataTable', 'SearchTypeBController@nameRecordBAsDataTable')->name('typeb.record.datatable'); //Ajax
             });
         });
         /*-- end CheckAdminBoard --*/
@@ -361,16 +366,16 @@ Route::group(['middleware' => ['Authen']], function () {
         * CheckAdminBoard
         *
         */
-        Route::group(['middleware' => 'CheckAdminBoardManager'], function() {
+        Route::group(['middleware' => 'CheckAdminBoardManager'], function () {
             # For View Registration Card
-            Route::group(['prefix' => 'searchCategory'], function(){
+            Route::group(['prefix' => 'searchCategory'], function () {
                 Route::get('viewCard/{id}', 'RegistrationCardController@viewRegisterCard'); // View Registration Card
             });
 
             #--------------------------------#
             # Search Report (Count Specimen) #
             #--------------------------------#
-            Route::group(['prefix' => 'searchReport'], function(){ //searchReport
+            Route::group(['prefix' => 'searchReport'], function () { //searchReport
                 # Show Dashboard
                 Route::get('dashboard', 'SearchReportController@dashboard');
                 # Show Taxonomy
@@ -405,7 +410,7 @@ Route::group(['middleware' => ['Authen']], function () {
         * CheckPGCP
         *
         */
-        Route::group(['middleware' => 'CheckPGCP'], function() {
+        Route::group(['middleware' => 'CheckPGCP'], function () {
             Route::get('exportRecord', 'ExportRecordController@exportRecord');
             Route::post('doExportRecord', 'ExportRecordController@doExportRecord');
             Route::get('exportRecordSQL', 'ExportRecordController@exportRecordSQL');
@@ -418,26 +423,30 @@ Route::group(['middleware' => ['Authen']], function () {
         * CheckManagerUserPGCP
         *
         */
-        Route::group(['middleware' => 'CheckManagerUserPGCP'], function() {
+        Route::group(['middleware' => 'CheckManagerUserPGCP'], function () {
             #------------------------#
             # Search Category A Type #
             #------------------------#
-            Route::group(['prefix' => 'searchCategory'], function(){
-                Route::post('getTaxonomyName','AjaxController@getTaxonomyName'); //AjaxController
-                Route::get('dashboard','SearchTypeAController@searchADashboard');
-                Route::get('diversity','SearchTypeAController@searchDiversity');
-                Route::get('distribution','SearchTypeAController@searchDistribution');
-                Route::post('distribution','SearchTypeAController@getDistribution');
-                Route::get('recentrecord','SearchTypeAController@searchRecent');
-                Route::post('searchdata','SearchTypeAController@search'); //Ajax
+            Route::group(['prefix' => 'searchCategory'], function () {
+                Route::post('getTaxonomyName', 'AjaxController@getTaxonomyName'); //AjaxController
+                Route::get('dashboard', 'SearchTypeAController@searchADashboard');
+                Route::get('diversity', 'SearchTypeAController@searchDiversity');
+                Route::post('diversityAAsDataTable', 'SearchTypeAController@diversityAAsDataTable')->name('typea.diversity.datatable'); //Ajax
+                Route::get('distribution', 'SearchTypeAController@searchDistribution');
+                Route::post('distribution', 'SearchTypeAController@getDistribution');
+                Route::get('recentrecord', 'SearchTypeAController@searchRecent');
+                Route::post('searchdata', 'SearchTypeAController@search'); //Ajax
                 Route::get('NameRecord', 'SearchTypeAController@searchByNameRecord');
                 Route::post('doNameRecord', 'SearchTypeAController@doSearchNameRecord'); //Ajax
+                Route::post('distributionAAsDataTable', 'SearchTypeAController@distributionAAsDataTable')->name('typea.distribution.datatable'); //Ajax
+                Route::post('nameRecordAAsDataTable', 'SearchTypeAController@nameRecordAAsDataTable')->name('typea.record.datatable'); //Ajax
+                Route::post('recentRecordAAsDataTable', 'SearchTypeAController@recentRecordAAsDataTable')->name('typea.recent.datatable'); //Ajax
+
+                Route::post('exportTypeADistributionSearch', 'ExportRecordController@exportTypeADistributionSearch')->name('typea.distribution.export'); //Ajax
 
             });
         });
         /*-- end CheckManagerUserPGCP --*/
-
-
     });
 });
 

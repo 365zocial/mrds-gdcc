@@ -1,5 +1,4 @@
 @extends('layouts.app_user')
-
 @section('css')
     @include('base_wording_css')
 
@@ -29,8 +28,21 @@
     @include('base_wording_js')
 
     <script src="{{ URL::asset('assets/script/select2/js/select2.min.js') }}">//for select2 script</script>
-
+    <script src="{{ URL::asset('assets/script/name_record_script.js') }}" type="text/javascript"></script>
     <script type="text/javascript">
+
+        function getCurrentParam(){
+            return {
+                _token: "{{ csrf_token() }}",
+                name_record_type: $('#name_record_type').val(),
+                local_name: $('.dd_filter_name_record_sub.local_name > select').val(),
+                vernacular_name: $('.dd_filter_name_record_sub.vernacular_name > select').val(),
+                common_name: $('.dd_filter_name_record_sub.common_name > select').val(),
+                name_type: $('#name_type').val(),
+                identifier: $('.dd_filter_name_sub.identifier > select').val(),
+                collector: $('.dd_filter_name_sub.collector > select').val(),
+            }
+        }
         $(document).ready(function() {
 
             // Loader
@@ -52,16 +64,15 @@
                     method: "POST",
                     url: "<?php echo url('search/doNameRecord'); ?>",
                     data: {
-                        _token: "{{ csrf_token() }}",
                         way: 1, // 1 is search, 2 is ajax
-                        name_type: $('#name_type').val(),
-                        search: $('#search').val()
+                        ...getCurrentParam()
                     }
                 }).done(function( data ) {
                     $('.table_result').slideDown();
                     tb.clear().draw();
                     $count = 1;
 
+                    @if(false)
                     $.each(data['results'], function(i, data){
                         tb.row.add( [
                             $count,
@@ -71,16 +82,50 @@
                         $count++;
 
                     });
+                    @endif
 
                     name_result = data['name_type'] + ' : ' + data['search'];
+                    name_record_result = data['name_record_type'] + ' : ' + data['search_record'];
 
                     // $('.source_result').html(source);
                     $('.name_result').html(name_result);
+                    $('.name_record_result').html(name_record_result);
+                    
 
                     $('.loader').hide();
+                    initDatatable()
                 });
             });
         });
+
+        var table = $('#recordDataTable').DataTable({});;
+        function initDatatable(){
+            table.destroy();
+            table = $('#recordDataTable').DataTable({
+                // order: [2, 'asc'],
+                // bFilter: true,
+                // bLengthChange: true,
+                // "paging": true,
+                // pagingType: "full_numbers",
+                processing: true,
+                serverSide: true,
+                ajax: {
+                method: "POST",
+                url: '{!! route('typec.record.datatable') !!}',
+                data: getCurrentParam()
+                },
+                columns: [
+                    { data: 'DT_Row_Index', orderable: false, searchable: false },   
+                    { data: 'cate_ref', orderable: false, searchable: false },
+                    { data: 'current_scientific_name_format', name: 'classification.current_scientific_name_format'},
+                    { data: 'local_name', name: 'record.local_name'},
+                    { data: 'vernacular_name', name: 'record.vernacular_name'},
+                    { data: 'common_name', name: 'classification.common_name'},
+                    { data: 'showpic', orderable: false, searchable: false },   
+                    
+                ],
+            });
+        }
 
         // export record from result
         function exportRecord() {
@@ -89,10 +134,8 @@
                 method: "POST",
                 url: "<?php echo url('search/doNameRecord'); ?>",
                 data: {
-                    _token: "{{ csrf_token() }}",
                     way: 2, // 1 is search, 2 is ajax
-                    name_type: $('#name_type').val(),
-                    search: $('#search').val()
+                    ...getCurrentParam()
                 }
             }).done(function( data ) {
                 if ( data ) {
@@ -140,6 +183,40 @@
 
 @section('contain')
 
+ <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Record Picture</h4>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <?php
+    $name_filters = [
+        [$collector,'collector'],
+        [$identifier,'identifier'],
+    ];
+
+    $name_record_filters = [
+        [$local_name,'local_name'],
+        [$vernacular_name,'vernacular_name'],
+        [$common_name,'common_name'],
+    ];
+
+    
+    ?>
+
+
+        
 <div class="row row-with-margin search-category-pages">
     <div class="col-md-8 col-md-offset-2">
         <div class="content-box">
@@ -149,19 +226,56 @@
             <form action="#" method="post" id="form" name="form">
                 @csrf
 
-                <!-- Search by name -->
+                <!-- Search by name Record -->
                 <div class="row row-inform">
                     <div class="col-md-4">
-                        <p class="search-report-dropdown-header">@if($lang == 2){{'ชื่อ'}}@else{{'Name'}}@endif</p>
-                        <select class="form-control select2" id="name_type" name="name_type">
-                            <option value="localname">@if($lang == 2){{'ชื่อพื้นเมือง'}}@else{{'Local Name'}}@endif</option>
-                            <option value="vernacularname">@if($lang == 2){{'ชื่อท้องถิ่น (ชื่อพื้นบ้าน)'}}@else{{'Vernacular Name'}}@endif</option>
-                            <!-- <option value="commonname">Common Name</option> -->
+                        <p class="search-report-dropdown-header">@if($lang == 2){{'ค้นหาด้วยข้อมูลตาราง'}}@else{{'Name Record'}}@endif</p>
+                        <select class="form-control select2" id="name_record_type" name="name_record_type">
+                            <option value="local_name">@if($lang == 2){{'ชื่อพื้นเมือง'}}@else{{'Local Name'}}@endif</option>
+                            <option value="vernacular_name">@if($lang == 2){{'ชื่อท้องถิ่น (ชื่อพื้นบ้าน)'}}@else{{'Vernacular Name'}}@endif</option>
+                            <option value="common_name">@if($lang == 2){{'ชื่อสามัญ'}}@else{{'Common Name'}}@endif</option>
                         </select>
                     </div>
                     <div class="col-md-8">
-                        <p class="search-report-dropdown-header">&nbsp;</p>
-                        <input type="text" class="form-control" id="search" name="search" placeholder="@if($lang == 2){{'ชื่อที่ต้องการค้นหา'}}@else{{'Input Text'}}@endif" required>
+                        @foreach($name_record_filters as $arr_filter)
+                        <div class="dd_filter_name_record_sub {{ $arr_filter[1] }}" style="display:none;">
+                            <p class="search-report-dropdown-header">&nbsp;</p>
+                            <select class="form-control select2" name="{{ $arr_filter[1] }}" id="">
+                                <option selected disabled="" value="0">Select</option>
+                                @foreach( $arr_filter[0] as $value )
+                                    <option value="{{ $value->name }}">{{ $value->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        @endforeach
+                        {{-- <input type="text" class="form-control" id="search" name="search" placeholder="@if($lang == 2){{'ชื่อที่ต้องการค้นหา'}}@else{{'Input Text'}}@endif" required> --}}
+                    </div>
+                </div>
+                <!-- /.Search by name Record -->
+
+
+                <!-- Search by name  -->
+                <div class="row row-inform">
+                    <div class="col-md-4">
+                        <p class="search-report-dropdown-header">@if($lang == 2){{'ค้นหาด้วยข้อมูลบุคคล'}}@else{{'Name'}}@endif</p>
+                        <select class="form-control select2" id="name_type" name="name_type">
+                            <option value="collector">@if($lang == 2){{'ผู้เก็บตัวอย่าง'}}@else{{'Collector'}}@endif</option>
+                            <option value="identifier">@if($lang == 2){{'ผู้ตรวจสอบ'}}@else{{'Identifier'}}@endif</option>
+                        </select>
+                    </div>
+                    <div class="col-md-8">
+                        @foreach($name_filters as $arr_filter)
+                        <div class="dd_filter_name_sub {{ $arr_filter[1] }}" style="display:none;">
+                            <p class="search-report-dropdown-header">&nbsp;</p>
+                            <select class="form-control select2" name="{{ $arr_filter[1] }}" id="">
+                                <option selected disabled="" value="0">Select</option>
+                                @foreach( $arr_filter[0] as $value )
+                                    <option value="{{ $value->name }}">{{ $value->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        @endforeach
+                        {{-- <input type="text" class="form-control" id="search" name="search" placeholder="@if($lang == 2){{'ชื่อที่ต้องการค้นหา'}}@else{{'Input Text'}}@endif" required> --}}
                     </div>
                 </div>
                 <!-- /.Search by name -->
@@ -189,7 +303,8 @@
                 <div class="col-md-8">
                     <p class="content-header search-result">Search Result</p>
                     <p class="record-label search-result">
-                        Name: <span class="record-data" style="margin-right: 30px;"><span class="name_result"></span></span>
+                        Name: <span class="record-data" style="margin-right: 30px;"><span class="name_result"></span></span><br>
+                        Name Record: <span class="record-data" style="margin-right: 30px;"><span class="name_record_result"></span></span><br>
                     </p>
                 </div>
                 <div id="remove-when-print" class="col-md-4" style="text-align: right;">
@@ -203,13 +318,16 @@
 
     <div class="row table_result" style="display: none;">
         <div class="col-md-12">
-            <table id="result" class="display" cellspacing="0">
+            <table id="recordDataTable" class="display" cellspacing="0">
                 <thead>
-                    <tr>
                         <th>No.</th>
-                        <th>IDCatalog / IDRef</th>
+                        <th>IDCatalog</th>
                         <th>Scientific Name</th>
-                    </tr>
+                        <th>Local Name</th>
+                        <th>Vernacular Name</th>
+                        <th>Common Name</th>
+                        <th>Picture</th>
+                        
                 </thead>
             </table>
         </div>

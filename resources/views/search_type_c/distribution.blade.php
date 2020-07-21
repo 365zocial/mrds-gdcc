@@ -71,20 +71,24 @@
                         <p class="search-report-dropdown-header radio">
                             @if($group_permission_a == 2)
                                 <label class="checkbox-inline">
-                                    <input type="checkbox" id="taxa_chkbox" value="1">
+                                    <input type="checkbox" id="taxa_chkbox" name="chk_taxa" value="1">
                                     @if($lang == 2){{'หมวดหมู่'}}@else{{'Taxon'}}@endif
                                 </label>
                             @endif
 
                             @if($group_permission_b == 2)
                                 <label class="checkbox-inline">
-                                    <input type="checkbox" id="local_chkbox" value="1">
+                                    <input type="checkbox" id="local_chkbox" name="chk_locality" value="1">
                                     @if($lang == 2){{'เชิงพื้นที่'}}@else{{'Locality'}}@endif
                                 </label>
                             @endif
                             <label class="checkbox-inline">
-                                <input type="checkbox" id="expan_chkbox" value="1">
+                                <input type="checkbox" id="expan_chkbox" name="chk_expedition" value="1">
                                 @if($lang == 2){{'การสำรวจ'}}@else{{'Expedition'}}@endif
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" id="marinecenter_chkbox" name="chk_marinecenter" value="1">
+                                @if($lang == 2){{'ศูนย์กลางทางทะเล'}}@else{{'Marine Center'}}@endif
                             </label>
                         </p>
                     </div>
@@ -110,9 +114,11 @@
                         [$orders,'order'],
                         [$suborders,'suborder'],
                         [$infraorders,'infraorder'],
+                        [$superfamilies,'superfamilies'],
                         [$families,'family'],
                         [$genuses,'genus'],
-                        [$species,'species']
+                        [$species,'species'],
+                        [$classification,'classification']
                     ];
                 ?>
 
@@ -125,7 +131,7 @@
                             <option selected disabled="" value="0">Select</option>
                             <option value="family">Family</option>
                             <option value="genus">Genus</option>
-                            <option value="species">Species</option>
+                            <option value="classification">Species</option>
                         </select>
                     </div>
                     <div class="col-md-6">
@@ -137,10 +143,10 @@
                         </div>
                         @foreach($arr_taxos as $arr_taxo)
                             <div class="dd_taxa_sub" style="display:none;">
-                                <select class="form-control select2" name="{{ $arr_taxo[1] }}" id="">
+                                <select class="form-control select2" name="{{$arr_taxo[1]}}" id="">
                                     <option selected disabled="" value="0">Select</option>
                                     @foreach( $arr_taxo[0] as $value )
-                                        <option value="{{ $value->id }}">{{ $value->name }}</option>
+                                        <option value="{{ $value->id }}">{!! $value->name !!}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -211,6 +217,21 @@
                                     <option value="{{ $expedition->id }}">{{ $expedition->name_th }}</option>
                                 @else
                                     <option value="{{ $expedition->id }}">{{ $expedition->name_en }}</option>
+                                @endif
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="row row-inform marinecenter_select" style="display:none;">
+                    <div class="col-md-12">
+                        <p class="search-report-dropdown-header">@if($lang == 2){{'ค้นหาตามศูนย์กลางทางทะเล'}}@else{{'Search by Marine Center'}}@endif</p>
+                        <select class="form-control select2" name="marinecenter_id" id="marinecenter_id">
+                            <option selected disabled="" value="0">Select</option>
+                            @foreach ( $marinecenters as $marinecenter )
+                                @if($lang == 2)
+                                    <option value="{{ $marinecenter->id }}">{{ $marinecenter->marinecenter_th }}</option>
+                                @else
+                                    <option value="{{ $marinecenter->id }}">{{ $marinecenter->marinecenter }}</option>
                                 @endif
                             @endforeach
                         </select>

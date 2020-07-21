@@ -26,42 +26,7 @@
     </style>
 @endsection
 
-@section('script')
-    @include('base_wording_js')
-    @include('googlemap')
 
-    <script type="text/javascript">
-        // export record from result
-        function exportRecord() {
-            $('.loader').show();
-            $.ajax({
-                method: "POST",
-                url: "<?php echo url('exportSearchTypeA'); ?>",
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    way: 'Distribution_Search',
-                }
-            }).done(function( data ) {
-                if ( data ) {
-                    window.location.href = '<?php echo "/export_result_record" ?>'+ '/' + data;
-
-                    // // delete file
-                    // $.ajax({
-                    //     method: "POST",
-                    //     url: "<?php //echo url('deleteFileForExcelRecord'); ?>",
-                    //     data: {
-                    //         name_file: data
-                    //     }
-                    // });
-                }
-                $('.loader').hide();
-            });
-        }
-
-    </script>
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key={{ Config::get('api.google_map') }}&callback=initMap"></script>
-
-@endsection
 
 @section('header')
     <?php
@@ -112,7 +77,7 @@
                         @if(Auth::user()->role_id == 4)
                             @if($group_permission_a_board == 2)
                                 @if($lang == 2){{'ค้นหาด้วยหมวดหมู่'}}@else{{'Taxon'}}@endif:
-                                <span class="record-data taxa_search" style="margin-right: 20px;">{{ $taxa }}</span>
+                                <span class="record-data taxa_search" style="margin-right: 20px;">{!!$taxa!!}</span>
                             @endif
                             @if($group_permission_b_board == 2)
                                 @if($lang == 2){{'ค้นหาเชิงพื้นที่'}}@else{{'Locality'}}@endif:
@@ -121,7 +86,7 @@
                         @endif
                         @if(Auth::user()->role_id == 2)
                                 @if($lang == 2){{'ค้นหาด้วยหมวดหมู่'}}@else{{'Taxon'}}@endif:
-                                <span class="record-data taxa_search" style="margin-right: 20px;">{{ $taxa }}</span>
+                                <span class="record-data taxa_search" style="margin-right: 20px;">{!!$taxa!!}</span>
                                 @if($lang == 2){{'ค้นหาเชิงพื้นที่'}}@else{{'Locality'}}@endif:
                                 <span class="record-data locality_search">{{ $locality }}</span>
                         @endif
@@ -131,13 +96,23 @@
                         @if($lang == 2){{'การสำรวจ'}}@else{{'Expendition'}}@endif:
                             <span class="record-data expedition_search">{{ $expedition }}</span>
                     </p>
+                    <p class="record-label">
+                        @if($lang == 2){{'ศูนย์กลางทางทะเล'}}@else{{'Marine Center'}}@endif:
+                            <span class="record-data marinecenter_search">{{ $marinecentertext }}</span>
+                    </p>
 
                 </div>
             </div>
 
             <div class="row table_result">
                 <div class="col-md-12">
+                    @if($is_map_show)
                     <div id="map" style="height:500px"></div>
+                    @else
+                    <div class="alert alert-danger" role="alert">
+                        Records not display in this map are following
+                    </div>
+                    @endif
                 </div>
             </div>
 
@@ -157,19 +132,23 @@
                     <p class="record-label search-result">
                         @if(Auth::user()->role_id == 4)
                             @if($group_permission_a_board == 2)
-                                @if($lang == 2){{'ค้นหาด้วยหมวดหมู่'}}@else{{'Taxon'}}@endif: <span class="record-data" style="margin-right: 30px;"><span class="taxa_search">{{$taxa}}</span></span>
+                                @if($lang == 2){{'ค้นหาด้วยหมวดหมู่'}}@else{{'Taxon'}}@endif: <span class="record-data" style="margin-right: 30px;"><span class="taxa_search">{!! $taxa !!}</span></span>
                             @endif
                             @if($group_permission_b_board == 2)
                                 @if($lang == 2){{'ค้นหาเชิงพื้นที่'}}@else{{'Locality'}}@endif: <span class="record-data" style="margin-right: 30px;"><span class="locality_search">{{$locality}}</span></span>
                             @endif
                         @endif
                         @if(Auth::user()->role_id == 2)
-                            @if($lang == 2){{'ค้นหาด้วยหมวดหมู่'}}@else{{'Taxon'}}@endif: <span class="record-data" style="margin-right: 30px;"><span class="taxa_search">{{$taxa}}</span></span>
+                            @if($lang == 2){{'ค้นหาด้วยหมวดหมู่'}}@else{{'Taxon'}}@endif: <span class="record-data" style="margin-right: 30px;"><span class="taxa_search">{!! $taxa !!}</span></span>
                             @if($lang == 2){{'ค้นหาเชิงพื้นที่'}}@else{{'Locality'}}@endif: <span class="record-data" style="margin-right: 30px;"><span class="locality_search">{{$locality}}</span></span>
                         @endif
                     </p>
                     <p class="record-label search-result">
                         @if($lang == 2){{'การสำรวจ'}}@else{{'Expendition'}}@endif: <span class="record-data" style="margin-right: 30px;"><span class="expedition_search">{{$expedition}}</span></span>
+                    </p>
+
+                    <p class="record-label search-result">
+                        @if($lang == 2){{'ศูนย์กลางทางทะเล'}}@else{{'Marine Center'}}@endif: <span class="record-data" style="margin-right: 30px;"><span class="marinecenter_search">{{$marinecentertext}}</span></span>
                     </p>
                 </div>
                 <div id="remove-when-print" class="col-md-4" style="text-align: right;">
@@ -181,95 +160,36 @@
 
             <div class="row">
                 <div class="col-md-12">
-                    <table id="result" class="display" cellspacing="0">
+                    <table id="distributeDataTable" class="display" cellspacing="0">
                         <thead>
-                            <th>IDCatalog/ IDRef</th>
-                            @if(Auth::user()->role_id == 4)
-                                @if($group_permission_a_board == 2)
-                                    <!-- <th>Domain</th>
-                                    <th>Kingdom</th> -->
-                                    <th>Phylum</th>
-                                    <th>Subphylum</th>
-                                    <th>Class (Clade)</th>
-                                    <th>Order (Clade)</th>
-                                    <th>Suborder (Clade)</th>
-                                    <th>Infraorder (Clade)</th>
-                                    <th>Family (Clade)</th>
-                                @endif
-                            @endif
-                            @if(Auth::user()->role_id == 2)
-                                <!-- <th>Domain</th>
-                                <th>Kingdom</th> -->
-                                <th>Phylum</th>
-                                <th>Subphylum</th>
-                                <th>Class (Clade)</th>
-                                <th>Order (Clade)</th>
-                                <th>Suborder (Clade)</th>
-                                <th>Infraorder (Clade)</th>
-                                <th>Family (Clade)</th>
-                            @endif
+                            <th>No.</th>
+                            <th>IDCatalog/IDRef</th>
+                            <th>Family</th>
+                            <th>Genus</th>
                             <th>Current Name</th>
-                            <th>Previous Name</th>
-                            <th>Type</th>
-                            <th>Habitat</th>
-                            @if(Auth::user()->role_id == 4)
-                                @if($group_permission_b_board == 2)
-                                    <th>Locality</th>
-                                @endif
-                            @endif
-                            @if(Auth::user()->role_id == 2)
-                                <th>Locality</th>
-                            @endif
-                            <th>Picture</th>
+                            <th>Ocean/Sea/Lake</th>
+                            <th>Country</th>
+                            <th>Province</th>
                         </thead>
+                        @if(false)
                         <tbody>
                             @foreach( $result_searchs as $value)
-                                <tr>
-                                    <td>{{ $value->related_catalog_item."".$value->related_reference_item }}</td>
-                                    @if(Auth::user()->role_id == 4)
-                                        @if($group_permission_a_board == 2)
-                                            <!-- <td>{{ $value->domain }}</td>
-                                            <td>{{ $value->kingdom }}</td> -->
-                                            <td>{{ $value->phylum }}</td>
-                                            <td>{{ $value->subphylum }}</td>
-                                            <td>{{ $value->class }}</td>
-                                            <td>{{ $value->order_o }}</td>
-                                            <td>{{ $value->suborder }}</td>
-                                            <td>{{ $value->infraorder }}</td>
-                                            <td>{{ $value->family }}</td>
-                                        @endif
-                                    @endif
-                                    @if(Auth::user()->role_id == 2)
-                                        <!-- <td>{{ $value->domain }}</td>
-                                        <td>{{ $value->kingdom }}</td> -->
-                                        <td>{{ $value->phylum }}</td>
-                                        <td>{{ $value->subphylum }}</td>
-                                        <td>{{ $value->class }}</td>
-                                        <td>{{ $value->order_o }}</td>
-                                        <td>{{ $value->suborder }}</td>
-                                        <td>{{ $value->infraorder }}</td>
-                                        <td>{{ $value->family }}</td>
-                                    @endif
-                                    <td>{!! $value->current_scientific_name_format !!}</td>
-                                    <td>{!! $value->previous_scientific_name_format !!}</td>
-                                    <td>{{ $value->type_status_en }}</td>
-                                    @if($lang == 2)
-                                        <td>{{ $value->habitat_th }}</td>
-                                    @else
-                                        <td>{{ $value->habitat_en }}</td>
-                                    @endif
-                                    @if(Auth::user()->role_id == 4)
-                                        @if($group_permission_b_board == 2)
-                                            <td>{{ $value->locality }}</td>
-                                        @endif
-                                    @endif
-                                    @if(Auth::user()->role_id == 2)
-                                        <td>{{ $value->locality }}</td>
-                                    @endif
-                                    <td><a href='#' class='showPic' data-toggle='modal' data-target='#myModal' data-uniqueid='{{  $value->unique_record }}'><span class='glyphicon glyphicon-eye-open' aria-hidden='true'> View image</a></td>
-                                </tr>
+                            <tr>
+                                <td>{{ $value->related_catalog_item."".$value->related_reference_item }}</td>
+                                <td>{{ $value->family }}</td>
+                                <td>{{ $value->genus }}</td>
+                                <td>{!! $value->current_scientific_name_format !!}</td>
+                                <td>{{ ($lang==1 ? $value->ocean_sea_lake_en : $value->ocean_sea_lake_th) }}</td>
+                                <td>{{ ($lang==1 ? $value->country_en : $value->country_th) }}</td>
+                                <td>{{ ($lang==1 ? $value->province_en  : $value->province_th)}}</td>
+                                @if(false)
+                                <td><a href='#' class='showPic' data-toggle='modal' data-target='#myModal' data-uniqueid='{{  $value->unique_record }}'><span class='glyphicon glyphicon-eye-open' aria-hidden='true'> View image</a></td>
+                                <td><a href="{{ url('staff/searchCategory/viewCard') }}/{{ base64_encode( base64_encode( base64_encode( $value->record_id ))) }}" target="_blank"><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span> View Card</a></td>
+                                @endif
+                            </tr>
                             @endforeach
                         </tbody>
+                        @endif
                     </table>
                 </div>
             </div>
@@ -279,22 +199,90 @@
 
 </div>
 
-<script type="text/javascript">
-function printContent(redirect){
 
-    $('table#result.display.dataTable.no-footer thead tr th:last-child').remove();
-    $('table#result.display.dataTable.no-footer tbody tr td:last-child').remove();
-    $('#remove-when-print').remove();
 
-    var html = $('#print-area').html();
-    var style = '<style media="print"> @page { size: landscape; } table#result.display.dataTable.no-footer thead tr th:last-child , table#result.display.dataTable.no-footer tbody tr td:last-child { text-align: left; } </style>';
-    var printcontent = html + style;
+@endsection
 
-    document.body.innerHTML = printcontent;
-    window.print();
-    window.location.href = redirect;
 
-}
-</script>
+@section('script')
+    @include('base_wording_js')
+    @include('googlemap')
+
+    <script type="text/javascript">
+        function printContent(redirect){
+        
+            $('table#result.display.dataTable.no-footer thead tr th:last-child').remove();
+            $('table#result.display.dataTable.no-footer tbody tr td:last-child').remove();
+            $('#remove-when-print').remove();
+        
+            var html = $('#print-area').html();
+            var style = '<style media="print"> @page { size: landscape; } table#result.display.dataTable.no-footer thead tr th:last-child , table#result.display.dataTable.no-footer tbody tr td:last-child { text-align: left; } </style>';
+            var printcontent = html + style;
+        
+            document.body.innerHTML = printcontent;
+            window.print();
+            window.location.href = redirect;
+        
+        }
+        // export record from result
+        function exportRecord() {
+            $('.loader').show();
+            $.ajax({
+                method: "POST",
+                url: "{!! route('typeb.distribution.export') !!}",
+                data: {
+                    ...{!! json_encode($request) !!},
+                    _token: "{{ csrf_token() }}",
+                    way: 'Distribution_Search',
+                }
+            }).done(function( data ) {
+                if ( data ) {
+                    window.location.href = '<?php echo "/export_result_record" ?>'+ '/' + data;
+
+                    // // delete file
+                    // $.ajax({
+                    //     method: "POST",
+                    //     url: "<?php //echo url('deleteFileForExcelRecord'); ?>",
+                    //     data: {
+                    //         name_file: data
+                    //     }
+                    // });
+                }
+                $('.loader').hide();
+            });
+        }
+
+        $(function() {
+        $('#distributeDataTable').DataTable({
+                order: [2, 'asc'],
+                // bFilter: true,
+                // bLengthChange: true,
+                // "paging": true,
+                // pagingType: "full_numbers",
+                processing: true,
+                serverSide: true,
+                ajax: {
+                method: "POST",
+                url: '{!! route('typeb.distribution.datatable') !!}',
+                data: {
+                    ...{!! json_encode($request) !!},
+                    _token: "{{ csrf_token() }}",
+                }
+                },
+                columns: [
+                    { data: 'DT_Row_Index', orderable: false, searchable: false },   
+                    { data: 'cate_ref', name: 'cate_ref', searchable: false, sortable : false },
+                    { data: 'family', name: 't9.name'},
+                    { data: 'genus', name: 't11.name'},
+                    { data: 'current_scientific_name_format', name: 'classification.current_scientific_name_format'},
+                    { data: `{{ ($lang==1 ? 'ocean_sea_lake_en' : 'ocean_sea_lake_th') }}`, name: `{{ ($lang==1 ? 'w4.name_en' : 'w4.name_th') }}`},
+                    { data: `{{ ($lang==1 ? 'country_en' : 'country_th') }}`, name: `{{ ($lang==1 ? 'country.country_en' : 'country.country_th') }}`},
+                    { data: `{{ ($lang==1 ? 'province_en' : 'province_th') }}`, name: `{{ ($lang==1 ? 'p.province_en' : 'p.province_th') }}`},
+                ]
+            });
+        });
+
+    </script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key={{ Config::get('api.google_map') }}&callback=initMap"></script>
 
 @endsection

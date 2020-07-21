@@ -42,11 +42,12 @@
 
         $(".select2").select2();
 
-        function getDataAjax(){
+        function getCurrentParam(){
 
             var chk_taxa = "";
             var chk_locality = "";
             var chk_expedition = "";
+            var chk_marinecenter = "";
 
             if( $('#taxa_chkbox').is(":checked") ){
                 chk_taxa        = $('#taxa_chkbox').val();
@@ -57,15 +58,11 @@
             if( $('#expan_chkbox').is(":checked") ){
                 chk_expedition  = $('#expan_chkbox').val();
             }
+            if( $('#marinecenter_chkbox').is(":checked") ){
+                chk_marinecenter  = $('#marinecenter_chkbox').val();
+            }
 
-            $.ajax({
-                method: "POST",
-                <?php if(Auth::user()->role_id == 5){ ?>
-                    url: "<?php echo url('user/search/searchdata'); ?>",
-                <?php }elseif(in_array(Auth::user()->role_id,[3,6])){ ?>
-                    url: "<?php echo url('staff/searchCategory/searchdata'); ?>",
-                <?php } ?>
-                data: {
+            return {
                         _token: "{{ csrf_token() }}",
                         header_taxonomy: $('#taxa_header_id').val(),
                         domain: $('#domain').val(),
@@ -81,6 +78,7 @@
                         chk_taxa: chk_taxa,
                         chk_locality: chk_locality,
                         chk_expedition: chk_expedition,
+                        chk_marinecenter:chk_marinecenter,
 
                         locality_type: $('#dd_locality').val(),
                         locality_country: $('#locality_country').val(),
@@ -89,8 +87,20 @@
                         locality_county: $('#locality_county').val(),
 
                         expan_id : $('#expan_id').val(),
+                        marinecenter_id : $('#marinecenter_id').val(),
+                        
                         lang: 'en'
                     }
+        }
+        function getDataAjax(){
+             $.ajax({
+                method: "POST",
+                <?php if(Auth::user()->role_id == 5){ ?>
+                    url: "<?php echo url('user/search/searchdata'); ?>",
+                <?php }elseif(in_array(Auth::user()->role_id,[3,6])){ ?>
+                    url: "<?php echo url('staff/searchCategory/searchdata'); ?>",
+                <?php } ?>
+                data: getCurrentParam(),
             }).done(function( data ) {
 
                 $('.loader').fadeOut();
@@ -104,6 +114,14 @@
 
                 var lang = data['lang_table'];
 
+                $('.locality_search').html(data['locality']);
+                $('.taxa_search').html(data['taxa']);
+                $('.expedition_search').html(data['expedition']);
+                $('.marinecenter_search').html(data['marinecentertext']);
+                initDatatable(getCurrentParam());
+
+                @if(false)
+                //not use anymore beacause error memory
                 $.each(data['result_searchs'], function(i, data){
 
                     if(lang == 2){
@@ -128,6 +146,7 @@
                         re_item_no = "";
                     }
 
+                    
                     tb.row.add( [
                             re_cat_no+""+re_item_no,
                         @if(Auth::user()->role_id == 3)
@@ -183,12 +202,53 @@
                         @endif
                     ] ).draw();
                 });
+                @endif
 
-                $('.locality_search').html(data['locality']);
-                $('.taxa_search').html(data['taxa']);
-                $('.expedition_search').html(data['expedition']);
+            });
+        }
 
 
+        var table = $('#distributeDataTable').DataTable({});;
+        function initDatatable(params){
+            table.destroy();
+            table = $('#distributeDataTable').DataTable({
+            order: [2, 'asc'],
+            // bFilter: true,
+            // bLengthChange: true,
+            // "paging": true,
+            // pagingType: "full_numbers",
+            processing: true,
+            serverSide: true,
+            ajax: {
+                method: "POST",
+                url: '{!! route('typea.recent.datatable') !!}',
+                data: params
+            },
+            columns: [
+                { data: 'cate_ref', orderable: false, searchable: false },
+            @if($group_permission_a == 2)
+                { data: 'phylum', name: 't3.name'},
+                { data: 'subphylum', name: 't4.name'},
+                { data: 'class', name: 't5.name'},
+                { data: 'order_o', name: 't6.name'},
+                { data: 'suborder', name: 't7.name'},
+                { data: 'infraorder', name: 't8.name'},
+                { data: 'family', name: 't9.name'},
+            @endif
+                { data: 'current_scientific_name_format', name: 'classification.current_scientific_name_format'},
+                { data: 'previous_scientific_name_format', name: 'classification.previous_scientific_name_format'},
+                { data: 'type_status_en', name: 'w2.name_en'},
+                { data: 'identifier', name: 'r.identifier'},
+                { data: 'previous_identifier', name: 'r.previous_identifier'},
+            @if($group_permission_b == 2)
+                { data: `{{ ($lang==1 ? 'ocean_sea_lake_en' : 'ocean_sea_lake_th') }}`, name: `{{ ($lang==1 ? 'w4.name_en' : 'w4.name_th') }}`},
+                { data: `{{ ($lang==1 ? 'country_en' : 'country_th') }}`, name: `{{ ($lang==1 ? 'country.country_en' : 'country.country_th') }}`},
+                { data: `{{ ($lang==1 ? 'province_en' : 'province_th') }}`, name: `{{ ($lang==1 ? 'p.province_en' : 'p.province_th') }}`},
+            @endif
+                { data: `{{ ($lang==1 ? 'expedition_en' : 'expedition_th') }}`, name: `{{ ($lang==1 ? 'w1.name_en' : 'w1.name_th') }}`},
+                { data: 'showpic', orderable: false, searchable: false },
+                { data: 'action', orderable: false, searchable: false },
+                ]
             });
         }
 
@@ -202,10 +262,10 @@
             $('.loader').show();
             $.ajax({
                 method: "POST",
-                url: "<?php echo url('exportSearchTypeA'); ?>",
+                url: '{!! route('typea.distribution.export') !!}',
                 data: {
-                    _token: "{{ csrf_token() }}",
                     way: 'Recent_Record',
+                    ...getCurrentParam()
                 }
             }).done(function( data ) {
                 if ( data ) {
@@ -223,7 +283,6 @@
                 $('.loader').hide();
             });
         }
-
     </script>
 @endsection
 
@@ -292,7 +351,7 @@
                 <form class="" id="form" action="" method="post">
                 @csrf
                     <div class="row row-inform">
-                        <div class="col-md-6">
+                        <div class="col-md-8">
                             <p class="search-report-dropdown-header">
                                 @if($lang == 2)
                                     ค้นหาโดย
@@ -330,10 +389,25 @@
                                         Expedition
                                     @endif
                                 </label>
+                                <label class="checkbox-inline">
+                                <input type="checkbox" id="marinecenter_chkbox" value="1">
+                                @if($lang == 2){{'ศูนย์กลางทางทะเล'}}@else{{'Marine Center'}}@endif
+                                </label>
                             </p>
                         </div>
                     </div>
-
+                    {{-- 't1.name as domain',
+            't2.name as kingdom',
+            't3.name as phylum',
+            't4.name as subphylum',
+            't5.name as class',
+            't6.name as order_o',
+            't7.name as suborder',
+            't8.name as infraorder',
+            't9.name as family',
+            't10.name as superfamily',
+            't11.name as genus',
+            't12.name as species', --}}
                     <?php
                         $arr_taxos = [
                             [$domains,'domain'],
@@ -344,7 +418,11 @@
                             [$orders,'order'],
                             [$suborders,'suborder'],
                             [$infraorders,'infraorder'],
-                            [$families,'family']
+                            [$superfamilies,'superfamilies'],
+                            [$families,'family'],
+                            [$genuses,'genus'],
+                            [$species,'species'],
+                            [$classification,'classification']
                         ];
                     ?>
 
@@ -355,15 +433,16 @@
                             <p class="search-report-dropdown-header">@if($lang == 2){{'ค้นหาด้วยหมวดหมู่'}}@else{{'Search by Taxon'}}@endif</p>
                             <select class="form-control select2" name="header_taxonomy" id="taxa_header_id">
                                 <option selected disabled="" value="0">Select</option>
-                                <option value="domain">Domain</option>
-                                <option value="kingdom">Kingdom</option>
                                 <option value="phylum">Phylum</option>
                                 <option value="subphylum">Subphylum</option>
                                 <option value="class">Class / Clade</option>
                                 <option value="order">Order / Clade</option>
                                 <option value="suborder">Suborder / Clade</option>
                                 <option value="infraorder">Infraorder / Clade</option>
+                                <option value="superfamily">Super Family / Clade</option>
                                 <option value="family">Family / Clade</option>
+                                <option value="genus">Genus</option>
+                                <option value="classification">Species</option>
                             </select>
                         </div>
                         <div class="col-md-6 form-group">
@@ -378,7 +457,7 @@
                                     <select class="form-control select2" name="taxa" id="{{ $arr_taxo[1] }}">
                                         <option selected disabled="" value="0">Select</option>
                                         @foreach( $arr_taxo[0] as $value )
-                                            <option value="{{ $value->id }}">{{ $value->name }}</option>
+                                            <option value="{{ $value->id }}">{!! $value->name !!}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -452,6 +531,21 @@
                                 @endforeach
                             </select>
                         </div>
+                    </div>
+                    <div class="row row-inform marinecenter_select" style="display:none;">
+                    <div class="col-md-12">
+                        <p class="search-report-dropdown-header">@if($lang == 2){{'ค้นหาตามศูนย์กลางทางทะเล'}}@else{{'Search by Marine Center'}}@endif</p>
+                        <select class="form-control select2" name="marinecenter_id" id="marinecenter_id">
+                            <option selected disabled="" value="0">Select</option>
+                            @foreach ( $marinecenters as $marinecenter )
+                                @if($lang == 2)
+                                    <option value="{{ $marinecenter->id }}">{{ $marinecenter->marinecenter_th }}</option>
+                                @else
+                                    <option value="{{ $marinecenter->id }}">{{ $marinecenter->marinecenter }}</option>
+                                @endif
+                            @endforeach
+                        </select>
+                    </div>
                     </div>
 
                     <div class="row submit_select" style="display:none; text-align:center;">
@@ -546,18 +640,26 @@
                         <span class="record-data" style="margin-right: 30px;"><span class="expedition_search"></span></span>
                     </p>
                 </div>
+                <div class="col-md-12">
+                    <p class="record-label search-result">
+                        @if($lang == 2)
+                            ศูนย์กลางทางทะเล:
+                        @else
+                            Marine Center:
+                        @endif
+                        <span class="record-data" style="margin-right: 30px;"><span class="marinecenter_search"></span></span>
+                    </p>
+                </div>
             </div>
         </div>
     </div>
 
     <div class="row row-inform table_result" style="display:none;">
         <div class="col-md-12">
-            <table id="result" class="display" cellspacing="0">
+            <table id="distributeDataTable" class="display" cellspacing="0">
                 <thead>
                     <th>ID</th>
                     @if($group_permission_a == 2)
-                        <!-- <th>Domain</th>
-                        <th>Kingdom</th> -->
                         <th>Phylum</th>
                         <th>Subphylum</th>
                         <th>Class (Clade)</th>

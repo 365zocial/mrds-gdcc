@@ -90,20 +90,23 @@
                         <p class="search-report-dropdown-header radio">
                             @if($group_permission_a == 2)
                                 <label class="checkbox-inline">
-                                    <input type="checkbox" id="taxa_chkbox" value="1">
+                                    <input type="checkbox" id="taxa_chkbox" name="chk_taxa" value="1">
                                     @if($lang == 2){{'หมวดหมู่'}}@else{{'Taxon'}}@endif
                                 </label>
                             @endif
-
                             @if($group_permission_b == 2)
                                 <label class="checkbox-inline">
-                                    <input type="checkbox" id="local_chkbox" value="1">
+                                    <input type="checkbox" id="local_chkbox" name="chk_locality" value="1">
                                     @if($lang == 2){{'เชิงพื้นที่'}}@else{{'Locality'}}@endif
                                 </label>
                             @endif
                             <label class="checkbox-inline">
-                                <input type="checkbox" id="expan_chkbox" value="1">
+                                <input type="checkbox" id="expan_chkbox" name="chk_expedition" value="1">
                                 @if($lang == 2){{'การสำรวจ'}}@else{{'Expedition'}}@endif
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" id="marinecenter_chkbox" name="chk_marinecenter" value="1">
+                                @if($lang == 2){{'ศูนย์กลางทางทะเล'}}@else{{'Marine Center'}}@endif
                             </label>
                         </p>
                     </div>
@@ -118,6 +121,18 @@
                         </select>
                     </div>
                 </div>
+                {{-- 't1.name as domain',
+            't2.name as kingdom',
+            't3.name as phylum',
+            't4.name as subphylum',
+            't5.name as class',
+            't6.name as order_o',
+            't7.name as suborder',
+            't8.name as infraorder',
+            't9.name as family',
+            't10.name as superfamily',
+            't11.name as genus',
+            't12.name as species', --}}
 
                 <?php
                     $arr_taxos = [
@@ -129,7 +144,11 @@
                         [$orders,'order'],
                         [$suborders,'suborder'],
                         [$infraorders,'infraorder'],
-                        [$families,'family']
+                        [$superfamilies,'superfamilies'],
+                        [$families,'family'],
+                        [$genuses,'genus'],
+                        [$species,'species'],
+                        [$classification,'classification']
                     ];
 
                 ?>
@@ -141,15 +160,9 @@
                         <p class="search-report-dropdown-header">@if($lang == 2){{'ค้นหาด้วยหมวดหมู่'}}@else{{'Search by Taxon'}}@endif</p>
                         <select class="form-control select2" name="header_taxonomy" id="taxa_header_id">
                             <option selected disabled="" value="0">Select</option>
-                            <option value="domain">Domain</option>
-                            <option value="kingdom">Kingdom</option>
-                            <option value="phylum">Phylum</option>
-                            <option value="subphylum">Subphylum</option>
-                            <option value="class">Class / Clade</option>
-                            <option value="order">Order / Clade</option>
-                            <option value="suborder">Suborder / Clade</option>
-                            <option value="infraorder">Infraorder / Clade</option>
-                            <option value="family">Family / Clade</option>
+                            <option value="family">Family</option>
+                            <option value="genus">Genus</option>
+                            <option value="classification">Species</option>
                         </select>
                     </div>
                     <div class="col-md-6">
@@ -164,7 +177,7 @@
                                 <select class="form-control select2" name="{{ $arr_taxo[1] }}" id="">
                                     <option selected disabled="" value="0">Select</option>
                                     @foreach( $arr_taxo[0] as $value )
-                                        <option value="{{ $value->id }}">{{ $value->name }}</option>
+                                        <option value="{{ $value->id }}">{!! $value->name !!}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -235,6 +248,22 @@
                                     <option value="{{ $expedition->id }}">{{ $expedition->name_th }}</option>
                                 @else
                                     <option value="{{ $expedition->id }}">{{ $expedition->name_en }}</option>
+                                @endif
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row row-inform marinecenter_select" style="display:none;">
+                    <div class="col-md-12">
+                        <p class="search-report-dropdown-header">@if($lang == 2){{'ค้นหาตามศูนย์กลางทางทะเล'}}@else{{'Search by Marine Center'}}@endif</p>
+                        <select class="form-control select2" name="marinecenter_id" id="marinecenter_id">
+                            <option selected disabled="" value="0">Select</option>
+                            @foreach ( $marinecenters as $marinecenter )
+                                @if($lang == 2)
+                                    <option value="{{ $marinecenter->id }}">{{ $marinecenter->marinecenter_th }}</option>
+                                @else
+                                    <option value="{{ $marinecenter->id }}">{{ $marinecenter->marinecenter }}</option>
                                 @endif
                             @endforeach
                         </select>
