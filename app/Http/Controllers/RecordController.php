@@ -103,7 +103,7 @@ class RecordController extends Controller
 			$data['donated_froms'] = Wording::getWordingByWordingTypeForForm(10);
 			$data['deposited_ats'] = Wording::getWordingByWordingTypeForForm(11);
 			$data['type_statuses'] = Wording::getWordingByWordingTypeForForm(2);
-			$data['sexs'] = Wording::getWordingByWordingTypeForForm(5);
+			$data['sexs'] = Wording::getWordingByWordingTypeSex();
 			$data['life_stages'] = Wording::getWordingByWordingTypeForForm(9);
 			$data['ocean_sea_lakes'] = Wording::getWordingByWordingTypeForForm(3);
 			$data['sediment_types'] = Wording::getWordingByWordingTypeForForm(25);
