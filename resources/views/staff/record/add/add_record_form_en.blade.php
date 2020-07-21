@@ -382,10 +382,13 @@
                   <div class="col-md-12">
                     <p class="search-report-dropdown-header">Sex</p>
                     @if(!empty($sexs))
-                            @foreach($sexs as $sex)
-                            <label class="checkbox-inline" style="font-weight:light"><input class="form-check-input" type="checkbox" id="sex{{ $sex->id }}" name="sex[]" value="{{ $sex->id }}">{{ $sex->name_en }}</label>
-                            @endforeach
-                      @endif
+                      @foreach($sexs as $sex)
+                        <label class="checkbox-inline" style="font-weight:light">
+                          <input class="form-check-input" type="checkbox" id="sex{{ $sex->id }}" name="sexs[]" value="{{ $sex->id }}">
+                          {{ $sex->name_en }}
+                        </label>
+                      @endforeach
+                    @endif
                   </div>
                 </div>
                 <div class="row row-inform">

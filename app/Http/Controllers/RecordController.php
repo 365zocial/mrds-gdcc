@@ -167,7 +167,7 @@ class RecordController extends Controller
 		$deposited_at = $input->deposited_at;
 		$type_status = $input->type_status;
 		$individual_count = $input->individual_count;
-		$sex = $input->sex;
+		$sexs = $input->sexs; //edit sexs receive multi variable #4
 		$size = $input->size;
 		$life_stage = $input->life_stage;
 		$ocean_sea_lake = $input->ocean_sea_lake;
@@ -284,7 +284,7 @@ class RecordController extends Controller
 			$db->habitat						= $habitat;
 			$db->sediment_type					= $sediment_type;
 			$db->type_status					= $type_status;
-			$db->sex						 	= $sex;
+			// $db->sex						 	= $sex;
 			$db->size						 	= $size;
 			$db->life_stage						= $life_stage;
 			$db->donated_from					= $donated_from;
@@ -317,6 +317,16 @@ class RecordController extends Controller
 			$db->updated_by						= Auth::user()->id;
 
 			$lastId = CatchException::catcherAdd($db);
+
+			// RecordUtilization::where('record_unique_id', $db->unique_record)->delete();
+			// if (count((array) $sexs) > 0) {
+			// 	foreach ($sexs as $value) {
+			// 		$recordutil = new RecordUtilization;
+			// 		$recordutil->record_unique_id = $db->unique_record;
+			// 		$recordutil->utilization_id = $value;
+			// 		$recordutil->save();
+			// 	}
+			// }
 
 			//log setting
 			if ($lastId) {
