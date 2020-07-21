@@ -199,50 +199,51 @@
 
             });
         }
+
+
         var table = $('#distributeDataTable').DataTable({});;
         function initDatatable(params){
             table.destroy();
-
-$('#distributeDataTable').DataTable({
-    order: [2, 'asc'],
-    // bFilter: true,
-    // bLengthChange: true,
-    // "paging": true,
-    // pagingType: "full_numbers",
-    processing: true,
-    serverSide: true,
-    ajax: {
-    method: "POST",
-    url: '{!! route('typea.recent.datatable') !!}',
-    data: params
-    },
-    columns: [
-        { data: 'cate_ref', orderable: false, searchable: false },
-        @if($group_permission_a == 2)
-                    { data: 'phylum', name: 't3.name'},
-                    { data: 'subphylum', name: 't4.name'},
-                    { data: 'class', name: 't5.name'},
-                    { data: 'order_o', name: 't6.name'},
-                    { data: 'suborder', name: 't7.name'},
-                    { data: 'infraorder', name: 't8.name'},
-                    { data: 'family', name: 't9.name'},
-        @endif
+            $('#distributeDataTable').DataTable({
+            order: [2, 'asc'],
+            // bFilter: true,
+            // bLengthChange: true,
+            // "paging": true,
+            // pagingType: "full_numbers",
+            processing: true,
+            serverSide: true,
+            ajax: {
+                method: "POST",
+                url: '{!! route('typea.recent.datatable') !!}',
+                data: params
+            },
+            columns: [
+                { data: 'cate_ref', orderable: false, searchable: false },
+            @if($group_permission_a == 2)
+                { data: 'phylum', name: 't3.name'},
+                { data: 'subphylum', name: 't4.name'},
+                { data: 'class', name: 't5.name'},
+                { data: 'order_o', name: 't6.name'},
+                { data: 'suborder', name: 't7.name'},
+                { data: 'infraorder', name: 't8.name'},
+                { data: 'family', name: 't9.name'},
+            @endif
                 { data: 'current_scientific_name_format', name: 'classification.current_scientific_name_format'},
                 { data: 'previous_scientific_name_format', name: 'classification.previous_scientific_name_format'},
                 { data: 'type_status_en', name: 'w2.name_en'},
                 { data: 'identifier', name: 'r.identifier'},
                 { data: 'previous_identifier', name: 'r.previous_identifier'},
-        @if($group_permission_b == 2)
+            @if($group_permission_b == 2)
                 { data: `{{ ($lang==1 ? 'ocean_sea_lake_en' : 'ocean_sea_lake_th') }}`, name: `{{ ($lang==1 ? 'w4.name_en' : 'w4.name_th') }}`},
                 { data: `{{ ($lang==1 ? 'country_en' : 'country_th') }}`, name: `{{ ($lang==1 ? 'country.country_en' : 'country.country_th') }}`},
                 { data: `{{ ($lang==1 ? 'province_en' : 'province_th') }}`, name: `{{ ($lang==1 ? 'p.province_en' : 'p.province_th') }}`},
-        @endif
-        { data: `{{ ($lang==1 ? 'expedition_en' : 'expedition_th') }}`, name: `{{ ($lang==1 ? 'w1.name_en' : 'w1.name_th') }}`},
-        { data: 'showpic', orderable: false, searchable: false },
-        { data: 'action', orderable: false, searchable: false },
-    ],
-    });
-}
+            @endif
+                { data: `{{ ($lang==1 ? 'expedition_en' : 'expedition_th') }}`, name: `{{ ($lang==1 ? 'w1.name_en' : 'w1.name_th') }}`},
+                { data: 'showpic', orderable: false, searchable: false },
+                { data: 'action', orderable: false, searchable: false },
+                ]
+            });
+        }
 
         function CreateView( id ) {
             var view = "<a href=<?php echo url("staff/searchCategory/viewCard"); ?>" + '/' + window.btoa( window.btoa( window.btoa( id ))) + " target='_blank'><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span> View Card</a>";
@@ -275,7 +276,6 @@ $('#distributeDataTable').DataTable({
                 $('.loader').hide();
             });
         }
-
     </script>
 @endsection
 
@@ -385,7 +385,18 @@ $('#distributeDataTable').DataTable({
                             </p>
                         </div>
                     </div>
-
+                    {{-- 't1.name as domain',
+            't2.name as kingdom',
+            't3.name as phylum',
+            't4.name as subphylum',
+            't5.name as class',
+            't6.name as order_o',
+            't7.name as suborder',
+            't8.name as infraorder',
+            't9.name as family',
+            't10.name as superfamily',
+            't11.name as genus',
+            't12.name as species', --}}
                     <?php
                         $arr_taxos = [
                             [$domains,'domain'],
@@ -396,7 +407,11 @@ $('#distributeDataTable').DataTable({
                             [$orders,'order'],
                             [$suborders,'suborder'],
                             [$infraorders,'infraorder'],
-                            [$families,'family']
+                            [$superfamilies,'superfamilies'],
+                            [$families,'family'],
+                            [$genuses,'genus'],
+                            [$species,'species'],
+                            [$classification,'classification']
                         ];
                     ?>
 
@@ -407,15 +422,16 @@ $('#distributeDataTable').DataTable({
                             <p class="search-report-dropdown-header">@if($lang == 2){{'ค้นหาด้วยหมวดหมู่'}}@else{{'Search by Taxon'}}@endif</p>
                             <select class="form-control select2" name="header_taxonomy" id="taxa_header_id">
                                 <option selected disabled="" value="0">Select</option>
-                                <option value="domain">Domain</option>
-                                <option value="kingdom">Kingdom</option>
                                 <option value="phylum">Phylum</option>
                                 <option value="subphylum">Subphylum</option>
                                 <option value="class">Class / Clade</option>
                                 <option value="order">Order / Clade</option>
                                 <option value="suborder">Suborder / Clade</option>
                                 <option value="infraorder">Infraorder / Clade</option>
+                                <option value="superfamily">Super Family / Clade</option>
                                 <option value="family">Family / Clade</option>
+                                <option value="genus">Genus</option>
+                                <option value="classification">Species</option>
                             </select>
                         </div>
                         <div class="col-md-6 form-group">
@@ -430,7 +446,7 @@ $('#distributeDataTable').DataTable({
                                     <select class="form-control select2" name="taxa" id="{{ $arr_taxo[1] }}">
                                         <option selected disabled="" value="0">Select</option>
                                         @foreach( $arr_taxo[0] as $value )
-                                            <option value="{{ $value->id }}">{{ $value->name }}</option>
+                                            <option value="{{ $value->id }}">{!! $value->name !!}</option>
                                         @endforeach
                                     </select>
                                 </div>

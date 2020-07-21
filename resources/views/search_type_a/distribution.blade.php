@@ -118,6 +118,18 @@
                         </select>
                     </div>
                 </div>
+                {{-- 't1.name as domain',
+            't2.name as kingdom',
+            't3.name as phylum',
+            't4.name as subphylum',
+            't5.name as class',
+            't6.name as order_o',
+            't7.name as suborder',
+            't8.name as infraorder',
+            't9.name as family',
+            't10.name as superfamily',
+            't11.name as genus',
+            't12.name as species', --}}
 
                 <?php
                     $arr_taxos = [
@@ -129,10 +141,11 @@
                         [$orders,'order'],
                         [$suborders,'suborder'],
                         [$infraorders,'infraorder'],
+                        [$superfamilies,'superfamilies'],
                         [$families,'family'],
                         [$genuses,'genus'],
                         [$species,'species'],
-                        
+                        [$classification,'classification']
                     ];
 
                 ?>
@@ -161,20 +174,11 @@
                                 <select class="form-control select2" name="{{ $arr_taxo[1] }}" id="">
                                     <option selected disabled="" value="0">Select</option>
                                     @foreach( $arr_taxo[0] as $value )
-                                        <option value="{{ $value->id }}">{{ $value->name }}</option>
+                                        <option value="{{ $value->id }}">{!! $value->name !!}</option>
                                     @endforeach
                                 </select>
                             </div>
                         @endforeach
-                        {{-- add classification  --}}
-                        <div class="dd_taxa_sub" style="display:none;">
-                            <select class="form-control select2" name="classification" id="">
-                                <option selected disabled="" value="0">Select</option>
-                                @foreach( $classification as $value )
-                                    <option value="{{ $value->id }}">{!! $value->current_scientific_name !!}</option>
-                                @endforeach
-                            </select>
-                        </div>
                     </div>
                 </div>
 

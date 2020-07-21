@@ -145,15 +145,16 @@ class SearchTypeBController extends Controller
         $data['districts']          =   json_decode(District::getDistrictListForFormEN());
         $data['counties']           =   json_decode(County::getCountyListForFormEN());
 
-        $data['domains']             =   Taxonomy::getDomain();
-        $data['kingdoms']            =   Taxonomy::getKingdom();
-        $data['phylums']             =   Taxonomy::getPhylum();
-        $data['subphylums']          =   Taxonomy::getSubphylum();
-        $data['classes']              =   Taxonomy::getClass();
-        $data['orders']              =   Taxonomy::getOrder();
-        $data['suborders']           =   Taxonomy::getSuborder();
-        $data['infraorders']         =   Taxonomy::getInfraorder();
-        $data['families']             =   Taxonomy::getFamily();
+        $data['domains']                =   Taxonomy::getDomain();
+        $data['kingdoms']               =   Taxonomy::getKingdom();
+        $data['phylums']                =   Taxonomy::getPhylum();
+        $data['subphylums']             =   Taxonomy::getSubphylum();
+        $data['classes']                =   Taxonomy::getClass();
+        $data['orders']                 =   Taxonomy::getOrder();
+        $data['suborders']              =   Taxonomy::getSuborder();
+        $data['infraorders']            =   Taxonomy::getInfraorder();
+        $data['superfamilies']          =   Taxonomy::getSuperfamily();
+        $data['families']               =   Taxonomy::getFamily();
         $data['genuses']                =   Taxonomy::getGenus();
         $data['species']                =   Taxonomy::getSpecies();
         $data['classification']         =   Classification::getClassificationBySciName();
@@ -1039,6 +1040,7 @@ class SearchTypeBController extends Controller
         $data['subgenuses'] = Taxonomy::getSubgenus();
         $data['specieses'] = Taxonomy::getSpecies();
         $data['subspecieses'] = Taxonomy::getSubspecies();
+        $data['classification']         =   Classification::getClassificationBySciName();
         return view('search_type_b.search_by_taxonomy', $data);
     }
 

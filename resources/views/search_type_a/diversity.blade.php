@@ -107,9 +107,36 @@
                         </p>
                     </div>
                 </div>
+                {{-- 't1.name as domain',
+            't2.name as kingdom',
+            't3.name as phylum',
+            't4.name as subphylum',
+            't5.name as class',
+            't6.name as order_o',
+            't7.name as suborder',
+            't8.name as infraorder',
+            't9.name as family',
+            't10.name as superfamily',
+            't11.name as genus',
+            't12.name as species', --}}
 
-                <?php $arr_taxos = [    [$domains,'domain'], [$kingdoms,'kingdom'], [$phylums,'phylum'], [$subphylums,'subphylum'], [$classes,'class'],
-                                        [$orders,'order'], [$suborders,'suborder'], [$infraorders,'infraorder'], [$families,'family']   ]; ?>
+                <?php 
+                $arr_taxos = [    
+                    [$domains,'domain'],
+                        [$kingdoms,'kingdom'],
+                        [$phylums,'phylum'],
+                        [$subphylums,'subphylum'],
+                        [$classes,'class'],
+                        [$orders,'order'],
+                        [$suborders,'suborder'],
+                        [$infraorders,'infraorder'],
+                        [$superfamilies,'superfamilies'],
+                        [$families,'family'],
+                        [$genuses,'genus'],
+                        [$species,'species'],
+                        [$classification,'classification']
+                    ];
+                ?>
 
                 <hr class="search-category-pages hr_search" style="display:none;">
                 <div class="row row-inform taxa_select" style="display:none;">
@@ -123,15 +150,15 @@
                         </p>
                         <select class="form-control search-report-select select2" name="header_taxonomy" id="taxa_header_id">
                             <option selected disabled="" value="0">Select</option>
-                            <option value="domain">Domain</option>
-                            <option value="kingdom">Kingdom</option>
                             <option value="phylum">Phylum</option>
-                            <option value="subphylum">Subphylum</option>
-                            <option value="class">Class / Clade</option>
-                            <option value="order">Order / Clade</option>
-                            <option value="suborder">Suborder / Clade</option>
-                            <option value="infraorder">Infraorder / Clade</option>
-                            <option value="family">Family / Clade</option>
+                                <option value="subphylum">Subphylum</option>
+                                <option value="class">Class / Clade</option>
+                                <option value="order">Order / Clade</option>
+                                <option value="suborder">Suborder / Clade</option>
+                                <option value="infraorder">Infraorder / Clade</option>
+                                <option value="superfamily">Super Family / Clade</option>
+                                <option value="family">Family / Clade</option>
+                                <option value="genus">Genus</option>
                         </select>
                     </div>
                     <div class="col-md-4">
@@ -146,7 +173,7 @@
                                 <select class="form-control select2" name="taxa" id="{{ $arr_taxo[1] }}">
                                     <option selected value="0">Select</option>
                                     @foreach( $arr_taxo[0] as $value )
-                                        <option value="{{ $value->id }}">{{ $value->name }}</option>
+                                        <option value="{{ $value->id }}">{!! $value->name !!}</option>
                                     @endforeach
                                 </select>
                             </div>

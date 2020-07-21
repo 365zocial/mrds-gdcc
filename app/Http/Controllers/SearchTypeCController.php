@@ -68,8 +68,11 @@ class SearchTypeCController extends Controller
         $data['orders']                 =   Taxonomy::getOrder();
         $data['suborders']              =   Taxonomy::getSuborder();
         $data['infraorders']            =   Taxonomy::getInfraorder();
+        $data['superfamilies']          =   Taxonomy::getSuperfamily();
         $data['families']               =   Taxonomy::getFamily();
         $data['genuses']                =   Taxonomy::getGenus();
+        $data['species']                =   Taxonomy::getSpecies();
+        $data['classification']         =   Classification::getClassificationBySciName();
         $data['group_permission_a']     =   $this->group_permission_a;
         $data['group_permission_b']     =   $this->group_permission_b;
         return view('search_type_c.diversity', $data);
@@ -94,6 +97,7 @@ class SearchTypeCController extends Controller
         $data['orders']                 =   Taxonomy::getOrder();
         $data['suborders']              =   Taxonomy::getSuborder();
         $data['infraorders']            =   Taxonomy::getInfraorder();
+        $data['superfamilies']          =   Taxonomy::getSuperfamily();
         $data['families']               =   Taxonomy::getFamily();
         $data['genuses']                =   Taxonomy::getGenus();
         $data['species']                =   Taxonomy::getSpecies();
@@ -122,7 +126,11 @@ class SearchTypeCController extends Controller
         $data['orders']                 =   Taxonomy::getOrder();
         $data['suborders']              =   Taxonomy::getSuborder();
         $data['infraorders']            =   Taxonomy::getInfraorder();
+        $data['superfamilies']          =   Taxonomy::getSuperfamily();
         $data['families']               =   Taxonomy::getFamily();
+        $data['genuses']                =   Taxonomy::getGenus();
+        $data['species']                =   Taxonomy::getSpecies();
+        $data['classification']         =   Classification::getClassificationBySciName();
         $data['group_permission_a']     =   $this->group_permission_a;
         $data['group_permission_b']     =   $this->group_permission_b;
         return view('search_type_c.recentrecord', $data);
@@ -427,7 +435,7 @@ class SearchTypeCController extends Controller
         if ($header_taxonomy == "classification" && $classification != "") {
             $classification_full = Classification::getClassificationWording($id_taxa);
             $taxa               = "Species" . " - " . $classification_full->current_scientific_name_format;
-        } elseif ($header_taxonomy != "" && $id_taxa != 0) {
+        } else if ($header_taxonomy != "" && $id_taxa != 0) {
             $taxa_full          = Taxonomy::getTaxonomyWording($id_taxa);
             $taxa               = ucfirst($header_taxonomy) . " - " . $taxa_full->name;
         } else {

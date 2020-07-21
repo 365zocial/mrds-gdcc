@@ -276,8 +276,23 @@
                     </div>
                 </div>
 
-                <?php $arr_taxos = [    [$domains,'domain'], [$kingdoms,'kingdom'], [$phylums,'phylum'], [$subphylums,'subphylum'], [$classes,'class'],
-                                        [$orders,'order'], [$suborders,'suborder'], [$infraorders,'infraorder'], [$families,'family'], [$genuses,'genus']   ]; ?>
+                <?php 
+                $arr_taxos = [    
+                        [$domains,'domain'],
+                        [$kingdoms,'kingdom'],
+                        [$phylums,'phylum'],
+                        [$subphylums,'subphylum'],
+                        [$classes,'class'],
+                        [$orders,'order'],
+                        [$suborders,'suborder'],
+                        [$infraorders,'infraorder'],
+                        [$superfamilies,'superfamilies'],
+                        [$families,'family'],
+                        [$genuses,'genus'],
+                        [$species,'species'],
+                        [$classification,'classification']
+                    ]; 
+                ?>
 
                 <hr class="search-category-pages hr_search" style="display:none;">
                 <div class="row row-inform taxa_select" style="display:none;">
@@ -291,14 +306,13 @@
                         </p>
                         <select class="form-control search-report-select select2" name="header_taxonomy" id="taxa_header_id">
                             <option selected disabled="" value="0">Select</option>
-                            <option value="domain">Domain</option>
-                            <option value="kingdom">Kingdom</option>
                             <option value="phylum">Phylum</option>
                             <option value="subphylum">Subphylum</option>
                             <option value="class">Class / Clade</option>
                             <option value="order">Order / Clade</option>
                             <option value="suborder">Suborder / Clade</option>
                             <option value="infraorder">Infraorder / Clade</option>
+                            <option value="superfamily">Super Family / Clade</option>
                             <option value="family">Family / Clade</option>
                             <option value="genus">Genus</option>
                         </select>
@@ -315,7 +329,7 @@
                                 <select class="form-control select2" name="taxa" id="{{ $arr_taxo[1] }}">
                                     <option selected value="0">Select</option>
                                     @foreach( $arr_taxo[0] as $value )
-                                        <option value="{{ $value->id }}">{{ $value->name }}</option>
+                                        <option value="{{ $value->id }}">{!! $value->name !!}</option>
                                     @endforeach
                                 </select>
                             </div>

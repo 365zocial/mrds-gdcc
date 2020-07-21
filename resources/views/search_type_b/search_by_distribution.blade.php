@@ -114,9 +114,11 @@
                         [$orders,'order'],
                         [$suborders,'suborder'],
                         [$infraorders,'infraorder'],
+                        [$superfamilies,'superfamilies'],
                         [$families,'family'],
                         [$genuses,'genus'],
                         [$species,'species'],
+                        [$classification,'classification']
                         
                     ];
                 ?>
@@ -143,20 +145,11 @@
                                 <select class="form-control select2" name="{{ $arr_taxo[1] }}" id="">
                                     <option selected disabled="" value="0">Select</option>
                                     @foreach( $arr_taxo[0] as $value )
-                                        <option value="{{ $value->id }}">{{ $value->name }}</option>
+                                        <option value="{{ $value->id }}">{!! $value->name !!}</option>
                                     @endforeach
                                 </select>
                             </div>
                         @endforeach
-                        {{-- add classification  --}}
-                        <div class="dd_taxa_sub" style="display:none;">
-                            <select class="form-control select2" name="classification" id="">
-                                <option selected disabled="" value="0">Select</option>
-                                @foreach( $classification as $value )
-                                    <option value="{{ $value->id }}">{!! $value->current_scientific_name !!}</option>
-                                @endforeach
-                            </select>
-                        </div>
                     </div>
                 </div>
 

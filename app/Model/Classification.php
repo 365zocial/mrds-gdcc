@@ -253,7 +253,7 @@ class Classification extends Model
 	//in request#4 No.9
 	public static function getClassificationBySciName()
 	{
-		return Classification::orderBy('current_scientific_name_format', 'asc')->get();
+		return Classification::select(['id', 'current_scientific_name_format as name'])->orderBy('current_scientific_name_format', 'asc')->get();
 	}
 
 	public static function getClassificationWording($classification_id)

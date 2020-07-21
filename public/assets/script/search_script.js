@@ -17,10 +17,11 @@ $("#taxa_chkbox").change(function () {
     $("#order").val($("#order option:first").val());
     $("#suborder").val($("#suborder option:first").val());
     $("#infraorder").val($("#infraorder option:first").val());
+    $("#superfamily").val($("#superfamily option:first").val());
     $("#family").val($("#family option:first").val());
     $("#genus").val($("#genus option:first").val());
     $("#species").val($("#species option:first").val());
-    $("#classification").val($("#classification option:first").val());
+    $("#classification").val($("#classification option:first").val()); // (ชื่อวิทยาศาสตร์)
   }
 });
 
@@ -108,17 +109,20 @@ $("#taxa_header_id").change(function () {
   if ($(this).val() == "infraorder") {
     $(".dd_taxa_sub").eq(8).show();
   }
-  if ($(this).val() == "family") {
+  if ($(this).val() == "superfamily") {
     $(".dd_taxa_sub").eq(9).show();
   }
-  if ($(this).val() == "genus") {
+  if ($(this).val() == "family") {
     $(".dd_taxa_sub").eq(10).show();
   }
-  if ($(this).val() == "species") {
+  if ($(this).val() == "genus") {
     $(".dd_taxa_sub").eq(11).show();
   }
-  if ($(this).val() == "classification") {
+  if ($(this).val() == "species") {
     $(".dd_taxa_sub").eq(12).show();
+  }
+  if ($(this).val() == "classification") {
+    $(".dd_taxa_sub").eq(13).show();
   }
 });
 
@@ -194,25 +198,39 @@ function checkBeforeSubmit() {
           select_tag = $(".dd_taxa_sub").eq(8).children();
         }
         if (
-          taxa_h == "family" &&
+          taxa_h == "superfamily" &&
           $(".dd_taxa_sub").eq(9).children().val() == 0
         ) {
           can_submit = false;
           select_tag = $(".dd_taxa_sub").eq(9).children();
         }
         if (
-          taxa_h == "genus" &&
+          taxa_h == "family" &&
           $(".dd_taxa_sub").eq(10).children().val() == 0
         ) {
           can_submit = false;
           select_tag = $(".dd_taxa_sub").eq(10).children();
         }
         if (
-          taxa_h == "species" &&
+          taxa_h == "genus" &&
           $(".dd_taxa_sub").eq(11).children().val() == 0
         ) {
           can_submit = false;
           select_tag = $(".dd_taxa_sub").eq(11).children();
+        }
+        if (
+          taxa_h == "species" &&
+          $(".dd_taxa_sub").eq(12).children().val() == 0
+        ) {
+          can_submit = false;
+          select_tag = $(".dd_taxa_sub").eq(12).children();
+        }
+        if (
+          taxa_h == "classification" &&
+          $(".dd_taxa_sub").eq(13).children().val() == 0
+        ) {
+          can_submit = false;
+          select_tag = $(".dd_taxa_sub").eq(13).children();
         }
       }
     }

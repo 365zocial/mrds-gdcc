@@ -22,6 +22,8 @@ use App\Model\County;
 use App\Model\Wording;
 use App\Model\Record;
 use App\Model\Classification;
+use App\Model\Marinecenter;
+
 use Auth;
 use App\Model\Group_Permission;
 use Yajra\Datatables\Datatables;
@@ -79,10 +81,12 @@ class SearchTypeAController extends Controller
         $data['orders']                 =   Taxonomy::getOrder();
         $data['suborders']              =   Taxonomy::getSuborder();
         $data['infraorders']            =   Taxonomy::getInfraorder();
+        $data['superfamilies']          =   Taxonomy::getSuperfamily();
         $data['families']               =   Taxonomy::getFamily();
         $data['genuses']                =   Taxonomy::getGenus();
         $data['species']                =   Taxonomy::getSpecies();
         $data['classification']         =   Classification::getClassificationBySciName();
+        $data['marinecenter_list']      =   Marinecenter::getMarineCenterList();
         $data['group_permission_a']     =   $this->group_permission_a;
         $data['group_permission_b']     =   $this->group_permission_b;
 
@@ -109,7 +113,11 @@ class SearchTypeAController extends Controller
         $data['orders']                 =   Taxonomy::getOrder();
         $data['suborders']              =   Taxonomy::getSuborder();
         $data['infraorders']            =   Taxonomy::getInfraorder();
+        $data['superfamilies']          =   Taxonomy::getSuperfamily();
         $data['families']               =   Taxonomy::getFamily();
+        $data['genuses']                =   Taxonomy::getGenus();
+        $data['species']                =   Taxonomy::getSpecies();
+        $data['classification']         =   Classification::getClassificationBySciName();
         $data['group_permission_a']     =   $this->group_permission_a;
         $data['group_permission_b']     =   $this->group_permission_b;
         return view('search_type_a.diversity', $data);
@@ -134,7 +142,11 @@ class SearchTypeAController extends Controller
         $data['orders']                 =   Taxonomy::getOrder();
         $data['suborders']              =   Taxonomy::getSuborder();
         $data['infraorders']            =   Taxonomy::getInfraorder();
+        $data['superfamilies']          =   Taxonomy::getSuperfamily();
         $data['families']               =   Taxonomy::getFamily();
+        $data['genuses']                =   Taxonomy::getGenus();
+        $data['species']                =   Taxonomy::getSpecies();
+        $data['classification']         =   Classification::getClassificationBySciName();
         $data['group_permission_a']     =   $this->group_permission_a;
         $data['group_permission_b']     =   $this->group_permission_b;
         return view('search_type_a.recentrecord', $data);
