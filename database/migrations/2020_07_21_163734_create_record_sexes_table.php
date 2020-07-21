@@ -15,7 +15,7 @@ class CreateRecordSexesTable extends Migration
     {
         Schema::create('record_sexes', function (Blueprint $table) {
             $table->integer('record_unique_id')->comment('Unique ID ของ record, FK: record table');
-            $table->integer('sex_id')->comment('ID ของ sex ใน form ของ record  // 1 = , 2 = การค้า, 3 = ใช้แรงงาน, 4 = อาหาร, 5 = ยา, 6 = ศึกษาวิจัย, 7 = เครื่องนุ่งห่ม');
+            $table->integer('sex_id')->comment('ID ของ sex ใน form ของ record  // 1 = Male, 2 = Female, 3 = Hermaphrodite, 4 = Indeterminate, 5 = Unknown, 6 = Transitional, 7 = Imposex');
             $table->timestamps();
         });
     }
