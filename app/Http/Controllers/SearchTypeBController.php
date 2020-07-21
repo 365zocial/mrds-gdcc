@@ -158,6 +158,7 @@ class SearchTypeBController extends Controller
         $data['genuses']                =   Taxonomy::getGenus();
         $data['species']                =   Taxonomy::getSpecies();
         $data['classification']         =   Classification::getClassificationBySciName();
+        $data['marinecenters']          =   Marinecenter::getMarineCenterList();
         $data['group_permission_a_manager']         =   $this->group_permission_a_manager;
         $data['group_permission_a_user']            =   $this->group_permission_a_user;
         $data['group_permission_a_board']           =   $this->group_permission_a_board;
@@ -198,9 +199,11 @@ class SearchTypeBController extends Controller
         $locality_district      = $input->locality_district;
         $locality_county        = $input->locality_county;
         $expan_id               = $input->expan_id;
-        $chk_taxa               = $input->taxa_chkbox;
-        $chk_locality           = $input->local_chkbox;
-        $chk_expedition         = $input->expan_chkbox;
+        $marinecenter_id        = $input->marinecenter_id;
+        $chk_taxa               = $input->chk_taxa;
+        $chk_locality           = $input->chk_locality;
+        $chk_expedition         = $input->chk_expedition;
+        $chk_marinecenter       = $input->chk_marinecenter;
         $map_type               = $input->map_type;
 
         $db = new Classification;
@@ -308,6 +311,13 @@ class SearchTypeBController extends Controller
         } else {
             $expedition = "-";
         }
+        if ($marinecenter_id != "") {
+            $marinecenter_full  = Marinecenter::getMarineCenter($marinecenter_id);
+            $marinecentertext       =  $marinecenter_full->marinecenter . " (" . $marinecenter_full->marinecenter_th . ")";
+            $db             = $db->where('r.marinecenter_id', $marinecenter_id);
+        } else {
+            $marinecentertext = "-";
+        }
 
 
         if ($lang == 2) {
@@ -345,6 +355,14 @@ class SearchTypeBController extends Controller
                 $checkGetSearch                     = $checkGetSearch && false;
             }
         }
+        if ($chk_marinecenter == 1) {
+            if ($marinecenter_id != "") {
+                $data['result_searchs']             = null;
+                $data['map']                        = null;
+                $checkGetSearch                     = $checkGetSearch && false;
+            }
+        }
+
 
         if ($checkGetSearch) {
             $data['result_searchs']             = $this->Data_searchResult($db);
@@ -363,6 +381,7 @@ class SearchTypeBController extends Controller
         $data_export['locality']                = $locality;
         $data_export['taxa']                    = $taxa;
         $data_export['result_searchs']          = $data['result_searchs'];
+        $data_export['marinecentertext']        = $marinecentertext;
         Session::put('search_result_a', json_encode($data_export));
 
         // permission
@@ -411,9 +430,11 @@ class SearchTypeBController extends Controller
         $locality_district      = $input->locality_district;
         $locality_county        = $input->locality_county;
         $expan_id               = $input->expan_id;
-        $chk_taxa               = $input->taxa_chkbox;
-        $chk_locality           = $input->local_chkbox;
-        $chk_expedition         = $input->expan_chkbox;
+        $marinecenter_id        = $input->marinecenter_id;
+        $chk_taxa               = $input->chk_taxa;
+        $chk_locality           = $input->chk_locality;
+        $chk_expedition         = $input->chk_expedition;
+        $chk_marinecenter         = $input->chk_marinecenter;
         $map_type               = $input->map_type;
 
         $dataDistribution = $this->dataDistribution($input);
@@ -440,6 +461,13 @@ class SearchTypeBController extends Controller
                 $checkGetSearch                     = $checkGetSearch && false;
             }
         }
+        if ($chk_marinecenter == 1) {
+            if ($marinecenter_id != "") {
+                $data['result_searchs']             = null;
+                $data['map']                        = null;
+                $checkGetSearch                     = $checkGetSearch && false;
+            }
+        }
 
         if ($checkGetSearch) {
             $data['map']                        = $dataDistribution['result_searchs']->skip(0)->take(100)->get();
@@ -450,6 +478,7 @@ class SearchTypeBController extends Controller
         $data['expedition']                     = $dataDistribution['expedition'];
         $data['locality']                       = $dataDistribution['locality'];
         $data['taxa']                           = $dataDistribution['taxa'];
+        $data['marinecentertext']               = $dataDistribution['marinecentertext'];
         $data['map_type']                       = $map_type;
         $data['lang']                           = 1;
         $data['request'] = $input->All();
@@ -544,9 +573,11 @@ class SearchTypeBController extends Controller
         $locality_district      = $input->locality_district;
         $locality_county        = $input->locality_county;
         $expan_id               = $input->expan_id;
-        $chk_taxa               = $input->taxa_chkbox;
-        $chk_locality           = $input->local_chkbox;
-        $chk_expedition         = $input->expan_chkbox;
+        $marinecenter_id        = $input->marinecenter_id;
+        $chk_taxa               = $input->chk_taxa;
+        $chk_locality           = $input->chk_locality;
+        $chk_expedition         = $input->chk_expedition;
+        $chk_marinecenter         = $input->chk_marinecenter;
         $map_type               = $input->map_type;
 
         $db = new Classification;
@@ -655,6 +686,13 @@ class SearchTypeBController extends Controller
         } else {
             $expedition = "-";
         }
+        if ($marinecenter_id != "") {
+            $marinecenter_full  = Marinecenter::getMarineCenter($marinecenter_id);
+            $marinecentertext       =  $marinecenter_full->marinecenter . " (" . $marinecenter_full->marinecenter_th . ")";
+            $db             = $db->where('r.marinecenter_id', $marinecenter_id);
+        } else {
+            $marinecentertext = "-";
+        }
 
 
         if ($lang == 2) {
@@ -718,7 +756,7 @@ class SearchTypeBController extends Controller
 
 
 
-        return ['result_searchs' => $searchResult, 'taxa' => $taxa, 'locality' => $locality, 'expedition' => $expedition, 'is_in_thailand' => $is_in_thailand];
+        return ['result_searchs' => $searchResult, 'taxa' => $taxa, 'locality' => $locality, 'expedition' => $expedition, 'is_in_thailand' => $is_in_thailand, 'marinecentertext' => $marinecentertext];
     }
 
     public function distributionBAsDataTable(Request $input)
@@ -728,7 +766,7 @@ class SearchTypeBController extends Controller
             ->addColumn('cate_ref', function ($row) {
                 return $row->related_catalog_item . $row->related_reference_item;
             })
-            ->rawColumns(['current_scientific_name_format'])
+            ->rawColumns(['current_scientific_name_format', 'previous_scientific_name_format'])
             ->addIndexColumn()
             ->make(true);
     }
@@ -1336,7 +1374,7 @@ class SearchTypeBController extends Controller
                 ';
             })
 
-            ->rawColumns(['action', 'showpic', 'current_scientific_name_format'])
+            ->rawColumns(['action', 'showpic', 'current_scientific_name_format', 'previous_scientific_name_format'])
             ->addIndexColumn()
             ->make(true);
     }

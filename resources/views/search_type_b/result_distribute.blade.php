@@ -96,6 +96,10 @@
                         @if($lang == 2){{'การสำรวจ'}}@else{{'Expendition'}}@endif:
                             <span class="record-data expedition_search">{{ $expedition }}</span>
                     </p>
+                    <p class="record-label">
+                        @if($lang == 2){{'ศูนย์กลางทางทะเล'}}@else{{'Marine Center'}}@endif:
+                            <span class="record-data marinecenter_search">{{ $marinecentertext }}</span>
+                    </p>
 
                 </div>
             </div>
@@ -141,6 +145,10 @@
                     </p>
                     <p class="record-label search-result">
                         @if($lang == 2){{'การสำรวจ'}}@else{{'Expendition'}}@endif: <span class="record-data" style="margin-right: 30px;"><span class="expedition_search">{{$expedition}}</span></span>
+                    </p>
+
+                    <p class="record-label search-result">
+                        @if($lang == 2){{'ศูนย์กลางทางทะเล'}}@else{{'Marine Center'}}@endif: <span class="record-data" style="margin-right: 30px;"><span class="marinecenter_search">{{$marinecentertext}}</span></span>
                     </p>
                 </div>
                 <div id="remove-when-print" class="col-md-4" style="text-align: right;">

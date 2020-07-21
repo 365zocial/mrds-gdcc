@@ -26,7 +26,7 @@
         });
 
         //request 4 if marker more than 20 show text
-        if(data_map.length > 20){
+        if(data_map!== null && data_map.length > 20){
           $('#map').before('It is complicate to display, plase scaledown your searching') 
         } 
 

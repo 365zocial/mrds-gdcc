@@ -91,6 +91,10 @@
                     @if($lang == 2){{'การสำรวจ'}}@else{{'Expendition'}}@endif:
                         <span class="record-data expedition_search">{{ $expedition }}</span>
                 </p>
+                <p class="record-label">
+                    @if($lang == 2){{'ศูนย์กลางทางทะเล'}}@else{{'Marine Center'}}@endif:
+                        <span class="record-data expedition_search">{{ $marinecentertext }}</span>
+                </p>
 
             </div>
         </div>

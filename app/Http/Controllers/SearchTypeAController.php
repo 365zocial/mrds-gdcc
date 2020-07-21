@@ -86,7 +86,7 @@ class SearchTypeAController extends Controller
         $data['genuses']                =   Taxonomy::getGenus();
         $data['species']                =   Taxonomy::getSpecies();
         $data['classification']         =   Classification::getClassificationBySciName();
-        $data['marinecenter_list']      =   Marinecenter::getMarineCenterList();
+        $data['marinecenters']          =   Marinecenter::getMarineCenterList();
         $data['group_permission_a']     =   $this->group_permission_a;
         $data['group_permission_b']     =   $this->group_permission_b;
 
@@ -118,6 +118,7 @@ class SearchTypeAController extends Controller
         $data['genuses']                =   Taxonomy::getGenus();
         $data['species']                =   Taxonomy::getSpecies();
         $data['classification']         =   Classification::getClassificationBySciName();
+        $data['marinecenters']          =   Marinecenter::getMarineCenterList();
         $data['group_permission_a']     =   $this->group_permission_a;
         $data['group_permission_b']     =   $this->group_permission_b;
         return view('search_type_a.diversity', $data);
@@ -147,6 +148,7 @@ class SearchTypeAController extends Controller
         $data['genuses']                =   Taxonomy::getGenus();
         $data['species']                =   Taxonomy::getSpecies();
         $data['classification']         =   Classification::getClassificationBySciName();
+        $data['marinecenters']          =   Marinecenter::getMarineCenterList();
         $data['group_permission_a']     =   $this->group_permission_a;
         $data['group_permission_b']     =   $this->group_permission_b;
         return view('search_type_a.recentrecord', $data);
@@ -182,6 +184,7 @@ class SearchTypeAController extends Controller
     //Created : 11-7-63
     //Modified : -
     //แยกส่วนการเตรียมข้อมูลของ Distribution ออกมา เพื่อใช้ใน DataTable ด้วย #copy from search_base()
+    #ใช้ร่วมกันในการค้นหา Distribution ,Diversity และ Recent Record
     public static function dataDistribution(Request $input)
     {
         $lang = Session::get('language');
@@ -205,9 +208,11 @@ class SearchTypeAController extends Controller
         $locality_district      = $input->locality_district;
         $locality_county        = $input->locality_county;
         $expan_id               = $input->expan_id;
-        $chk_taxa               = $input->taxa_chkbox;
-        $chk_locality           = $input->local_chkbox;
-        $chk_expedition         = $input->expan_chkbox;
+        $marinecenter_id        = $input->marinecenter_id;
+        $chk_taxa               = $input->chk_taxa;
+        $chk_locality           = $input->chk_locality;
+        $chk_expedition         = $input->chk_expedition;
+        $chk_marinecenter       = $input->chk_marinecenter;
         $map_type               = $input->map_type;
 
         $lang = Session::get('language');
@@ -317,6 +322,17 @@ class SearchTypeAController extends Controller
         } else {
             $expedition = "-";
         }
+        //important type A search up to user's base
+
+        if ($marinecenter_id != "") {
+            $marinecenter_full  = Marinecenter::getMarineCenter($marinecenter_id);
+            $marinecentertext       =  $marinecenter_full->marinecenter . " (" . $marinecenter_full->marinecenter_th . ")";
+            $db             = $db->where('r.marinecenter_id', $marinecenter_id);
+        } else {
+            $db = $db->where('r.marinecenter_id', Auth::user()->marinecenter_id);
+            $marinecenter_full  = Marinecenter::getMarineCenter(Auth::user()->marinecenter_id);
+            $marinecentertext       =  $marinecenter_full->marinecenter . " (" . $marinecenter_full->marinecenter_th . ")";
+        }
 
 
         if ($lang == 2) {
@@ -325,10 +341,6 @@ class SearchTypeAController extends Controller
             $db = $db->where('r.language_id', 1);
         }
 
-        //important type A search up to user's base
-        if (Auth::user()->role_id == 3) {
-            $db = $db->where('r.marinecenter_id', Auth::user()->marinecenter_id);
-        }
 
         $db = $db->where('approve_status', 1);
         $db = $db->where('r.status', 2);
@@ -384,7 +396,7 @@ class SearchTypeAController extends Controller
 
 
 
-        return ['result_searchs' => $searchResult, 'taxa' => $taxa, 'locality' => $locality, 'expedition' => $expedition, 'is_in_thailand' => $is_in_thailand];
+        return ['result_searchs' => $searchResult, 'taxa' => $taxa, 'locality' => $locality, 'expedition' => $expedition, 'is_in_thailand' => $is_in_thailand, 'marinecentertext' => $marinecentertext];
     }
 
     public function search_base2(Request $input, $withData = false)
@@ -411,9 +423,11 @@ class SearchTypeAController extends Controller
         $locality_district      = $input->locality_district;
         $locality_county        = $input->locality_county;
         $expan_id               = $input->expan_id;
-        $chk_taxa               = $input->taxa_chkbox;
-        $chk_locality           = $input->local_chkbox;
-        $chk_expedition         = $input->expan_chkbox;
+        $marinecenter_id        = $input->marinecenter_id;
+        $chk_taxa               = $input->chk_taxa;
+        $chk_locality           = $input->chk_locality;
+        $chk_expedition         = $input->chk_expedition;
+        $chk_marinecenter       = $input->chk_marinecenter;
         $map_type               = $input->map_type;
 
         $dataDistribution = $this->dataDistribution($input);
@@ -439,16 +453,25 @@ class SearchTypeAController extends Controller
                 $checkGetSearch                     = $checkGetSearch && false;
             }
         }
+        if ($chk_marinecenter == 1) {
+            if ($marinecenter_id != "") {
+                $data['result_searchs']             = null;
+                $data['map']                        = null;
+                $checkGetSearch                     = $checkGetSearch && false;
+            }
+        }
 
         if ($checkGetSearch) {
             $data['map']                        = $dataDistribution['result_searchs']->skip(0)->take(100)->get();
         }
 
-        // $data['map']                            = json_encode($data['map']);
+        $data['map']                            = json_encode($data['map']);
         $data['lang_table']                     = $lang;
         $data['expedition']                     = $dataDistribution['expedition'];
         $data['locality']                       = $dataDistribution['locality'];
         $data['taxa']                           = $dataDistribution['taxa'];
+        $data['marinecentertext']               = $dataDistribution['marinecentertext'];
+
         $data['map_type']                       = $map_type;
         $data['is_in_thailand']                 = $dataDistribution['is_in_thailand'];
         $data['request'] = $input->All();
@@ -575,9 +598,7 @@ class SearchTypeAController extends Controller
             $db = $db->where('r.language_id', 1);
         }
 
-        if (Auth::user()->role_id == 3) {
-            $db = $db->where('r.marinecenter_id', Auth::user()->marinecenter_id);
-        }
+
 
         $db = $db->where('approve_status', 1);
         $db = $db->where('r.status', 2);
@@ -706,7 +727,7 @@ class SearchTypeAController extends Controller
                 $btn = "<a href='#' class='showPic' data-toggle='modal' data-target='#myModal' data-uniqueid='" . $query->unique_record . "' ><span class='glyphicon glyphicon-eye-open' aria-hidden='true'> View image</a>";
                 return $btn;
             })
-            ->rawColumns(['action', 'showpic', 'current_scientific_name_format'])
+            ->rawColumns(['action', 'showpic', 'current_scientific_name_format', 'previous_scientific_name_format'])
             ->addIndexColumn()
             ->make(true);
     }
@@ -728,7 +749,7 @@ class SearchTypeAController extends Controller
 
                 return $btn;
             })
-            ->rawColumns(['action', 'current_scientific_name_format'])
+            ->rawColumns(['action', 'current_scientific_name_format', 'previous_scientific_name_format'])
             ->addIndexColumn()
             ->make(true);
     }
@@ -740,7 +761,7 @@ class SearchTypeAController extends Controller
             ->addColumn('cate_ref', function ($row) {
                 return $row->related_catalog_item . $row->related_reference_item;
             })
-            ->rawColumns(['current_scientific_name_format'])
+            ->rawColumns(['current_scientific_name_format', 'previous_scientific_name_format'])
             ->addIndexColumn()
             ->make(true);
     }
@@ -863,7 +884,7 @@ class SearchTypeAController extends Controller
                 <a href="' . url("staff/searchCategory/viewCard") . '/' . base64_encode(base64_encode(base64_encode($row->record_id))) . '" target="_blank"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> View Card</a>
                 ';
             })
-            ->rawColumns(['action', 'current_scientific_name_format'])
+            ->rawColumns(['action', 'current_scientific_name_format', 'previous_scientific_name_format'])
             ->addIndexColumn()
             ->make(true);
     }

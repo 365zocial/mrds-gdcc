@@ -66,7 +66,7 @@
                 @csrf
 
                 <div class="row row-inform">
-                    <div class="col-md-6">
+                    <div class="col-md-8">
                         <p class="search-report-dropdown-header">
                             @if($lang == 2)
                                 ค้นหาโดย
@@ -104,6 +104,14 @@
                                     Expedition
                                 @endif
                             </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" id="marinecenter_chkbox" value="1">
+                                @if($lang == 2)
+                                    ศูนย์กลางทางทะเล
+                                @else
+                                    Marine Center
+                                @endif
+                            </label>
                         </p>
                     </div>
                 </div>
@@ -121,8 +129,8 @@
             't12.name as species', --}}
 
                 <?php 
-                $arr_taxos = [    
-                    [$domains,'domain'],
+                $arr_taxos = [
+                        [$domains,'domain'],
                         [$kingdoms,'kingdom'],
                         [$phylums,'phylum'],
                         [$subphylums,'subphylum'],
@@ -261,6 +269,21 @@
                         </select>
                     </div>
                 </div>
+                <div class="row row-inform marinecenter_select" style="display:none;">
+                    <div class="col-md-12">
+                        <p class="search-report-dropdown-header">@if($lang == 2){{'ค้นหาตามศูนย์กลางทางทะเล'}}@else{{'Search by Marine Center'}}@endif</p>
+                        <select class="form-control select2" name="marinecenter_id" id="marinecenter_id">
+                            <option selected disabled="" value="0">Select</option>
+                            @foreach ( $marinecenters as $marinecenter )
+                                @if($lang == 2)
+                                    <option value="{{ $marinecenter->id }}">{{ $marinecenter->marinecenter_th }}</option>
+                                @else
+                                    <option value="{{ $marinecenter->id }}">{{ $marinecenter->marinecenter }}</option>
+                                @endif
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
 
                 <div class="row submit_select" style="display:none;">
                     <div class="col-md-12 btn-action-box">
@@ -339,6 +362,16 @@
                         <span class="record-data" style="margin-right: 30px;"><span class="expedition_search"></span></span>
                     </p>
                 </div>
+                <div class="col-md-12">
+                    <p class="record-label search-result">
+                        @if($lang == 2)
+                            ศูนย์กลางทางทะเล:
+                        @else
+                            Marine Center:
+                        @endif
+                        <span class="record-data" style="margin-right: 30px;"><span class="marinecenter_search"></span></span>
+                    </p>
+                </div>
             </div>
         </div>
     </div>
@@ -414,6 +447,7 @@
             var chk_taxa = "";
             var chk_locality = "";
             var chk_expedition = "";
+            var chk_marinecenter = "";
             if( $('#taxa_chkbox').is(":checked") ){
                 chk_taxa        = $('#taxa_chkbox').val();
             }
@@ -422,6 +456,9 @@
             }
             if( $('#expan_chkbox').is(":checked") ){
                 chk_expedition  = $('#expan_chkbox').val();
+            }
+            if( $('#marinecenter_chkbox').is(":checked") ){
+                chk_marinecenter  = $('#marinecenter_chkbox').val();
             }
 
             let params = {
@@ -440,6 +477,7 @@
                         chk_taxa: chk_taxa,
                         chk_locality: chk_locality,
                         chk_expedition: chk_expedition,
+                        chk_marinecenter: chk_marinecenter,
 
                         locality_type: $('#dd_locality').val(),
                         locality_country: $('#locality_country').val(),
@@ -448,6 +486,7 @@
                         locality_county: $('#locality_county').val(),
 
                         expan_id : $('#expan_id').val(),
+                        marinecenter_id : $('#marinecenter_id').val(),
                     }
 
                     return params;
@@ -463,7 +502,6 @@
                 <?php } ?>
                 data: getCurrentParam()
             }).done(function( data ) {
-
                 $('.loader').fadeOut();
                 $('.table_result').slideDown();
                 tb.clear().draw();
@@ -477,6 +515,8 @@
                 $('.locality_search').html(data['locality']);
                 $('.taxa_search').html(data['taxa']);
                 $('.expedition_search').html(data['expedition']);
+                $('.marinecenter_search').html(data['marinecentertext']);
+                
 
                 initDatatable(getCurrentParam());
                 // $.each(data['result_searchs'], function(i,data){
@@ -552,7 +592,7 @@
         }
         var table = $('#distributeDataTable').DataTable({});;
         function initDatatable(params){
-
+            table.destroy();
             let showColumn = [
                     { data: 'cate_ref', orderable: false, searchable: false },   
                     
@@ -593,8 +633,8 @@
                             { data: `{{ ($lang==1 ? 'expedition_en' : 'expedition_th') }}`, name: `{{ ($lang==1 ? 'w1.name_en' : 'w1.name_th') }}`},
                         @endif
             ]
-            table.destroy();
-            $('#distributeDataTable').DataTable({
+            
+            table = $('#distributeDataTable').DataTable({
                 order: [2, 'asc'],
                 // bFilter: true,
                 // bLengthChange: true,

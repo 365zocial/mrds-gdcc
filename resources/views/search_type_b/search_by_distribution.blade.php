@@ -60,38 +60,39 @@
                             @if(Auth::user()->role_id == 4)
                                 @if($group_permission_a_board == 2)
                                     <label class="checkbox-inline">
-                                        <input type="checkbox" id="taxa_chkbox" value="1">
+                                        <input type="checkbox" id="taxa_chkbox" name="chk_taxa" value="1">
                                         @if($lang == 2){{'หมวดหมู่'}}@else{{'Taxon'}}@endif
                                     </label>
                                 @endif
 
                                 @if($group_permission_b_board == 2)
                                     <label class="checkbox-inline">
-                                        <input type="checkbox" id="local_chkbox" value="1">
+                                        <input type="checkbox" id="local_chkbox" name="chk_locality" value="1">
                                         @if($lang == 2){{'เชิงพื้นที่'}}@else{{'Locality'}}@endif
                                     </label>
                                 @endif
                             @endif
                             @if(Auth::user()->role_id == 2)
                                 <label class="checkbox-inline">
-                                    <input type="checkbox" id="taxa_chkbox" value="1">
+                                    <input type="checkbox" id="taxa_chkbox" name="chk_taxa" value="1">
                                     @if($lang == 2){{'หมวดหมู่'}}@else{{'Taxon'}}@endif
                                 </label>
                                 <label class="checkbox-inline">
-                                    <input type="checkbox" id="local_chkbox" value="1">
+                                    <input type="checkbox" id="local_chkbox" name="chk_locality" value="1">
                                     @if($lang == 2){{'เชิงพื้นที่'}}@else{{'Locality'}}@endif
                                 </label>
                             @endif
-
-
                             <label class="checkbox-inline">
-                                <input type="checkbox" id="expan_chkbox" value="1">
+                                <input type="checkbox" id="expan_chkbox" name="chk_expedition" value="1">
                                 @if($lang == 2){{'การสำรวจ'}}@else{{'Expedition'}}@endif
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" id="marinecenter_chkbox" name="chk_marinecenter" value="1">
+                                @if($lang == 2){{'ศูนย์กลางทางทะเล'}}@else{{'Marine Center'}}@endif
                             </label>
                         </p>
                     </div>
                 </div>
-
                 <div class="row row-inform">
                     <div class="col-md-4">
                         <p class="search-report-dropdown-header">@if($lang == 2){{'การแสดงพื้นที่ของแผนที่'}}@else{{'Set map type'}}@endif</p>
@@ -216,6 +217,22 @@
                                     <option value="{{ $expedition->id }}">{{ $expedition->name_th }}</option>
                                 @else
                                     <option value="{{ $expedition->id }}">{{ $expedition->name_en }}</option>
+                                @endif
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row row-inform marinecenter_select" style="display:none;">
+                    <div class="col-md-12">
+                        <p class="search-report-dropdown-header">@if($lang == 2){{'ค้นหาตามศูนย์กลางทางทะเล'}}@else{{'Search by Marine Center'}}@endif</p>
+                        <select class="form-control select2" name="marinecenter_id" id="marinecenter_id">
+                            <option selected disabled="" value="0">Select</option>
+                            @foreach ( $marinecenters as $marinecenter )
+                                @if($lang == 2)
+                                    <option value="{{ $marinecenter->id }}">{{ $marinecenter->marinecenter_th }}</option>
+                                @else
+                                    <option value="{{ $marinecenter->id }}">{{ $marinecenter->marinecenter }}</option>
                                 @endif
                             @endforeach
                         </select>

@@ -57,6 +57,19 @@ $("#expan_chkbox").change(function () {
   }
 });
 
+$("#marinecenter_chkbox").change(function () {
+  hideSubmit();
+  if (this.checked) {
+    $(".marinecenter_select").show();
+    $("#marinecenter_id").attr("required", "true");
+    $(".submit_select").show();
+    $(".hr_search").show();
+  } else {
+    $(".marinecenter_select").hide();
+    $("#marinecenter_id").val($("#marinecenter_id option:first").val());
+  }
+});
+
 function hideSubmit() {
   // console.log( $('#expan_chkbox').is(":checked") );
   if (

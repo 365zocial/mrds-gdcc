@@ -22,6 +22,8 @@ use App\Model\County;
 use App\Model\Wording;
 use App\Model\Record;
 use App\Model\Classification;
+use App\Model\Marinecenter;
+
 use Auth;
 use App\Model\Group_Permission;
 use Yajra\Datatables\Datatables;
@@ -73,6 +75,7 @@ class SearchTypeCController extends Controller
         $data['genuses']                =   Taxonomy::getGenus();
         $data['species']                =   Taxonomy::getSpecies();
         $data['classification']         =   Classification::getClassificationBySciName();
+        $data['marinecenters']          =   Marinecenter::getMarineCenterList();
         $data['group_permission_a']     =   $this->group_permission_a;
         $data['group_permission_b']     =   $this->group_permission_b;
         return view('search_type_c.diversity', $data);
@@ -102,6 +105,7 @@ class SearchTypeCController extends Controller
         $data['genuses']                =   Taxonomy::getGenus();
         $data['species']                =   Taxonomy::getSpecies();
         $data['classification']         =   Classification::getClassificationBySciName();
+        $data['marinecenters']          =   Marinecenter::getMarineCenterList();
         $data['group_permission_a']     =   $this->group_permission_a;
         $data['group_permission_b']     =   $this->group_permission_b;
         return view('search_type_c.distribution', $data);
@@ -131,6 +135,7 @@ class SearchTypeCController extends Controller
         $data['genuses']                =   Taxonomy::getGenus();
         $data['species']                =   Taxonomy::getSpecies();
         $data['classification']         =   Classification::getClassificationBySciName();
+        $data['marinecenters']          =   Marinecenter::getMarineCenterList();
         $data['group_permission_a']     =   $this->group_permission_a;
         $data['group_permission_b']     =   $this->group_permission_b;
         return view('search_type_c.recentrecord', $data);
@@ -167,7 +172,7 @@ class SearchTypeCController extends Controller
             ->addColumn('cate_ref', function ($row) {
                 return $row->related_catalog_item . $row->related_reference_item;
             })
-            ->rawColumns(['current_scientific_name_format'])
+            ->rawColumns(['current_scientific_name_format', 'previous_scientific_name_format'])
             ->addIndexColumn()
             ->make(true);
     }
@@ -189,7 +194,7 @@ class SearchTypeCController extends Controller
 
                 return $btn;
             })
-            ->rawColumns(['action', 'current_scientific_name_format'])
+            ->rawColumns(['action', 'current_scientific_name_format', 'previous_scientific_name_format'])
             ->addIndexColumn()
             ->make(true);
     }
@@ -212,7 +217,7 @@ class SearchTypeCController extends Controller
                 $btn = "<a href='#' class='showPic' data-toggle='modal' data-target='#myModal' data-uniqueid='" . $query->unique_record . "' ><span class='glyphicon glyphicon-eye-open' aria-hidden='true'> View image</a>";
                 return $btn;
             })
-            ->rawColumns(['action', 'showpic', 'current_scientific_name_format'])
+            ->rawColumns(['action', 'showpic', 'current_scientific_name_format', 'previous_scientific_name_format'])
             ->addIndexColumn()
             ->make(true);
     }
@@ -239,8 +244,9 @@ class SearchTypeCController extends Controller
 
 
         $dataDistribution = $this->dataDistribution($input);
-
         $checkGetSearch = true;
+        //supakorn
+        #comment taxonomy showmap in type C?
         // if ($chk_taxa == 1) {
         //     if ($domain == "" && $kingdom == "" && $phylum == "" && $subphylum == "" && $class == "" && $order == "" && $infraorder == "" && $family == "") {
         //         $data['result_searchs']             = null;
@@ -277,6 +283,7 @@ class SearchTypeCController extends Controller
         $data['expedition']                     = $dataDistribution['expedition'];
         $data['locality']                       = $dataDistribution['locality'];
         $data['taxa']                           = $dataDistribution['taxa'];
+        $data['marinecentertext']               = $dataDistribution['marinecentertext'];
         $data['map_type']                       = $map_type;
         $data['is_in_thailand']                 = $dataDistribution['is_in_thailand'];
 
@@ -365,9 +372,11 @@ class SearchTypeCController extends Controller
         $locality_district      = $input->locality_district;
         $locality_county        = $input->locality_county;
         $expan_id               = $input->expan_id;
-        $chk_taxa               = $input->taxa_chkbox;
-        $chk_locality           = $input->local_chkbox;
-        $chk_expedition         = $input->expan_chkbox;
+        $marinecenter_id        = $input->marinecenter_id;
+        $chk_taxa               = $input->chk_taxa;
+        $chk_locality           = $input->chk_locality;
+        $chk_expedition         = $input->chk_expedition;
+        $chk_marinecenter         = $input->chk_marinecenter;
         $map_type               = $input->map_type;
 
         $lang = Session::get('language');
@@ -478,6 +487,15 @@ class SearchTypeCController extends Controller
             $expedition = "-";
         }
 
+        if ($marinecenter_id != "") {
+            $marinecenter_full  = Marinecenter::getMarineCenter($marinecenter_id);
+            $marinecentertext       =  $marinecenter_full->marinecenter . " (" . $marinecenter_full->marinecenter_th . ")";
+            $db             = $db->where('r.marinecenter_id', $marinecenter_id);
+        } else {
+            $marinecentertext = "-";
+        }
+
+
 
         if ($lang == 2) {
             $db = $db->where('r.language_id', 2);
@@ -540,7 +558,7 @@ class SearchTypeCController extends Controller
         ]);
 
 
-        return ['result_searchs' => $searchResult,  'taxa' => $taxa, 'locality' => $locality, 'expedition' => $expedition, 'is_in_thailand' => $is_in_thailand];
+        return ['result_searchs' => $searchResult,  'taxa' => $taxa, 'locality' => $locality, 'expedition' => $expedition, 'is_in_thailand' => $is_in_thailand, 'marinecentertext' => $marinecentertext];
     }
 
     //diversity old
@@ -652,13 +670,15 @@ class SearchTypeCController extends Controller
         $db = $db->where('r.status', 2);
 
         $checkGetSearch = true;
-        if ($chk_taxa == 1) {
-            if ($domain == "" && $kingdom == "" && $phylum == "" && $subphylum == "" && $class == "" && $order == "" && $infraorder == "" && $family == "") {
-                $data['result_searchs']             = null;
-                $data['map']                        = null;
-                $checkGetSearch                     = $checkGetSearch && false;
-            }
-        }
+        //supakorn
+        #comment taxonomy showmap in type C?
+        // if ($chk_taxa == 1) {
+        //     if ($domain == "" && $kingdom == "" && $phylum == "" && $subphylum == "" && $class == "" && $order == "" && $infraorder == "" && $family == "") {
+        //         $data['result_searchs']             = null;
+        //         $data['map']                        = null;
+        //         $checkGetSearch                     = $checkGetSearch && false;
+        //     }
+        // }
         if ($chk_locality == 1) {
             if ($locality_country == "" && $locality_province == "" && $locality_district == "" && $locality_county == "") {
                 $data['result_searchs']             = null;
@@ -721,20 +741,24 @@ class SearchTypeCController extends Controller
         $locality_district      = $input->locality_district;
         $locality_county        = $input->locality_county;
         $expan_id               = $input->expan_id;
-        $chk_taxa               = $input->taxa_chkbox;
-        $chk_locality           = $input->local_chkbox;
-        $chk_expedition         = $input->expan_chkbox;
+        $marinecenter_id        = $input->marinecenter_id;
+        $chk_taxa               = $input->chk_taxa;
+        $chk_locality           = $input->chk_locality;
+        $chk_expedition         = $input->chk_expedition;
+        $chk_marinecenter         = $input->chk_marinecenter;
         $map_type               = $input->map_type;
 
         $dataDistribution = $this->dataDistribution($input);
         $checkGetSearch = true;
-        if ($chk_taxa == 1) {
-            if ($domain == "" && $kingdom == "" && $phylum == "" && $subphylum == "" && $class == "" && $order == "" && $infraorder == "" && $family == "") {
-                $data['result_searchs']             = null;
-                $data['map']                        = null;
-                $checkGetSearch                     = $checkGetSearch && false;
-            }
-        }
+        //supakorn
+        #comment taxonomy showmap in type C?
+        // if ($chk_taxa == 1) {
+        //     if ($domain == "" && $kingdom == "" && $phylum == "" && $subphylum == "" && $class == "" && $order == "" && $infraorder == "" && $family == "") {
+        //         $data['result_searchs']             = null;
+        //         $data['map']                        = null;
+        //         $checkGetSearch                     = $checkGetSearch && false;
+        //     }
+        // }
         if ($chk_locality == 1) {
             if ($locality_country == "" && $locality_province == "" && $locality_district == "" && $locality_county == "") {
                 $data['result_searchs']             = null;
@@ -744,6 +768,13 @@ class SearchTypeCController extends Controller
         }
         if ($chk_expedition == 1) {
             if ($expan_id == "") {
+                $data['result_searchs']             = null;
+                $data['map']                        = null;
+                $checkGetSearch                     = $checkGetSearch && false;
+            }
+        }
+        if ($chk_marinecenter == 1) {
+            if ($marinecenter_id != "") {
                 $data['result_searchs']             = null;
                 $data['map']                        = null;
                 $checkGetSearch                     = $checkGetSearch && false;
@@ -759,6 +790,7 @@ class SearchTypeCController extends Controller
         $data['expedition']                     = $dataDistribution['expedition'];
         $data['locality']                       = $dataDistribution['locality'];
         $data['taxa']                           = $dataDistribution['taxa'];
+        $data['marinecentertext']               = $dataDistribution['marinecentertext'];
         $data['map_type']                       = $map_type;
         $data['is_in_thailand']                 = $dataDistribution['is_in_thailand'];
         $data['request'] = $input->All();
@@ -937,7 +969,7 @@ class SearchTypeCController extends Controller
             ->addColumn('showpic', function ($row) {
                 return "<a href='#' class='showPic' data-toggle='modal' data-target='#myModal' data-uniqueid='" . $row->unique_record . "' ><span class='glyphicon glyphicon-eye-open' aria-hidden='true'> View image</a>";
             })
-            ->rawColumns(['action', 'showpic', 'current_scientific_name_format'])
+            ->rawColumns(['action', 'showpic', 'current_scientific_name_format', 'previous_scientific_name_format'])
             ->addIndexColumn()
             ->make(true);
     }

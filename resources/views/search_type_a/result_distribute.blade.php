@@ -107,6 +107,13 @@
                         <span class="record-data expedition_search">{{ $expedition }}</span>
                 </p>
 
+                <p class="record-label">
+                    @if($lang == 2){{'ศูนย์กลางทางทะเล'}}@else{{'Marine Center'}}@endif:
+                        <span class="record-data expedition_search">{{ $marinecentertext }}</span>
+                </p>
+
+                
+
             </div>
         </div>
 
@@ -256,7 +263,7 @@
         var table = $('#distributeDataTable').DataTable({});;
         function initDatatable(){
             table.destroy();
-            $('#distributeDataTable').DataTable({
+            table = $('#distributeDataTable').DataTable({
                 order: [2, 'asc'],
                 // bFilter: true,
                 // bLengthChange: true,

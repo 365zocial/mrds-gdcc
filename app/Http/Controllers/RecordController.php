@@ -711,7 +711,7 @@ class RecordController extends Controller
 
 				return $btn;
 			})
-			->rawColumns(['current_scientific_name_format', 'action'])
+			->rawColumns(['current_scientific_name_format', 'action', 'previous_scientific_name_format'])
 			->addIndexColumn()
 			->make(true);
 	}
