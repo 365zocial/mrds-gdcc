@@ -204,6 +204,12 @@ Route::group(['middleware' => ['Authen']], function () {
             Route::group(['prefix' => 'disableWording'], function(){
                 Route::get('/', 'WordingForCheckController@disableWording');
             });
+            #-------------------------------------------#
+            # Chage sex field from downdrop to checkbox #
+            #-------------------------------------------#
+            Route::group(['prefix' => 'changeTypeSexField'], function(){
+                Route::get('/', 'WordingForCheckController@changeTypeSexField');
+            });
 
             #-------------------#
             # System Log Export #
