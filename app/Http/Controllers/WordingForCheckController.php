@@ -83,21 +83,32 @@ class WordingForCheckController extends Controller
     {
         $start_id = 1;  // ค่าของ id เริ่มต้นที่ต้องการค้นหา
         $end_id = 10000;    // ค่าของ id สุดท้ายที่จะทำการค้นหา (ระบบจะค้นหาเป็นช่วงของ start_id จนถึง end_id)
-        $word_id = 1;   // 1=Male, 2=Female, 3=Hermaphrodite, 4=Indeterminate, 5=Unknown, 6=Transitional, 7=Imposex
 
-        $for_disable = 1; // 0 คือ ไม่ทำงาน, 1 คือ ทำการแก้ไขข้อมูล
+        $old_word_id = 8;
+        $new_word_id = 1;
+        /*
+                            old             new
+        Male =              8               1
+        Female =            9               2
+        Hermaphrodite =     10              3
+        Indeterminate =     11              4
+        Unknown =           12              5
+        Transitional =      13              6
+        Imposex =           14              7
+        */
+        $for_disable = 0; // 0 คือ ไม่ทำงาน, 1 คือ ทำการแก้ไขข้อมูล
         for( $i = $start_id; $i <= $end_id; $i++) {
-            $result = Record::where('id', $i)->where('sex', $word_id)->first();
+            $result = Record::where('id', $i)->where('sex', $old_word_id)->first();
 
             if( $result ) {
                 // ถ้ามีข้อมูล ให้ทำการสร้าง data ใน table ใหม่
-                echo "***".$i.
+                echo "***".$result->id." - ".$result->related_catalog_item;
 
                 if( $for_disable == 1 ) {
                     // รอ DB
                     $data = new RecordSex;
-                    $data->name = $result->unique_record;
-                    $data->sex_id = $result->sex;
+                    $data->record_unique_id = $result->unique_record;
+                    $data->sex_id = $new_word_id;
                     $sdata->save();
                     echo " - save complete";
                 }
@@ -111,7 +122,7 @@ class WordingForCheckController extends Controller
         }
         echo "<br><br>'changeTypeSexField' is Complete id:".$start_id." - ".$end_id;
         echo "<br>";
-        echo "Word ID = ".$word_id;
+        echo "Old Word ID = ".$old_word_id." /// New Word ID = ".$new_word_id;
     }
 
 }
