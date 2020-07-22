@@ -27,7 +27,7 @@
 		$("#team_exploration_code").attr("data-parsley-focus", "first");
 
 		/* back button in browser */
-		history.pushState(null, null, 'addRecordFormTH');
+        history.pushState(null, null, 'addRecordFormTH');
 		window.addEventListener('popstate', function(event) {
 			history.pushState(null, null, 'addRecordFormTH');
 		});

@@ -19,5 +19,6 @@ class AlterTableSeeder extends Seeder
 
         DB::statement('ALTER TABLE record_utilizations DROP PRIMARY KEY, ADD PRIMARY KEY(record_unique_id, utilization_id)');
         DB::statement('ALTER TABLE record_places DROP PRIMARY KEY, ADD PRIMARY KEY(record_unique_id, place_id)');
+        DB::statement('ALTER TABLE record_sexes DROP PRIMARY KEY, ADD PRIMARY KEY(record_unique_id, sex_id)');
     }
 }
