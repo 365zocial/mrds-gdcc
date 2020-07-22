@@ -84,6 +84,8 @@ class WordingForCheckController extends Controller
         $start_id = 1;  // ค่าของ id เริ่มต้นที่ต้องการค้นหา
         $end_id = 10000;    // ค่าของ id สุดท้ายที่จะทำการค้นหา (ระบบจะค้นหาเป็นช่วงของ start_id จนถึง end_id)
 
+        $for_disable = 0; // 0 คือ ไม่ทำงาน, 1 คือ ทำการแก้ไขข้อมูล
+
         $old_word_id = 8;
         $new_word_id = 1;
         /*
@@ -96,9 +98,9 @@ class WordingForCheckController extends Controller
         Transitional =      13              6
         Imposex =           14              7
         */
-        $for_disable = 0; // 0 คือ ไม่ทำงาน, 1 คือ ทำการแก้ไขข้อมูล
+
         for( $i = $start_id; $i <= $end_id; $i++) {
-            $result = Record::where('id', $i)->where('sex', $old_word_id)->first();
+            $result = Record::where('id', $i)->where('sex', $old_word_id)->where('language_id', 1)->first();
 
             if( $result ) {
                 // ถ้ามีข้อมูล ให้ทำการสร้าง data ใน table ใหม่
@@ -109,7 +111,7 @@ class WordingForCheckController extends Controller
                     $data = new RecordSex;
                     $data->record_unique_id = $result->unique_record;
                     $data->sex_id = $new_word_id;
-                    $sdata->save();
+                    $data->save();
                     echo " - save complete";
                 }
                 echo "<br>";
