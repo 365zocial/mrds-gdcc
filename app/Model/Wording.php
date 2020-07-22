@@ -29,7 +29,7 @@ class Wording extends Model
             (object)['id' => 6, 'name_en' => 'Transitional', 'name_th' => 'Transitional'],
             (object)['id' => 7, 'name_en' => 'Imposex', 'name_th' => 'Imposex']
         ];
-        return (object) $sexs;
+        return $sexs;
     }
 
     public static function getWordingByWordingTypeForForm($wording_type_id)

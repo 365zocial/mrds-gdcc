@@ -361,9 +361,22 @@
               <input type="text" class="form-control" id="individual_count" name="individual_count" placeholder="Text Input"  @if ( $record->individual_count != null ) value="{{ $record->individual_count }}" @endif >
             </div>
           </div>
+          <div class="row row-inform">
+            <div class="col-md-12">
+              <p class="search-report-dropdown-header">Sex</p>
+              @if(!empty($sexs))
+                @foreach($sexs as $sex)
+                  <label class="checkbox-inline" style="font-weight:light">
+                    <input class="form-check-input" type="checkbox" id="sex{{ $sex->id }}" name="sexs[]" value="{{ $sex->id }}" @if(in_array($sex->id,$currentSexes)) {{"checked"}} @endif>
+                    {{ $sex->name_en }}
+                  </label>
+                @endforeach
+              @endif
+            </div>
+          </div>
 
           <div class="row row-inform">
-            <div class="col-md-4">
+            {{-- <div class="col-md-4">
               <p class="search-report-dropdown-header">Sex</p>
               <select class="form-control search-report-select select2" id="sex" name="sex">
               @if( count($sexs) !== 0 )
@@ -375,12 +388,12 @@
                 <option value="" selected>No list in select</option>
               @endif
               </select>
-            </div>
-            <div class="col-md-4">
+            </div> --}}
+            <div class="col-md-6">
               <p class="search-report-dropdown-header">Size</p>
               <input type="text" class="form-control" id="size" name="size" placeholder="Text Input"  @if ( $record->size != null ) value="{{ $record->size }}" @endif>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
               <p class="search-report-dropdown-header">Life Stage</p>
               <select class="form-control search-report-select select2" id="life_stage" name="life_stage">
               @if( count($life_stages) !== 0 )
