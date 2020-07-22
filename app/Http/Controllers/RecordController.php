@@ -436,7 +436,7 @@ class RecordController extends Controller
 	//#to show sex 
 	//input Record->unique_record
 	//output String
-	public function getShowSexAsString($unique_record)
+	public static function getShowSexAsString($unique_record)
 	{
 		//show sexes wording
 		$sexArray = Wording::getWordingByWordingTypeSex();

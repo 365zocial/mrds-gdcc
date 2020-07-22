@@ -1253,6 +1253,10 @@ class SearchTypeBController extends Controller
             $data['extra_info'] = null;
         }
 
+        $sexWord = RecordController::getShowSexAsString($data['record'][0]->unique_record);
+        $data['show_sex_th'] = $sexWord->selectedSexTh;
+        $data['show_sex_en'] = $sexWord->selectedSexEn;
+
         return view('search_type_b.view_record', $data);
     }
 
