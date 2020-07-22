@@ -318,7 +318,6 @@ class RecordController extends Controller
 			$db->updated_by						= Auth::user()->id;
 
 			$lastId = CatchException::catcherAdd($db);
-
 			RecordSex::where('record_unique_id', $db->unique_record)->delete();
 			if (count((array) $sexs) > 0) {
 				foreach ($sexs as $value) {
@@ -390,7 +389,7 @@ class RecordController extends Controller
 			$data['marinecenter'] = Marinecenter::getMarineCenter($record->marinecenter_id)->marinecenter_code;
 
 			// get taxonomy wording
-			$arr_taxonomy_id 			=	[
+			$arr_taxonomy_id = [
 				$data['classification']->domain,
 				$data['classification']->kingdom,
 				$data['classification']->subkingdom,
@@ -414,7 +413,7 @@ class RecordController extends Controller
 				$data['classification']->species,
 				$data['classification']->subspecies
 			];
-			$data['taxonomy']			=	Taxonomy::getMultipleTaxonmyWording($arr_taxonomy_id);
+			$data['taxonomy'] = Taxonomy::getMultipleTaxonmyWording($arr_taxonomy_id);
 
 			$data['iq'] = Wording::getWording($data['classification']->identification_qualifier);
 			if (is_null($data['iq'])) {
@@ -423,12 +422,40 @@ class RecordController extends Controller
 				$data['iq'] = $data['iq']->name_en;
 			}
 
-			$data['references'] 		= Reference::getReferenceByID($record->reference);
+			$data['references'] = Reference::getReferenceByID($record->reference);
+			$data['selectedSex'] = $this->getShowSexAsString($record->unique_record)->selectedSexTh;
+
 
 			return view('staff.record.add.add_record_form_th', $data);
 		} else {
 			return redirect('staff/checkClassificationForm');
 		}
+	}
+
+	//supakorn
+	//#to show sex 
+	//input Record->unique_record
+	//output String
+	public function getShowSexAsString($unique_record)
+	{
+		//show sexes wording
+		$sexArray = Wording::getWordingByWordingTypeSex();
+		$currentSexes = RecordSex::getRecordSexByUniqueId($unique_record);
+		//variable selected
+		$selectedSexEn = [];
+		$selectedSexTh = [];
+		foreach ($currentSexes as $value) {
+			//get name_th from sexArray where id = sex_id
+			// if (array_search($value->sex_id, array_column($sexArray, 'id'))) {
+			$sex = $sexArray[array_search($value->sex_id, array_column($sexArray, 'id'))];
+			$selectedSexEn[] = $sex->name_th;
+			$selectedSexTh[] = $sex->name_en;
+			// }
+		}
+		//join as string
+		$data['selectedSexEn'] = implode(', ', $selectedSexEn);
+		$data['selectedSexTh'] = implode(', ', $selectedSexTh);
+		return (object)$data;
 	}
 
 	//Sorawit
@@ -798,7 +825,7 @@ class RecordController extends Controller
 		$data['donated_froms'] 		= Wording::getWordingByWordingTypeForForm(10);
 		$data['deposited_ats'] 		= Wording::getWordingByWordingTypeForForm(11);
 		$data['type_statuses'] 		= Wording::getWordingByWordingTypeForForm(2);
-		$data['sexs'] 				= Wording::getWordingByWordingTypeForForm(5);
+		// $data['sexs'] 				= Wording::getWordingByWordingTypeForForm(5);
 		$data['life_stages'] 		= Wording::getWordingByWordingTypeForForm(9);
 		$data['ocean_sea_lakes'] 	= Wording::getWordingByWordingTypeForForm(3);
 		$data['sediment_types'] 	= Wording::getWordingByWordingTypeForForm(25);
@@ -811,6 +838,14 @@ class RecordController extends Controller
 		$data['preparation_types'] 	= Wording::getWordingByWordingTypeForForm(7);
 		$data['expeditions'] 		= Wording::getWordingByWordingTypeForForm(6);
 
+		$c = [];
+		$currentSex = RecordSex::getRecordSexByUniqueId($record[0]->unique_record);
+		foreach ($currentSex as $current) {
+			$c[] = $current->sex_id;
+		}
+
+		$data['currentSexes'] = $c;
+		$data['sexs'] = Wording::getWordingByWordingTypeSex();
 		// get extra field
 		$data['extra_fields'] = Extra_Field::getExtraFieldNameList();
 
@@ -847,7 +882,8 @@ class RecordController extends Controller
 		$deposited_at 			= $input->deposited_at;
 		$type_status 			= $input->type_status;
 		$individual_count 		= $input->individual_count;
-		$sex 					= $input->sex;
+		// $sex 					= $input->sex;
+		$sexs = $input->sexs; //edit sexs receive multi variable #4
 		$size 					= $input->size;
 		$life_stage 			= $input->life_stage;
 		$ocean_sea_lake 		= $input->ocean_sea_lake;
@@ -970,7 +1006,7 @@ class RecordController extends Controller
 			$db->habitat 				= $habitat;
 			$db->sediment_type			= $sediment_type;
 			$db->type_status 			= $type_status;
-			$db->sex 					= $sex;
+			// $db->sex 					= $sex;
 			$db->size 					= $size;
 			$db->life_stage 			= $life_stage;
 			$db->donated_from 			= $donated_from;
@@ -1014,6 +1050,17 @@ class RecordController extends Controller
 				} else {
 					return redirect('staff/manageRecordPublication');
 				}
+			}
+		}
+
+		//update record_sexes
+		RecordSex::where('record_unique_id', $db->unique_record)->delete();
+		if (count((array) $sexs) > 0) {
+			foreach ($sexs as $value) {
+				$recordSex = new RecordSex;
+				$recordSex->record_unique_id = $db->unique_record;
+				$recordSex->sex_id = $value;
+				$recordSex->save();
 			}
 		}
 
@@ -1102,6 +1149,9 @@ class RecordController extends Controller
 			$data['references'] 		= Reference::getReferenceByID($record->reference);
 			$data['classification'] = Classification::getClassification($record->classification_id);
 			$data['marinecenter'] = Marinecenter::getMarineCenter($record->marinecenter_id)->marinecenter_code;
+			$sexWord = $this->getShowSexAsString($data['record']->unique_record);
+			$data['show_sex_th'] = $sexWord->selectedSexTh;
+
 			return view('staff.record.edit.edit_record_form_th', $data);
 		} else {
 			return redirect('staff/managerRecord');
@@ -1343,6 +1393,9 @@ class RecordController extends Controller
 		} else {
 			$data['extra_info'] = null;
 		}
+		$sexWord = $this->getShowSexAsString($data['record'][0]->unique_record);
+		$data['show_sex_th'] = $sexWord->selectedSexTh;
+		$data['show_sex_en'] = $sexWord->selectedSexEn;
 
 		return view('staff.record.manage.view_record', $data);
 	}
@@ -1666,6 +1719,7 @@ class RecordController extends Controller
 
 	public function approveViewRecord($record_id = "")
 	{
+
 		if ($record_id != "") {
 			$id_decode = base64_decode(base64_decode(base64_decode($record_id)));
 		} elseif (Session::has('record_id_add_en')) {
@@ -1681,8 +1735,12 @@ class RecordController extends Controller
 			return redirect('staff/manageRecord');
 		}
 
-
 		$data['record']				=	Record::getFullRecord($id_decode);
+		$sexWord = $this->getShowSexAsString($data['record'][0]->unique_record);
+		$data['show_sex_th'] = $sexWord->selectedSexTh;
+		$data['show_sex_en'] = $sexWord->selectedSexEn;
+
+
 		$data['marinecenter']		=	Marinecenter::getMarineCenterCode($data['record'][0]->marinecenter_id);
 		$data['classification'] 	= 	Classification::getClassification($data['record'][0]->classification_id);
 		$data['country']			=	Country::getCountryWording($data['record'][0]->country);
@@ -1710,6 +1768,7 @@ class RecordController extends Controller
 		$place_list					=	['น้ำจืด', 'น้ำกร่อย', 'ทะเล', 'ภูเขา', 'บนต้นไม้', 'หน้าดิน', 'ในดิน', 'บนบก'];
 		$record_place				=	RecordPlace::where('record_unique_id', $data['record'][0]->unique_record)->get();
 		$data['record_places']		=	[];
+
 		foreach ($record_place as $value) {
 			$data['record_places'][]	=	$place_list[$value->place_id - 1];
 		}
@@ -1753,6 +1812,8 @@ class RecordController extends Controller
 		} else {
 			$data['extra_info'] = null;
 		}
+
+
 
 		return view('staff.record.approve.view_record', $data);
 	}

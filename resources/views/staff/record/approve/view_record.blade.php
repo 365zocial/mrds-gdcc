@@ -378,7 +378,7 @@
         <div class="row">
           <div class="col-md-4">
             <p class="record-label">Sex:
-              <span class="record-data">{{ AllMean::ReplaceNullWithDash( Wording::getWordingWithAttr( $record[0]->sex,"name_en" )) }}</span>
+              <span class="record-data">{{ AllMean::ReplaceNullWithDash($show_sex_en) }}</span>
             </p>
           </div>
           <div class="col-md-8">
@@ -671,7 +671,7 @@
         <div class="row">
           <div class="col-md-4">
             <p class="record-label">เพศ:
-              <span class="record-data">{{ AllMean::ReplaceNullWithDash( Wording::getWordingWithAttr( $record[1]->sex ,"name_th" )) }}</span>
+              <span class="record-data">{{ AllMean::ReplaceNullWithDash($show_sex_th) }}</span>
             </p>
           </div>
           <div class="col-md-8">

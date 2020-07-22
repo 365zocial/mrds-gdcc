@@ -210,17 +210,19 @@
                         <input type="number" class="form-control" id="individual_count" placeholder=" @if ( $record->individual_count != 0 && $record->individual_count != null ) {{ $record->individual_count }} @else - @endif " readonly>
                     </div>
                 </div>
-
                 <div class="row row-inform">
-                    <div class="col-md-4">
-                        <p class="search-report-dropdown-header font-thai-resize">เพศ</p>
-                        <input type="text" class="form-control font-thai-resize" id="sex" placeholder=" @if ( $record->sex != 0 && $record->sex != null ) {{ Wording::getWording($record->sex)->name_th }} @else - @endif " readonly>
-                        </div>
-                    <div class="col-md-4">
+                <div class="col-md-12">
+                    <p class="search-report-dropdown-header font-thai-resize">เพศ</p>
+                    <input type="text" class="form-control font-thai-resize" id="sex" placeholder=" @if (!empty($selectedSex) ) {{ $selectedSex }} @else - @endif " readonly>
+                </div>
+                </div>
+                <div class="row row-inform">
+                    
+                    <div class="col-md-6">
                         <p class="search-report-dropdown-header font-thai-resize">ขนาดที่พบ</p>
                         <input type="text" step="any" class="form-control" name="size" id="size" placeholder="Text Input" @if ( $record->size != 0 && $record->size != null ) value="{{ $record->size }}" @endif>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <p class="search-report-dropdown-header font-thai-resize">ระยะการเจริญเติบโตที่พบ</p>
                         <input type="text" class="form-control font-thai-resize" id="life_stage" placeholder=" @if ( $record->life_stage != 0 && $record->life_stage != null ) {{ Wording::getWording($record->life_stage)->name_th }} @else - @endif " readonly>
                     </div>
