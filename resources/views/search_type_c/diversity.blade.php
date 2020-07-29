@@ -288,7 +288,7 @@
                 </div>
 
                 <?php 
-                $arr_taxos = [    
+                $arr_taxos = [
                         [$domains,'domain'],
                         [$kingdoms,'kingdom'],
                         [$phylums,'phylum'],
