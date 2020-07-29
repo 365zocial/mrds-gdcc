@@ -462,7 +462,7 @@ class SearchTypeAController extends Controller
         }
 
         if ($checkGetSearch) {
-            $data['map']                        = $dataDistribution['result_searchs']->skip(0)->take(100)->get();
+            $data['map']                        = $dataDistribution['result_searchs']->groupBy('r.unique_record')->skip(0)->take(100)->get();
         }
 
         $data['map']                            = json_encode($data['map']);
@@ -712,7 +712,7 @@ class SearchTypeAController extends Controller
     {
         $data  = $this->dataDistribution($input);
         $btn = '';
-        return Datatables::of($data['result_searchs'])
+        return Datatables::of($data['result_searchs']->groupBy('r.unique_record'))
             ->addColumn('cate_ref', function ($row) {
                 return $row->related_catalog_item . $row->related_reference_item;
             })
@@ -738,7 +738,7 @@ class SearchTypeAController extends Controller
         $btn = '';
         //supakorn 
         //diversity must show only current name in change request#4 No11
-        return Datatables::of($data['result_searchs']->groupBy('classification.current_scientific_name'))
+        return Datatables::of($data['result_searchs']->groupBy('classification.current_scientific_name', 'r.unique_record'))
             ->addColumn('cate_ref', function ($row) {
                 return $row->related_catalog_item . $row->related_reference_item;
             })
@@ -757,7 +757,7 @@ class SearchTypeAController extends Controller
     public function distributionAAsDataTable(Request $input)
     {
         $data  = $this->dataDistribution($input);
-        return Datatables::of($data['result_searchs'])
+        return Datatables::of($data['result_searchs']->groupBy('r.unique_record'))
             ->addColumn('cate_ref', function ($row) {
                 return $row->related_catalog_item . $row->related_reference_item;
             })
@@ -872,7 +872,7 @@ class SearchTypeAController extends Controller
             'classification.common_name',
             'pic.unique_record',
             'pic.path_pic'
-        ]);
+        ])->groupBy('record.unique_record');
         return Datatables::of($db)
             ->addColumn('cate_ref', function ($row) {
                 return $row->related_catalog_item . $row->related_reference_item;

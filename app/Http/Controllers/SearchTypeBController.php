@@ -470,7 +470,7 @@ class SearchTypeBController extends Controller
         }
 
         if ($checkGetSearch) {
-            $data['map']                        = $dataDistribution['result_searchs']->skip(0)->take(100)->get();
+            $data['map']                        = $dataDistribution['result_searchs']->groupBy('r.unique_record')->skip(0)->take(100)->get();
         }
 
         $data['map']                            = json_encode($data['map']);
@@ -762,7 +762,7 @@ class SearchTypeBController extends Controller
     public function distributionBAsDataTable(Request $input)
     {
         $data  = $this->dataDistribution($input);
-        return Datatables::of($data['result_searchs'])
+        return Datatables::of($data['result_searchs']->groupBy('r.unique_record'))
             ->addColumn('cate_ref', function ($row) {
                 return $row->related_catalog_item . $row->related_reference_item;
             })
@@ -1363,7 +1363,7 @@ class SearchTypeBController extends Controller
             'classification.common_name',
             'pic.unique_record',
             'pic.path_pic'
-        ]);
+        ])->groupBy('record.unique_record');
         return Datatables::of($db)
             ->addColumn('cate_ref', function ($row) {
                 return $row->related_catalog_item . $row->related_reference_item;

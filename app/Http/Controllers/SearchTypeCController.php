@@ -168,7 +168,7 @@ class SearchTypeCController extends Controller
     public function distributionAsDataTable(Request $input)
     {
         $data  = $this->dataDistribution($input);
-        return Datatables::of($data['result_searchs'])
+        return Datatables::of($data['result_searchs']->groupBy('r.unique_record'))
             ->addColumn('cate_ref', function ($row) {
                 return $row->related_catalog_item . $row->related_reference_item;
             })
@@ -183,7 +183,7 @@ class SearchTypeCController extends Controller
         $btn = '';
         //supakorn 
         //diversity must show only current name in change request#4 No1
-        return Datatables::of($data['result_searchs']->groupBy('classification.current_scientific_name'))
+        return Datatables::of($data['result_searchs']->groupBy('classification.current_scientific_name', 'r.unique_record'))
             ->addColumn('cate_ref', function ($row) {
                 return $row->related_catalog_item . $row->related_reference_item;
             })
@@ -202,7 +202,7 @@ class SearchTypeCController extends Controller
     {
         $data  = $this->dataDistribution($input);
         $btn = '';
-        return Datatables::of($data['result_searchs'])
+        return Datatables::of($data['result_searchs']->groupBy('r.unique_record'))
             ->addColumn('cate_ref', function ($row) {
                 return $row->related_catalog_item . $row->related_reference_item;
             })
@@ -275,7 +275,7 @@ class SearchTypeCController extends Controller
             //noneed to send result_searchs after modified
             // $data['result_searchs']             = $this->Data_searchResult_distribution($db);
             //map still need
-            $data['map']                        = $dataDistribution['result_searchs']->skip(0)->take(100)->get();
+            $data['map']                        = $dataDistribution['result_searchs']->groupBy('r.unique_record')->skip(0)->take(100)->get();
         }
 
         $data['map']                            = json_encode($data['map']);
@@ -782,7 +782,7 @@ class SearchTypeCController extends Controller
         }
 
         if ($checkGetSearch) {
-            $data['map']                        = $dataDistribution['result_searchs']->skip(0)->take(100)->get();
+            $data['map']                        = $dataDistribution['result_searchs']->groupBy('r.unique_record')->skip(0)->take(100)->get();
         }
 
         // $data['map']                            = json_encode($data['map']);
@@ -961,7 +961,7 @@ class SearchTypeCController extends Controller
             'classification.common_name',
             'pic.unique_record',
             'pic.path_pic'
-        ]);
+        ])->groupBy('record.unique_record');
         return Datatables::of($db)
             ->addColumn('cate_ref', function ($row) {
                 return $row->related_catalog_item . $row->related_reference_item;
