@@ -143,7 +143,7 @@
                         </div>
                         @foreach($arr_taxos as $arr_taxo)
                             <div class="dd_taxa_sub" style="display:none;">
-                                <select class="form-control select2" name="{{$arr_taxo[1]}}" id="">
+                                <select class="form-control select2" name="{{$arr_taxo[1]}}" id="{{ $arr_taxo[1] }}">
                                     <option selected disabled="" value="0">Select</option>
                                     @foreach( $arr_taxo[0] as $value )
                                         <option value="{{ $value->id }}">{!! $value->name !!}</option>

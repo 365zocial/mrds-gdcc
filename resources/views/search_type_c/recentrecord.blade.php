@@ -73,6 +73,7 @@
                         suborder: $('#suborder').val(),
                         infraorder: $('#infraorder').val(),
                         family: $('#family').val(),
+                        classification: $('#classification').val(),
 
                         chk_taxa: chk_taxa,
                         chk_locality: chk_locality,
@@ -110,7 +111,7 @@
                 var ocean_sea_lake = "";
 
                 var lang = data['lang_table'];
-
+                console.log(getCurrentParam());
                 initDatatable(getCurrentParam())
                 @if(false)
                 $.each(data['result_searchs'], function(i, data){
@@ -171,6 +172,7 @@
 
         var table = $('#distributeDataTable').DataTable({});;
         function initDatatable(params){
+            console.log(params);
             table.destroy();
             table = $('#distributeDataTable').DataTable({
                 order: [2, 'asc'],
@@ -394,7 +396,7 @@
                             </div>
                             @foreach($arr_taxos as $arr_taxo)
                                 <div class="dd_taxa_sub" style="display:none;">
-                                    <select class="form-control select2" name="taxa" id="{{ $arr_taxo[1] }}">
+                                    <select class="form-control select2" name="{{ $arr_taxo[1] }}" id="{{ $arr_taxo[1] }}">
                                         <option selected disabled="" value="0">Select</option>
                                         @foreach( $arr_taxo[0] as $value )
                                             <option value="{{ $value->id }}">{!! $value->name !!}</option>

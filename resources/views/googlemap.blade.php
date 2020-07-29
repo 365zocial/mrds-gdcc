@@ -42,16 +42,13 @@
                 var id_related = data_map['related_reference_item'];
             }
             info[i] = id_related;
-            if(data_map['latitude'] && data_map['longitude']){
+            if(data_map['latitude'] && data_map['longitude'] && !isNaN(Number(data_map['latitude'])) && !isNaN(Number(data_map['longitude']))){
                 markers[count] = {
                     "position": {"lat": Number(data_map['latitude']), "lng": Number(data_map['longitude']) },
                     "icon": icons[i%20]
                 };
-                
-                
-                
             }
-            if( Number(data_map['start_latitude']) != "" && Number(data_map['start_longitude']) != "" && Number(data_map['end_latitude']) != "" && Number(data_map['end_longitude']) ){
+            if( Number(data_map['start_latitude']) != "" && !isNaN(Number(data_map['start_longitude'])) && !isNaN(Number(data_map['end_latitude']))&& Number(data_map['end_longitude']) ){
                 area[count] = [
                             {lat: Number(data_map['start_latitude']), lng: Number(data_map['start_longitude'])},
                             {lat: Number(data_map['start_latitude']), lng: Number(data_map['end_longitude'])},
@@ -61,6 +58,7 @@
             }else{
                 area[count] = null;
             }
+            
        }
        count++;
     });
