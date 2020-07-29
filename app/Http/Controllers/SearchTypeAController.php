@@ -861,6 +861,10 @@ class SearchTypeAController extends Controller
             }
         }
 
+        //supakorn
+        //fix name record use thai language only
+        $db = $db->where('record.language_id', 2);
+
         $db->select([
             'record.id as record_id',
             'record.related_catalog_item',

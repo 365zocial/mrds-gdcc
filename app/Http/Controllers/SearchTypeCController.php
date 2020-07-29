@@ -921,6 +921,7 @@ class SearchTypeCController extends Controller
     #แยก query ของ name record ออกมา
     public function nameRecordCAsDataTable(Request $input)
     {
+
         $db = new Record;
         $db = $db->leftjoin('classification', 'record.classification_id', 'classification.id');
         $db = $db->leftjoin('picture as pic', 'record.unique_record', '=', 'pic.unique_record');
@@ -948,6 +949,9 @@ class SearchTypeCController extends Controller
                 $db = $db->where('record.identifier', 'like', '%' . $input->identifier . '%');
             }
         }
+        //supakorn
+        //name record use thai language only
+        $db = $db->where('record.language_id', 2);
         $db->select([
             'record.id as record_id',
             'record.related_catalog_item',
