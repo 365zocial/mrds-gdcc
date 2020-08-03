@@ -46,7 +46,7 @@ class CreateRecord extends Migration
             $table->integer('habitat')->nullable()->comment('ลักษณะของสถานที่ที่ Record อาศัย เช่น หาดหิน, หาดทราย, หาดโคลน, ป่าชายเลน, แนวหญ้าทะเล, แนวปะการัง, ปากแม่น้ำ, พื้นทะเล, น้ำทะเล และ ทะเลลึก, FK: wording table');
             $table->integer('sediment_type')->nullable()->comment('ประเภทของดินตะกอน, FK: wording table');
             $table->integer('type_status')->nullable()->comment('ประเภทของตัวอย่างต้นแบบชนิดใหม่ของโลก, FK: wording table // 1 = Holotype, 2 = Paratype, 3 = Neotype, 4 = Allotype');
-            $table->integer('sex')->nullable()->comment('เพศของ Record ที่เก็บมา, FK: wording table // 1 = Male, 2 = Female, 3 = Hermaphrodite, 4 = Indeterminate, 5 = Unknown, 6 = Transitional, 7 = Imposex');
+            // $table->integer('sex')->nullable()->comment('เพศของ Record ที่เก็บมา, FK: wording table // 1 = Male, 2 = Female, 3 = Hermaphrodite, 4 = Indeterminate, 5 = Unknown, 6 = Transitional, 7 = Imposex // (ไม่ได้ใช้งานในระบบแล้ว)');
             $table->string('size', 255)->nullable()->comment('ขนาดของ Record ทีเก็บมา');
             $table->integer('life_stage')->nullable()->comment('ช่วงชีวิต (Life Cycle) ของ Record ที่เก็บมา, FK: wording table // 1 = Juvenile, 2 = Adult');
             $table->integer('donated_from')->nullable()->comment('หน่วยงานที่บริจาค Record นั้นๆ, FK: wording table');
