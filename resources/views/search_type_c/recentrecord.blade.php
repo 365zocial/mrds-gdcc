@@ -533,22 +533,6 @@
                         @endif
                         <span class="record-data"><span class="locality_search"></span></span>
                         @endif
-                        @if($group_permission_a == 2)
-                        @if($lang == 2)
-                        ค้นหาด้วยหมวดหมู่:
-                        @else
-                        Taxon:
-                        @endif
-                        <span class="record-data" style="margin-right: 30px;"><span class="taxa_search"></span></span>
-                        @endif
-                        @if($group_permission_b == 2)
-                        @if($lang == 2)
-                        ค้นหาเชิงพื้นที่:
-                        @else
-                        Locality:
-                        @endif
-                        <span class="record-data"><span class="locality_search"></span></span>
-                        @endif
                     </p>
                 </div>
                 <div id="remove-when-print" class="col-md-6" style="text-align: right;">
