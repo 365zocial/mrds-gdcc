@@ -61,6 +61,7 @@ class SearchTypeCController extends Controller
         $data['provinces']              =   json_decode(Province::getProvinceListForFormEN());
         $data['districts']              =   json_decode(District::getDistrictListForFormEN());
         $data['counties']               =   json_decode(County::getCountyListForFormEN());
+        $data['ocean_sea_lake']         =   Wording::getWordingByWordingTypeForForm(3);
 
         $data['domains']                =   Taxonomy::getDomain();
         $data['kingdoms']               =   Taxonomy::getKingdom();
@@ -91,6 +92,7 @@ class SearchTypeCController extends Controller
         $data['provinces']              =   json_decode(Province::getProvinceListForFormEN());
         $data['districts']              =   json_decode(District::getDistrictListForFormEN());
         $data['counties']               =   json_decode(County::getCountyListForFormEN());
+        $data['ocean_sea_lake']         =   Wording::getWordingByWordingTypeForForm(3);
 
         $data['domains']                =   Taxonomy::getDomain();
         $data['kingdoms']               =   Taxonomy::getKingdom();
@@ -105,6 +107,7 @@ class SearchTypeCController extends Controller
         $data['genuses']                =   Taxonomy::getGenus();
         $data['species']                =   Taxonomy::getSpecies();
         $data['classification']         =   Classification::getClassificationBySciName();
+
         $data['marinecenters']          =   Marinecenter::getMarineCenterList();
         $data['group_permission_a']     =   $this->group_permission_a;
         $data['group_permission_b']     =   $this->group_permission_b;
@@ -121,6 +124,7 @@ class SearchTypeCController extends Controller
         $data['provinces']              =   json_decode(Province::getProvinceListForFormEN());
         $data['districts']              =   json_decode(District::getDistrictListForFormEN());
         $data['counties']               =   json_decode(County::getCountyListForFormEN());
+        $data['ocean_sea_lake']         =   Wording::getWordingByWordingTypeForForm(3);
 
         $data['domains']                =   Taxonomy::getDomain();
         $data['kingdoms']               =   Taxonomy::getKingdom();
@@ -238,6 +242,7 @@ class SearchTypeCController extends Controller
         $locality_province = $input->locality_province;
         $locality_district = $input->locality_district;
         $locality_county = $input->locality_county;
+        $locality_ocean_sea_lake = $input->locality_ocean_sea_lake;
         $expan_id = $input->expedition;
         $map_type = $input->map_type;
         $classification = $input->classification;
@@ -245,7 +250,6 @@ class SearchTypeCController extends Controller
 
         $dataDistribution = $this->dataDistribution($input);
         $checkGetSearch = true;
-        //supakorn
         #comment taxonomy showmap in type C?
         // if ($chk_taxa == 1) {
         //     if ($domain == "" && $kingdom == "" && $phylum == "" && $subphylum == "" && $class == "" && $order == "" && $infraorder == "" && $family == "") {
@@ -255,7 +259,7 @@ class SearchTypeCController extends Controller
         //     }
         // }
         if ($chk_locality == 1) {
-            if ($locality_country == "" && $locality_province == "" && $locality_district == "" && $locality_county == "") {
+            if ($locality_country == "" && $locality_province == "" && $locality_district == "" && $locality_county == "" && $locality_ocean_sea_lake == "") {
                 $data['result_searchs']             = null;
                 $data['map']                        = null;
                 $checkGetSearch                     = $checkGetSearch && false;
@@ -276,6 +280,12 @@ class SearchTypeCController extends Controller
             // $data['result_searchs']             = $this->Data_searchResult_distribution($db);
             //map still need
             $data['map']                        = $dataDistribution['result_searchs']->groupBy('r.unique_record')->skip(0)->take(100)->get();
+            //supakorn
+            //modified
+            #เนื่องจาก ocean sea lake ไม่สามารถเช็คได้โดยตรงจึงเช็คจาก record
+            if ($locality_type == "ocean_sea_lake" && $locality_ocean_sea_lake != "") {
+                $dataDistribution['is_in_thailand'] = $data['map'][0]->country_id == 1;
+            }
         }
 
         $data['map']                            = json_encode($data['map']);
@@ -371,6 +381,7 @@ class SearchTypeCController extends Controller
         $locality_province      = $input->locality_province;
         $locality_district      = $input->locality_district;
         $locality_county        = $input->locality_county;
+        $locality_ocean_sea_lake = $input->locality_ocean_sea_lake;
         $expan_id               = $input->expan_id;
         $marinecenter_id        = $input->marinecenter_id;
         $chk_taxa               = $input->chk_taxa;
@@ -473,6 +484,11 @@ class SearchTypeCController extends Controller
             $is_in_thailand = $locality_full->country_id == 1;
             $locality       = ucfirst($locality_type) . " - " . $locality_full->county_en . " (" . $locality_full->county_th . ")";
             $db             = $db->where('r.county', $locality_county);
+        } elseif ($locality_type == "ocean_sea_lake" && $locality_ocean_sea_lake != "") {
+            $locality_full  = Wording::getWording($locality_ocean_sea_lake);
+            $locality       = ucfirst('Ocean/Sea/Lake') . " - " . $locality_full->name_en . " (" . $locality_full->name_th . ")";
+            $is_in_thailand = false;
+            $db             = $db->where('r.ocean_sea_lake', $locality_ocean_sea_lake);
         } else {
             $locality       = "-";
             $is_in_thailand = false;
@@ -740,6 +756,7 @@ class SearchTypeCController extends Controller
         $locality_province      = $input->locality_province;
         $locality_district      = $input->locality_district;
         $locality_county        = $input->locality_county;
+        $locality_ocean_sea_lake = $input->locality_ocean_sea_lake;
         $expan_id               = $input->expan_id;
         $marinecenter_id        = $input->marinecenter_id;
         $chk_taxa               = $input->chk_taxa;
@@ -783,6 +800,12 @@ class SearchTypeCController extends Controller
 
         if ($checkGetSearch) {
             $data['map']                        = $dataDistribution['result_searchs']->groupBy('r.unique_record')->skip(0)->take(100)->get();
+            //supakorn
+            //modified
+            #เนื่องจาก ocean sea lake ไม่สามารถเช็คได้โดยตรงจึงเช็คจาก record
+            if ($locality_type == "ocean_sea_lake" && $locality_ocean_sea_lake != "") {
+                $dataDistribution['is_in_thailand'] = $data['map'][0]->country_id == 1;
+            }
         }
 
         // $data['map']                            = json_encode($data['map']);

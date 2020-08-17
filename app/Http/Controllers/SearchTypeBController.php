@@ -144,6 +144,7 @@ class SearchTypeBController extends Controller
         $data['provinces']          =   json_decode(Province::getProvinceListForFormEN());
         $data['districts']          =   json_decode(District::getDistrictListForFormEN());
         $data['counties']           =   json_decode(County::getCountyListForFormEN());
+        $data['ocean_sea_lake']         =   Wording::getWordingByWordingTypeForForm(3);
 
         $data['domains']                =   Taxonomy::getDomain();
         $data['kingdoms']               =   Taxonomy::getKingdom();
@@ -429,6 +430,8 @@ class SearchTypeBController extends Controller
         $locality_province      = $input->locality_province;
         $locality_district      = $input->locality_district;
         $locality_county        = $input->locality_county;
+        $locality_ocean_sea_lake = $input->locality_ocean_sea_lake;
+
         $expan_id               = $input->expan_id;
         $marinecenter_id        = $input->marinecenter_id;
         $chk_taxa               = $input->chk_taxa;
@@ -447,13 +450,13 @@ class SearchTypeBController extends Controller
                 $checkGetSearch                     = $checkGetSearch && false;
             }
         }
-        if ($chk_locality == 1) {
-            if ($locality_country == "" && $locality_province == "" && $locality_district == "" && $locality_county == "") {
-                $data['result_searchs']             = null;
-                $data['map']                        = null;
-                $checkGetSearch                     = $checkGetSearch && false;
-            }
-        }
+        // if ($chk_locality == 1) {
+        //     if ($locality_country == "" && $locality_province == "" && $locality_district == "" && $locality_county == "" && $locality_ocean_sea_lake != "") {
+        //         $data['result_searchs']             = null;
+        //         $data['map']                        = null;
+        //         $checkGetSearch                     = $checkGetSearch && false;
+        //     }
+        // }
         if ($chk_expedition == 1) {
             if ($expan_id == "") {
                 $data['result_searchs']             = null;
@@ -471,6 +474,12 @@ class SearchTypeBController extends Controller
 
         if ($checkGetSearch) {
             $data['map']                        = $dataDistribution['result_searchs']->groupBy('r.unique_record')->skip(0)->take(100)->get();
+            //supakorn
+            //modified
+            #เนื่องจาก ocean sea lake ไม่สามารถเช็คได้โดยตรงจึงเช็คจาก record
+            if ($locality_type == "ocean_sea_lake" && $locality_ocean_sea_lake != "") {
+                $dataDistribution['is_in_thailand'] = $data['map'][0]->country_id == 1;
+            }
         }
 
         $data['map']                            = json_encode($data['map']);
@@ -572,6 +581,8 @@ class SearchTypeBController extends Controller
         $locality_province      = $input->locality_province;
         $locality_district      = $input->locality_district;
         $locality_county        = $input->locality_county;
+        $locality_ocean_sea_lake = $input->locality_ocean_sea_lake;
+
         $expan_id               = $input->expan_id;
         $marinecenter_id        = $input->marinecenter_id;
         $chk_taxa               = $input->chk_taxa;
@@ -674,6 +685,11 @@ class SearchTypeBController extends Controller
             $is_in_thailand = $locality_full->country_id == 1;
             $locality       = ucfirst($locality_type) . " - " . $locality_full->county_en . " (" . $locality_full->county_th . ")";
             $db             = $db->where('r.county', $locality_county);
+        } elseif ($locality_type == "ocean_sea_lake" && $locality_ocean_sea_lake != "") {
+            $locality_full  = Wording::getWording($locality_ocean_sea_lake);
+            $locality       = ucfirst('Ocean/Sea/Lake') . " - " . $locality_full->name_en . " (" . $locality_full->name_th . ")";
+            $is_in_thailand = false;
+            $db             = $db->where('r.ocean_sea_lake', $locality_ocean_sea_lake);
         } else {
             $locality       = "-";
             $is_in_thailand = false;

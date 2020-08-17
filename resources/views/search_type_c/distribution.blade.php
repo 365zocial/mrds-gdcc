@@ -118,7 +118,8 @@
                         [$families,'family'],
                         [$genuses,'genus'],
                         [$species,'species'],
-                        [$classification,'classification']
+                        [$classification,'classification'],
+                        
                     ];
                 ?>
 
@@ -163,6 +164,7 @@
                             <option id="dd_province" value="province" >Province / จังหวัด</option>
                             <option id="dd_district" value="district" >District / อำเภอ</option>
                             <option id="dd_county" value="county" >County / ตำบล</option>
+                            <option id="dd_ocean_sea_lake" value="ocean_sea_lake" >Ocean Sea Lake / มหาสมุทร ทะเล ทะเลสาบ</option>
                         </select>
                     </div>
                     <div class="col-md-6">
@@ -204,6 +206,15 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="dd_locality_sub" style="display:none;">
+                            <select class="form-control select2" name="locality_ocean_sea_lake" id="locality_ocean_sea_lake">
+                                <option selected disabled="" value="0">Select</option>
+                                @foreach($ocean_sea_lake as $o)
+                                    <option value="{{ $o->id }}">{{ $o->name_en." / ".$o->name_th }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        
                     </div>
                 </div>
 

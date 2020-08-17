@@ -32,6 +32,8 @@ class Wording extends Model
         return $sexs;
     }
 
+
+
     public static function getWordingByWordingTypeForForm($wording_type_id)
     {
         return Wording::where('wording_type_id', '=', $wording_type_id)->where('status', 2)->get();

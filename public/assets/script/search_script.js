@@ -92,6 +92,8 @@ $("#dd_locality").change(function () {
     $(".dd_locality_sub").eq(3).show();
   } else if ($(this).val() == "county") {
     $(".dd_locality_sub").eq(4).show();
+  } else if ($(this).val() == "ocean_sea_lake") {
+    $(".dd_locality_sub").eq(5).show();
   }
 });
 
