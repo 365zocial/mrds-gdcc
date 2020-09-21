@@ -74,6 +74,7 @@
                         suborder: $('#suborder').val(),
                         infraorder: $('#infraorder').val(),
                         family: $('#family').val(),
+                        genus: $('#genus').val(),
                         classification: $('#classification').val(),
 
                         chk_taxa: chk_taxa,
