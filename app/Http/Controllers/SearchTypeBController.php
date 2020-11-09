@@ -568,7 +568,7 @@ class SearchTypeBController extends Controller
         $phylum                 = $input->phylum;
         $subphylum              = $input->subphylum;
         $class                  = $input->class;
-        $order                  = $input->order;
+        $order_o                  = $input->order_o;
         $suborder               = $input->suborder;
         $infraorder             = $input->infraorder;
         $superfamily            = $input->superfamily;
@@ -630,9 +630,9 @@ class SearchTypeBController extends Controller
         } else if ($header_taxonomy == "class" && $class != "") {
             $id_taxa        = $class;
             $db             = $db->where('classification.class', $class);
-        } else if ($header_taxonomy == "order" && $order != "") {
-            $id_taxa        = $order;
-            $db             = $db->where('classification.order_o', $order);
+        } else if ($header_taxonomy == "order_o" && $order_o != "") {
+            $id_taxa        = $order_o;
+            $db             = $db->where('classification.order_o', $order_o);
         } else if ($header_taxonomy == "suborder" && $suborder != "") {
             $id_taxa        = $suborder;
             $db             = $db->where('classification.suborder', $suborder);

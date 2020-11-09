@@ -197,7 +197,7 @@ class SearchTypeAController extends Controller
         $phylum                 = $input->phylum;
         $subphylum              = $input->subphylum;
         $class                  = $input->class;
-        $order                  = $input->order;
+        $order_o                  = $input->order_o;
         $suborder               = $input->suborder;
         $infraorder             = $input->infraorder;
         $superfamily            = $input->superfamily;
@@ -260,9 +260,9 @@ class SearchTypeAController extends Controller
         } else if ($header_taxonomy == "class" && $class != "") {
             $id_taxa        = $class;
             $db             = $db->where('classification.class', $class);
-        } else if ($header_taxonomy == "order" && $order != "") {
-            $id_taxa        = $order;
-            $db             = $db->where('classification.order_o', $order);
+        } else if ($header_taxonomy == "order_o" && $order_o != "") {
+            $id_taxa        = $order_o;
+            $db             = $db->where('classification.order_o', $order_o);
         } else if ($header_taxonomy == "suborder" && $suborder != "") {
             $id_taxa        = $suborder;
             $db             = $db->where('classification.suborder', $suborder);
@@ -424,7 +424,7 @@ class SearchTypeAController extends Controller
         $phylum                 = $input->phylum;
         $subphylum              = $input->subphylum;
         $class                  = $input->class;
-        $order                  = $input->order;
+        $order_o                  = $input->order_o;
         $suborder               = $input->suborder;
         $infraorder             = $input->infraorder;
         $family                 = $input->family;
@@ -449,7 +449,7 @@ class SearchTypeAController extends Controller
         $dataDistribution = $this->dataDistribution($input);
         $checkGetSearch = true;
         if ($chk_taxa == 1) {
-            if ($domain == "" && $kingdom == "" && $phylum == "" && $subphylum == "" && $class == "" && $order == "" && $infraorder == "" && $family == "") {
+            if ($domain == "" && $kingdom == "" && $phylum == "" && $subphylum == "" && $class == "" && $order_o == "" && $infraorder == "" && $family == "") {
                 $data['result_searchs']             = null;
                 $data['map']                        = null;
                 $checkGetSearch                     = $checkGetSearch && false;
@@ -504,7 +504,7 @@ class SearchTypeAController extends Controller
     }
 
 
-    public function search_base($chk_taxa, $chk_locality, $chk_expedition, $header_taxonomy, $domain, $kingdom, $phylum, $subphylum, $class, $order, $suborder, $infraorder, $family, $locality_type, $locality_country, $locality_province, $locality_district, $locality_county, $expan_id, $map_type = "", $genus = "", $species = "", $classification = "")
+    public function search_base($chk_taxa, $chk_locality, $chk_expedition, $header_taxonomy, $domain, $kingdom, $phylum, $subphylum, $class, $order_o, $suborder, $infraorder, $family, $locality_type, $locality_country, $locality_province, $locality_district, $locality_county, $expan_id, $map_type = "", $genus = "", $species = "", $classification = "")
     {
         $lang = Session::get('language');
         $db = new Classification;
@@ -545,9 +545,9 @@ class SearchTypeAController extends Controller
         } else if ($header_taxonomy == "class" && $class != "") {
             $id_taxa        = $class;
             $db             = $db->where('classification.class', $class);
-        } else if ($header_taxonomy == "order" && $order != "") {
-            $id_taxa        = $order;
-            $db             = $db->where('classification.order_o', $order);
+        } else if ($header_taxonomy == "order_o" && $order_o != "") {
+            $id_taxa        = $order_o;
+            $db             = $db->where('classification.order_o', $order_o);
         } else if ($header_taxonomy == "suborder" && $suborder != "") {
             $id_taxa        = $suborder;
             $db             = $db->where('classification.suborder', $suborder);
@@ -628,7 +628,7 @@ class SearchTypeAController extends Controller
 
         $checkGetSearch = true;
         if ($chk_taxa == 1) {
-            if ($domain == "" && $kingdom == "" && $phylum == "" && $subphylum == "" && $class == "" && $order == "" && $infraorder == "" && $family == "") {
+            if ($domain == "" && $kingdom == "" && $phylum == "" && $subphylum == "" && $class == "" && $order_o == "" && $infraorder == "" && $family == "") {
                 $data['result_searchs']             = null;
                 $data['map']                        = null;
                 $checkGetSearch                     = $checkGetSearch && false;

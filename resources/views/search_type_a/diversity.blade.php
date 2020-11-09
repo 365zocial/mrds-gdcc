@@ -135,7 +135,7 @@
                         [$phylums,'phylum'],
                         [$subphylums,'subphylum'],
                         [$classes,'class'],
-                        [$orders,'order'],
+                        [$orders,'order_o'],
                         [$suborders,'suborder'],
                         [$infraorders,'infraorder'],
                         [$superfamily,'superfamily'],
@@ -161,7 +161,7 @@
                             <option value="phylum">Phylum</option>
                                 <option value="subphylum">Subphylum</option>
                                 <option value="class">Class / Clade</option>
-                                <option value="order">Order / Clade</option>
+                                <option value="order_o">Order / Clade</option>
                                 <option value="suborder">Suborder / Clade</option>
                                 <option value="infraorder">Infraorder / Clade</option>
                                 <option value="superfamily">Super Family / Clade</option>
@@ -478,7 +478,7 @@
                 phylum: $('#phylum').val(),
                 subphylum: $('#subphylum').val(),
                 class: $('#class').val(),
-                order: $('#order').val(),
+                order_o: $('#order_o').val(),
                 suborder: $('#suborder').val(),
                 infraorder: $('#infraorder').val(),
                 superfamily: $('#superfamily').val(),

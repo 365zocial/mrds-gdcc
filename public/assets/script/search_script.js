@@ -115,7 +115,7 @@ $("#taxa_header_id").change(function () {
   if ($(this).val() == "class") {
     $(".dd_taxa_sub").eq(5).show();
   }
-  if ($(this).val() == "order") {
+  if ($(this).val() == "order_o") {
     $(".dd_taxa_sub").eq(6).show();
   }
   if ($(this).val() == "suborder") {

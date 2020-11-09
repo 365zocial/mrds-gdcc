@@ -369,7 +369,7 @@ class SearchTypeCController extends Controller
         $phylum                 = $input->phylum;
         $subphylum              = $input->subphylum;
         $class                  = $input->class;
-        $order                  = $input->order;
+        $order_o                  = $input->order_o;
         $suborder               = $input->suborder;
         $infraorder             = $input->infraorder;
         $superfamily            = $input->superfamily;
@@ -431,9 +431,9 @@ class SearchTypeCController extends Controller
         } else if ($header_taxonomy == "class" && $class != "") {
             $id_taxa        = $class;
             $db             = $db->where('classification.class', $class);
-        } else if ($header_taxonomy == "order" && $order != "") {
-            $id_taxa        = $order;
-            $db             = $db->where('classification.order_o', $order);
+        } else if ($header_taxonomy == "order_o" && $order_o != "") {
+            $id_taxa        = $order_o;
+            $db             = $db->where('classification.order_o', $order_o);
         } else if ($header_taxonomy == "suborder" && $suborder != "") {
             $id_taxa        = $suborder;
             $db             = $db->where('classification.suborder', $suborder);
@@ -640,8 +640,8 @@ class SearchTypeCController extends Controller
         }
 
         if ($header_taxonomy != "" && $id_taxa != 0) {
-            $taxa_full          = Taxonomy::getTaxonomyWording($id_taxa);
-            $taxa               = ucfirst($header_taxonomy) . " - " . $taxa_full->name;
+            $taxa_full          = ""; //Taxonomy::getTaxonomyWording($id_taxa);
+            $taxa               = ucfirst($header_taxonomy) . " - "; //. $taxa_full->name;
         } else {
             $taxa               = "-";
         }
