@@ -72,6 +72,7 @@
                         order: $('#order').val(),
                         suborder: $('#suborder').val(),
                         infraorder: $('#infraorder').val(),
+                        superfamily: $('#superfamily').val(),
                         family: $('#family').val(),
                         genus: $('#genus').val(),
                         classification: $('#classification').val(),
@@ -174,7 +175,6 @@
 
         var table = $('#distributeDataTable').DataTable({});;
         function initDatatable(params){
-            console.log(params);
             table.destroy();
             table = $('#distributeDataTable').DataTable({
                 order: [2, 'asc'],
@@ -362,7 +362,7 @@
                             [$orders,'order'],
                             [$suborders,'suborder'],
                             [$infraorders,'infraorder'],
-                            [$superfamilies,'superfamilies'],
+                            [$superfamily,'superfamily'],
                             [$families,'family'],
                             [$genuses,'genus'],
                             [$species,'species'],

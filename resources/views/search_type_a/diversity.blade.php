@@ -138,7 +138,7 @@
                         [$orders,'order'],
                         [$suborders,'suborder'],
                         [$infraorders,'infraorder'],
-                        [$superfamilies,'superfamilies'],
+                        [$superfamily,'superfamily'],
                         [$families,'family'],
                         [$genuses,'genus'],
                         [$species,'species'],
@@ -471,36 +471,37 @@
             }
 
             let params = {
-                        _token: "{{ csrf_token() }}",
-                        header_taxonomy: $('#taxa_header_id').val(),
-                        domain: $('#domain').val(),
-                        kingdom: $('#kingdom').val(),
-                        phylum: $('#phylum').val(),
-                        subphylum: $('#subphylum').val(),
-                        class: $('#class').val(),
-                        order: $('#order').val(),
-                        suborder: $('#suborder').val(),
-                        infraorder: $('#infraorder').val(),
-                        family: $('#family').val(),
-                        classification: $('#classification').val(),
+                _token: "{{ csrf_token() }}",
+                header_taxonomy: $('#taxa_header_id').val(),
+                domain: $('#domain').val(),
+                kingdom: $('#kingdom').val(),
+                phylum: $('#phylum').val(),
+                subphylum: $('#subphylum').val(),
+                class: $('#class').val(),
+                order: $('#order').val(),
+                suborder: $('#suborder').val(),
+                infraorder: $('#infraorder').val(),
+                superfamily: $('#superfamily').val(),
+                family: $('#family').val(),
+                classification: $('#classification').val(),
 
-                        chk_taxa: chk_taxa,
-                        chk_locality: chk_locality,
-                        chk_expedition: chk_expedition,
-                        chk_marinecenter: chk_marinecenter,
+                chk_taxa: chk_taxa,
+                chk_locality: chk_locality,
+                chk_expedition: chk_expedition,
+                chk_marinecenter: chk_marinecenter,
 
-                        locality_type: $('#dd_locality').val(),
-                        locality_country: $('#locality_country').val(),
-                        locality_province: $('#locality_province').val(),
-                        locality_district: $('#locality_district').val(),
-                        locality_county: $('#locality_county').val(),
-                        locality_ocean_sea_lake: $('#locality_ocean_sea_lake').val(),
+                locality_type: $('#dd_locality').val(),
+                locality_country: $('#locality_country').val(),
+                locality_province: $('#locality_province').val(),
+                locality_district: $('#locality_district').val(),
+                locality_county: $('#locality_county').val(),
+                locality_ocean_sea_lake: $('#locality_ocean_sea_lake').val(),
 
-                        expan_id : $('#expan_id').val(),
-                        marinecenter_id : $('#marinecenter_id').val(),
-                    }
+                expan_id : $('#expan_id').val(),
+                marinecenter_id : $('#marinecenter_id').val(),
+            }
 
-                    return params;
+            return params;
         }
 
         function getDataAjax(){

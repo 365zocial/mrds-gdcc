@@ -71,7 +71,7 @@ class SearchTypeCController extends Controller
         $data['orders']                 =   Taxonomy::getOrder();
         $data['suborders']              =   Taxonomy::getSuborder();
         $data['infraorders']            =   Taxonomy::getInfraorder();
-        $data['superfamilies']          =   Taxonomy::getSuperfamily();
+        $data['superfamily']          =   Taxonomy::getSuperfamily();
         $data['families']               =   Taxonomy::getFamily();
         $data['genuses']                =   Taxonomy::getGenus();
         $data['species']                =   Taxonomy::getSpecies();
@@ -102,7 +102,7 @@ class SearchTypeCController extends Controller
         $data['orders']                 =   Taxonomy::getOrder();
         $data['suborders']              =   Taxonomy::getSuborder();
         $data['infraorders']            =   Taxonomy::getInfraorder();
-        $data['superfamilies']          =   Taxonomy::getSuperfamily();
+        $data['superfamily']          =   Taxonomy::getSuperfamily();
         $data['families']               =   Taxonomy::getFamily();
         $data['genuses']                =   Taxonomy::getGenus();
         $data['species']                =   Taxonomy::getSpecies();
@@ -134,7 +134,7 @@ class SearchTypeCController extends Controller
         $data['orders']                 =   Taxonomy::getOrder();
         $data['suborders']              =   Taxonomy::getSuborder();
         $data['infraorders']            =   Taxonomy::getInfraorder();
-        $data['superfamilies']          =   Taxonomy::getSuperfamily();
+        $data['superfamily']          =   Taxonomy::getSuperfamily();
         $data['families']               =   Taxonomy::getFamily();
         $data['genuses']                =   Taxonomy::getGenus();
         $data['species']                =   Taxonomy::getSpecies();
@@ -235,6 +235,7 @@ class SearchTypeCController extends Controller
         $chk_expedition = $input->chk_expedition;
         $header_taxonomy = $input->header_taxonomy;
         $family = $input->family;
+        $superfamily = $input->superfamily;
         $genus = $input->genus;
         $species = $input->species;
         $locality_type = $input->locality_type;
@@ -371,6 +372,7 @@ class SearchTypeCController extends Controller
         $order                  = $input->order;
         $suborder               = $input->suborder;
         $infraorder             = $input->infraorder;
+        $superfamily            = $input->superfamily;
         $family                 = $input->family;
         $genus                  = $input->genus;
         $species                = $input->species;
@@ -438,6 +440,9 @@ class SearchTypeCController extends Controller
         } else if ($header_taxonomy == "infraorder" && $infraorder != "") {
             $id_taxa        = $infraorder;
             $db             = $db->where('classification.infraorder', $infraorder);
+        } else if ($header_taxonomy == "superfamily" && $superfamily != "") {
+            $id_taxa        = $family;
+            $db             = $db->where('classification.superfamily', $superfamily);
         } else if ($header_taxonomy == "family" && $family != "") {
             $id_taxa        = $family;
             $db             = $db->where('classification.family', $family);

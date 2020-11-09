@@ -144,7 +144,7 @@
                         [$orders,'order'],
                         [$suborders,'suborder'],
                         [$infraorders,'infraorder'],
-                        [$superfamilies,'superfamilies'],
+                        [$superfamily,'superfamily'],
                         [$families,'family'],
                         [$genuses,'genus'],
                         [$species,'species'],
