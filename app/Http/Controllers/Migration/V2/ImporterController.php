@@ -298,7 +298,10 @@ class ImporterController extends Controller
             $taxo_lists = TempData::get([$column]);
             foreach($taxo_lists as $taxo) {
                 if($taxo->{$column} !== '' && !empty($taxo->{$column})){
-                    Taxonomy::firstOrCreate(['header_taxonomy_id' => ($index_header+1), 'name' => $taxo->{$column}]);
+                    Taxonomy::firstOrCreate(
+                        ['header_taxonomy_id' => ($index_header+1), 'name' => $taxo->{$column}],
+                        ['status' => 2, 'created_by' => \Auth::user()->id, 'updated_by' => \Auth::user()->id]
+                    );
                 }
             }
         }
