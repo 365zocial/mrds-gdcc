@@ -532,6 +532,19 @@
                             @endif
                         </select>
                     </div>
+                    <div class="col-md-6">
+                        <p class="search-report-dropdown-header">Thai Red List</p>
+                        <select class="form-control search-report-select select2" id="thai_red_list" name="thai_red_list">
+                            @if( count($thai_red_lists) !== 0 )
+                                <option value="" selected disabled>Select</option>
+                                @foreach($thai_red_lists as $thai_red_list)
+                                    <option value="{{ $thai_red_list->id }}" >{{ $thai_red_list->name_en }} ({{ $thai_red_list->name_th }})</option>
+                                @endforeach
+                            @else
+                                <option value="" selected>No list in select</option>
+                            @endif
+                        </select>
+                    </div>
                 </div>
 
                 <hr class="search-report">

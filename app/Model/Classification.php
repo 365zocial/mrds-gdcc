@@ -15,7 +15,7 @@ use App\Model\Header_Taxonomy;
 class Classification extends Model
 {
 	protected $table = 'classification';
-	protected $fillable = ['current_scientific_name', 'current_scientific_name_format', 'previous_scientific_name', 'previous_scientific_name_format', 'domain', 'kingdom', 'subkingdom', 'infrakingdom', 'phylum', 'subphylum', 'infraphylum', 'superclass', 'class', 'subclass', 'infraclass', 'superorder', 'order_o', 'suborder', 'infraorder', 'superfamily', 'family', 'subfamily', 'genus', 'subgenus', 'species', 'subspecies', 'identification_qualifier', 'protection_thai_law', 'protection_iucn_2019', 'protection_cites', 'common_name', 'status', 'migration_data'];
+	protected $fillable = ['current_scientific_name', 'current_scientific_name_format', 'previous_scientific_name', 'previous_scientific_name_format', 'domain', 'kingdom', 'subkingdom', 'infrakingdom', 'phylum', 'subphylum', 'infraphylum', 'superclass', 'class', 'subclass', 'infraclass', 'superorder', 'order_o', 'suborder', 'infraorder', 'superfamily', 'family', 'subfamily', 'genus', 'subgenus', 'species', 'subspecies', 'identification_qualifier', 'protection_thai_law', 'protection_iucn_2019', 'protection_cites', 'common_name', 'thai_red_list', 'status', 'migration_data'];
 
 	public static function addClassification(
 		$cur_sci_name,
@@ -49,6 +49,7 @@ class Classification extends Model
 		$protection_cites,
 		$invasive_species,
 		$living,
+		$thai_red_list,
 		$migrate = false
 	) {
 
@@ -90,6 +91,7 @@ class Classification extends Model
 			$db->protection_cites					=	$protection_cites;
 			$db->invasive_species					=	$invasive_species;
 			$db->living								=	$living;
+			$db->thai_red_list						=	$thai_red_list;
 			$db->common_name						=	$common_name;
 
 			$db->status 							= 	2;
@@ -143,7 +145,8 @@ class Classification extends Model
 		$protection_iucn_2019,
 		$protection_cites,
 		$invasive_species,
-		$living
+		$living,
+		$thai_red_list
 	) {
 
 		//get $created_by
@@ -189,6 +192,7 @@ class Classification extends Model
 			$db->protection_cites					=	$protection_cites;
 			$db->invasive_species					=	$invasive_species;
 			$db->living								=	$living;
+			$db->thai_red_list						=	$thai_red_list;
 			$db->common_name						=	$common_name;
 			$db->created_by 						= 	$created_by;
 			$db->updated_by 						= 	$created_by;
@@ -249,7 +253,7 @@ class Classification extends Model
 		return Classification::where('status', 2)->where($header_taxonomy, $taxonomy_id)->get();
 	}
 
-	//get current name to show as species search 
+	//get current name to show as species search
 	//in request#4 No.9
 	public static function getClassificationBySciName()
 	{

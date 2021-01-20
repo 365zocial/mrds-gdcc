@@ -419,6 +419,11 @@
                     <span class="record-data">{{ AllMean::ReplaceNullWithDash( Wording::find($classification->protection_cites ), "name_en" ) }} @if ($classification->protection_cites != null) ({{ AllMean::ReplaceNullWithDash( Wording::find($classification->protection_cites ), "name_th" ) }}) @endif</span>
                   </p>
                 </div>
+                <div class="col-md-12">
+                  <p class="record-label">Thai Red List:
+                    <span class="record-data">{{ AllMean::ReplaceNullWithDash( Wording::find($classification->thai_red_list ), "name_en" ) }} @if ($classification->thai_red_list != null) ({{ AllMean::ReplaceNullWithDash( Wording::find($classification->thai_red_list ), "name_th" ) }}) @endif</span>
+                  </p>
+                </div>
             </div>
 
             <hr class="view-record-line">

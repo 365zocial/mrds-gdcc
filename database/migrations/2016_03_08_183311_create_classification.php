@@ -46,6 +46,7 @@ class CreateClassification extends Migration
             $table->integer('protection_cites')->nullable()->comment('การคุ้มครองสัตว์ ตามบัญชี CITES, FK: wording table');
             $table->integer('invasive_species')->nullable()->comment('ชนิดพันธุ์ต่างถิ่น, FK: wording table');
             $table->integer('living')->nullable()->comment('กลุ่มชนิดพันธุ์, FK: wording table');
+            $table->integer('thai_red_list')->nullable()->comment('การประเมินความเสี่ยงต่อการสูญพันธ์ของชนิด, FK: wording table');
             $table->text('common_name')->nullable()->comment('ชื่อสามัญ');
             $table->integer('status')->unsigned()->comment('สถานะที่ต้องการจะให้ปรากฏในระบบหรือไม่ // 2 = Enable, 1 = Disable');
             $table->boolean('migration_data')->default(false)->comment('เป็นตัวบอกว่า Record เป็นข้อมูลใหม่ที่กรอกผ่านเว็บ หรือเป็นข้อมูลที่เกิดจาก migrate // 1 = migrate, 0 = ข้อมูลใหม่');

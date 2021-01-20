@@ -100,6 +100,7 @@ class ClassificationController extends Controller
 			$data['protection_citeses'] 	= Wording::getWordingByWordingTypeForForm(23);
 			$data['invasive_species'] 	= Wording::getWordingByWordingTypeForForm(26);
 			$data['livings'] 	= Wording::getWordingByWordingTypeForForm(27);
+			$data['thai_red_lists'] 	= Wording::getWordingByWordingTypeForForm(28);
 
 			return view('staff.classification.add.add_classification_form', $data);
 		}
@@ -175,6 +176,7 @@ class ClassificationController extends Controller
 		$data['protection_citeses'] 	= Wording::getWordingByWordingTypeForForm(23);
 		$data['invasive_species'] 	= Wording::getWordingByWordingTypeForForm(26);
 		$data['livings'] 	= Wording::getWordingByWordingTypeForForm(27);
+		$data['thai_red_lists'] 	= Wording::getWordingByWordingTypeForForm(28);
 
 		return view('staff.classification.edit.edit_classification_form', $data);
 	}
@@ -213,6 +215,7 @@ class ClassificationController extends Controller
 		$common_name 		=	$input->common_name;
 		$protection_thai_law	=	$input->protection_thai_law;
 		$protection_iucn_2019	=	$input->protection_iucn_2019;
+		$thai_red_list		= $input->thai_red_list;
 		$protection_cites	=	$input->protection_cites;
 		$invasive_species	=	$input->invasive_species;
 		$living			=	$input->living;
@@ -248,7 +251,8 @@ class ClassificationController extends Controller
 			$protection_iucn_2019,
 			$protection_cites,
 			$invasive_species,
-			$living
+			$living,
+			$thai_red_list
 		);
 
 		if ($lastId) {
@@ -309,6 +313,7 @@ class ClassificationController extends Controller
 		$protection_cites	=	$input->protection_cites;
 		$invasive_species	=	$input->invasive_species;
 		$living				=	$input->living;
+		$thai_red_list		=	$input->thai_red_list;
 
 		if (Classification::updateClassification(
 			$classification_id,
@@ -343,7 +348,8 @@ class ClassificationController extends Controller
 			$protection_iucn_2019,
 			$protection_cites,
 			$invasive_species,
-			$living
+			$living,
+			$thai_red_list
 		)) {
 
 			System_Log::Loging(

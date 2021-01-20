@@ -39,7 +39,8 @@ class CreateWordingTypeTable extends Migration
                                                 24 = economic_value,
                                                 25 = sediment_type,
                                                 26 = invasive_species,
-                                                27 = living
+                                                27 = living,
+                                                28 = thai_red_list
                                                 ');
             $table->string('name')->comment('ชื่อประเภทของข้อความ');
             $table->integer('created_by')->unsigned()->comment('ใครเป็นผู้บันทึก, FK: users table');
