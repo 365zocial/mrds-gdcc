@@ -1073,6 +1073,11 @@ class SearchTypeBController extends Controller
     //Created : 16-6-59
     //Modified : -
     # for search taxonomy form
+
+    //Supakorn
+    //Created : 20-01-64
+    //Modified : -
+    # search type species and subspecie use classification to search instated
     public function searchByTaxonomy()
     {
         $data['header_taxonomys'] = Header_Taxonomy::getHeaderTaxonomyListOrderByLevel();
@@ -1098,7 +1103,7 @@ class SearchTypeBController extends Controller
         $data['subgenuses'] = Taxonomy::getSubgenus();
         $data['specieses'] = Taxonomy::getSpecies();
         $data['subspecieses'] = Taxonomy::getSubspecies();
-        $data['classification']         =   Classification::getClassificationBySciName();
+        $data['classification'] = Classification::getClassificationBySciName();
         return view('search_type_b.search_by_taxonomy', $data);
     }
 
@@ -1106,6 +1111,8 @@ class SearchTypeBController extends Controller
     //Created : 13-6-59
     //Modified : 16-6-59
     # for search taxonomy
+
+
     public function doSearchTaxonomy(Request $input)
     {
         // get value from form
@@ -1139,41 +1146,72 @@ class SearchTypeBController extends Controller
             'subspecies_id'
         ];
         $taxonomy_id = $input->{$arr[$header_taxonomy_id - 1]};
-
         if ($way == 1) {   // search
+
+
             // get DB
             // get header taxonomy
             $header_taxonomy = Header_Taxonomy::getHeaderTaxonomy($header_taxonomy_id);
             // convert small word
             $header_taxonomy = strtolower($header_taxonomy);
             // change order to order_o for column search
-            if ($header_taxonomy == 'order') $header_taxonomy = 'order_o';
-
-            // query db
-            $db = new Classification;
-            $db = $db->leftjoin('record as r', 'classification.id', '=', 'r.classification_id');
-            $db = $db->where('r.language_id', 1)->where('r.status', 2)->where('r.approve_status', 1)->where('r.source', $source);
-            if ($taxonomy_id != 0) {
-                $db = $db->where('classification.' . $header_taxonomy, $taxonomy_id);
-                $data['results'] = $db->select(
-                    'classification.current_scientific_name_format',
-                    'r.id',
-                    'r.related_catalog_item',
-                    'r.related_reference_item'
-                )->get();
-                $taxonomy = Taxonomy::getTaxonomyWording($taxonomy_id)->name;
-                $data['taxonomy'] = $taxonomy;
-            } else {
-                $data['results'] = null;
-                $data['taxonomy'] = '-';
+            if ($header_taxonomy == 'order') {
+                $header_taxonomy = 'order_o';
             }
-            // ------
+            if ($header_taxonomy_id < 21) {
+                // query db
+                $db = new Classification;
+                $db = $db->leftjoin('record as r', 'classification.id', '=', 'r.classification_id');
+                $db = $db->where('r.language_id', 1)->where('r.status', 2)->where('r.approve_status', 1)->where('r.source', $source);
+                if ($taxonomy_id != 0) {
+                    $db = $db->where('classification.' . $header_taxonomy, $taxonomy_id);
+                    $data['results'] = $db->select(
+                        'classification.current_scientific_name_format',
+                        'r.id',
+                        'r.related_catalog_item',
+                        'r.related_reference_item'
+                    )->get();
+                    $taxonomy = Taxonomy::getTaxonomyWording($taxonomy_id)->name;
+                    $data['taxonomy'] = $taxonomy;
+                } else {
+                    $data['results'] = null;
+                    $data['taxonomy'] = '-';
+                }
+                // ------
+            } else {
+                //Supakorn
+                //Created : 20-01-64
+                //Modified : -
+                # search type species and subspecie use classification to search instated (header taxonomy 21 and 22)
 
+                # IMPORTANT!!
+                # species_id or subspecies_id is classification.id
+
+
+                // query db
+                $db = new Classification;
+                $db = $db->leftjoin('record as r', 'classification.id', '=', 'r.classification_id');
+                $db = $db->where('r.language_id', 1)->where('r.status', 2)->where('r.approve_status', 1)->where('r.source', $source);
+                if ($taxonomy_id != 0) {
+                    $db = $db->where('classification.id', $taxonomy_id);
+                    $data['results'] = $db->select(
+                        'classification.current_scientific_name_format',
+                        'r.id',
+                        'r.related_catalog_item',
+                        'r.related_reference_item'
+                    )->get();
+                    $taxonomy = Classification::getClassificationWording($taxonomy_id)->current_scientific_name_format;
+                    $data['taxonomy'] = $taxonomy;
+                } else {
+                    $data['results'] = null;
+                    $data['taxonomy'] = '-';
+                }
+                // ------
+            }
             $data['source'] = $source;
             $data['header_taxonomy'] = Header_Taxonomy::getHeaderTaxonomy($header_taxonomy_id); // get header taxonomy for display
             $data['header_taxonomy_id'] = $header_taxonomy_id;
             $data['taxonomy_id'] = $taxonomy_id;
-
             return Response::json($data);
         } else {    //ajax
             // export excel

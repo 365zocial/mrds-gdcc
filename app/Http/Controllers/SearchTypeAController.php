@@ -146,7 +146,7 @@ class SearchTypeAController extends Controller
         $data['orders']                 =   Taxonomy::getOrder();
         $data['suborders']              =   Taxonomy::getSuborder();
         $data['infraorders']            =   Taxonomy::getInfraorder();
-        $data['superfamily']          =   Taxonomy::getSuperfamily();
+        $data['superfamily']            =   Taxonomy::getSuperfamily();
         $data['families']               =   Taxonomy::getFamily();
         $data['genuses']                =   Taxonomy::getGenus();
         $data['species']                =   Taxonomy::getSpecies();
