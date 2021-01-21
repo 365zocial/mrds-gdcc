@@ -532,6 +532,9 @@
                             @endif
                         </select>
                     </div>
+                </div>
+
+                <div class="row" style="padding-top: 15px;">
                     <div class="col-md-6">
                         <p class="search-report-dropdown-header">Thai Red List</p>
                         <select class="form-control search-report-select select2" id="thai_red_list" name="thai_red_list">
