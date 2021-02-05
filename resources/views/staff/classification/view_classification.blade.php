@@ -229,12 +229,15 @@
             <hr>
 
             <div class="row row-before-line">
-              <div class="col-md-6">
+              <div class="col-md-12">
                 <p class="record-label">Common Name:
                   <span class="record-data">{{ AllMean::ReplaceNullWithDash( $classification->common_name ) }}</span>
                 </p>
               </div>
-              <div class="col-md-6">
+            </div>
+
+            <div class="row row-before-line">
+              <div class="col-md-12">
                 <p class="record-label">Protection Thai Law:
                   <span class="record-data">{{ AllMean::ReplaceNullWithDash( Wording::find($classification->protection_thai_law ), "name_th" ) }}</span>
                 </p>
@@ -242,12 +245,15 @@
             </div>
 
             <div class="row row-before-line">
-                <div class="col-md-6">
+                <div class="col-md-12">
                   <p class="record-label">Protection IUCN 2019:
                     <span class="record-data">{{ AllMean::ReplaceNullWithDash( Wording::find($classification->protection_iucn_2019 ), "name_en" ) }} @if( $classification->protection_iucn_2019 != null ) ({{ AllMean::ReplaceNullWithDash( Wording::find($classification->protection_iucn_2019 ), "name_th" ) }}) @endif</span>
                   </p>
                 </div>
-              <div class="col-md-6">
+            </div>
+
+            <div class="row row-before-line">
+              <div class="col-md-12">
                 <p class="record-label">Protection CITES:
                   <span class="record-data">{{ AllMean::ReplaceNullWithDash( Wording::find($classification->protection_cites ), "name_en" ) }} @if ($classification->protection_cites != null) ({{ AllMean::ReplaceNullWithDash( Wording::find($classification->protection_cites ), "name_th" ) }}) @endif</span>
                 </p>
@@ -255,7 +261,7 @@
             </div>
 
             <div class="row row-before-line">
-              <div class="col-md-6">
+              <div class="col-md-12">
                 <p class="record-label">Thai Red List:
                   <span class="record-data">{{ AllMean::ReplaceNullWithDash( Wording::find($classification->thai_red_list ), "name_en" ) }} @if ($classification->thai_red_list != null) ({{ AllMean::ReplaceNullWithDash( Wording::find($classification->thai_red_list ), "name_th" ) }}) @endif</span>
                 </p>
