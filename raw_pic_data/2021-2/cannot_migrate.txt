@@ -1,0 +1,27 @@
+# จากงานเพิ่มประสิทธิภาพครั้งที่ 7 : 15 February 2021
+# มีจำนวน 17 ภาพ ที่ไม่สามารถ Migrate ได้
+# เนื่องจากไม่มีข้อมูล Record ในระบบ
+# โดยภาพจะถูกเก็บไว้ใน Folder "not"
+#
+# 1-pmbc_3263W.jpg
+# 1 คือ folder ที่ 1
+# W คือภาพที่มีลายน้ำ (ตอนนี้ใช้ภาพที่แสดงลายน้ำในระบบ)
+#
+-----------------------
+1-pmbc_3263W.jpg
+1-pmbc_3264W.jpg
+1-pmbc_3265W.jpg
+1-pmbc_3266W.jpg
+1-pmbc_5204W.jpg
+1-pmbc_5206W.jpg
+2-pmbc_5218W.jpg
+2-pmbc_5219W.jpg
+2-pmbc_5221W.jpg
+2-pmbc_5233W.jpg
+2-pmbc_5481W.jpg
+2-pmbc_5482W.jpg
+2-pmbc_5483W.jpg
+2-pmbc_5484W.jpg
+2-pmbc_5485W.jpg
+2-pmbc_5526W.jpg
+2-pmbc_5559W.jpg

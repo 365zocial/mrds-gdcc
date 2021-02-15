@@ -791,8 +791,8 @@ class ImporterController extends Controller
         $update_db_status = 0;  // 0 คือ แค่ตรวจอย่างเดียว, 1 คือ ตรวจและบันทึกลงฐานข้อมูล
 
         // ทำการอ่านไฟล์ใน folder
-        $dir    = base_path("raw_pic_data/W/Bivalvia_W_41");
-        $path_folder = "images_migrate/Bivalvia/W/Bivalvia_W_41/";
+        $dir    = base_path("raw_pic_data/W/1");
+        $path_folder = "images_migrate/2021_February/W/1/";
         echo $dir. "<br><br><br>";
 
         $pic_files = scandir($dir);
