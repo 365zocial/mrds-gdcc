@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 use Auth;
 use Response;
@@ -19,6 +20,7 @@ use App\Model\County;
 use App\Model\Users;
 use App\Model\Picture;
 use App\Model\ExportLog;
+use App\Model\RecordCot;
 use App\Http\Controllers\RecordController;
 
 
@@ -878,4 +880,160 @@ class ApiController extends Controller
     //     return Response::json($data);
     //
     // }
+
+    //Created : 29-3-64
+    //Modified : -
+    //Input : username, password
+    # Login for COT
+    public function LoginCOT(Request $input)
+    {
+        // Get data
+        $username = strtolower($input->username);
+        $password = $input->password;
+
+        // Check authenticate
+        if (Auth::attempt(['name' => $username, 'password' => $password]) && Auth::user()->role_id == 7) {
+            $expired_date = date("Y-m-d H:i:s", strtotime("+1 hours")); // token มีอายุ 1 ชั่วโมง
+            $token = Str::random(256);
+
+            // Save to user table
+            $db_user = Users::find(Auth::user()->id);
+            $db_user->api_token = $token;
+            $db_user->api_expired_at = $expired_date;
+            $db_user->save();
+
+            // Data to send
+            $data['message'] = 'Successful';
+            $data['status'] = '200';
+            $data['data'] = [
+                'token' => $token,
+                'expired_date' => $expired_date,
+            ];
+
+            // Save export log : 0 is excel, 1 is pdf, 2 is api
+            $note = 'COT_API_Login-' . $input->username;
+            ExportLog::saveExportLog(2, $note);
+
+            return Response::json($data, 200);
+        } else {
+            $data['message'] = 'Authenticate Fail';
+            $data['status'] = '401';
+            $data['data'] = null;
+
+            return Response::json($data, 401);
+        }
+    }
+
+    //Created : 29-3-64
+    //Modified : -
+    //Input : bearerToken (Headers.Authorization), scientific_name
+    # Get record list for COT
+    public function recordListCOT(Request $input)
+    {
+        // Get data
+        $api_token = $input->bearerToken();
+        $scientific_name = $input->scientific_name;
+
+        // Check token for get user
+        $user = Users::where('api_token', $api_token)
+            ->where('role_id', 7)
+            ->where('status', 2)
+            ->first();
+
+        // Check Token ผิด
+        if ( !$user ) {
+            $data['message'] = 'Authenticate Fail';
+            $data['status'] = '401';
+            $data['data'] = null;
+
+            return Response::json($data, 401);
+        }
+
+        // Check Token หมดอายุ
+        $now_date = date("Y-m-d H:i:s");
+        if ( strtotime($user->api_expired_at) <= strtotime($now_date) ) {
+            $data['message'] = 'Token Expired';
+            $data['status'] = '401';
+            $data['data'] = null;
+
+            return Response::json($data, 401);
+        }
+
+        // Search scientific_name and get data
+        $records = RecordCot::select('related_catalog_item', 'related_reference_item', 'current_scientific_name');
+        if ( !is_null($scientific_name) && !empty($scientific_name) ) {
+            $records = $records->where('current_scientific_name', 'like', "%$scientific_name%");
+        }
+        $records = $records->paginate(10);
+
+        $data['message'] = 'Successful';
+        $data['status'] = '200';
+        $data['data'] = $records;
+
+        return Response::json($data, 200);
+    }
+
+    //Created : 29-3-64
+    //Modified : -
+    //Input : bearerToken (Headers.Authorization), related_item
+    # Get record list for COT
+    public function recordDetailCOT(Request $input)
+    {
+        // Get data
+        $api_token = $input->bearerToken();
+        $related_item = $input->related_item;
+
+        // Check token for get user
+        $user = Users::where('api_token', $api_token)
+            ->where('role_id', 7)
+            ->where('status', 2)
+            ->first();
+
+        // Check Token ผิด
+        if ( !$user ) {
+            $data['message'] = 'Authenticate Fail';
+            $data['status'] = '401';
+            $data['data'] = null;
+
+            return Response::json($data, 401);
+        }
+
+        // Check Token หมดอายุ
+        $now_date = date("Y-m-d H:i:s");
+        if ( strtotime($user->api_expired_at) <= strtotime($now_date) ) {
+            $data['message'] = 'Token Expired';
+            $data['status'] = '401';
+            $data['data'] = null;
+
+            return Response::json($data, 401);
+        }
+
+        // Get main data (english) and Search
+        // if ( !is_null($related_item) && !empty($related_item) ) {
+                // หา 2 ที่ คือ related_catalog_item กับ related_reference_item *******
+        //     $record = RecordCot::where('current_scientific_name', 'like', "%$scientific_name%");
+        // } else {
+        //     $record = RecordCot::first();
+        // }
+
+        // Get second data (thai)
+        $record_th = Record::select('islands_island', 'gene_bank_number',
+            'local_name', 'folk_wisdom', 'recorder', 'knowledge_remarks')
+            ->where('language_id', 2)
+            ->first();
+        // เอา $record ต่อกับ $record_th โดยให้ $record เป็นตัวนำ (ถ้าต่อแล้วไม่มีปัญหา ให้ลบ comment sql ใน ViewRecordCOTSeeder) ******* 
+
+        // Get picture
+        // แปลง ที่อยู่เป็น url ด้วย *******
+        $pics = Picture::where('unique_record', $records->unique_record)->get();
+
+
+        $data['message'] = 'Successful';
+        $data['status'] = '200';
+        $data['data'] = $record;
+
+        return Response::json($data, 200);
+
+    }
+
 }

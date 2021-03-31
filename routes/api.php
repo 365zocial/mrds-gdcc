@@ -17,4 +17,16 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('v1/dataRecordPGCP', 'ApiController@dataRecordPGCP');
+Route::group(['prefix' => 'v1'], function () {
+    Route::post('dataRecordPGCP', 'ApiController@dataRecordPGCP');
+
+    /*
+    *   สำหรับหน่วยงาน COT
+    */
+    Route::group(['prefix' => 'cot'], function () {
+        Route::post('login', 'ApiController@LoginCOT');
+        Route::post('recordList', 'ApiController@recordListCOT');
+        Route::post('recordDetail', 'ApiController@recordDetailCOT');
+    });
+
+});

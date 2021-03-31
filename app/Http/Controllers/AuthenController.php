@@ -59,7 +59,9 @@ class AuthenController extends Controller
         $password         =   $request->input('inp-password');
 
         if (Auth::attempt(['name' => strtolower($name), 'password' => $password])) {
-            if($this->authorization_check_LoggedIn() && $this->authorization_check_status(Auth::user()->status)){
+
+            // 2021-03-29 ไม่อนุญาตให้ API_COT เข้าสู่ระบบหลังบ้านได้
+            if($this->authorization_check_LoggedIn() && $this->authorization_check_status(Auth::user()->status) && Auth::user()->role_id != 7){
                 //-------login log
                     Login_Log::addLogInLog(Auth::user()->id);
                 //-------
@@ -68,7 +70,6 @@ class AuthenController extends Controller
                 echo "Your account is disable";
                 return redirect('/');
             }
-
         }else{
             Session::put('authen', 1);
             return redirect('login');

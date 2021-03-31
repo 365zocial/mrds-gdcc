@@ -39,7 +39,7 @@
     		$("#-telephone").attr("data-parsley-focus", "first");
 
             $('#-role').change(function(){
-                if ( $(this).val() == 4 ||  $(this).val() == 5 ||  $(this).val() == 6) {
+                if ( $(this).val() == 4 ||  $(this).val() == 5 ||  $(this).val() == 6 || $(this).val() == 7 ) {
                     $('.marinecenter-form').attr("disabled", "disabled");
                     $('.marinecenter-form').hide();
                     $('#-marinecenter').removeAttr('required');

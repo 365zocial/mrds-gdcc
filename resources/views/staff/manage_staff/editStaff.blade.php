@@ -16,7 +16,7 @@
             $('.password-form').hide();
 
             $('#-role').change(function(){
-                if( $(this).val() == 4 || $(this).val() == 5 || $(this).val() == 6){
+                if( $(this).val() == 4 || $(this).val() == 5 || $(this).val() == 6 || $(this).val() == 7 ){
                     $('.marinecenter-form').attr("disabled","disabled");
                     $('.marinecenter-form').hide();
                     $('#-marinecenter').removeAttr('required');
@@ -105,9 +105,12 @@
                         </select>
                     </div>
 
-                    <div class="col-md-4 marinecenter-form" style="display:@if($users->role_id == 5){{ "none;" }}@endif">
+                    <div class="col-md-4 marinecenter-form" style="display:@if($users->role_id == 5 || $users->role_id == 7){{ "none;" }}@endif">
                         <p class="search-report-dropdown-header">Marine Center <span class="required">*Required</span></p>
-                        <select class="form-control search-report-select select2" id="-marinecenter" name="inp-marinecenter" @if($users->role_id != 5){{ "required" }}@endif>
+                        <select class="form-control search-report-select select2" id="-marinecenter" name="inp-marinecenter"
+                        @php /* ถ้าไม่ใช่ role_id ที่ 5 กับ 7 ให้มี required */ @endphp
+                        @if( !array_search($users->role_id, array([],5,7)) ){{ "required" }} @endif>
+
                         @if( count($marinecenters) !== 0 )
                             <option value="" selected disabled>Select</option>
                             @foreach($marinecenters as $marinecenter)
@@ -119,7 +122,7 @@
                         </select>
                     </div>
 
-                    <div class="col-md-4 approve-form" style="display:@if($users->role_id == 5){{ "none;" }}@endif">
+                    <div class="col-md-4 approve-form" style="display:@if($users->role_id == 5 || $users->role_id == 7){{ "none;" }}@endif">
                         <p class="search-report-dropdown-header">&nbsp;</p>
                         <label class="checkbox">
                           <input type="checkbox" id="-approve" name="inp-approve_permission" @if($users->approve_permission == 1){{ "checked" }}@endif > Approve Permission

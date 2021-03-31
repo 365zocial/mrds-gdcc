@@ -82,7 +82,7 @@ class StaffController extends Controller
             $address            =   $request->input('inp-address');
             $approve            =   $request->input('inp-approve_permission');
 
-            if($request->input('inp-roleid') != 5){
+            if( !array_search($request->input('inp-roleid'), array([],5,7)) ){
                 $marinecenter_id    =   $request->input('inp-marinecenter');
             }else{
                 $marinecenter_id    =   NULL;
@@ -144,7 +144,7 @@ class StaffController extends Controller
             $approve          =   $request->input('inp-approve_permission');
             $status           =   $request->input('status_switch');
 
-            if($request->input('inp-roleid') != 5){
+            if( !array_search($request->input('inp-roleid'), array([],5,7)) ){
                 $marinecenter_id    =   $request->input('inp-marinecenter');
             }else{
                 $marinecenter_id    =   NULL;
@@ -186,7 +186,7 @@ class StaffController extends Controller
     }
 
     public function searchByName(Request $request){
-        
+
         if($request->typename == 'localname'){
             $data['datas'] = \App\Model\Record::leftjoin('classification', 'record.classification_id', 'classification.id')->where('record.local_name', 'like', '%'.$request->search.'%')->get();
         }elseif($request->typename == 'vernacularname'){
@@ -194,7 +194,7 @@ class StaffController extends Controller
         }elseif($request->typename == 'commonname'){
             $data['datas'] = \App\Model\Record::leftjoin('classification', 'record.classification_id', 'classification.id')->where('classification.common_name', 'like', '%'.$request->search.'%')->get();
         }
-    
+
         return view('staff/searchByName', $data);
     }
 
