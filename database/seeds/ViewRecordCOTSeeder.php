@@ -42,15 +42,9 @@ class ViewRecordCOTSeeder extends Seeder
                 r.diagnosis,
                 r.description,
                 w_ocean_sea_lake.name_th AS ocean_sea_lake,
-                /* r2.islands_island, */
                 province.province_th AS province,
                 w_habitat.name_th AS habitat,
                 r.collected_date,
-                /* r2.gene_bank_number,
-                r2.local_name,
-                r2.folk_wisdom,
-                r2.recorder,
-                r2.knowledge_remarks, */
                 w_living.name_th AS living,
                 w_protection_thai_law.name_th AS protection_thai_law,
                 w_thai_red_list.name_th AS protection_thai_red_list,
@@ -59,7 +53,7 @@ class ViewRecordCOTSeeder extends Seeder
             FROM record as r
             LEFT JOIN classification as c on r.classification_id = c.id
             LEFT JOIN marinecenter as marinecenter on r.marinecenter_id = marinecenter.id
-            LEFT JOIN institution as institution on marinecenter.institution_id = marinecenter.id
+            LEFT JOIN institution as institution on marinecenter.institution_id = institution.id
             LEFT JOIN taxonomy AS t1 ON c.domain = t1.id
             LEFT JOIN taxonomy AS t2 ON c.kingdom = t2.id
             LEFT JOIN taxonomy AS t3 ON c.subkingdom = t3.id
@@ -91,10 +85,6 @@ class ViewRecordCOTSeeder extends Seeder
             LEFT JOIN wording AS w_thai_red_list ON c.thai_red_list = w_thai_red_list.id
             LEFT JOIN wording AS w_protection_iucn_2019 ON c.protection_iucn_2019 = w_protection_iucn_2019.id
             LEFT JOIN wording AS w_protection_cites ON c.protection_cites = w_protection_cites.id
-            /* LEFT JOIN (
-                SELECT unique_record, islands_island, gene_bank_number, local_name, folk_wisdom, recorder, knowledge_remarks
-                FROM record WHERE language_id = 2
-            ) AS r2 ON r.unique_record = r2.unique_record */
             WHERE r.language_id = 1 AND r.status = 2  AND r.approve_status = 1
         ';
 

@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 
 use Auth;
 use Response;
+use DB;
 use App\Model\Record;
 use App\Model\Marinecenter;
 use App\Model\Classification;
@@ -1008,32 +1009,55 @@ class ApiController extends Controller
             return Response::json($data, 401);
         }
 
-        // Get main data (english) and Search
-        // if ( !is_null($related_item) && !empty($related_item) ) {
-                // หา 2 ที่ คือ related_catalog_item กับ related_reference_item *******
-        //     $record = RecordCot::where('current_scientific_name', 'like', "%$scientific_name%");
-        // } else {
-        //     $record = RecordCot::first();
-        // }
+        // Check input
+        if ( is_null($related_item) || empty($related_item) ) {
+            $data['message'] = 'related_item not found.';
+            $data['status'] = '204';
+            $data['data'] = null;
+
+            return Response::json($data, 204);
+        }
+
+        // Get main data (english) with search related_catalog_item or related_reference_item
+        $record = RecordCot::where('related_catalog_item', $related_item)
+            ->orWhere('related_reference_item', $related_item)
+            ->first()
+            ->toArray();
+
+        // Check ถ้าค้นหาแล้วไม่เจอ
+        if ( !$record ) {
+            $data['message'] = 'Record not found.';
+            $data['status'] = '204';
+            $data['data'] = null;
+
+            return Response::json($data, 204);
+        }
 
         // Get second data (thai)
         $record_th = Record::select('islands_island', 'gene_bank_number',
             'local_name', 'folk_wisdom', 'recorder', 'knowledge_remarks')
+            ->where('unique_record', $record['unique_record'])
             ->where('language_id', 2)
-            ->first();
-        // เอา $record ต่อกับ $record_th โดยให้ $record เป็นตัวนำ (ถ้าต่อแล้วไม่มีปัญหา ให้ลบ comment sql ใน ViewRecordCOTSeeder) ******* 
+            ->first()
+            ->toArray();
+
+        // เอา $record ต่อกับ $record_th โดยให้ $record เป็นตัวนำ
+        $result_record = array_merge($record, $record_th);
 
         // Get picture
-        // แปลง ที่อยู่เป็น url ด้วย *******
-        $pics = Picture::where('unique_record', $records->unique_record)->get();
+        $pics = Picture::select('unique_record', DB::raw("CONCAT('http://mrds.dmcr.go.th/uploads/images/', path_pic) as path_pic"))
+            ->where('unique_record', $record['unique_record'])
+            ->get();
 
-
+        // Setup response
         $data['message'] = 'Successful';
         $data['status'] = '200';
-        $data['data'] = $record;
+        $data['data'] = [
+            'data' => $result_record,
+            'img' => $pics,
+        ];;
 
         return Response::json($data, 200);
-
     }
 
 }
