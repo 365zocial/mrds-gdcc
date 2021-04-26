@@ -89,7 +89,7 @@ class ExportLabelController extends Controller
                         </style>
                         </head><body>';
                         
-            $html .= '<table class="export_label" style="width: 95%; border-collapse: collapse; border: 1px solid #000;">';
+            $html .= '<table class="export_label" style="width: 90%; border-collapse: collapse; border: 1px solid #000;">';
 
             foreach ($records as $key => $get) {
                 $province = \App\Model\Province::find($get->province);
