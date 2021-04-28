@@ -84,12 +84,18 @@ class ExportLabelController extends Controller
                                 vertical-align: top;
                                 font-weight: normal;
                                 font-size: 14px;
-                                line-height: 25px;
+                                line-height: 20px;
                             }
                         </style>
                         </head><body>';
                         
             $html .= '<table class="export_label" style="width: 90%; border-collapse: collapse; border: 1px solid #000;">';
+            
+            /*
+                28 April 2021
+                ได้มีการปรับขนาดความก้าวและความสูง จากงาน "รายงานสรุปการเพิ่มประสิทธิภาพ MRDS (กทม) (ครั้งที่ 7)"
+                เนื่องจากทางพี่แก้วแจ้งว่าไม่สามารถใส่ซองได้ เหลือ กว้าง 8.4 cm สูง 5.45 cm
+            */
 
             foreach ($records as $key => $get) {
                 $province = \App\Model\Province::find($get->province);
@@ -107,7 +113,7 @@ class ExportLabelController extends Controller
                     if (strlen($locality) > 22) $locality = substr($locality, 0, 22) . '...';
                 } else $locality = '-';
                 $html .= '<td style="width: 50%; border: 1px solid #000;">';
-                $html .= '<p class="marinecenter" style="font-size: 18px; font-weight: 900; text-align: center; text-transform: uppercase; margin-top: 5px; margin-bottom: 0px;">Department of Marine and Coastal Resources</p>';
+                $html .= '<p class="marinecenter" style="font-size: 16px; font-weight: 900; text-align: center; text-transform: uppercase; margin-top: 5px; margin-bottom: 0px;">Department of Marine and Coastal Resources</p>';
                 $html .= '<table class="export_data" style="width: 100%; border-width: 1px; >
                                 
                                 <tr>
