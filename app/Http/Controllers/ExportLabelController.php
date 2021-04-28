@@ -132,7 +132,7 @@ class ExportLabelController extends Controller
                                 </tr>
                                 <tr>
                                     <td><span class="label">Province</span></td>
-                                    <td >' . $province . '</td>
+                                    <td style="font-size: 11px !important;">' . $province . '</td>
                                     <td width="10%"><span class="label">Date</span></td>
                                     <td width="25%" >' . $collectorDate . '</td>
                                     
