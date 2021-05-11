@@ -1021,8 +1021,7 @@ class ApiController extends Controller
         // Get main data (english) with search related_catalog_item or related_reference_item
         $record = RecordCot::where('related_catalog_item', $related_item)
             ->orWhere('related_reference_item', $related_item)
-            ->first()
-            ->toArray();
+            ->first();
 
         // Check ถ้าค้นหาแล้วไม่เจอ
         if ( !$record ) {
@@ -1032,6 +1031,8 @@ class ApiController extends Controller
 
             return Response::json($data, 204);
         }
+
+        $record = $record->toArray();
 
         // Get second data (thai)
         $record_th = Record::select('islands_island', 'gene_bank_number',
