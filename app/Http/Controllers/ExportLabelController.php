@@ -44,6 +44,7 @@ class ExportLabelController extends Controller
             $html = '<!DOCTYPE html><html><head>
                         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
                         <title></title>
+                        
                         <style>
                             @font-face {
                                 font-family: THSarabun;
@@ -104,7 +105,7 @@ class ExportLabelController extends Controller
                 if (!empty($province)) $province = $province->province_en;
                 else $province = '-';
                 if (!empty($get->family)) $family = Taxonomy::find($get->family)->name;
-                else $family = ' - ';
+                else $family = '-';
                 if ($get->collected_date !== '0000-00-00' && !empty($get->collected_date)) $collectorDate = date('d/m/Y', strtotime($get->collected_date));
                 if ($get->identified_date !== '0000-00-00' && !empty($get->identified_date)) $identifiedDate = date('d/m/Y', strtotime($get->identified_date));
                 if ($key % 2 === 0) $html .= '<tr style="border: 1px solid #000;">';
@@ -112,6 +113,9 @@ class ExportLabelController extends Controller
                     $locality = $get->locality;
                     if (strlen($locality) > 22) $locality = substr($locality, 0, 22) . '...';
                 } else $locality = '-';
+                if (!empty($get->identifier)) $identifier = $get->identifier;
+                else $identifier = '-';
+
                 $html .= '<td style="width: 50%; border: 1px solid #000;">';
                 $html .= '<p class="marinecenter" style="font-size: 16px; font-weight: 900; text-align: center; text-transform: uppercase; margin-top: 5px; margin-bottom: 0px;">Department of Marine and Coastal Resources</p>';
                 $html .= '<table class="export_data" style="width: 100%; border-width: 1px; >
@@ -145,7 +149,7 @@ class ExportLabelController extends Controller
                                 </tr>
                                 <tr>
                                     <td ><span class="label">Identifier</span></td>
-                                    <td >' . $collectorDate . '</td>
+                                    <td >' . $identifier . '</td>
                                     <td width="10%"><span class="label">Date</span></td>
                                     <td width="25%">' . $identifiedDate . '</td>
                                 </tr>
@@ -155,12 +159,7 @@ class ExportLabelController extends Controller
                                 </tr>
                             </table>' .
                     '</td>';
-                // <tr>
-                //     <td clas <span class="label">Identifier</span></td>
-                //     <td>'.$get->identifier.'</td>
-                //     <td clas <span class="label">Date</span></td>
-                //     <td>'.$identifiedDate.'</td>
-                // </tr>
+
                 if (($key + 1) % 2 === 0) $html .= '</tr>';
             }
             if ($key % 2 === 0) $html .= '<td></td></tr>';
@@ -171,6 +170,7 @@ class ExportLabelController extends Controller
             $pdf = \App::make('dompdf.wrapper');
             $pdf->setPaper('a4', 'portrait');
             $pdf->loadHTML($html, 'UTF-8');
+
             return $pdf->stream();
         } else {
             Session::put('export_failure', 'Empty Data.');

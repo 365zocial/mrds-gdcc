@@ -98,4 +98,11 @@
   'boon' => array(
     'normal' => $fontDir . '/boon-normal_b70d314c8f6b5c489dfd2ba8956411f4',
   ),
+  'noto sans' => array(
+    'italic' => $fontDir . '/867dbaa5281a6a8341fa42445381a4e8',
+    'normal' => $fontDir . '/cb5d6f4134537c52e726b1205ccc5c6a',
+  ),
+  'amiri' => array(
+    'normal' => $fontDir . '/e458858052d83a3815e0be0b47541cf7',
+  ),
 ) ?>
