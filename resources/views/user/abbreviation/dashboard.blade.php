@@ -57,7 +57,7 @@
                 @if($lang == 2)
                     ID กรณีอ้างอิงจากตัวอย่าง
                 @else
-                    ID, when refer to specimen ID, when refer to specimen
+                    ID, when refer to specimen
                 @endif
             </p>
             <p class="content-header" style="text-transform: none; padding: 0px 30px;">
