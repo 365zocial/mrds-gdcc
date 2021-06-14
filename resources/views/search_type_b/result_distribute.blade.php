@@ -179,9 +179,9 @@
                                 <td>{{ $value->family }}</td>
                                 <td>{{ $value->genus }}</td>
                                 <td>{!! $value->current_scientific_name_format !!}</td>
-                                <td>{{ ($lang==1 ? $value->ocean_sea_lake_en : $value->ocean_sea_lake_th) }}</td>
-                                <td>{{ ($lang==1 ? $value->country_en : $value->country_th) }}</td>
-                                <td>{{ ($lang==1 ? $value->province_en  : $value->province_th)}}</td>
+                                <td>{{ ($lang==2 ? $value->ocean_sea_lake_th : $value->ocean_sea_lake_en) }}</td>
+                                <td>{{ ($lang==2 ? $value->country_th : $value->country_en) }}</td>
+                                <td>{{ ($lang==2 ? $value->province_th  : $value->province_en )}}</td>
                                 @if(false)
                                 <td><a href='#' class='showPic' data-toggle='modal' data-target='#myModal' data-uniqueid='{{  $value->unique_record }}'><span class='glyphicon glyphicon-eye-open' aria-hidden='true'> View image</a></td>
                                 <td><a href="{{ url('staff/searchCategory/viewCard') }}/{{ base64_encode( base64_encode( base64_encode( $value->record_id ))) }}" target="_blank"><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span> View Card</a></td>
@@ -275,9 +275,9 @@
                     { data: 'family', name: 't9.name'},
                     { data: 'genus', name: 't11.name'},
                     { data: 'current_scientific_name_format', name: 'classification.current_scientific_name_format'},
-                    { data: `{{ ($lang==1 ? 'ocean_sea_lake_en' : 'ocean_sea_lake_th') }}`, name: `{{ ($lang==1 ? 'w4.name_en' : 'w4.name_th') }}`},
-                    { data: `{{ ($lang==1 ? 'country_en' : 'country_th') }}`, name: `{{ ($lang==1 ? 'country.country_en' : 'country.country_th') }}`},
-                    { data: `{{ ($lang==1 ? 'province_en' : 'province_th') }}`, name: `{{ ($lang==1 ? 'p.province_en' : 'p.province_th') }}`},
+                    { data: `{{ ($lang==2 ? 'ocean_sea_lake_th' : 'ocean_sea_lake_en') }}`, name: `{{ ($lang==2 ? 'w4.name_th' : 'w4.name_en') }}`},
+                    { data: `{{ ($lang==2 ? 'country_th' : 'country_en') }}`, name: `{{ ($lang==2 ? 'country.country_th' : 'country.country_en') }}`},
+                    { data: `{{ ($lang==2 ? 'province_th' : 'province_en') }}`, name: `{{ ($lang==2 ? 'p.province_th' : 'p.province_en') }}`},
                 ]
             });
         });

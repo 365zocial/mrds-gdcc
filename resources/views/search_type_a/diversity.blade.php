@@ -620,11 +620,11 @@
                             @endif
                                 { data: 'current_scientific_name_format', name: 'classification.current_scientific_name_format'},
                             @if($group_permission_b == 2)
-                            { data: `{{ ($lang==1 ? 'ocean_sea_lake_en' : 'ocean_sea_lake_th') }}`, name: `{{ ($lang==1 ? 'w4.name_en' : 'w4.name_th') }}`},
-                            { data: `{{ ($lang==1 ? 'country_en' : 'country_th') }}`, name: `{{ ($lang==1 ? 'country.country_en' : 'country.country_th') }}`},
-                            { data: `{{ ($lang==1 ? 'province_en' : 'province_th') }}`, name: `{{ ($lang==1 ? 'p.province_en' : 'p.province_th') }}`},
+                            { data: `{{ ($lang==2 ? 'ocean_sea_lake_th' : 'ocean_sea_lake_en') }}`, name: `{{ ($lang==2 ? 'w4.name_th' : 'w4.name_en') }}`},
+                            { data: `{{ ($lang==2 ? 'country_th' : 'country_en') }}`, name: `{{ ($lang==2 ? 'country.country_th' : 'country.country_en') }}`},
+                            { data: `{{ ($lang==2 ? 'province_th' : 'province_en') }}`, name: `{{ ($lang==2 ? 'p.province_th' : 'p.province_en') }}`},
                             @endif
-                                { data: `{{ ($lang==1 ? 'expedition_en' : 'expedition_th') }}`, name: `{{ ($lang==1 ? 'w1.name_en' : 'w1.name_th') }}`},
+                                { data: `{{ ($lang==2 ? 'expedition_th' : 'expedition_en') }}`, name: `{{ ($lang==2 ? 'w1.name_th' : 'w1.name_en') }}`},
                                 { data: 'action', orderable: false, searchable: false },   
                         @else
                             @if($group_permission_a == 2)
@@ -638,11 +638,11 @@
                             @endif
                                 { data: 'current_scientific_name_format', name: 'classification.current_scientific_name_format'},
                             @if($group_permission_b == 2)
-                            { data: `{{ ($lang==1 ? 'ocean_sea_lake_en' : 'ocean_sea_lake_th') }}`, name: `{{ ($lang==1 ? 'w4.name_en' : 'w4.name_th') }}`},
-                            { data: `{{ ($lang==1 ? 'country_en' : 'country_th') }}`, name: `{{ ($lang==1 ? 'country.country_en' : 'country.country_th') }}`},
-                            { data: `{{ ($lang==1 ? 'province_en' : 'province_th') }}`, name: `{{ ($lang==1 ? 'p.province_en' : 'p.province_th') }}`},
+                            { data: `{{ ($lang==2 ? 'ocean_sea_lake_th' : 'ocean_sea_lake_en') }}`, name: `{{ ($lang==2 ? 'w4.name_th' : 'w4.name_en') }}`},
+                            { data: `{{ ($lang==2 ? 'country_th' : 'country_en') }}`, name: `{{ ($lang==2 ? 'country.country_th' : 'country.country_en') }}`},
+                            { data: `{{ ($lang==2 ? 'province_th' : 'province_en') }}`, name: `{{ ($lang==2 ? 'p.province_th' : 'p.province_en') }}`},
                             @endif
-                            { data: `{{ ($lang==1 ? 'expedition_en' : 'expedition_th') }}`, name: `{{ ($lang==1 ? 'w1.name_en' : 'w1.name_th') }}`},
+                            { data: `{{ ($lang==2 ? 'expedition_th' : 'expedition_en') }}`, name: `{{ ($lang==2 ? 'w1.name_th' : 'w1.name_en') }}`},
                         @endif
             ]
             

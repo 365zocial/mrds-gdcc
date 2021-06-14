@@ -190,7 +190,7 @@
                     { data: 'infraorder', name: 't8.name'},
                     { data: 'superfamily', name: 't10.name'},
                     { data: 'family', name: 't9.name'},
-                    //{ data: `{{ ($lang==1 ? 'ocean_sea_lake_en' : 'ocean_sea_lake_th') }}`, name: `{{ ($lang==1 ? 'w4.name_en' : 'w4.name_th') }}`},
+                    //{ data: `{{ ($lang==2 ? 'ocean_sea_lake_th' : 'ocean_sea_lake_en') }}`, name: `{{ ($lang==2 ? 'w4.name_th' : 'w4.name_en') }}`},
                 @endif
                 { data: 'current_scientific_name_format', name: 'classification.current_scientific_name_format'},
             ],
