@@ -67,23 +67,25 @@ class ImporterController extends Controller
         'subspecies'
     ];
 
-    public function index() {
+    public function index()
+    {
         $files = [];
         $lists = file(base_path('raw_data/list.txt'));
         foreach ($lists as $line) {
             $files[] = $line;
         }
 
-        foreach($files AS $file) {
-            echo $file."\r\n";
+        foreach ($files as $file) {
+            echo $file . "\r\n";
             // select file
-            $path_to_file = base_path('raw_data/'.$file);
+            $path_to_file = base_path('raw_data/' . $file);
             $this->importEachFile($path_to_file);
         }
     }
 
-    private function importEachFile($path_to_file) {;
-        $this->csvFile = file(str_replace("\n","",$path_to_file));
+    private function importEachFile($path_to_file)
+    {;
+        $this->csvFile = file(str_replace("\n", "", $path_to_file));
 
         // import to temp table
         $this->importDataToTemp();
@@ -92,35 +94,40 @@ class ImporterController extends Controller
         $this->insertData();
     }
 
-    private function importDataToTemp() {
+    private function importDataToTemp()
+    {
         $this->importData();
         $this->storeData();
     }
 
-    private function importData() {
+    private function importData()
+    {
         foreach ($this->csvFile as $line) {
-            if($this->row > $this->header_row_no) {
+            if ($this->row > $this->header_row_no) {
                 $this->data[] = str_getcsv($line);
             }
             $this->row++;
         }
     }
 
-    public function getDatas() {
+    public function getDatas()
+    {
         return $this->data;
     }
 
-    public function showData($row = 0) {
-        if($row > 0) {
+    public function showData($row = 0)
+    {
+        if ($row > 0) {
             print_r(array_splice($this->data, 0, $row));
         } else {
             print_r($this->data);
         }
     }
 
-    private function storeData() {
+    private function storeData()
+    {
         TempData::truncate();
-        foreach($this->getDatas() AS $data) {
+        foreach ($this->getDatas() as $data) {
             $tmp = new TempData;
             $tmp->date = $data[0];
             $tmp->department = $data[1];
@@ -282,7 +289,8 @@ class ImporterController extends Controller
         }
     }
 
-    private function insertData() {
+    private function insertData()
+    {
         // check toxonomy
         $this->upsertTaxonomy();
 
@@ -293,13 +301,14 @@ class ImporterController extends Controller
         $this->insertRecord();
     }
 
-    private function upsertTaxonomy() {
-        foreach($this->header_taxonomy as $index_header => $column) {
+    private function upsertTaxonomy()
+    {
+        foreach ($this->header_taxonomy as $index_header => $column) {
             $taxo_lists = TempData::get([$column]);
-            foreach($taxo_lists as $taxo) {
-                if($taxo->{$column} !== '' && !empty($taxo->{$column})){
+            foreach ($taxo_lists as $taxo) {
+                if ($taxo->{$column} !== '' && !empty($taxo->{$column})) {
                     Taxonomy::firstOrCreate(
-                        ['header_taxonomy_id' => ($index_header+1), 'name' => $taxo->{$column}],
+                        ['header_taxonomy_id' => ($index_header + 1), 'name' => $taxo->{$column}],
                         ['status' => 2, 'created_by' => \Auth::user()->id, 'updated_by' => \Auth::user()->id]
                     );
                 }
@@ -307,40 +316,41 @@ class ImporterController extends Controller
         }
     }
 
-    private function insertClass() {
-        foreach(TempData::get() AS $temp) {
+    private function insertClass()
+    {
+        foreach (TempData::get() as $temp) {
             //get taxo id for this class
             $arr_taxo_id = $this->getIdTaxonomy($temp);
 
             $check_class = Classification::where('domain', $arr_taxo_id['domain'])
-                            ->where('kingdom', $arr_taxo_id['kingdom'])
-                            ->where('subkingdom', $arr_taxo_id['subkingdom'])
-                            ->where('infrakingdom', $arr_taxo_id['infrakingdom'])
-                            ->where('phylum', $arr_taxo_id['phylum'])
-                            ->where('subphylum', $arr_taxo_id['subphylum'])
-                            ->where('infraphylum', $arr_taxo_id['infraphylum'])
-                            ->where('superclass', $arr_taxo_id['superclass'])
-                            ->where('class', $arr_taxo_id['class'])
-                            ->where('subclass', $arr_taxo_id['subclass'])
-                            ->where('infraclass', $arr_taxo_id['infraclass'])
-                            ->where('superorder', $arr_taxo_id['superorder'])
-                            ->where('order_o', $arr_taxo_id['order_o'])
-                            ->where('suborder', $arr_taxo_id['suborder'])
-                            ->where('infraorder', $arr_taxo_id['infraorder'])
-                            ->where('superfamily', $arr_taxo_id['superfamily'])
-                            ->where('family', $arr_taxo_id['family'])
-                            ->where('subfamily', $arr_taxo_id['subfamily'])
-                            ->where('genus', $arr_taxo_id['genus'])
-                            ->where('subgenus', $arr_taxo_id['subgenus'])
-                            ->where('species', $arr_taxo_id['species'])
-                            ->where('subspecies', $arr_taxo_id['subspecies'])
-                            ->first();
+                ->where('kingdom', $arr_taxo_id['kingdom'])
+                ->where('subkingdom', $arr_taxo_id['subkingdom'])
+                ->where('infrakingdom', $arr_taxo_id['infrakingdom'])
+                ->where('phylum', $arr_taxo_id['phylum'])
+                ->where('subphylum', $arr_taxo_id['subphylum'])
+                ->where('infraphylum', $arr_taxo_id['infraphylum'])
+                ->where('superclass', $arr_taxo_id['superclass'])
+                ->where('class', $arr_taxo_id['class'])
+                ->where('subclass', $arr_taxo_id['subclass'])
+                ->where('infraclass', $arr_taxo_id['infraclass'])
+                ->where('superorder', $arr_taxo_id['superorder'])
+                ->where('order_o', $arr_taxo_id['order_o'])
+                ->where('suborder', $arr_taxo_id['suborder'])
+                ->where('infraorder', $arr_taxo_id['infraorder'])
+                ->where('superfamily', $arr_taxo_id['superfamily'])
+                ->where('family', $arr_taxo_id['family'])
+                ->where('subfamily', $arr_taxo_id['subfamily'])
+                ->where('genus', $arr_taxo_id['genus'])
+                ->where('subgenus', $arr_taxo_id['subgenus'])
+                ->where('species', $arr_taxo_id['species'])
+                ->where('subspecies', $arr_taxo_id['subspecies'])
+                ->first();
 
-            if(is_null($check_class)) {
+            if (is_null($check_class)) {
                 $new_class = new Classification;
-                $new_class->current_scientific_name = AllMean::checkAndCutForNoneBackSpace( strip_tags( $this->convertUnderScore( $temp->current_scientific_name) ) );
+                $new_class->current_scientific_name = AllMean::checkAndCutForNoneBackSpace(strip_tags($this->convertUnderScore($temp->current_scientific_name)));
                 $new_class->current_scientific_name_format = $this->convertUnderScore($temp->current_scientific_name);
-                $new_class->previous_scientific_name = AllMean::checkAndCutForNoneBackSpace( strip_tags( $this->convertUnderScore( $temp->previous_scientific_name) ) );
+                $new_class->previous_scientific_name = AllMean::checkAndCutForNoneBackSpace(strip_tags($this->convertUnderScore($temp->previous_scientific_name)));
                 $new_class->previous_scientific_name_format = $this->convertUnderScore($temp->previous_scientific_name);
                 $new_class->domain = $arr_taxo_id['domain'];
                 $new_class->kingdom = $arr_taxo_id['kingdom'];
@@ -375,7 +385,7 @@ class ImporterController extends Controller
                 $new_class->updated_by = \Auth::user()->id;
                 $new_class->save();
                 $class = $new_class->id;
-            }else {
+            } else {
                 $class = $check_class->id;
             }
 
@@ -449,37 +459,40 @@ class ImporterController extends Controller
         }
     }
 
-    private function insertRecord() {
-        foreach(TempData::get() AS $index => $temp) {
+    private function insertRecord()
+    {
+        foreach (TempData::get() as $index => $temp) {
 
-            list($_uniq,
-            $_marine_center,
-            $_collection,
-            $_catalog_number,
-            $_source,
-            $_reference,
-            $_page,
-            $_no_species,
-            $_no_locality,
-            $_related_catalog_item,
-            $_related_reference_item,
-            $_country,
-            $_province,
-            $_district,
-            $_county,
-            $_locality,
-            $_variety_name,
-            $_diagnosis,
-            $_description,
-            $_islands_island,
-            $_size,
-            $_verbatim_latitude,
-            $_verbatim_longitude,
-            $_collected_date,
-            $_identified_date,
-            $_old_date_temp) = $this->setPrepareRecord($temp);
+            list(
+                $_uniq,
+                $_marine_center,
+                $_collection,
+                $_catalog_number,
+                $_source,
+                $_reference,
+                $_page,
+                $_no_species,
+                $_no_locality,
+                $_related_catalog_item,
+                $_related_reference_item,
+                $_country,
+                $_province,
+                $_district,
+                $_county,
+                $_locality,
+                $_variety_name,
+                $_diagnosis,
+                $_description,
+                $_islands_island,
+                $_size,
+                $_verbatim_latitude,
+                $_verbatim_longitude,
+                $_collected_date,
+                $_identified_date,
+                $_old_date_temp
+            ) = $this->setPrepareRecord($temp);
 
-            for($i_language = 1; $i_language <= 2 ; $i_language++) {
+            for ($i_language = 1; $i_language <= 2; $i_language++) {
                 $rc                                     = new Record;
                 $rc->unique_record                      = $_uniq;
                 $rc->classification_id                  = $this->class_id[$index]; // get each class id to mapping
@@ -496,45 +509,45 @@ class ImporterController extends Controller
                 $rc->related_reference_item             = $_related_reference_item;
                 $rc->individual_count                   = $temp->individual_count;
 
-                if( empty($temp->latitude) && !empty($temp->verbatim_latitude) ) {
+                if (empty($temp->latitude) && !empty($temp->verbatim_latitude)) {
                     $rc->latitude                       = $this->readVerbatim($temp->verbatim_latitude);
                 } else {
-                    $latitude = explode(" ",$temp->latitude);
+                    $latitude = explode(" ", $temp->latitude);
                     $rc->latitude                       = $latitude[0];
                     // $rc->latitude                       = $temp->latitude;  // TODO: เขียน code ตัดอักษรออก
                 }
                 $rc->verbatim_latitude                  = $_verbatim_latitude;
-                $start_latitude = explode(" ",$temp->start_latitude);
+                $start_latitude = explode(" ", $temp->start_latitude);
                 $rc->start_latitude                     = $start_latitude[0];
-                $end_latitude = explode(" ",$temp->end_latitude);
+                $end_latitude = explode(" ", $temp->end_latitude);
                 $rc->end_latitude                       = $end_latitude[0];
 
-                if( empty($temp->longitude) && !empty($temp->verbatim_longitude) ) {
+                if (empty($temp->longitude) && !empty($temp->verbatim_longitude)) {
                     $rc->longitude                       = $this->readVerbatim($temp->verbatim_longitude);
                 } else {
-                    $longitude = explode(" ",$temp->longitude);
+                    $longitude = explode(" ", $temp->longitude);
                     $rc->latitude                       = $longitude[0];
 
                     // $rc->longitude                          = $temp->longitude;  // TODO: เขียน code ตัดอักษรออก
                 }
                 $rc->verbatim_longitude                 = $_verbatim_longitude;
-                $start_longitude = explode(" ",$temp->start_longitude);
+                $start_longitude = explode(" ", $temp->start_longitude);
                 $rc->start_longitude                    = $start_longitude[0];
-                $end_longitude = explode(" ",$temp->end_longitude);
+                $end_longitude = explode(" ", $temp->end_longitude);
                 $rc->end_longitude                      = $end_longitude[0];
 
                 $rc->country                            = $_country;
                 $rc->province                           = $_province;
                 $rc->district                           = $_district;
                 $rc->county                             = $_county;
-                $rc->locality                           = $_locality[$i_language-1];
+                $rc->locality                           = $_locality[$i_language - 1];
                 $rc->ocean_sea_lake                     = $this->wordingOceanSeaLake($temp->ocean_sea_lake, $temp->ocean_sea_lake_dup);
-                $rc->islands_island                     = $_islands_island[$i_language-1];
+                $rc->islands_island                     = $_islands_island[$i_language - 1];
                 $rc->habitat                            = $this->wordingHabitat($temp->habitat, $temp->habitat_dup);
                 $rc->sediment_type                      = $temp->sediment_type;
                 $rc->type_status                        = $this->wordingTypeStatus($temp->type_status, $temp->type_status_dup);
                 $rc->sex                                = $this->wordingSex($temp->sex);
-                $rc->size                               = $_size[$i_language-1];
+                $rc->size                               = $_size[$i_language - 1];
                 $rc->life_stage                         = $this->wordingLifeStage($temp->life_stage, $temp->life_stage_dup);
                 $rc->donated_from                       = $this->wordingDonatedFrom($temp->donated_from);
                 $rc->deposited_at                       = $this->wordingDepositedAt($temp->deposited_at);
@@ -559,9 +572,9 @@ class ImporterController extends Controller
                 $rc->gene_bank_number                   = $temp->gene_bank_number;
                 $rc->local_name                         = $temp->local_name;
                 $rc->vernacular_name                    = $temp->vernacular_name;
-                $rc->variety_name                       = $_variety_name[$i_language-1];
-                $rc->diagnosis                          = $_diagnosis[$i_language-1];
-                $rc->description                        = $_description[$i_language-1];
+                $rc->variety_name                       = $_variety_name[$i_language - 1];
+                $rc->diagnosis                          = $_diagnosis[$i_language - 1];
+                $rc->description                        = $_description[$i_language - 1];
                 $rc->team_exploration_code              = $temp->team_exploration_code;
                 $rc->area_exploration                   = $temp->area_exploration;
                 $rc->village_no                         = $temp->village_no;
@@ -590,7 +603,7 @@ class ImporterController extends Controller
                 $rc->animal_type2                       = $this->wordingAnimalType2($temp->animal_type2);
                 $rc->animal_type3                       = $this->wordingAnimalType3($temp->animal_type3);
                 $rc->economic_value                     = $this->wordingEconomicValue($temp->economic_value);
-                if ( $temp->reproduction != null ) {
+                if ($temp->reproduction != null) {
                     $rc->reproduction                   = 1;
                 }
                 $rc->plant_type                         = $this->wordingPlantType($temp->plant_type);
@@ -603,57 +616,61 @@ class ImporterController extends Controller
                 $rc->created_by                         = \Auth::user()->id;
                 $rc->updated_by                         = \Auth::user()->id;
                 $rc->status                             = 2;
-                if ( $_old_date_temp != null ) {
+                if ($_old_date_temp != null) {
                     $rc->updated_at                     = $_old_date_temp;
                 }
                 $rc->save();
             }
         }
-
     }
 
     // utility function
-    public function createRelatedCatalog($marinecenter_code, $source, $collection_name, $catalog_number){
+    public function createRelatedCatalog($marinecenter_code, $source, $collection_name, $catalog_number)
+    {
 
         $collection_code = Collection::where('name_en', $collection_name)->get()[0]->col_code;
 
-        $related_catalog_item = $marinecenter_code."-".$source."-".$collection_code."-".$catalog_number;
+        $related_catalog_item = $marinecenter_code . "-" . $source . "-" . $collection_code . "-" . $catalog_number;
 
         return $related_catalog_item;
     }
 
-    public function createRelatedReference($marinecenter_code, $source, $collection_name, $reference_id, $page, $no_species, $no_locality){
+    public function createRelatedReference($marinecenter_code, $source, $collection_name, $reference_id, $page, $no_species, $no_locality)
+    {
         $collection_code = Collection::where('name_en', $collection_name)->get()[0]->col_code;
         $reference_code = Reference::find($reference_id)->ref_code;
-        $related_reference_item = $marinecenter_code."-".$source."-".$collection_code."-".$reference_code."-".$page."-".$no_species."-".$no_locality;
+        $related_reference_item = $marinecenter_code . "-" . $source . "-" . $collection_code . "-" . $reference_code . "-" . $page . "-" . $no_species . "-" . $no_locality;
 
         return $related_reference_item;
     }
 
-    private function readVerbatim($verbatim){
-        if($verbatim !== ""){
-            $dms = explode(" ",$verbatim);
+    private function readVerbatim($verbatim)
+    {
+        if ($verbatim !== "") {
+            $dms = explode(" ", $verbatim);
             $dms[0] = str_replace('°', '', $dms[0]);
             $dms[1] = str_replace("'", '', $dms[1]);
             $dms[2] = str_replace('"', '', $dms[2]);    // ตัดเครื่องหมาย double qoute ออก 1 อัน
             $dms[2] = str_replace('"', '', $dms[2]);    // ตัดเครื่องหมาย double qoute ออก 1 อัน (เพราะต้องตัด 2 อัน)
             return AllMean::dmstodecimal($dms[0], $dms[1], $dms[2], $dms[3]);
-        }else{
+        } else {
             return "";
         }
     }
 
-    private function getIdTaxonomy($temp) {
+    private function getIdTaxonomy($temp)
+    {
         $arr_taxo_id = [];
-        foreach($this->header_taxonomy as $index_header => $column) {
-            $taxo = Taxonomy::where('name', $temp->{$column})->where('header_taxonomy_id', ($index_header+1))->first();
+        foreach ($this->header_taxonomy as $index_header => $column) {
+            $taxo = Taxonomy::where('name', $temp->{$column})->where('header_taxonomy_id', ($index_header + 1))->first();
             $arr_taxo_id[$column] = !is_null($taxo) ? $taxo->id : null;
         }
 
         return $arr_taxo_id;
     }
 
-    private function setPrepareRecord($temp) {
+    private function setPrepareRecord($temp)
+    {
         $uniq = (Record::orderBy('id', 'desc')->limit(1)->get(['unique_record'])[0]->unique_record + 1);
         $marine_center = Marinecenter::where('marinecenter_code', $temp->marinecenter_code)->get()[0]->id;
         $collection = Collection::where('name_en', $temp->collection)->get()[0]->id;
@@ -677,29 +694,29 @@ class ImporterController extends Controller
         $islands_island = [$temp->islands_island, $temp->islands_island_dup];
         $size = [$temp->size, $temp->size_dup];
 
-        if($temp->collected_date !== "") {
-            $collected_date_temp = explode("/",$temp->collected_date);
-            $collected_date = $collected_date_temp[2]."-".$collected_date_temp[0]."-".$collected_date_temp[1];
-        }else{
+        if ($temp->collected_date !== "") {
+            $collected_date_temp = explode("/", $temp->collected_date);
+            $collected_date = $collected_date_temp[2] . "-" . $collected_date_temp[0] . "-" . $collected_date_temp[1];
+        } else {
             $collected_date = null;
         }
 
-        if($temp->identified_date !== "") {
-            $identified_date_temp = explode("/",$temp->identified_date);
-            $identified_date = $identified_date_temp[2]."-".$identified_date_temp[0]."-".$identified_date_temp[1];
-        }else {
+        if ($temp->identified_date !== "") {
+            $identified_date_temp = explode("/", $temp->identified_date);
+            $identified_date = $identified_date_temp[2] . "-" . $identified_date_temp[0] . "-" . $identified_date_temp[1];
+        } else {
             $identified_date = null;
         }
 
-        if($temp->date !== "") {
-            $temp->date = trim($temp->date," ");
-            $old_date_temp = explode("/",$temp->date);
-            $old_date = $old_date_temp[2]."-".$old_date_temp[0]."-".$old_date_temp[1];
-        }else {
+        if ($temp->date !== "") {
+            $temp->date = trim($temp->date, " ");
+            $old_date_temp = explode("/", $temp->date);
+            $old_date = $old_date_temp[2] . "-" . $old_date_temp[0] . "-" . $old_date_temp[1];
+        } else {
             $old_date = null;
         }
 
-        if($temp->source === 'Specimen') {
+        if ($temp->source === 'Specimen') {
             $catalog_number     = $temp->catalog_number;
             $source             = 1;
             $reference          = "";
@@ -708,7 +725,7 @@ class ImporterController extends Controller
             $no_locality        = "";
             $related_catalog_item = $this->createRelatedCatalog($temp->marinecenter_code, $source, $temp->collection, $catalog_number);
             $related_reference_item = "";
-        }elseif($temp->source === "Publication"){
+        } elseif ($temp->source === "Publication") {
             $catalog_number     = "";
             $source             = 2;
             $reference          = Reference::where('name_en', $temp->reference)->get()[0]->id;
@@ -722,51 +739,53 @@ class ImporterController extends Controller
         $verbatim_latitude = $temp->verbatim_latitude;
         $verbatim_longitude = $temp->verbatim_longitude;
 
-        return [$uniq,
-                $marine_center,
-                $collection,
-                $catalog_number,
-                $source,
-                $reference,
-                $page,
-                $no_species,
-                $no_locality,
-                $related_catalog_item,
-                $related_reference_item,
-                $country_id,
-                $province_id,
-                $district_id,
-                $county_id,
-                $locality,
-                $variety_name,
-                $diagnosis,
-                $description,
-                $islands_island,
-                $size,
-                $verbatim_latitude,
-                $verbatim_longitude,
-                $collected_date,
-                $identified_date,
-                $old_date];
+        return [
+            $uniq,
+            $marine_center,
+            $collection,
+            $catalog_number,
+            $source,
+            $reference,
+            $page,
+            $no_species,
+            $no_locality,
+            $related_catalog_item,
+            $related_reference_item,
+            $country_id,
+            $province_id,
+            $district_id,
+            $county_id,
+            $locality,
+            $variety_name,
+            $diagnosis,
+            $description,
+            $islands_island,
+            $size,
+            $verbatim_latitude,
+            $verbatim_longitude,
+            $collected_date,
+            $identified_date,
+            $old_date
+        ];
     }
 
-    public function convertUnderScore($string){
+    public function convertUnderScore($string)
+    {
         $merge_string = "";
-        $arr_string = explode(" ",$string);
+        $arr_string = explode(" ", $string);
 
         foreach ($arr_string as $value) {
-            if( strpos($value,"_") !== false){
-                $value = str_replace("_","<i>",$value);
+            if (strpos($value, "_") !== false) {
+                $value = str_replace("_", "<i>", $value);
 
-                if( strpos($value,")") !== false ){
+                if (strpos($value, ")") !== false) {
                     $value = rtrim($value, ")");
                     $value .= "</i>)";
-                }else{
+                } else {
                     $value .= "</i>";
                 }
-
             }
-            $merge_string .= $value." ";
+            $merge_string .= $value . " ";
         }
         return $merge_string;
     }
@@ -776,8 +795,10 @@ class ImporterController extends Controller
 
     /*
         # วิธีการ migrate ภาพ
-        - ให้ทำการแบ่งภาพเป็น Folder ละ 100 ภาพ
-        - หลังจากทำการ Migrate แล้ว ค่อยลากไฟล์ไปไว้ใน Folder ภาพ (raw_pic_data)
+        - ให้ทำการแบ่งภาพเป็น Folder ละ 100 ภาพ แล้วนำไปใส่ใน Folder raw_pic_data เพื่อทำการ Migrate
+        - Export Database จาก production ลงมาใน Localhost
+        - หลังจากทำการ Migrate แล้ว ค่อยลากไฟล์ไปไว้ใน Folder ภาพบน Production
+        - และ Update Database ไปใหม่ โดยนำจาก Localhost ไปไว้บน production
 
         # การทำงานของฟังก์ชัน
         - $update_db_status ถ้ามีค่าเป็น 0 คือ แค่ตรวจอย่างเดียว, 1 คือ ตรวจและบันทึกลงฐานข้อมูล
@@ -786,21 +807,24 @@ class ImporterController extends Controller
         - ก่อน Migrate ภาพจะต้องตรวจภาพก่อน ว่ามีในชื่อภาพนี้อยู่ใน Record หรือไม่ ด้วยการทำบน Localhost (เพื่อทดสอบก่อนที่จะทำงานบน database จริงๆ )
     */
 
-    public function MigratePicture(){
+    public function MigratePicture()
+    {
         // เปิดการแก้ไข database
         $update_db_status = 0;  // 0 คือ แค่ตรวจอย่างเดียว, 1 คือ ตรวจและบันทึกลงฐานข้อมูล
 
         // ทำการอ่านไฟล์ใน folder
         $dir    = base_path("raw_pic_data/W/1");
-        $path_folder = "images_migrate/2021_February/W/1/";
-        echo $dir. "<br><br><br>";
+        // $path_folder = "images_migrate/2021_September_1/W/8/";  // may
+        // $path_folder = "images_migrate/2021_September_2/W/5/";   // flash drive
+        $path_folder = "images_migrate/2021_September_3/W/1/";   // aug
+        echo $dir . "<br><br><br>";
 
         $pic_files = scandir($dir);
         // print_r( count($pic_files) );
 
         // Loop เช็คไฟล์ใน Folder
-        foreach( $pic_files as $key => $file ) {
-            if( $file == '.' || $file == '..' || $file == '.DS_Store' ) {
+        foreach ($pic_files as $key => $file) {
+            if ($file == '.' || $file == '..' || $file == '.DS_Store') {
                 // เอาไฟล์ที่ไม่ใช่ภาพออก คือ ., .. และ .DS_Store
             } else {
                 $name_file = [];
@@ -808,22 +832,22 @@ class ImporterController extends Controller
                 $name_file = explode("_", $name_file[1]);   // ตัดคำที่ "_"
                 $name_file = explode("W", $name_file[0]);   // ตัดคำที่ "W", W คือ ภาพมีลายน้ำ
                 // echo $name_file[0]."<br>";
-                echo $key-1 . " - " . $file . "<br>";
+                echo $key - 1 . " - " . $file . "<br>";
 
                 $data = Record::where('catalog_number', $name_file[0])->orderBy('id', 'desc')->first();
 
-                if( empty( $data ) ) {    // ถ้าค้นหาใน database แล้วไม่เจอจะหยุดการทำงาน
-                    echo $key-1 . " - " .$name_file[0] . ' is not found in database.<br>';
+                if (empty($data)) {    // ถ้าค้นหาใน database แล้วไม่เจอจะหยุดการทำงาน
+                    echo $key - 1 . " - " . $name_file[0] . ' is not found in database.<br>';
                     exit;
                 } else {    //  store in database
-                    if ( $update_db_status ) {
+                    if ($update_db_status) {
                         // เอา uniq record ไปเช็คว่ามีภาพแล้วหรือยัง
                         $pic = Picture::where('unique_record', $data->unique_record)->orderBy('id', 'desc')->first();
 
-                        if( empty( $pic ) ) {    // ถ้าไม่มี ให้สร้างเป็น level และ selected_picture 1
+                        if (empty($pic)) {    // ถ้าไม่มี ให้สร้างเป็น level และ selected_picture 1
                             $pic_store = new Picture;
                             $pic_store->unique_record = $data->unique_record;
-                            $pic_store->path_pic = $path_folder.$file;
+                            $pic_store->path_pic = $path_folder . $file;
                             $pic_store->selected_picture = 1;
                             $pic_store->level = 1;
                             $pic_store->created_by = 1;
@@ -832,7 +856,7 @@ class ImporterController extends Controller
                         } else {    // ถ้ามีให้สร้างเป็น level มากสุดบวก 1
                             $pic_store = new Picture;
                             $pic_store->unique_record = $data->unique_record;
-                            $pic_store->path_pic = $path_folder.$file;
+                            $pic_store->path_pic = $path_folder . $file;
                             $pic_store->selected_picture = 1;
                             $pic_store->level = $pic->level + 1;
                             $pic_store->created_by = 1;
@@ -844,12 +868,11 @@ class ImporterController extends Controller
             }
         }
 
-        if ( $update_db_status == 0 ) {
+        if ($update_db_status == 0) {
             echo "<br><br>Update database is close. Pls change status at 'update_db_status' = 1" . "<br><br>";
         }
 
         echo 'Migrate Complete';
         exit;
     }
-
 }

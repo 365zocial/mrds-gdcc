@@ -1,0 +1,60 @@
+# จากงานเพิ่มประสิทธิภาพครั้งที่ 7 : 15 February 2021
+# ซึ่งตกค้างจากครั้งก่อน 1,753 ภาพ แต่ในรอบนี้มีการ Migrate 1,800 ภาพ
+# มีจำนวน 38 ภาพ ที่ไม่สามารถ Migrate ได้
+# เนื่องจากไม่มีข้อมูล Record ในระบบ
+# โดยภาพจะถูกเก็บไว้ใน Folder "not"
+#
+#
+# 1-pmbc_3601W.jpg
+# 1 คือ folder ที่ 1
+# W คือภาพที่มีลายน้ำ (ตอนนี้ใช้ภาพที่แสดงลายน้ำในระบบ)
+#
+-----------------------
+# ภาพจาก HDD "ภาพให้บริษัท 20 พฤษภาคม 2564" 720 ภาพ
+# มีจำนวน 6 ภาพ ที่ไม่สามารถ Migrate ได้
+1-pmbc_3330W.jpg
+1-pmbc_3476W.jpg
+1-pmbc_5437W.jpg
+1-pmbc_5665W.jpg
+7-pmbc_20725W.jpg
+7-pmbc_25173W.jpg
+
+-----------------------
+# ภาพจาก Flash Drive 432 ภาพ
+# มีจำนวน 5 ภาพ ที่ไม่สามารถ Migrate ได้
+1-pmbc_3320W.jpg
+1-pmbc_3322W.jpg
+1-pmbc_3324W.jpg
+1-pmbc_3325W.jpg
+2-pmbc_13974W.jpg
+
+-----------------------
+# ภาพจาก HDD "ภาพให้บริษัท 31 สิงหาคม 2564" 648 ภาพ
+# มีจำนวน 27 ภาพ ที่ไม่สามารถ Migrate ได้
+1-pmbc_3601W.jpg
+1-pmbc_3603W.jpg
+1-pmbc_5754W.jpg
+1-pmbc_5755W.jpg
+2-pmbc_5958 (2)W.jpg
+2-pmbc_6185W.jpg
+2-pmbc_6187W.jpg
+2-pmbc_6188W.jpg
+2-pmbc_6190W.jpg
+2-pmbc_6191W.jpg
+2-pmbc_6214W.jpg
+3-pmbc_6598W.jpg
+3-pmbc_6599W.jpg
+3-pmbc_6600W.jpg
+3-pmbc_6601W.jpg
+3-pmbc_6602W.jpg
+3-pmbc_6603W.jpg
+3-pmbc_6604W.jpg
+3-pmbc_9876W.jpg
+3-pmbc_9877W.jpg
+3-pmbc_9879W.jpg
+3-pmbc_9880W.jpg
+3-pmbc_9881W.jpg
+3-pmbc_10437W.jpg
+6-pmbc_21196W.jpg
+6-pmbc_21210W.jpg
+6-pmbc_25173W.jpg
