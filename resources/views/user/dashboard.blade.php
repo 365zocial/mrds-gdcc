@@ -1,41 +1,45 @@
 @extends('layouts.app_user')
 
 @section('css')
-    @include('base_wording_css')
-    <link href="<?php echo url('assets/fonts/THSarabunNew/THSarabunNew.ttf'); ?>" rel="stylesheet" type="text/css">
-    <link href="<?php echo url('assets/fonts/THSarabunNew/THSarabunNewBold.ttf'); ?>" rel="stylesheet" type="text/css">
-    <link href="<?php echo url('assets/fonts/THSarabunNew/THSarabunNewBoldItalic.ttf'); ?>" rel="stylesheet" type="text/css">
-    <link href="<?php echo url('assets/fonts/THSarabunNew/THSarabunNewItalic.ttf'); ?>" rel="stylesheet" type="text/css">
-    <style media="screen">
-        .font-th-header {
-            font-size: 24px !important;
-            font-family: THSarabunNewBold;
-            font-weight: 600 !important;
-            color: #636363;
-            opacity: 0.8;
-        }
+@include('base_wording_css')
+<link href="<?php echo url('assets/fonts/THSarabunNew/THSarabunNew.ttf'); ?>" rel="stylesheet" type="text/css">
+<link href="<?php echo url('assets/fonts/THSarabunNew/THSarabunNewBold.ttf'); ?>" rel="stylesheet" type="text/css">
+<link href="<?php echo url('assets/fonts/THSarabunNew/THSarabunNewBoldItalic.ttf'); ?>" rel="stylesheet" type="text/css">
+<link href="<?php echo url('assets/fonts/THSarabunNew/THSarabunNewItalic.ttf'); ?>" rel="stylesheet" type="text/css">
+<style media="screen">
+    .font-th-header {
+        font-size: 24px !important;
+        font-family: THSarabunNewBold;
+        font-weight: 600 !important;
+        color: #636363;
+        opacity: 0.8;
+    }
+
+    .font-th-content {
+        font-size: 26px !important;
+        font-family: THSarabunNew;
+        color: #636363;
+        opacity: 0.6;
+        line-height: 1.75 !important;
+        text-align: justify;
+    }
+
+    @media (max-width: 768px) {
+
+        .font-th-header,
         .font-th-content {
-            font-size: 26px !important;
-            font-family: THSarabunNew;
-            color: #636363;
-            opacity: 0.6;
-            line-height: 1.75 !important;
-            text-align: justify;
+            padding: 0 15px;
         }
-        @media (max-width: 768px) {
-            .font-th-header, .font-th-content {
-                padding: 0 15px;
-            }
-        }
-    </style>
+    }
+</style>
 @endsection
 
 @section('script')
-    <script type="text/javascript">
-        $('#myModal').on('shown.bs.modal', function () {
-            $('#myInput').focus()
-        })
-    </script>
+<script type="text/javascript">
+    $('#myModal').on('shown.bs.modal', function() {
+        $('#myInput').focus()
+    })
+</script>
 @endsection
 
 @section('contain')
@@ -47,38 +51,38 @@
             <div class="col-md-12">
                 <p class="content-header" style="font-size: 24px !important;">
                     @if( $lang == 2)
-                        ระบบฐานข้อมูลสิ่งมีชีวิตทางทะเล
+                    ระบบฐานข้อมูลสิ่งมีชีวิตทางทะเล
                     @else
-                        Marine Resource Database System
+                    Marine Resource Database System
                     @endif
                 </p>
                 <p class="content-help-text" style="text-align: center; font-size: 18px !important;">
                     @if( $lang == 2)
-                        คุณสามารถสืบค้นข้อมูลที่คุณต้องการจากหัวข้อเหล่านี้
+                    คุณสามารถสืบค้นข้อมูลที่คุณต้องการจากหัวข้อเหล่านี้
                     @else
-                        You can search for your required information by these topics.
+                    You can search for your required information by these topics.
                     @endif
                 </p>
             </div>
         </div>
 
         @if(session('success'))
-            <div class="col-12">
-                <center>
-                    <div class="alert alert-success">
-                        <p>{!! session('success') !!}</p>
-                    </div>
-                </center>
-            </div>
+        <div class="col-12">
+            <center>
+                <div class="alert alert-success">
+                    <p>{!! session('success') !!}</p>
+                </div>
+            </center>
+        </div>
         @endif
         @if(session('failure'))
-            <div class="col-12">
-                <center>
-                    <div class="alert alert-danger">
-                        <p>{!! session('failure') !!}</p>
-                    </div>
-                </center>
-            </div>
+        <div class="col-12">
+            <center>
+                <div class="alert alert-danger">
+                    <p>{!! session('failure') !!}</p>
+                </div>
+            </center>
+        </div>
         @endif
 
         <div class="row" style="margin-top: 5%; margin-bottom: 30px;">
@@ -91,9 +95,9 @@
                         </div>
                         <p class="menu-text">
                             @if( $lang == 2)
-                                สืบค้นข้อมูลความหลากหลาย
+                            สืบค้นข้อมูลความหลากหลาย
                             @else
-                                Diversity Search
+                            Diversity Search
                             @endif
                             <br>&nbsp;
                         </p>
@@ -109,9 +113,9 @@
                         </div>
                         <p class="menu-text">
                             @if( $lang == 2)
-                                สืบค้นการกระจายของสิ่งมีชีวิต
+                            สืบค้นการกระจายของสิ่งมีชีวิต
                             @else
-                                Distribution Search
+                            Distribution Search
                             @endif
                             <br>&nbsp;
                         </p>
@@ -127,10 +131,10 @@
                         </div>
                         <p class="menu-text">
                             @if( $lang == 2)
-                                สืบค้นรายการลงทะเบียน
-                                <br>&nbsp;
+                            สืบค้นรายการลงทะเบียน
+                            <br>&nbsp;
                             @else
-                                Recent Record
+                            Recent Record
                             @endif
                             <br>&nbsp;
                         </p>
@@ -146,10 +150,10 @@
                         </div>
                         <p class="menu-text">
                             @if( $lang == 2)
-                                สืบค้นรายการจากชื่อ
-                                <br>&nbsp;
+                            สืบค้นรายการจากชื่อ
+                            <br>&nbsp;
                             @else
-                                Name Record
+                            Name Record
                             @endif
                             <br>&nbsp;
                         </p>
@@ -169,9 +173,9 @@
                         </div>
                         <p class="menu-text">
                             @if($lang == 2)
-                                ความหมายของชื่อ
+                            ความหมายของชื่อ
                             @else
-                                Abbreviation
+                            Abbreviation
                             @endif
                             <br>&nbsp;
                         </p>
@@ -180,41 +184,41 @@
             </div>
 
             <div class="col-md-3 menu-box">
-              <a class="box-link" href="#" data-toggle="modal" data-target="#myModal">
-                <div class="menu-icon-box">
-                    <div>
-                        <img class="icon img-responsive" src='{{ URL::asset("assets/images/icon_dashboard_user/loan_specimen.png") }}' />
-                    </div>
-                    <p class="menu-text">
-                        @if(Session::get('language') == 2)
+                <a class="box-link" href="#" data-toggle="modal" data-target="#myModal">
+                    <div class="menu-icon-box">
+                        <div>
+                            <img class="icon img-responsive" src='{{ URL::asset("assets/images/icon_dashboard_user/loan_specimen.png") }}' />
+                        </div>
+                        <p class="menu-text">
+                            @if(Session::get('language') == 2)
                             การขอยืมตัวอย่าง
                             <br>&nbsp;
-                        @else
+                            @else
                             Loan Specimen
-                        @endif
-                        <br>&nbsp;
-                    </p>
-                </div>
-              </a>
+                            @endif
+                            <br>&nbsp;
+                        </p>
+                    </div>
+                </a>
             </div>
 
         </div>
 
         <div class="row row-with-margin" style="padding-top: 30px;">
-                <p class="content-header font-th-header" style="text-align: left;">
-                    @if(Session::get('language') == 2)
-                        ระบบฐานข้อมูลทรัพยากรสิ่งมีชีวิตทางทะเล (Marine Resources Database System - MRDS)
-                    @else
-                        Marine Resources Database System (MRDS)
-                    @endif
-                </p>
-                <p class="menu-text font-th-content" style="text-transform: none;">
-                    @if(Session::get('language') == 2)
-                        ระบบฐานข้อมูลทรัพยากรสิ่งมีชีวิตทางทะเล (Marine Resources Database System - MRDS) เป็นระบบสารสนเทศของข้อมูลตัวอย่างสิ่งมีชีวิตทางทะเล ทั้งที่มีตัวอย่างอ้างอิงและที่อ้างอิงจากผลงานตีพิมพ์ของส่วนวิจัยทรัพยากรป่าชายเลน กองอนุรักษ์ทรัพยากรป่าชายเลน และสถาบันวิจัยและพัฒนาทรัพยากรทางทะเล ชายฝั่ง ซึ่งประกอบด้วยข้อมูลของศูนย์วิจัยและพัฒนาทรัพยากรทางทะเลและชายฝั่งทั้ง 7 ศูนย์ ได้แก่ ศูนย์วิจัยทรัพยากรทางทะเลและชายฝั่งอ่าวไทยฝั่งตะวันออก (ศวทอ.) ศูนย์วิจัยทรัพยากรทางทะเลและชายฝั่งอ่าวไทยฝั่งตะวันออก (ศวบอ.) ศูนย์วิจัยทรัพยากรทางทะเลและชายฝั่งอ่าวไทยฝั่งตะวันตก (ศวบต.) ศูนย์วิจัยทรัพยากรทางทะเลและชายฝั่งอ่าวไทยตอนกลาง (ศวทก.) ศูนย์วิจัยทรัพยากรทางทะเลและชายฝั่งอ่าวไทยตอนล่าง (ศวทล.) ศูนย์วิจัยทรัพยากรทางทะเลและชายฝั่งทะเลอันดามันตอนบน (ศวอบ.) และศูนย์วิจัยทรัพยากรทางทะเลและชายฝั่งทะเลอันดามันตอนล่าง (ศวอล.) ระบบจะทำการบันทึกข้อมูลจากทุกส่วน/ศูนย์ มาจัดเก็บและจัดทำเป็นฐานข้อมูลเดียวกันเพื่อนำไปใช้ประโยชน์ร่วมกันทั้งในด้านการวิจัยและเพื่อการศึกษา
-                    @else
-                        Marine Resources Database System (MRDS) is an information system of Department of Marine Coastal Resources based on specimens, which deposited at the Reference Collection of Phuket Marine Biological Center (PMBC), and based on biodiversity information that published by Mangrove Resources Research Subdivision (Mangrove Forest Resources Conservation Division), PMBC, and other six Marine and Coastal Resources Research Center, i.e., Lower Andaman Sea (MCRRCLA), the Eastern Gulf of Thailand (MCRRDE), the Eastern Upper Gulf of Thailand (MCRRCEU), the Western Upper Gulf of Thailand (MCRRCWU), the Center Gulf of Thailand (MCRRDC), the Lower Gulf of Thailand (MCRRDL). The main objective of MRDS is to gather biodiversity information of marine fauna and flora in Thai waters.
-                    @endif
-                </p>
+            <p class="content-header font-th-header" style="text-align: left;">
+                @if(Session::get('language') == 2)
+                ระบบฐานข้อมูลทรัพยากรสิ่งมีชีวิตทางทะเล (Marine Resources Database System - MRDS)
+                @else
+                Marine Resources Database System (MRDS)
+                @endif
+            </p>
+            <p class="menu-text font-th-content" style="text-transform: none;">
+                @if(Session::get('language') == 2)
+                ระบบฐานข้อมูลทรัพยากรสิ่งมีชีวิตทางทะเล (Marine Resources Database System - MRDS) เป็นระบบสารสนเทศของข้อมูลตัวอย่างสิ่งมีชีวิตทางทะเล ทั้งที่มีตัวอย่างอ้างอิงและที่อ้างอิงจากผลงานตีพิมพ์ของส่วนวิจัยทรัพยากรป่าชายเลน กองอนุรักษ์ทรัพยากรป่าชายเลน และสถาบันวิจัยและพัฒนาทรัพยากรทางทะเลและชายฝั่ง ซึ่งประกอบด้วยข้อมูลของศูนย์วิจัยทรัพยากรทางทะเลและชายฝั่งทั้ง 7 ศูนย์ ได้แก่ ศูนย์วิจัยทรัพยากรทางทะเลและชายฝั่งอ่าวไทยฝั่งตะวันออก (ศวทอ.) ศูนย์วิจัยทรัพยากรทางทะเลและชายฝั่งอ่าวไทยตอนบนฝั่งตะวันออก (ศวบอ.) ศูนย์วิจัยทรัพยากรทางทะเลและชายฝั่งอ่าวไทยตอนบนฝั่งตะวันตก (ศวบต.) ศูนย์วิจัยทรัพยากรทางทะเลและชายฝั่งอ่าวไทยตอนกลาง (ศวทก.) ศูนย์วิจัยทรัพยากรทางทะเลและชายฝั่งอ่าวไทยตอนล่าง (ศวทล.) ศูนย์วิจัยทรัพยากรทางทะเลและชายฝั่งทะเลอันดามันตอนบน (ศวอบ.) และศูนย์วิจัยทรัพยากรทางทะเลและชายฝั่งทะเลอันดามันตอนล่าง (ศวอล.) ระบบจะทำการบันทึกข้อมูลจากทุกส่วน/ศูนย์ มาจัดเก็บและจัดทำเป็นฐานข้อมูลเดียวกันเพื่อนำไปใช้ประโยชน์ร่วมกันทั้งในด้านการวิจัยและเพื่อการศึกษา
+                @else
+                Marine Resources Database System (MRDS) is an information system of Department of Marine Coastal Resources based on specimens, which deposited at the Reference Collection of Phuket Marine Biological Center (PMBC), and based on biodiversity information that published by Mangrove Resources Research Subdivision (Mangrove Forest Resources Conservation Division), PMBC, and other six Marine and Coastal Resources Research Center, i.e., Lower Andaman Sea (MCRRCLA), the Eastern Gulf of Thailand (MCRRDE), the Eastern Upper Gulf of Thailand (MCRRCEU), the Western Upper Gulf of Thailand (MCRRCWU), the Center Gulf of Thailand (MCRRDC), the Lower Gulf of Thailand (MCRRDL). The main objective of MRDS is to gather biodiversity information of marine fauna and flora in Thai waters.
+                @endif
+            </p>
         </div>
 
     </div>
@@ -228,18 +232,18 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="myModalLabel">
                     @if(Session::get('language') == 2)
-                        การขอยืมตัวอย่าง
+                    การขอยืมตัวอย่าง
                     @else
-                        Loan Specimen
+                    Loan Specimen
                     @endif
                 </h4>
             </div>
             <div class="modal-body">
                 <div class="col-sm-12" style="padding-bottom: 10px;">
                     @if(Session::get('language') == 2)
-                        <p style="font-size: 16px;">กรุณากรอกรายละเอียดเพื่อติดต่อขอยืมตัวอย่าง เจ้าหน้าที่จะติดต่อกลับอย่างเร็วที่สุด</p>
+                    <p style="font-size: 16px;">กรุณากรอกรายละเอียดเพื่อติดต่อขอยืมตัวอย่าง เจ้าหน้าที่จะติดต่อกลับอย่างเร็วที่สุด</p>
                     @else
-                        <p style="font-size: 16px;">Please complete this form for borrow our example. Our team will be get in touch as soon as possible.</p>
+                    <p style="font-size: 16px;">Please complete this form for borrow our example. Our team will be get in touch as soon as possible.</p>
                     @endif
                 </div>
                 <form class="form-horizontal" role="form" method="post" action="{{ url('sendEmailToAdmin') }}">
