@@ -408,9 +408,9 @@ class ClassificationController extends Controller
 		if ($data['classification'] != null && $data['record'] != null) {
 			$back_page = $data['record']->source;
 			if ($back_page == 1) {
-				$data['back_page'] = 'editRecordForm/1/' . base64_encode(base64_encode(base64_encode($data['record_id'])));
+				$data['back_page'] = 'editRecordForm/1/' . base64_encode(base64_encode(base64_encode($data['record_id']))) . '/' . base64_encode(base64_encode(base64_encode('1')));
 			} else {
-				$data['back_page'] = 'editRecordForm/2/' . base64_encode(base64_encode(base64_encode($data['record_id'])));
+				$data['back_page'] = 'editRecordForm/2/' . base64_encode(base64_encode(base64_encode($data['record_id']))) . '/' . base64_encode(base64_encode(base64_encode('2')));
 			}
 			$data['classifications'] = Classification::getNameAndIDClassification();
 			return view('staff.classification.change.change_classification', $data);
