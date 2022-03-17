@@ -22,6 +22,8 @@ use App\Model\Users;
 use App\Model\Picture;
 use App\Model\ExportLog;
 use App\Model\RecordCot;
+use App\Model\RecordCot3;
+use App\Model\RecordCot4;
 use App\Http\Controllers\RecordController;
 
 
@@ -942,7 +944,7 @@ class ApiController extends Controller
             ->first();
 
         // Check Token ผิด
-        if ( !$user ) {
+        if (!$user) {
             $data['message'] = 'Authenticate Fail';
             $data['status'] = '401';
             $data['data'] = null;
@@ -952,7 +954,7 @@ class ApiController extends Controller
 
         // Check Token หมดอายุ
         $now_date = date("Y-m-d H:i:s");
-        if ( strtotime($user->api_expired_at) <= strtotime($now_date) ) {
+        if (strtotime($user->api_expired_at) <= strtotime($now_date)) {
             $data['message'] = 'Token Expired';
             $data['status'] = '401';
             $data['data'] = null;
@@ -962,7 +964,7 @@ class ApiController extends Controller
 
         // Search scientific_name and get data
         $records = RecordCot::select('related_catalog_item', 'related_reference_item', 'current_scientific_name');
-        if ( !is_null($scientific_name) && !empty($scientific_name) ) {
+        if (!is_null($scientific_name) && !empty($scientific_name)) {
             $records = $records->where('current_scientific_name', 'like', "%$scientific_name%");
         }
         $records = $records->paginate(10);
@@ -991,7 +993,7 @@ class ApiController extends Controller
             ->first();
 
         // Check Token ผิด
-        if ( !$user ) {
+        if (!$user) {
             $data['message'] = 'Authenticate Fail';
             $data['status'] = '401';
             $data['data'] = null;
@@ -1001,7 +1003,7 @@ class ApiController extends Controller
 
         // Check Token หมดอายุ
         $now_date = date("Y-m-d H:i:s");
-        if ( strtotime($user->api_expired_at) <= strtotime($now_date) ) {
+        if (strtotime($user->api_expired_at) <= strtotime($now_date)) {
             $data['message'] = 'Token Expired';
             $data['status'] = '401';
             $data['data'] = null;
@@ -1010,7 +1012,7 @@ class ApiController extends Controller
         }
 
         // Check input
-        if ( is_null($related_item) || empty($related_item) ) {
+        if (is_null($related_item) || empty($related_item)) {
             $data['message'] = 'related_item not found.';
             $data['status'] = '204';
             $data['data'] = null;
@@ -1024,7 +1026,7 @@ class ApiController extends Controller
             ->first();
 
         // Check ถ้าค้นหาแล้วไม่เจอ
-        if ( !$record ) {
+        if (!$record) {
             $data['message'] = 'Record not found.';
             $data['status'] = '204';
             $data['data'] = null;
@@ -1035,8 +1037,23 @@ class ApiController extends Controller
         $record = $record->toArray();
 
         // Get second data (thai)
-        $record_th = Record::select('islands_island', 'gene_bank_number',
-            'local_name', 'folk_wisdom', 'recorder', 'knowledge_remarks')
+        $record_th = Record::select(
+            'individual_count',
+            'locality',
+            'islands_island',
+            'depth_start',
+            'depth_end',
+            'gene_bank_number',
+            'local_name',
+            'folk_wisdom',
+            'recorder',
+            'village_no',
+            'knowledge_remarks',
+            'w_economic_value.name_th AS economic_value',
+            'w_area_exploration.name_th AS area_exploration'
+        )
+            ->leftjoin('wording AS w_economic_value', 'record.economic_value', '=', 'w_economic_value.id')
+            ->leftjoin('wording AS w_area_exploration', 'record.area_exploration', '=', 'w_area_exploration.id')
             ->where('unique_record', $record['unique_record'])
             ->where('language_id', 2)
             ->first()
@@ -1046,7 +1063,15 @@ class ApiController extends Controller
         $result_record = array_merge($record, $record_th);
 
         // Get picture
-        $pics = Picture::select('unique_record', DB::raw("CONCAT('http://mrds.dmcr.go.th/uploads/images/', path_pic) as path_pic"))
+        // $pics = Picture::select('unique_record', DB::raw("CONCAT('http://mrds.dmcr.go.th/uploads/images/', path_pic) as path_pic"))
+        //     ->where('unique_record', $record['unique_record'])
+        //     ->get();
+        $pics = RecordCot3::select('unique_record', 'path_pic')
+            ->where('unique_record', $record['unique_record'])
+            ->get();
+
+        // Get Utilization
+        $utilizations = RecordCot4::select('unique_record', 'utilization_detail')
             ->where('unique_record', $record['unique_record'])
             ->get();
 
@@ -1056,9 +1081,9 @@ class ApiController extends Controller
         $data['data'] = [
             'data' => $result_record,
             'img' => $pics,
+            'utilization' => $utilizations,
         ];;
 
         return Response::json($data, 200);
     }
-
 }
