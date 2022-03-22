@@ -115,12 +115,13 @@ class SearchTypeAController extends Controller
         $data['orders']                 =   Taxonomy::getOrder();
         $data['suborders']              =   Taxonomy::getSuborder();
         $data['infraorders']            =   Taxonomy::getInfraorder();
-        $data['superfamily']          =   Taxonomy::getSuperfamily();
+        $data['superfamily']            =   Taxonomy::getSuperfamily();
         $data['families']               =   Taxonomy::getFamily();
         $data['genuses']                =   Taxonomy::getGenus();
         $data['species']                =   Taxonomy::getSpecies();
         $data['classification']         =   Classification::getClassificationBySciName();
         $data['marinecenters']          =   Marinecenter::getMarineCenterList();
+        $data['typestatuses']           =   Wording::getWordingByWordingTypeForForm(2);
         $data['group_permission_a']     =   $this->group_permission_a;
         $data['group_permission_b']     =   $this->group_permission_b;
         return view('search_type_a.diversity', $data);
@@ -215,10 +216,12 @@ class SearchTypeAController extends Controller
 
         $expan_id               = $input->expan_id;
         $marinecenter_id        = $input->marinecenter_id;
+        $typestatus_id          = $input->typestatus_id;
         $chk_taxa               = $input->chk_taxa;
         $chk_locality           = $input->chk_locality;
         $chk_expedition         = $input->chk_expedition;
         $chk_marinecenter       = $input->chk_marinecenter;
+        $chk_typestatus         = $input->chk_typestatus;
         $map_type               = $input->map_type;
 
         $lang = Session::get('language');
@@ -348,6 +351,13 @@ class SearchTypeAController extends Controller
             $marinecentertext       =  $marinecenter_full->marinecenter . " (" . $marinecenter_full->marinecenter_th . ")";
         }
 
+        if ($typestatus_id != "") {
+            $typestatustext = Wording::getWording($typestatus_id)->name_en;
+            $db = $db->where('r.type_status', $typestatus_id);
+        } else {
+            $typestatustext = "-";
+        }
+
 
         if ($lang == 2) {
             $db = $db->where('r.language_id', 2);
@@ -406,12 +416,7 @@ class SearchTypeAController extends Controller
             'r.end_longitude'
         ]);
 
-
-
-
-
-
-        return ['result_searchs' => $searchResult, 'taxa' => $taxa, 'locality' => $locality, 'expedition' => $expedition, 'is_in_thailand' => $is_in_thailand, 'marinecentertext' => $marinecentertext];
+        return ['result_searchs' => $searchResult, 'taxa' => $taxa, 'locality' => $locality, 'expedition' => $expedition, 'is_in_thailand' => $is_in_thailand, 'marinecentertext' => $marinecentertext, 'typestatustext' => $typestatustext];
     }
 
     public function search_base2(Request $input, $withData = false)
@@ -440,10 +445,12 @@ class SearchTypeAController extends Controller
         $locality_ocean_sea_lake = $input->locality_ocean_sea_lake;
         $expan_id               = $input->expan_id;
         $marinecenter_id        = $input->marinecenter_id;
+        $typestatus_id          = $input->typestatus_id;
         $chk_taxa               = $input->chk_taxa;
         $chk_locality           = $input->chk_locality;
         $chk_expedition         = $input->chk_expedition;
         $chk_marinecenter       = $input->chk_marinecenter;
+        $chk_typestatus         = $input->chk_typestatus;
         $map_type               = $input->map_type;
 
         $dataDistribution = $this->dataDistribution($input);
@@ -476,6 +483,13 @@ class SearchTypeAController extends Controller
                 $checkGetSearch                     = $checkGetSearch && false;
             }
         }
+        if ($chk_typestatus == 1) {
+            if ($typestatus_id != "") {
+                $data['result_searchs']             = null;
+                $data['map']                        = null;
+                $checkGetSearch                     = $checkGetSearch && false;
+            }
+        }
 
         if ($checkGetSearch) {
             $data['map']                        = $dataDistribution['result_searchs']->groupBy('r.unique_record')->skip(0)->take(100)->get();
@@ -494,7 +508,7 @@ class SearchTypeAController extends Controller
         $data['locality']                       = $dataDistribution['locality'];
         $data['taxa']                           = $dataDistribution['taxa'];
         $data['marinecentertext']               = $dataDistribution['marinecentertext'];
-
+        $data['typestatustext']                 = $dataDistribution['typestatustext'];
         $data['map_type']                       = $map_type;
         $data['is_in_thailand']                 = $dataDistribution['is_in_thailand'];
         $data['request'] = $input->All();

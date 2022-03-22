@@ -70,6 +70,19 @@ $("#marinecenter_chkbox").change(function () {
   }
 });
 
+$("#typestatus_chkbox").change(function () {
+  hideSubmit();
+  if (this.checked) {
+    $(".typestatus_select").show();
+    $("#typestatus_id").attr("required", "true");
+    $(".submit_select").show();
+    $(".hr_search").show();
+  } else {
+    $(".typestatus_select").hide();
+    $("#typestatus_id").val($("#typestatus_id option:first").val());
+  }
+});
+
 function hideSubmit() {
   // console.log( $('#expan_chkbox').is(":checked") );
   if (
