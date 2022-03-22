@@ -48,6 +48,7 @@
             var chk_locality = "";
             var chk_expedition = "";
             var chk_marinecenter = "";
+            var chk_typestatus = "";
 
             if( $('#taxa_chkbox').is(":checked") ){
                 chk_taxa        = $('#taxa_chkbox').val();
@@ -60,6 +61,9 @@
             }
             if( $('#marinecenter_chkbox').is(":checked") ){
                 chk_marinecenter  = $('#marinecenter_chkbox').val();
+            }
+            if( $('#typestatus_chkbox').is(":checked") ){
+                chk_typestatus  = $('#typestatus_chkbox').val();
             }
 
             return {
@@ -82,6 +86,7 @@
                         chk_locality: chk_locality,
                         chk_expedition: chk_expedition,
                         chk_marinecenter:chk_marinecenter,
+                        chk_typestatus: chk_typestatus,
 
                         locality_type: $('#dd_locality').val(),
                         locality_country: $('#locality_country').val(),
@@ -92,6 +97,7 @@
 
                         expan_id : $('#expan_id').val(),
                         marinecenter_id : $('#marinecenter_id').val(),
+                        typestatus_id: $('#typestatus_id').val(),
                         
                         lang: 'en'
                     }
@@ -122,6 +128,8 @@
                 $('.taxa_search').html(data['taxa']);
                 $('.expedition_search').html(data['expedition']);
                 $('.marinecenter_search').html(data['marinecentertext']);
+                $('.typestatus_search').html(data['typestatustext']);
+                
                 initDatatable(getCurrentParam());
 
                 @if(false)
@@ -355,7 +363,7 @@
                 <form class="" id="form" action="" method="post">
                 @csrf
                     <div class="row row-inform">
-                        <div class="col-md-8">
+                        <div class="col-md-12">
                             <p class="search-report-dropdown-header">
                                 @if($lang == 2)
                                     ค้นหาโดย
@@ -365,38 +373,52 @@
                             </p>
                             <p class="search-report-dropdown-header">
                                 @if($group_permission_a == 2)
-                                    <label class="checkbox-inline">
-                                        <input type="checkbox" id="taxa_chkbox" value="1">
-                                        @if($lang == 2)
-                                            หมวดหมู่
-                                        @else
-                                            Taxon
-                                        @endif
-                                    </label>
+                                    <div class="col-md-3">
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" id="taxa_chkbox" value="1">
+                                            @if($lang == 2)
+                                                หมวดหมู่
+                                            @else
+                                                Taxon
+                                            @endif
+                                        </label>
+                                    </div>
                                 @endif
 
                                 @if($group_permission_b == 2)
+                                    <div class="col-md-3">
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" id="local_chkbox" value="1">
+                                            @if($lang == 2)
+                                                เชิงพื้นที่
+                                            @else
+                                                Locality
+                                            @endif
+                                        </label>
+                                    </div>
+                                @endif
+                                <div class="col-md-3">
                                     <label class="checkbox-inline">
-                                        <input type="checkbox" id="local_chkbox" value="1">
+                                        <input type="checkbox" id="expan_chkbox" value="1">
                                         @if($lang == 2)
-                                            เชิงพื้นที่
+                                            การสำรวจ
                                         @else
-                                            Locality
+                                            Expedition
                                         @endif
                                     </label>
-                                @endif
-                                <label class="checkbox-inline">
-                                    <input type="checkbox" id="expan_chkbox" value="1">
-                                    @if($lang == 2)
-                                        การสำรวจ
-                                    @else
-                                        Expedition
-                                    @endif
-                                </label>
-                                <label class="checkbox-inline">
-                                <input type="checkbox" id="marinecenter_chkbox" value="1">
-                                @if($lang == 2){{'ศูนย์กลางทางทะเล'}}@else{{'Marine Center'}}@endif
-                                </label>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" id="marinecenter_chkbox" value="1">
+                                    @if($lang == 2){{'ศูนย์กลางทางทะเล'}}@else{{'Marine Center'}}@endif
+                                    </label>
+                                </div>
+                                <div class="col-md-3">
+                                     <label class="checkbox-inline">
+                                         <input type="checkbox" id="typestatus_chkbox" name="chk_typestatus" value="1">
+                                         @if($lang == 2){{'ประเภทสถานะ'}}@else{{'Type Status'}}@endif
+                                     </label>
+                                 </div>
                             </p>
                         </div>
                     </div>
@@ -546,19 +568,34 @@
                         </div>
                     </div>
                     <div class="row row-inform marinecenter_select" style="display:none;">
-                    <div class="col-md-12">
-                        <p class="search-report-dropdown-header">@if($lang == 2){{'ค้นหาตามศูนย์กลางทางทะเล'}}@else{{'Search by Marine Center'}}@endif</p>
-                        <select class="form-control select2" name="marinecenter_id" id="marinecenter_id">
-                            <option selected disabled="" value="0">Select</option>
-                            @foreach ( $marinecenters as $marinecenter )
-                                @if($lang == 2)
-                                    <option value="{{ $marinecenter->id }}">{{ $marinecenter->marinecenter_th }}</option>
-                                @else
-                                    <option value="{{ $marinecenter->id }}">{{ $marinecenter->marinecenter }}</option>
-                                @endif
-                            @endforeach
-                        </select>
+                        <div class="col-md-12">
+                            <p class="search-report-dropdown-header">@if($lang == 2){{'ค้นหาตามศูนย์กลางทางทะเล'}}@else{{'Search by Marine Center'}}@endif</p>
+                            <select class="form-control select2" name="marinecenter_id" id="marinecenter_id">
+                                <option selected disabled="" value="0">Select</option>
+                                @foreach ( $marinecenters as $marinecenter )
+                                    @if($lang == 2)
+                                        <option value="{{ $marinecenter->id }}">{{ $marinecenter->marinecenter_th }}</option>
+                                    @else
+                                        <option value="{{ $marinecenter->id }}">{{ $marinecenter->marinecenter }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
+                    <div class="row row-inform typestatus_select" style="display:none;">
+                        <div class="col-md-12">
+                            <p class="search-report-dropdown-header">@if($lang == 2){{'ค้นหาตามประเภทสถานะ'}}@else{{'Search by Type Status'}}@endif</p>
+                            <select class="form-control select2" name="typestatus_id" id="typestatus_id">
+                                <option selected disabled="" value="0">Select</option>
+                                @foreach ( $typestatuses as $typestatus )
+                                    @if($lang == 2)
+                                        <option value="{{ $typestatus->id }}">{{ $typestatus->name_th }}</option>
+                                    @else
+                                        <option value="{{ $typestatus->id }}">{{ $typestatus->name_en }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
 
                     <div class="row submit_select" style="display:none; text-align:center;">
@@ -663,6 +700,16 @@
                         <span class="record-data" style="margin-right: 30px;"><span class="marinecenter_search"></span></span>
                     </p>
                 </div>
+                <div class="col-md-12">
+                     <p class="record-label search-result">
+                         @if($lang == 2)
+                             ประเภทสถานะ:
+                         @else
+                             Type Status:
+                         @endif
+                         <span class="record-data" style="margin-right: 30px;"><span class="typestatus_search"></span></span>
+                     </p>
+                 </div>
             </div>
         </div>
     </div>
