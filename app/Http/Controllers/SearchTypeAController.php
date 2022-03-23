@@ -88,6 +88,7 @@ class SearchTypeAController extends Controller
         $data['species']                =   Taxonomy::getSpecies();
         $data['classification']         =   Classification::getClassificationBySciName();
         $data['marinecenters']          =   Marinecenter::getMarineCenterList();
+        $data['typestatuses']            =   Wording::getWordingByWordingTypeForForm(2);
         $data['group_permission_a']     =   $this->group_permission_a;
         $data['group_permission_b']     =   $this->group_permission_b;
 

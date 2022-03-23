@@ -100,6 +100,10 @@
                         @if($lang == 2){{'ศูนย์กลางทางทะเล'}}@else{{'Marine Center'}}@endif:
                             <span class="record-data marinecenter_search">{{ $marinecentertext }}</span>
                     </p>
+                    <p class="record-label">
+                        @if($lang == 2){{'ประเภทสถานะ'}}@else{{'Type Status'}}@endif:
+                            <span class="record-data expedition_search">{{ $typestatustext }}</span>
+                    </p>
 
                 </div>
             </div>

@@ -103,13 +103,14 @@ class SearchTypeCController extends Controller
         $data['orders']                 =   Taxonomy::getOrder();
         $data['suborders']              =   Taxonomy::getSuborder();
         $data['infraorders']            =   Taxonomy::getInfraorder();
-        $data['superfamily']          =   Taxonomy::getSuperfamily();
+        $data['superfamily']            =   Taxonomy::getSuperfamily();
         $data['families']               =   Taxonomy::getFamily();
         $data['genuses']                =   Taxonomy::getGenus();
         $data['species']                =   Taxonomy::getSpecies();
         $data['classification']         =   Classification::getClassificationBySciName();
 
         $data['marinecenters']          =   Marinecenter::getMarineCenterList();
+        $data['typestatuses']            =   Wording::getWordingByWordingTypeForForm(2);
         $data['group_permission_a']     =   $this->group_permission_a;
         $data['group_permission_b']     =   $this->group_permission_b;
         return view('search_type_c.distribution', $data);
@@ -235,6 +236,9 @@ class SearchTypeCController extends Controller
         $chk_taxa = $input->chk_taxa;
         $chk_locality =  $input->chk_locality;
         $chk_expedition = $input->chk_expedition;
+        $chk_marinecenter = $input->chk_marinecenter;
+        $chk_typestatus = $input->chk_typestatus;
+
         $header_taxonomy = $input->header_taxonomy;
         $family = $input->family;
         $superfamily = $input->superfamily;
@@ -297,6 +301,7 @@ class SearchTypeCController extends Controller
         $data['locality']                       = $dataDistribution['locality'];
         $data['taxa']                           = $dataDistribution['taxa'];
         $data['marinecentertext']               = $dataDistribution['marinecentertext'];
+        $data['typestatustext']                 = $dataDistribution['typestatustext'];
         $data['map_type']                       = $map_type;
         $data['is_in_thailand']                 = $dataDistribution['is_in_thailand'];
 

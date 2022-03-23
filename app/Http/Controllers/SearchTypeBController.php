@@ -154,12 +154,13 @@ class SearchTypeBController extends Controller
         $data['orders']                 =   Taxonomy::getOrder();
         $data['suborders']              =   Taxonomy::getSuborder();
         $data['infraorders']            =   Taxonomy::getInfraorder();
-        $data['superfamily']          =   Taxonomy::getSuperfamily();
+        $data['superfamily']            =   Taxonomy::getSuperfamily();
         $data['families']               =   Taxonomy::getFamily();
         $data['genuses']                =   Taxonomy::getGenus();
         $data['species']                =   Taxonomy::getSpecies();
         $data['classification']         =   Classification::getClassificationBySciName();
         $data['marinecenters']          =   Marinecenter::getMarineCenterList();
+        $data['typestatuses']           =   Wording::getWordingByWordingTypeForForm(2);
         $data['group_permission_a_manager']         =   $this->group_permission_a_manager;
         $data['group_permission_a_user']            =   $this->group_permission_a_user;
         $data['group_permission_a_board']           =   $this->group_permission_a_board;
@@ -434,10 +435,12 @@ class SearchTypeBController extends Controller
 
         $expan_id               = $input->expan_id;
         $marinecenter_id        = $input->marinecenter_id;
+        $typestatus_id          = $input->typestatus_id;
         $chk_taxa               = $input->chk_taxa;
         $chk_locality           = $input->chk_locality;
         $chk_expedition         = $input->chk_expedition;
-        $chk_marinecenter         = $input->chk_marinecenter;
+        $chk_marinecenter       = $input->chk_marinecenter;
+        $chk_typestatus         = $input->chk_typestatus;
         $map_type               = $input->map_type;
 
         $dataDistribution = $this->dataDistribution($input);
@@ -471,6 +474,13 @@ class SearchTypeBController extends Controller
                 $checkGetSearch                     = $checkGetSearch && false;
             }
         }
+        if ($chk_typestatus == 1) {
+            if ($typestatus_id != "") {
+                $data['result_searchs']             = null;
+                $data['map']                        = null;
+                $checkGetSearch                     = $checkGetSearch && false;
+            }
+        }
 
         if ($checkGetSearch) {
             $data['map']                        = $dataDistribution['result_searchs']->groupBy('r.unique_record')->skip(0)->take(100)->get();
@@ -488,6 +498,7 @@ class SearchTypeBController extends Controller
         $data['locality']                       = $dataDistribution['locality'];
         $data['taxa']                           = $dataDistribution['taxa'];
         $data['marinecentertext']               = $dataDistribution['marinecentertext'];
+        $data['typestatustext']                 = $dataDistribution['typestatustext'];
         $data['map_type']                       = $map_type;
         $data['lang']                           = 1;
         $data['request'] = $input->All();
@@ -586,10 +597,12 @@ class SearchTypeBController extends Controller
 
         $expan_id               = $input->expan_id;
         $marinecenter_id        = $input->marinecenter_id;
+        $typestatus_id          = $input->typestatus_id;
         $chk_taxa               = $input->chk_taxa;
         $chk_locality           = $input->chk_locality;
         $chk_expedition         = $input->chk_expedition;
-        $chk_marinecenter         = $input->chk_marinecenter;
+        $chk_marinecenter       = $input->chk_marinecenter;
+        $chk_typestatus         = $input->chk_typestatus;
         $map_type               = $input->map_type;
 
         $db = new Classification;
@@ -713,6 +726,12 @@ class SearchTypeBController extends Controller
         } else {
             $marinecentertext = "-";
         }
+        if ($typestatus_id != "") {
+            $typestatustext = Wording::getWording($typestatus_id)->name_en;
+            $db = $db->where('r.type_status', $typestatus_id);
+        } else {
+            $typestatustext = "-";
+        }
 
 
         if ($lang == 2) {
@@ -776,7 +795,7 @@ class SearchTypeBController extends Controller
 
 
 
-        return ['result_searchs' => $searchResult, 'taxa' => $taxa, 'locality' => $locality, 'expedition' => $expedition, 'is_in_thailand' => $is_in_thailand, 'marinecentertext' => $marinecentertext];
+        return ['result_searchs' => $searchResult, 'taxa' => $taxa, 'locality' => $locality, 'expedition' => $expedition, 'is_in_thailand' => $is_in_thailand, 'marinecentertext' => $marinecentertext, 'typestatustext' => $typestatustext];
     }
 
     public function distributionBAsDataTable(Request $input)

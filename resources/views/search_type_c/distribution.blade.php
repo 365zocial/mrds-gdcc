@@ -70,26 +70,40 @@
                         </p>
                         <p class="search-report-dropdown-header radio">
                             @if($group_permission_a == 2)
-                                <label class="checkbox-inline">
-                                    <input type="checkbox" id="taxa_chkbox" name="chk_taxa" value="1">
-                                    @if($lang == 2){{'หมวดหมู่'}}@else{{'Taxon'}}@endif
-                                </label>
+                                <div class="col-md-3">
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" id="taxa_chkbox" name="chk_taxa" value="1">
+                                        @if($lang == 2){{'หมวดหมู่'}}@else{{'Taxon'}}@endif
+                                    </label>
+                                </div>
                             @endif
 
                             @if($group_permission_b == 2)
-                                <label class="checkbox-inline">
-                                    <input type="checkbox" id="local_chkbox" name="chk_locality" value="1">
-                                    @if($lang == 2){{'เชิงพื้นที่'}}@else{{'Locality'}}@endif
-                                </label>
+                                <div class="col-md-3">
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" id="local_chkbox" name="chk_locality" value="1">
+                                        @if($lang == 2){{'เชิงพื้นที่'}}@else{{'Locality'}}@endif
+                                    </label>
+                                </div>
                             @endif
-                            <label class="checkbox-inline">
-                                <input type="checkbox" id="expan_chkbox" name="chk_expedition" value="1">
-                                @if($lang == 2){{'การสำรวจ'}}@else{{'Expedition'}}@endif
-                            </label>
-                            <label class="checkbox-inline">
-                                <input type="checkbox" id="marinecenter_chkbox" name="chk_marinecenter" value="1">
-                                @if($lang == 2){{'ศูนย์กลางทางทะเล'}}@else{{'Marine Center'}}@endif
-                            </label>
+                            <div class="col-md-3">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="expan_chkbox" name="chk_expedition" value="1">
+                                    @if($lang == 2){{'การสำรวจ'}}@else{{'Expedition'}}@endif
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="marinecenter_chkbox" name="chk_marinecenter" value="1">
+                                    @if($lang == 2){{'ศูนย์กลางทางทะเล'}}@else{{'Marine Center'}}@endif
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="typestatus_chkbox" name="chk_typestatus" value="1">
+                                    @if($lang == 2){{'ประเภทสถานะ'}}@else{{'Type Status'}}@endif
+                                </label>
+                            </div>
                         </p>
                     </div>
                 </div>
@@ -248,6 +262,21 @@
                         </select>
                     </div>
                 </div>
+                <div class="row row-inform typestatus_select" style="display:none;">
+                     <div class="col-md-12">
+                         <p class="search-report-dropdown-header">@if($lang == 2){{'ค้นหาตามประเภทสถานะ'}}@else{{'Search by Type Status'}}@endif</p>
+                         <select class="form-control select2" name="typestatus_id" id="typestatus_id">
+                             <option selected disabled="" value="0">Select</option>
+                             @foreach ( $typestatuses as $typestatus )
+                                 @if($lang == 2)
+                                     <option value="{{ $typestatus->id }}">{{ $typestatus->name_th }}</option>
+                                 @else
+                                     <option value="{{ $typestatus->id }}">{{ $typestatus->name_en }}</option>
+                                 @endif
+                             @endforeach
+                         </select>
+                     </div>
+                 </div>
 
                 <div class="row submit_select" style="display:none; text-align:center;">
                     <div class="col-md-12 btn-action-box">
