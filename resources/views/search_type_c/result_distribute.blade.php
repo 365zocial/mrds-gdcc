@@ -236,7 +236,7 @@
 
     $(function() {
         $('#distributeDataTable').DataTable({
-                order: [2, 'asc'],
+                // order: [2, 'asc'],
                 // bFilter: true,
                 // bLengthChange: true,
                 // "paging": true,
