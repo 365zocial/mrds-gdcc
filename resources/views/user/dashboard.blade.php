@@ -202,6 +202,25 @@
                 </a>
             </div>
 
+            <div class="col-md-3 menu-box">
+                <a class="box-link" href="{{ url('search/utilization') }}">
+                    <div class="menu-icon-box">
+                        <div>
+                            <img class="icon img-responsive" src='{{ URL::asset("assets/images/icon_dashboard_user/recent_record.png") }}' />
+                        </div>
+                        <p class="menu-text">
+                            @if( $lang == 2)
+                            การใช้ประโยชน์
+                            <br>&nbsp;
+                            @else
+                            Utilization
+                            @endif
+                            <br>&nbsp;
+                        </p>
+                    </div>
+                </a>
+            </div>
+
         </div>
 
         <div class="row row-with-margin" style="padding-top: 30px;">

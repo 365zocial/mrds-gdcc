@@ -40,8 +40,13 @@ Route::group(['middleware' => ['CheckAuthened']], function () {
         Route::get('NameRecord', 'SearchTypeCController@searchByNameRecord');
         Route::post('doNameRecord', 'SearchTypeCController@doSearchNameRecord'); //Ajax
 
+        Route::get('utilization', 'SearchTypeCController@searchByUtilization');
+        Route::post('searchUtilization', 'SearchTypeCController@searchUtilization'); //Ajax
+        Route::post('utilizationCAsDataTable', 'SearchTypeCController@utilizationCAsDataTable')->name('typec.utilization.datatable'); //Ajax
+
         Route::post('exportSearchTypeA', 'ExportRecordController@exportSearchTypeA'); //Ajax
         Route::post('exportDistributionSearch', 'ExportRecordController@exportDistributionSearch')->name('typec.distribution.export'); //Ajax
+        Route::post('exportUtilizationSearch', 'ExportRecordController@exportUtilizationSearch')->name('typec.utilization.export'); //Ajax
 
     });
 

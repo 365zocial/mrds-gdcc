@@ -1028,4 +1028,251 @@ class SearchTypeCController extends Controller
             ->addIndexColumn()
             ->make(true);
     }
+
+    //Sorawit
+    //Created : 25-03-65
+    # ใช้ข้อมูล record เพื่อแสดงข้อมูลการใช้ประโยชน์
+    public function searchByUtilization()
+    {
+        $this->getPermission();
+
+        $data['lang']   = Session::get('language');
+        $data['expeditions']            =   Wording::getWordingByWordingTypeForFormSortByLang(6, 1);    // sort eng lang
+        $data['countries']              =   json_decode(Country::getCountryListForFormEN());
+        $data['provinces']              =   json_decode(Province::getProvinceListForFormEN());
+        $data['districts']              =   json_decode(District::getDistrictListForFormEN());
+        $data['counties']               =   json_decode(County::getCountyListForFormEN());
+        $data['ocean_sea_lake']         =   Wording::getWordingByWordingTypeForForm(3);
+        $data['domains']                =   Taxonomy::getDomain();
+        $data['kingdoms']               =   Taxonomy::getKingdom();
+        $data['phylums']                =   Taxonomy::getPhylum();
+        $data['subphylums']             =   Taxonomy::getSubphylum();
+        $data['classes']                =   Taxonomy::getClass();
+        $data['orders']                 =   Taxonomy::getOrder();
+        $data['suborders']              =   Taxonomy::getSuborder();
+        $data['infraorders']            =   Taxonomy::getInfraorder();
+        $data['superfamily']            =   Taxonomy::getSuperfamily();
+        $data['families']               =   Taxonomy::getFamily();
+        $data['genuses']                =   Taxonomy::getGenus();
+        $data['species']                =   Taxonomy::getSpecies();
+        $data['classification']         =   Classification::getClassificationBySciName();
+        $data['marinecenters']          =   Marinecenter::getMarineCenterList();
+        $data['typestatuses']            =   Wording::getWordingByWordingTypeForForm(2);
+        $data['group_permission_a']     =   $this->group_permission_a;
+        $data['group_permission_b']     =   $this->group_permission_b;
+        return view('search_type_c.utilization', $data);
+    }
+
+    public function searchUtilization(Request $input)
+    {
+        $data = $this->search_base_utilization($input);
+        return Response::json($data);
+    }
+
+    public function search_base_utilization(Request $input, $withData = false)
+    {
+        $lang = Session::get('language');
+
+        $dataUtilization = $this->dataUtilization($input);
+
+        $data['lang_table']                     = $lang;
+        $data['expedition']                     = $dataUtilization['expedition'];
+        $data['locality']                       = $dataUtilization['locality'];
+        $data['taxa']                           = $dataUtilization['taxa'];
+        $data['marinecentertext']               = $dataUtilization['marinecentertext'];
+        $data['typestatustext']                 = $dataUtilization['typestatustext'];
+        $data['is_in_thailand']                 = $dataUtilization['is_in_thailand'];
+        $data['request'] = $input->All();
+
+        return $data;
+    }
+
+    //แยกส่วนการเตรียมข้อมูลออกมา เพื่อใช้ใน Datatable ด้วย
+    public static function dataUtilization(Request $input)
+    {
+        $header_taxonomy        = $input->header_taxonomy;
+        $domain                 = $input->domain;
+        $kingdom                = $input->kingdom;
+        $phylum                 = $input->phylum;
+        $subphylum              = $input->subphylum;
+        $class                  = $input->class;
+        $order_o                = $input->order_o;
+        $suborder               = $input->suborder;
+        $infraorder             = $input->infraorder;
+        $superfamily            = $input->superfamily;
+        $family                 = $input->family;
+        $genus                  = $input->genus;
+        $species                = $input->species;
+        $classification         = $input->classification;
+        $locality_type          = $input->locality_type;
+        $locality_country       = $input->locality_country;
+        $locality_province      = $input->locality_province;
+        $locality_district      = $input->locality_district;
+        $locality_county        = $input->locality_county;
+        $locality_ocean_sea_lake = $input->locality_ocean_sea_lake;
+        $expan_id               = $input->expan_id;
+        $marinecenter_id        = $input->marinecenter_id;
+        $typestatus_id          = $input->typestatus_id;
+
+        $lang = Session::get('language');
+        $db = new Classification;
+        $db = $db->leftjoin('record as r', 'classification.id', '=', 'r.classification_id');
+        $db = $db->leftjoin('marinecenter', 'r.marinecenter_id', '=', 'marinecenter.id');
+        $db = $db->leftjoin('record_detail4', 'r.unique_record', '=', 'record_detail4.unique_record');
+        $db = $db->leftjoin('wording as w_economic_value', 'r.economic_value', '=', 'w_economic_value.id');
+        $db = $db->leftjoin('wording as w_living', 'classification.living', '=', 'w_living.id');
+        $db = $db->leftjoin('wording as w_protection_thai_law', 'classification.protection_thai_law', '=', 'w_protection_thai_law.id');
+        $db = $db->leftjoin('wording as w_thai_red_list', 'classification.thai_red_list', '=', 'w_thai_red_list.id');
+        $db = $db->leftjoin('wording as w_protection_iucn_2019', 'classification.protection_iucn_2019', '=', 'w_protection_iucn_2019.id');
+        $db = $db->leftjoin('wording as w_protection_cites', 'classification.protection_cites', '=', 'w_protection_cites.id');
+
+        $id_taxa = 0;
+        if ($header_taxonomy == "domain" && $domain != "") {
+            $id_taxa        = $domain;
+            $db             = $db->where('classification.domain', $domain);
+        } else if ($header_taxonomy == "kingdom" && $kingdom != "") {
+            $id_taxa        = $kingdom;
+            $db             = $db->where('classification.kingdom', $kingdom);
+        } else if ($header_taxonomy == "phylum" && $phylum != "") {
+            $id_taxa        = $phylum;
+            $db             = $db->where('classification.phylum', $phylum);
+        } else if ($header_taxonomy == "subphylum" && $subphylum != "") {
+            $id_taxa        = $subphylum;
+            $db             = $db->where('classification.subphylum', $subphylum);
+        } else if ($header_taxonomy == "class" && $class != "") {
+            $id_taxa        = $class;
+            $db             = $db->where('classification.class', $class);
+        } else if ($header_taxonomy == "order_o" && $order_o != "") {
+            $id_taxa        = $order_o;
+            $db             = $db->where('classification.order_o', $order_o);
+        } else if ($header_taxonomy == "suborder" && $suborder != "") {
+            $id_taxa        = $suborder;
+            $db             = $db->where('classification.suborder', $suborder);
+        } else if ($header_taxonomy == "infraorder" && $infraorder != "") {
+            $id_taxa        = $infraorder;
+            $db             = $db->where('classification.infraorder', $infraorder);
+        } else if ($header_taxonomy == "superfamily" && $superfamily != "") {
+            $id_taxa        = $family;
+            $db             = $db->where('classification.superfamily', $superfamily);
+        } else if ($header_taxonomy == "family" && $family != "") {
+            $id_taxa        = $family;
+            $db             = $db->where('classification.family', $family);
+        } else if ($header_taxonomy == "genus" && $genus != "") {
+            $id_taxa        = $genus;
+            $db             = $db->where('classification.genus', $genus);
+        } else if ($header_taxonomy == "species" && $species != "") {
+            $id_taxa        = $species;
+            $db             = $db->where('classification.species', $species);
+        } else if ($header_taxonomy == "classification" && $classification != "") {
+            $id_taxa        = $classification;
+            $db             = $db->where('classification.id', $classification);
+        }
+
+        if ($header_taxonomy == "classification" && $classification != "") {
+            $classification_full = Classification::getClassificationWording($id_taxa);
+            $taxa               = "Species" . " - " . $classification_full->current_scientific_name_format;
+        } else if ($header_taxonomy != "" && $id_taxa != 0) {
+            $taxa_full          = Taxonomy::getTaxonomyWording($id_taxa);
+            $taxa               = ucfirst($header_taxonomy) . " - " . $taxa_full->name;
+        } else {
+            $taxa               = "-";
+        }
+
+        #-----------------------------------------------------------#
+
+        if ($locality_type == "country" && $locality_country != "") {
+            $locality_full  = Country::getCountryWording($locality_country);
+            $is_in_thailand = $locality_full->id == 1;
+            $locality       = ucfirst($locality_type) . " - " . $locality_full->country_en . " (" . $locality_full->country_th . ")";
+            $db             = $db->where('r.country', $locality_country);
+        } else if ($locality_type == "province" && $locality_province != "") {
+            $locality_full  = Province::getProvinceWording($locality_province);
+            $is_in_thailand = $locality_full->country_id == 1;
+            $locality       = ucfirst($locality_type) . " - " . $locality_full->province_en . " (" . $locality_full->province_th . ")";
+            $db             = $db->where('r.province', $locality_province);
+        } elseif ($locality_type == "district" && $locality_district != "") {
+            $locality_full  = District::getDistrictWording($locality_district);
+            $is_in_thailand = $locality_full->country_id == 1;
+            $locality       = ucfirst($locality_type) . " - " . $locality_full->district_en . " (" . $locality_full->district_th . ")";
+            $db             = $db->where('r.county', $locality_district);
+        } elseif ($locality_type == "county" && $locality_county != "") {
+            $locality_full  = County::getCountyWording($locality_county);
+            $is_in_thailand = $locality_full->country_id == 1;
+            $locality       = ucfirst($locality_type) . " - " . $locality_full->county_en . " (" . $locality_full->county_th . ")";
+            $db             = $db->where('r.county', $locality_county);
+        } elseif ($locality_type == "ocean_sea_lake" && $locality_ocean_sea_lake != "") {
+            $locality_full  = Wording::getWording($locality_ocean_sea_lake);
+            $locality       = ucfirst('Ocean/Sea/Lake') . " - " . $locality_full->name_en . " (" . $locality_full->name_th . ")";
+            $is_in_thailand = false;
+            $db             = $db->where('r.ocean_sea_lake', $locality_ocean_sea_lake);
+        } else {
+            $locality       = "-";
+            $is_in_thailand = false;
+        }
+
+        if ($expan_id != "") {
+            $expedition = Wording::getWording($expan_id)->name_en . " (" . Wording::getWording($expan_id)->name_th . ")";
+            $db = $db->where('r.expedition', $expan_id);
+        } else {
+            $expedition = "-";
+        }
+        if ($marinecenter_id != "") {
+            $marinecenter_full  = Marinecenter::getMarineCenter($marinecenter_id);
+            $marinecentertext       =  $marinecenter_full->marinecenter . " (" . $marinecenter_full->marinecenter_th . ")";
+            $db             = $db->where('r.marinecenter_id', $marinecenter_id);
+        } else {
+            $marinecentertext = "-";
+        }
+        if ($typestatus_id != "") {
+            $typestatustext = Wording::getWording($typestatus_id)->name_en;
+            $db = $db->where('r.type_status', $typestatus_id);
+        } else {
+            $typestatustext = "-";
+        }
+
+        $db = $db->where('r.language_id', 2);   // เพราะ field ที่แสดงเป็นภาษาไทย
+
+        $db = $db->where('approve_status', 1);
+        $db = $db->where('r.status', 2);
+
+        $searchResult = $db->select([
+            'marinecenter.marinecenter_th',
+            'r.related_catalog_item',
+            'r.related_reference_item',
+            'classification.current_scientific_name_format',
+            'classification.current_scientific_name',
+            'classification.common_name',
+            'r.local_name',
+            'record_detail4.utilization_detail as utilization',
+            'r.folk_wisdom',
+            'r.recorder',
+            'r.knowledge_remarks',
+            'w_economic_value.name_th as economic_value_th',
+            'w_living.name_th as living_th',
+            'w_protection_thai_law.name_th as protection_thai_law_th',
+            'w_thai_red_list.name_th as thai_red_list_th',
+            'w_protection_iucn_2019.name_th as protection_iucn_2019_th',
+            'w_protection_cites.name_th as protection_cites_th'
+        ]);
+
+
+        return ['result_searchs' => $searchResult,  'taxa' => $taxa, 'locality' => $locality, 'expedition' => $expedition, 'is_in_thailand' => $is_in_thailand, 'marinecentertext' => $marinecentertext, 'typestatustext' => $typestatustext];
+    }
+
+    //sorawit
+    //Created : 28-3-65
+    #แยก query ของ name record ออกมา
+    public function utilizationCAsDataTable(Request $input)
+    {
+        $data  = $this->dataUtilization($input);
+        //supakorn 
+        //diversity must show only current name in change request#4 No1
+        return Datatables::of($data['result_searchs'])
+            ->addColumn('cate_ref', function ($row) {
+                return $row->related_catalog_item . $row->related_reference_item;
+            })
+            ->rawColumns(['current_scientific_name_format', 'previous_scientific_name_format'])
+            ->addIndexColumn()
+            ->make(true);
+    }
 }

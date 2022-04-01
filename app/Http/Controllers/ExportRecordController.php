@@ -2388,6 +2388,169 @@ class ExportRecordController extends Controller
         echo $name_file . '.csv';
     }
 
+    //sorawit
+    //Created : 31-3-65
+    # Utilization Search in type C 
+    public static function exportUtilizationSearch(Request $input)
+    {
+        $way = $input->way; // เผื่อไว้กรณีมีผลการค้นหาที่ รายการสามารถซ้ำได้ และจะต้องใช้เป็นส่วนหนึ่งของชื่อไฟล์ด้วย
+        $results = (object) SearchTypeCController::dataUtilization($input);
+        $results->result_searchs = $results->result_searchs->get();
+
+        ExportRecordController::printUtilizationExcelRecord($results, $way);
+    }
+
+    //sorawit
+    //Created : 31-3-65
+    # use in search Utilization Search
+    public static function printUtilizationExcelRecord($results, $way)
+    {
+        // created export date
+        $date = date_create();
+        $date_export = date_format($date, "d-m-Y H:i:s");
+        $date_export_file_name = date_format($date, "Y-m-d_H-i-s");
+
+        //---- make file excel ----
+        $name_file = 'Excel_Record_' . $way . '_' . $date_export_file_name;
+        Excel::create($name_file, function ($excel) use ($results, $way, $date_export) {
+            $excel->sheet('Record Data', function ($sheet) use ($results, $way, $date_export) {
+
+                //--- Set Parameter ---
+                if (Auth::check()) {
+                    $user_name = Auth::user()->first_name . ' ' . Auth::user()->last_name . ' (' . Auth::user()->telephone . ') (' . Auth::user()->email . ')';
+                } else {
+                    $user_name = "Unknown";
+                }
+                //--- ------------- ---
+
+                # For Utilization Search
+                if ($way == 'Utilization_Search') {
+                    //--- Set Layout and Style ---
+                    $sheet->mergeCells('A2:P2');
+                    $sheet->mergeCells('A3:P3');
+                    $sheet->mergeCells('A4:P4');
+                    $sheet->mergeCells('A5:P5');
+                    $sheet->mergeCells('A6:P6');
+                    $sheet->mergeCells('A7:P7');
+                    $sheet->mergeCells('A8:P8');
+                    $sheet->mergeCells('A9:P9');
+                    $sheet->mergeCells('A10:P10');
+                    $sheet->mergeCells('A11:P11');
+                    $sheet->mergeCells('A12:P12');
+
+                    $sheet->setHeight(2, 30);
+                    $sheet->setHeight(6, 30);
+                    $sheet->setHeight(14, 30);
+
+                    $sheet->row(2, function ($row) {
+                        $row->setBackground('#FE9529');
+                    });
+                    $sheet->row(6, function ($row) {
+                        $row->setBackground('#FE9529');
+                    });
+                    $sheet->row(14, function ($row) {
+                        $row->setBackground('#FE9529');
+                    });
+
+                    $sheet->cell('A2:P2', function ($cells) {
+                        $cells->setFontSize(20);
+                    });
+                    $sheet->cell('A6:P6', function ($cells) {
+                        $cells->setFontSize(20);
+                    });
+                    $sheet->cell('A14:P14', function ($cells) {
+                        $cells->setFontSize(16);
+                    });
+
+                    $sheet->cells('A2:P2', function ($cells) {
+                        $cells->setFontWeight('bold');
+                    });
+                    $sheet->cells('A6:P6', function ($cells) {
+                        $cells->setFontWeight('bold');
+                    });
+                    $sheet->cells('A14:P14', function ($cells) {
+                        $cells->setFontWeight('bold');
+                        $cells->setAlignment('center');
+                        $cells->setValignment('middle');
+                    });
+
+                    $sheet->setBorder('A14:P14', 'thin');
+                    //--- -------------------- ---
+
+                    //--- Header Part ---
+                    if ($results == null) {
+                        $results->taxa = '-';
+                        $$results->locality = '-';
+                        $results->expedition = '-';
+                    }
+                    $sheet->row(2, array('Export Information'));
+                    $sheet->row(3, array('Export By: ' . $user_name));
+                    $sheet->row(4, array('Date Export: ' . $date_export));
+                    $sheet->row(6, array('Data Information'));
+                    $sheet->row(7, array('Search Type: ' . $way));
+                    $sheet->row(8, array('Taxonomy: ' . $results->taxa));
+                    $sheet->row(9, array('Locality: ' . $results->locality));
+                    $sheet->row(10, array('Expedition: ' . $results->expedition));
+                    $sheet->row(11, array('Marine Center: ' . $results->marinecentertext));
+                    $sheet->row(12, array('Type Status: ' . $results->typestatustext));
+                    //--- ----------- ---
+
+                    //--- Header Table Part ---
+                    $arr_header = array();
+                    $arr_header = ['No.', 'ID', 'Marine Center', 'Current Name', 'Common Name', 'Local Name', 'Utilization', 'Folk Wisdom', 'Recorder', 'Knowledge Remarks', 'Economic Value', 'Living', 'Protection Thai Law', 'Protection Thai RedList', 'Protection IUCN 2019', 'Protection CITES'];
+                    $sheet->row(14, $arr_header);
+                    //--- ----------------- ---
+
+                    //--- Content Part ---
+                    // display data
+                    $row_number = 15;   // start line
+                    $count_line = 1;   // count line for No.
+                    if ($results != null) {
+                        foreach ($results->result_searchs as $data) {
+                            // make array content
+                            $arr_content = array();
+                            $arr_content = [
+                                $count_line,
+                                $data->related_catalog_item . $data->related_reference_item,
+                                $data->marinecenter_th,
+                                html_entity_decode($data->current_scientific_name),
+                                $data->common_name,
+                                $data->local_name,
+                                $data->utilization,
+                                $data->folk_wisdom,
+                                $data->recorder,
+                                $data->knowledge_remarks,
+                                $data->economic_value_th,
+                                $data->living_th,
+                                $data->protection_thai_law_th,
+                                $data->thai_red_list_th,
+                                $data->protection_iucn_2019_th,
+                                $data->protection_cites_th
+                            ];
+
+                            // write in file
+                            $sheet->row($row_number, $arr_content);
+
+                            //--- Set Layout and Style ---
+                            $sheet->setBorder('A' . $row_number . ':P' . $row_number, 'thin');
+                            //--- -------------------- ---
+
+                            $row_number++;
+                            $count_line++;
+                        }
+                    }
+                    //--- ------------ ---
+                }
+            });
+        })->store('csv', Config::get('path.export_record_file_path'));
+
+        // save export log : 0 is excel, 1 is pdf, 2 is api
+        ExportLog::saveExportLog(0, $name_file);
+
+        // sent name_file for download
+        echo $name_file . '.csv';
+    }
+
     // ห้ามลบ
 
     // //Sorawit
