@@ -2402,8 +2402,6 @@ class ExportRecordController extends Controller
                                 ];
                             }
 
-                            dd($arr_content);
-
                             // write in file
                             $sheet->row($row_number, $arr_content);
 
