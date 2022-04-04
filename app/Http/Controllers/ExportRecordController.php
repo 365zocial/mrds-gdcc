@@ -1955,6 +1955,7 @@ class ExportRecordController extends Controller
             $excel->sheet('Record Data', function ($sheet) use ($results, $way, $date_export) {
 
                 $lang = Session::get('language');   // เช็คภาษาสำหรับ distribution
+                if(is_null($lang)) $lang = 1;   // ถ้าไม่มีการเลือกภาษามาให้เป็นภาษาอังกฤษ
 
                 //--- Set Parameter ---
                 if (Auth::check()) {
