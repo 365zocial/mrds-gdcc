@@ -115,7 +115,7 @@
                                     <label class="checkbox-inline">
                                         <input type="checkbox" id="marinecenter_chkbox" value="1">
                                         @if($lang == 2)
-                                            ศูนย์กลางทางทะเล
+                                            หน่วยงานย่อยภายใต้ ทช.
                                         @else
                                             Marine Center
                                         @endif
@@ -296,7 +296,7 @@
                 </div>
                 <div class="row row-inform marinecenter_select" style="display:none;">
                     <div class="col-md-12">
-                        <p class="search-report-dropdown-header">@if($lang == 2){{'ค้นหาตามศูนย์กลางทางทะเล'}}@else{{'Search by Marine Center'}}@endif</p>
+                        <p class="search-report-dropdown-header">@if($lang == 2){{'ค้นหาตามหน่วยงานย่อยภายใต้ ทช.'}}@else{{'Search by Marine Center'}}@endif</p>
                         <select class="form-control select2" name="marinecenter_id" id="marinecenter_id">
                             <option selected disabled="" value="0">Select</option>
                             @foreach ( $marinecenters as $marinecenter )
@@ -405,7 +405,7 @@
                 <div class="col-md-12">
                     <p class="record-label search-result">
                         @if($lang == 2)
-                            ศูนย์กลางทางทะเล:
+                            หน่วยงานย่อยภายใต้ ทช.:
                         @else
                             Marine Center:
                         @endif

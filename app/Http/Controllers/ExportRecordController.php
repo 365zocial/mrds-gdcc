@@ -1949,6 +1949,8 @@ class ExportRecordController extends Controller
         $date_export = date_format($date, "d-m-Y H:i:s");
         $date_export_file_name = date_format($date, "Y-m-d_H-i-s");
 
+        $lang = Session::get('language');
+
         //---- make file excel ----
         $name_file = 'Excel_Record_' . $way . '_' . $date_export_file_name;
         Excel::create($name_file, function ($excel) use ($results, $way, $date_export) {
@@ -1997,10 +1999,12 @@ class ExportRecordController extends Controller
                     $sheet->mergeCells('A9:K9');
                     $sheet->mergeCells('A10:K10');
                     $sheet->mergeCells('A11:K11');
+                    $sheet->mergeCells('A12:K12');
+                    $sheet->mergeCells('A13:K13');
 
                     $sheet->setHeight(2, 30);
                     $sheet->setHeight(6, 30);
-                    $sheet->setHeight(12, 30);
+                    $sheet->setHeight(14, 30);
 
                     $sheet->row(2, function ($row) {
                         $row->setBackground('#FE9529');
@@ -2008,7 +2012,7 @@ class ExportRecordController extends Controller
                     $sheet->row(6, function ($row) {
                         $row->setBackground('#FE9529');
                     });
-                    $sheet->row(12, function ($row) {
+                    $sheet->row(14, function ($row) {
                         $row->setBackground('#FE9529');
                     });
 
@@ -2018,7 +2022,7 @@ class ExportRecordController extends Controller
                     $sheet->cell('A6:K6', function ($cells) {
                         $cells->setFontSize(20);
                     });
-                    $sheet->cell('A12:K12', function ($cells) {
+                    $sheet->cell('A14:K14', function ($cells) {
                         $cells->setFontSize(16);
                     });
 
@@ -2028,13 +2032,13 @@ class ExportRecordController extends Controller
                     $sheet->cells('A6:K6', function ($cells) {
                         $cells->setFontWeight('bold');
                     });
-                    $sheet->cells('A12:K12', function ($cells) {
+                    $sheet->cells('A14:K14', function ($cells) {
                         $cells->setFontWeight('bold');
                         $cells->setAlignment('center');
                         $cells->setValignment('middle');
                     });
 
-                    $sheet->setBorder('A12:K12', 'thin');
+                    $sheet->setBorder('A14:K14', 'thin');
                     //--- -------------------- ---
 
                     //--- Header Part ---
@@ -2042,6 +2046,8 @@ class ExportRecordController extends Controller
                         $results->taxa = '-';
                         $$results->locality = '-';
                         $results->expedition = '-';
+                        $results->marinecentertext = '-';
+                        $results->typestatustext = '-';
                     }
                     $sheet->row(2, array('Export Information'));
                     $sheet->row(3, array('Export By: ' . $user_name));
@@ -2051,25 +2057,27 @@ class ExportRecordController extends Controller
                     $sheet->row(8, array('Taxonomy: ' . $results->taxa));
                     $sheet->row(9, array('Locality: ' . $results->locality));
                     $sheet->row(10, array('Expedition: ' . $results->expedition));
+                    $sheet->row(11, array('Marine Center: ' . $results->marinecentertext));
+                    $sheet->row(12, array('Type Status: ' . $results->typestatustext));
                     //--- ----------- ---
 
                     //--- Header Table Part ---
                     $arr_header = array();
                     if ($group_permission_a == 2 && $group_permission_b == 2) {
-                        $arr_header = ['No.', 'Phylum', 'Subphylum', 'Class (Clade)', 'Order (Clade)', 'Suborder (Clade)', 'Infraorder (Clade)', 'Family (Clade)', 'Current Name', 'Ocean/Sea/Lake', 'Country', 'Province', 'Expendition'];
+                        $arr_header = ['ID', 'Phylum', 'Subphylum', 'Class', 'Order', 'Suborder', 'Infraorder', 'Super Family', 'Family', 'Current Name'];
                     } elseif ($group_permission_a == 2 && $group_permission_b == 1) {
-                        $arr_header = ['No.', 'Phylum', 'Subphylum', 'Class (Clade)', 'Order (Clade)', 'Suborder (Clade)', 'Infraorder (Clade)', 'Family (Clade)', 'Current Name', 'Expendition'];
+                        $arr_header = ['ID', 'Phylum', 'Subphylum', 'Class', 'Order', 'Suborder', 'Infraorder', 'Super Family', 'Family', 'Current Name'];
                     } elseif ($group_permission_a == 1 && $group_permission_b == 2) {
-                        $arr_header = ['No.', 'Current Name', 'Ocean/Sea/Lake', 'Country', 'Province', 'Expendition'];
+                        $arr_header = ['ID', 'Current Name'];
                     } else {
-                        $arr_header = ['No.', 'Current Name', 'Expendition'];
+                        $arr_header = ['ID', 'Current Name'];
                     }
-                    $sheet->row(12, $arr_header);
+                    $sheet->row(14, $arr_header);
                     //--- ----------------- ---
 
                     //--- Content Part ---
                     // display data
-                    $row_number = 13;   // start line
+                    $row_number = 15;   // start line
                     $count_line = 1;   // count line for No.
                     if ($results != null) {
                         foreach ($results->result_searchs as $data) {
@@ -2084,24 +2092,23 @@ class ExportRecordController extends Controller
                             $arr_content = array();
                             if ($group_permission_a == 2 && $group_permission_b == 2) {
                                 $arr_content = [
-                                    $count_line, $data->phylum, $data->subphylum, $data->class,
-                                    $data->order_o, $data->suborder, $data->infraorder, $data->family,
-                                    html_entity_decode($data->current_scientific_name), $data->ocean_sea_lake_en . '/' . $data->ocean_sea_lake_th, $data->country_en . '/' . $data->country_th, $data->province_en . '/' . $data->province_th,
-                                    $expedition
+                                    $data->related_catalog_item . $data->related_reference_item, $data->phylum, $data->subphylum, $data->class,
+                                    $data->order_o, $data->suborder, $data->infraorder, $data->superfamily, $data->family,
+                                    html_entity_decode($data->current_scientific_name)
                                 ];
                             } elseif ($group_permission_a == 2 && $group_permission_b == 1) {
                                 $arr_content = [
-                                    $count_line, $data->phylum, $data->subphylum, $data->class,
-                                    $data->order_o, $data->suborder, $data->infraorder, $data->family,
-                                    html_entity_decode($data->current_scientific_name), $expedition
+                                    $data->related_catalog_item . $data->related_reference_item, $data->phylum, $data->subphylum, $data->class,
+                                    $data->order_o, $data->suborder, $data->infraorder, $data->superfamily, $data->family,
+                                    html_entity_decode($data->current_scientific_name)
                                 ];
                             } elseif ($group_permission_a == 1 && $group_permission_b == 2) {
                                 $arr_content = [
-                                    $count_line, html_entity_decode($data->current_scientific_name), $data->ocean_sea_lake_en . '/' . $data->ocean_sea_lake_th, $data->country_en . '/' . $data->country_th, $data->province_en . '/' . $data->province_th, $expedition
+                                    $data->related_catalog_item . $data->related_reference_item, html_entity_decode($data->current_scientific_name)
                                 ];
                             } else {
                                 $arr_content = [
-                                    $count_line, html_entity_decode($data->current_scientific_name), $expedition
+                                    $data->related_catalog_item . $data->related_reference_item, html_entity_decode($data->current_scientific_name)
                                 ];
                             }
 
@@ -2122,20 +2129,22 @@ class ExportRecordController extends Controller
                 # Recent Record
                 elseif ($way == 'Recent_Record') {
                     //--- Set Layout and Style ---
-                    $sheet->mergeCells('A2:M2');
-                    $sheet->mergeCells('A3:M3');
-                    $sheet->mergeCells('A4:M4');
-                    $sheet->mergeCells('A5:M5');
-                    $sheet->mergeCells('A6:M6');
-                    $sheet->mergeCells('A7:M7');
-                    $sheet->mergeCells('A8:M8');
-                    $sheet->mergeCells('A9:M9');
-                    $sheet->mergeCells('A10:M10');
-                    $sheet->mergeCells('A11:M11');
+                    $sheet->mergeCells('A2:R2');
+                    $sheet->mergeCells('A3:R3');
+                    $sheet->mergeCells('A4:R4');
+                    $sheet->mergeCells('A5:R5');
+                    $sheet->mergeCells('A6:R6');
+                    $sheet->mergeCells('A7:R7');
+                    $sheet->mergeCells('A8:R8');
+                    $sheet->mergeCells('A9:R9');
+                    $sheet->mergeCells('A10:R10');
+                    $sheet->mergeCells('A11:R11');
+                    $sheet->mergeCells('A12:R12');
+                    $sheet->mergeCells('A13:R13');
 
                     $sheet->setHeight(2, 30);
                     $sheet->setHeight(6, 30);
-                    $sheet->setHeight(12, 30);
+                    $sheet->setHeight(14, 30);
 
                     $sheet->row(2, function ($row) {
                         $row->setBackground('#FE9529');
@@ -2143,39 +2152,41 @@ class ExportRecordController extends Controller
                     $sheet->row(6, function ($row) {
                         $row->setBackground('#FE9529');
                     });
-                    $sheet->row(12, function ($row) {
+                    $sheet->row(14, function ($row) {
                         $row->setBackground('#FE9529');
                     });
 
-                    $sheet->cell('A2:M2', function ($cells) {
+                    $sheet->cell('A2:R2', function ($cells) {
                         $cells->setFontSize(20);
                     });
-                    $sheet->cell('A6:M6', function ($cells) {
+                    $sheet->cell('A6:R6', function ($cells) {
                         $cells->setFontSize(20);
                     });
-                    $sheet->cell('A12:M12', function ($cells) {
+                    $sheet->cell('A14:R14', function ($cells) {
                         $cells->setFontSize(16);
                     });
 
-                    $sheet->cells('A2:M2', function ($cells) {
+                    $sheet->cells('A2:R2', function ($cells) {
                         $cells->setFontWeight('bold');
                     });
-                    $sheet->cells('A6:M6', function ($cells) {
+                    $sheet->cells('A6:R6', function ($cells) {
                         $cells->setFontWeight('bold');
                     });
-                    $sheet->cells('A12:M12', function ($cells) {
+                    $sheet->cells('A14:R14', function ($cells) {
                         $cells->setFontWeight('bold');
                         $cells->setAlignment('center');
                         $cells->setValignment('middle');
                     });
 
-                    $sheet->setBorder('A12:M12', 'thin');
+                    $sheet->setBorder('A14:R14', 'thin');
                     //--- -------------------- ---
 
                     //--- Header Part ---
                     if ($results == null) {
                         $results->taxa = '-';
                         $$results->locality = '-';
+                        $results->expedition = '-';
+                        $results->expedition = '-';
                         $results->expedition = '-';
                     }
                     $sheet->row(2, array('Export Information'));
@@ -2186,25 +2197,29 @@ class ExportRecordController extends Controller
                     $sheet->row(8, array('Taxonomy: ' . $results->taxa));
                     $sheet->row(9, array('Locality: ' . $results->locality));
                     $sheet->row(10, array('Expedition: ' . $results->expedition));
+                    $sheet->row(11, array('Marine Center: ' . $results->marinecentertext));
+                    $sheet->row(12, array('Type Status: ' . $results->typestatustext));
                     //--- ----------- ---
 
                     //--- Header Table Part ---
                     $arr_header = array();
                     if ($group_permission_a == 2 && $group_permission_b == 2) {
-                        $arr_header = ['ID', 'Phylum', 'Subphylum', 'Class (Clade)', 'Order (Clade)', 'Suborder (Clade)', 'Infraorder (Clade)', 'Family (Clade)', 'Current Name', 'Previous Name', 'Type', 'Current Indentifier', 'Province', 'Picture'];
+                        $arr_header = ['ID', 'Phylum', 'Subphylum', 'Class (Clade)', 'Order (Clade)', 'Suborder (Clade)', 'Infraorder (Clade)', 'Family (Clade)', 'Current Name', 'Previous Name', 'Type', 'Current Indentifier', 'Previous Indentifier', 'Ocean/Sea/Lake', 'Country', 'Province', 'Expendition', 'Picture'];
                     } elseif ($group_permission_a == 2 && $group_permission_b == 1) {
-                        $arr_header = ['ID', 'Phylum', 'Subphylum', 'Class (Clade)', 'Order (Clade)', 'Suborder (Clade)', 'Infraorder (Clade)', 'Family (Clade)', 'Current Name', 'Previous Name', 'Type', 'Current Indentifier', 'Picture'];
+                        $arr_header = ['ID', 'Phylum', 'Subphylum', 'Class (Clade)', 'Order (Clade)', 'Suborder (Clade)', 'Infraorder (Clade)', 'Family (Clade)', 'Current Name', 'Previous Name', 'Type', 'Current Indentifier', 'Previous Indentifier', 'Ocean/Sea/Lake', 'Country', 'Province', 'Expendition', 'Picture'];
                     } elseif ($group_permission_a == 1 && $group_permission_b == 2) {
-                        $arr_header = ['ID', 'Current Name', 'Previous Name', 'Type', 'Current Indentifier', 'Province', 'Picture'];
+                        $arr_header = ['ID', 'Current Name', 'Previous Name', 'Type', 'Current Indentifier', 'Previous Indentifier', 'Ocean/Sea/Lake', 'Country', 'Province', 'Expendition', 'Picture'];
                     } else {
-                        $arr_header = ['ID', 'Current Name', 'Previous Name', 'Type', 'Current Indentifier', 'Picture'];
+                        $arr_header = ['ID', 'Current Name', 'Previous Name', 'Type', 'Current Indentifier', 'Previous Indentifier', 'Ocean/Sea/Lake', 'Country', 'Province', 'Expendition', 'Picture'];
                     }
-                    $sheet->row(12, $arr_header);
+                    $sheet->row(14, $arr_header);
                     //--- ----------------- ---
 
+                    // todo: ของ recent record เหลือแต่แสดง url รูป
+                    
                     //--- Content Part ---
                     // display data
-                    $row_number = 13;   // start line
+                    $row_number = 15;   // start line
                     if ($results != null) {
                         foreach ($results->result_searchs as $data) {
 
@@ -2215,24 +2230,47 @@ class ExportRecordController extends Controller
                                     $data->related_catalog_item . '' . $data->related_reference_item, $data->phylum, $data->subphylum, $data->class,
                                     $data->order_o, $data->suborder, $data->infraorder, $data->family,
                                     html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->identifier,
-                                    $data->province_en . '/' . $data->province_th
+                                    $data->previous_identifier,
+                                    $data->ocean_sea_lake,
+                                    $data->country_en . '/' . $data->country_th,
+                                    $data->province_en . '/' . $data->province_th,
+                                    $data->expedition,
+                                    $data->path_pic
                                 ];
                             } elseif ($group_permission_a == 2 && $group_permission_b == 1) {
                                 $arr_content = [
                                     $data->related_catalog_item . '' . $data->related_reference_item, $data->phylum, $data->subphylum, $data->class,
                                     $data->order_o, $data->suborder, $data->infraorder, $data->family,
                                     html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->identifier,
+                                    $data->previous_identifier,
+                                    $data->ocean_sea_lake,
+                                    $data->country_en . '/' . $data->country_th,
+                                    $data->province_en . '/' . $data->province_th,
+                                    $data->expedition,
+                                    $data->path_pic,
+                                    $data->path_pic
                                 ];
                             } elseif ($group_permission_a == 1 && $group_permission_b == 2) {
                                 $arr_content = [
                                     $data->related_catalog_item . '' . $data->related_reference_item,
                                     html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->identifier,
-                                    $data->province_en . '/' . $data->province_th
+                                    $data->previous_identifier,
+                                    $data->ocean_sea_lake,
+                                    $data->country_en . '/' . $data->country_th,
+                                    $data->province_en . '/' . $data->province_th,
+                                    $data->expedition,
+                                    $data->path_pic
                                 ];
                             } else {
                                 $arr_content = [
                                     $data->related_catalog_item . '' . $data->related_reference_item,
-                                    html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->identifier
+                                    html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->identifier,
+                                    $data->previous_identifier,
+                                    $data->ocean_sea_lake,
+                                    $data->country_en . '/' . $data->country_th,
+                                    $data->province_en . '/' . $data->province_th,
+                                    $data->expedition,
+                                    $data->path_pic
                                 ];
                             }
 
@@ -2240,7 +2278,7 @@ class ExportRecordController extends Controller
                             $sheet->row($row_number, $arr_content);
 
                             //--- Set Layout and Style ---
-                            $sheet->setBorder('A' . $row_number . ':M' . $row_number, 'thin');
+                            $sheet->setBorder('A' . $row_number . ':R' . $row_number, 'thin');
                             //--- -------------------- ---
 
                             $row_number++;
@@ -2252,20 +2290,20 @@ class ExportRecordController extends Controller
                 # Distribution Search
                 elseif ($way == 'Distribution_Search') {
                     //--- Set Layout and Style ---
-                    $sheet->mergeCells('A2:M2');
-                    $sheet->mergeCells('A3:M3');
-                    $sheet->mergeCells('A4:M4');
-                    $sheet->mergeCells('A5:M5');
-                    $sheet->mergeCells('A6:M6');
-                    $sheet->mergeCells('A7:M7');
-                    $sheet->mergeCells('A8:M8');
-                    $sheet->mergeCells('A9:M9');
-                    $sheet->mergeCells('A10:M10');
-                    $sheet->mergeCells('A11:M11');
+                    $sheet->mergeCells('A2:G2');
+                    $sheet->mergeCells('A3:G3');
+                    $sheet->mergeCells('A4:G4');
+                    $sheet->mergeCells('A5:G5');
+                    $sheet->mergeCells('A6:G6');
+                    $sheet->mergeCells('A7:G7');
+                    $sheet->mergeCells('A8:G8');
+                    $sheet->mergeCells('A9:G9');
+                    $sheet->mergeCells('A10:G10');
+                    $sheet->mergeCells('A11:G11');
 
                     $sheet->setHeight(2, 30);
                     $sheet->setHeight(6, 30);
-                    $sheet->setHeight(12, 30);
+                    $sheet->setHeight(14, 30);
 
                     $sheet->row(2, function ($row) {
                         $row->setBackground('#FE9529');
@@ -2273,33 +2311,33 @@ class ExportRecordController extends Controller
                     $sheet->row(6, function ($row) {
                         $row->setBackground('#FE9529');
                     });
-                    $sheet->row(12, function ($row) {
+                    $sheet->row(14, function ($row) {
                         $row->setBackground('#FE9529');
                     });
 
-                    $sheet->cell('A2:M2', function ($cells) {
+                    $sheet->cell('A2:G2', function ($cells) {
                         $cells->setFontSize(20);
                     });
-                    $sheet->cell('A6:M6', function ($cells) {
+                    $sheet->cell('A6:G6', function ($cells) {
                         $cells->setFontSize(20);
                     });
-                    $sheet->cell('A12:M12', function ($cells) {
+                    $sheet->cell('A14:G14', function ($cells) {
                         $cells->setFontSize(16);
                     });
 
-                    $sheet->cells('A2:M2', function ($cells) {
+                    $sheet->cells('A2:G2', function ($cells) {
                         $cells->setFontWeight('bold');
                     });
-                    $sheet->cells('A6:M6', function ($cells) {
+                    $sheet->cells('A6:G6', function ($cells) {
                         $cells->setFontWeight('bold');
                     });
-                    $sheet->cells('A12:M12', function ($cells) {
+                    $sheet->cells('A14:G14', function ($cells) {
                         $cells->setFontWeight('bold');
                         $cells->setAlignment('center');
                         $cells->setValignment('middle');
                     });
 
-                    $sheet->setBorder('A12:M12', 'thin');
+                    $sheet->setBorder('A14:G14', 'thin');
                     //--- -------------------- ---
 
                     //--- Header Part ---
@@ -2316,25 +2354,28 @@ class ExportRecordController extends Controller
                     $sheet->row(8, array('Taxonomy: ' . $results->taxa));
                     $sheet->row(9, array('Locality: ' . $results->locality));
                     $sheet->row(10, array('Expedition: ' . $results->expedition));
+                    $sheet->row(11, array('Marine Center: ' . $results->marinecentertext));
+                    $sheet->row(12, array('Type Status: ' . $results->typestatustext));
                     //--- ----------- ---
 
                     //--- Header Table Part ---
                     $arr_header = array();
                     if ($group_permission_a == 2 && $group_permission_b == 2) {
-                        $arr_header = ['ID', 'Phylum', 'Subphylum', 'Class (Clade)', 'Order (Clade)', 'Suborder (Clade)', 'Infraorder (Clade)', 'Family (Clade)', 'Current Name', 'Previous Name', 'Type', 'Habitat', 'Current Indentifier', 'Locality'];
+                        $arr_header = ['IDCatalog/IDRef', 'Family', 'Genus', 'Current Name', 'Ocean/Sea/Lake', 'Country', 'Province'];
                     } elseif ($group_permission_a == 2 && $group_permission_b == 1) {
-                        $arr_header = ['ID', 'Phylum', 'Subphylum', 'Class (Clade)', 'Order (Clade)', 'Suborder (Clade)', 'Infraorder (Clade)', 'Family (Clade)', 'Current Name', 'Previous Name', 'Type', 'Habitat', 'Current Indentifier'];
+                        $arr_header = ['IDCatalog/IDRef', 'Family', 'Genus', 'Current Name', 'Ocean/Sea/Lake', 'Country', 'Province'];
                     } elseif ($group_permission_a == 1 && $group_permission_b == 2) {
-                        $arr_header = ['ID', 'Current Name', 'Previous Name', 'Type', 'Habitat', 'Current Indentifier', 'Locality'];
+                        $arr_header = ['IDCatalog/IDRef', 'Current Name', 'Ocean/Sea/Lake', 'Country', 'Province'];
                     } else {
-                        $arr_header = ['ID', 'Current Name', 'Previous Name', 'Type', 'Habitat', 'Current Indentifier'];
+                        $arr_header = ['IDCatalog/IDRef', 'Current Name', 'Ocean/Sea/Lake', 'Country', 'Province'];
                     }
-                    $sheet->row(12, $arr_header);
+
+                    $sheet->row(14, $arr_header);
                     //--- ----------------- ---
 
                     //--- Content Part ---
                     // display data
-                    $row_number = 13;   // start line
+                    $row_number = 15;   // start line
                     if ($results != null) {
                         foreach ($results->result_searchs as $data) {
 
@@ -2342,27 +2383,19 @@ class ExportRecordController extends Controller
                             $arr_content = array();
                             if ($group_permission_a == 2 && $group_permission_b == 2) {
                                 $arr_content = [
-                                    $data->related_catalog_item . '' . $data->related_reference_item, $data->phylum, $data->subphylum, $data->class,
-                                    $data->order_o, $data->suborder, $data->infraorder, $data->family,
-                                    html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->habitat_en, $data->identifier,
-                                    $data->locality
+                                    $data->related_catalog_item . $data->related_reference_item, $data->family, $data->genus, html_entity_decode($data->current_scientific_name), ($lang==2 ? $data->ocean_sea_lake_th : $data->ocean_sea_lake_en), ($lang==2 ? $data->country_th : $data->country_en), ($lang==2 ? $data->province_th  : $data->province_en)
                                 ];
                             } elseif ($group_permission_a == 2 && $group_permission_b == 1) {
                                 $arr_content = [
-                                    $data->related_catalog_item . '' . $data->related_reference_item, $data->phylum, $data->subphylum, $data->class,
-                                    $data->order_o, $data->suborder, $data->infraorder, $data->family,
-                                    html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->habitat_en, $data->identifier,
+                                    $data->related_catalog_item . $data->related_reference_item, $data->family, $data->genus, html_entity_decode($data->current_scientific_name), ($lang==2 ? $data->ocean_sea_lake_th : $data->ocean_sea_lake_en), ($lang==2 ? $data->country_th : $data->country_en), ($lang==2 ? $data->province_th  : $data->province_en)
                                 ];
                             } elseif ($group_permission_a == 1 && $group_permission_b == 2) {
                                 $arr_content = [
-                                    $data->related_catalog_item . '' . $data->related_reference_item,
-                                    html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->habitat_en, $data->identifier,
-                                    $data->locality
+                                    $data->related_catalog_item . $data->related_reference_item, html_entity_decode($data->current_scientific_name), ($lang==2 ? $data->ocean_sea_lake_th : $data->ocean_sea_lake_en), ($lang==2 ? $data->country_th : $data->country_en), ($lang==2 ? $data->province_th  : $data->province_en)
                                 ];
                             } else {
                                 $arr_content = [
-                                    $data->related_catalog_item . '' . $data->related_reference_item,
-                                    html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->habitat_en, $data->identifier
+                                    $data->related_catalog_item . $data->related_reference_item, html_entity_decode($data->current_scientific_name), ($lang==2 ? $data->ocean_sea_lake_th : $data->ocean_sea_lake_en), ($lang==2 ? $data->country_th : $data->country_en), ($lang==2 ? $data->province_th  : $data->province_en)
                                 ];
                             }
 
@@ -2370,7 +2403,7 @@ class ExportRecordController extends Controller
                             $sheet->row($row_number, $arr_content);
 
                             //--- Set Layout and Style ---
-                            $sheet->setBorder('A' . $row_number . ':M' . $row_number, 'thin');
+                            $sheet->setBorder('A' . $row_number . ':G' . $row_number, 'thin');
                             //--- -------------------- ---
 
                             $row_number++;
@@ -2482,6 +2515,8 @@ class ExportRecordController extends Controller
                         $results->taxa = '-';
                         $$results->locality = '-';
                         $results->expedition = '-';
+                        $results->marinecentertext = '-';
+                        $results->typestatustext = '-';
                     }
                     $sheet->row(2, array('Export Information'));
                     $sheet->row(3, array('Export By: ' . $user_name));

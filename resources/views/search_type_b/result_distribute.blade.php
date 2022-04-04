@@ -97,7 +97,7 @@
                             <span class="record-data expedition_search">{{ $expedition }}</span>
                     </p>
                     <p class="record-label">
-                        @if($lang == 2){{'ศูนย์กลางทางทะเล'}}@else{{'Marine Center'}}@endif:
+                        @if($lang == 2){{'หน่วยงานย่อยภายใต้ ทช.'}}@else{{'Marine Center'}}@endif:
                             <span class="record-data marinecenter_search">{{ $marinecentertext }}</span>
                     </p>
                     <p class="record-label">
@@ -152,7 +152,7 @@
                     </p>
 
                     <p class="record-label search-result">
-                        @if($lang == 2){{'ศูนย์กลางทางทะเล'}}@else{{'Marine Center'}}@endif: <span class="record-data" style="margin-right: 30px;"><span class="marinecenter_search">{{$marinecentertext}}</span></span>
+                        @if($lang == 2){{'หน่วยงานย่อยภายใต้ ทช.'}}@else{{'Marine Center'}}@endif: <span class="record-data" style="margin-right: 30px;"><span class="marinecenter_search">{{$marinecentertext}}</span></span>
                     </p>
                 </div>
                 <div id="remove-when-print" class="col-md-4" style="text-align: right;">

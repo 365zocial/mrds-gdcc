@@ -108,7 +108,7 @@
                 </p>
 
                 <p class="record-label">
-                    @if($lang == 2){{'ศูนย์กลางทางทะเล'}}@else{{'Marine Center'}}@endif:
+                    @if($lang == 2){{'หน่วยงานย่อยภายใต้ ทช.'}}@else{{'Marine Center'}}@endif:
                         <span class="record-data expedition_search">{{ $marinecentertext }}</span>
                 </p>
 

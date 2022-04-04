@@ -2,7 +2,7 @@
 
 #
 #
-# Type C is copy type a: Diviersity Search, Distribution Search and Recent Record
+# Type C is copy type a: Diviersity Search, Distribution Search, Recent Record and Utilization
 # Role: User (you cannot login, can use)
 #
 #
