@@ -1949,12 +1949,12 @@ class ExportRecordController extends Controller
         $date_export = date_format($date, "d-m-Y H:i:s");
         $date_export_file_name = date_format($date, "Y-m-d_H-i-s");
 
-        $lang = Session::get('language');
-
         //---- make file excel ----
         $name_file = 'Excel_Record_' . $way . '_' . $date_export_file_name;
         Excel::create($name_file, function ($excel) use ($results, $way, $date_export) {
             $excel->sheet('Record Data', function ($sheet) use ($results, $way, $date_export) {
+
+                $lang = Session::get('language');   // เช็คภาษาสำหรับ distribution
 
                 //--- Set Parameter ---
                 if (Auth::check()) {
@@ -2186,8 +2186,8 @@ class ExportRecordController extends Controller
                         $results->taxa = '-';
                         $$results->locality = '-';
                         $results->expedition = '-';
-                        $results->expedition = '-';
-                        $results->expedition = '-';
+                        $results->marinecentertext = '-';
+                        $results->typestatustext = '-';
                     }
                     $sheet->row(2, array('Export Information'));
                     $sheet->row(3, array('Export By: ' . $user_name));
@@ -2214,8 +2214,6 @@ class ExportRecordController extends Controller
                     }
                     $sheet->row(14, $arr_header);
                     //--- ----------------- ---
-
-                    // todo: ของ recent record เหลือแต่แสดง url รูป
                     
                     //--- Content Part ---
                     // display data
@@ -2300,6 +2298,8 @@ class ExportRecordController extends Controller
                     $sheet->mergeCells('A9:G9');
                     $sheet->mergeCells('A10:G10');
                     $sheet->mergeCells('A11:G11');
+                    $sheet->mergeCells('A12:G12');
+                    $sheet->mergeCells('A13:G13');
 
                     $sheet->setHeight(2, 30);
                     $sheet->setHeight(6, 30);
@@ -2345,6 +2345,8 @@ class ExportRecordController extends Controller
                         $results->taxa = '-';
                         $$results->locality = '-';
                         $results->expedition = '-';
+                        $results->marinecentertext = '-';
+                        $results->typestatustext = '-';
                     }
                     $sheet->row(2, array('Export Information'));
                     $sheet->row(3, array('Export By: ' . $user_name));
@@ -2398,6 +2400,8 @@ class ExportRecordController extends Controller
                                     $data->related_catalog_item . $data->related_reference_item, html_entity_decode($data->current_scientific_name), ($lang==2 ? $data->ocean_sea_lake_th : $data->ocean_sea_lake_en), ($lang==2 ? $data->country_th : $data->country_en), ($lang==2 ? $data->province_th  : $data->province_en)
                                 ];
                             }
+
+                            dd($arr_content);
 
                             // write in file
                             $sheet->row($row_number, $arr_content);
