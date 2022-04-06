@@ -813,10 +813,10 @@ class ImporterController extends Controller
         $update_db_status = 0;  // 0 คือ แค่ตรวจอย่างเดียว, 1 คือ ตรวจและบันทึกลงฐานข้อมูล
 
         // ทำการอ่านไฟล์ใน folder
-        $dir    = base_path("raw_pic_data/W/1");
+        $dir    = base_path("raw_pic_data/W/4");
         // $path_folder = "images_migrate/2021_September_1/W/8/";  // may
         // $path_folder = "images_migrate/2021_September_2/W/5/";   // flash drive
-        $path_folder = "images_migrate/2021_September_3/W/1/";   // aug
+        $path_folder = "images_migrate/2022_April_Craniata/W/4/";   // aug
         echo $dir . "<br><br><br>";
 
         $pic_files = scandir($dir);

@@ -206,7 +206,7 @@
                 <a class="box-link" href="{{ url('search/utilization') }}">
                     <div class="menu-icon-box">
                         <div>
-                            <img class="icon img-responsive" src='{{ URL::asset("assets/images/icon_dashboard_user/recent_record.png") }}' />
+                            <img class="icon img-responsive" src='{{ URL::asset("assets/images/icon_dashboard_user/utillization.png") }}' />
                         </div>
                         <p class="menu-text">
                             @if( $lang == 2)
