@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\DB;
 * สร้างเพื่อให้พี่แก้วใช้ข้อมูล 19 Jan 2022
 * เพื่อแสดงว่า record มีี utilization อะไรบ้าง
 * มีต้นแบบมาจาก record_cot
-* มีการใช้งานจริงใน api cot
 *
 */
 

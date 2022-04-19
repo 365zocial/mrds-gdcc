@@ -26,6 +26,7 @@ use App\Model\Marinecenter;
 
 use Auth;
 use App\Model\Group_Permission;
+use Illuminate\Support\Facades\DB;
 use Yajra\Datatables\Datatables;
 
 class SearchTypeCController extends Controller
@@ -1114,11 +1115,10 @@ class SearchTypeCController extends Controller
         $marinecenter_id        = $input->marinecenter_id;
         $typestatus_id          = $input->typestatus_id;
 
-        $lang = Session::get('language');
         $db = new Classification;
         $db = $db->leftjoin('record as r', 'classification.id', '=', 'r.classification_id');
         $db = $db->leftjoin('marinecenter', 'r.marinecenter_id', '=', 'marinecenter.id');
-        $db = $db->leftjoin('record_detail4', 'r.unique_record', '=', 'record_detail4.unique_record');
+        $db = $db->leftjoin('record_utilizations as util', 'r.unique_record', '=', 'util.record_unique_id');
         $db = $db->leftjoin('wording as w_economic_value', 'r.economic_value', '=', 'w_economic_value.id');
         $db = $db->leftjoin('wording as w_living', 'classification.living', '=', 'w_living.id');
         $db = $db->leftjoin('wording as w_protection_thai_law', 'classification.protection_thai_law', '=', 'w_protection_thai_law.id');
@@ -1243,7 +1243,17 @@ class SearchTypeCController extends Controller
             'classification.current_scientific_name',
             'classification.common_name',
             'r.local_name',
-            'record_detail4.utilization_detail as utilization',
+            DB::raw('IF(util.utilization_id=1,"ความเพลิดเพลิน",
+            IF(util.utilization_id=2,"การค้า",
+                IF(util.utilization_id=3,"ใช้แรงงาน",
+                    IF(util.utilization_id=4,"อาหาร",
+                        IF(util.utilization_id=5,"ยา",
+                            IF(util.utilization_id=6,"ศึกษาวิจัย",
+                                IF(util.utilization_id=7,"เครื่องนุ่งห่ม",
+                                    IF(util.utilization_id=8,"สวยงาม",""
+            )))))))) AS utilization'),
+
+
             'r.folk_wisdom',
             'r.recorder',
             'r.knowledge_remarks',
@@ -1255,18 +1265,15 @@ class SearchTypeCController extends Controller
             'w_protection_cites.name_th as protection_cites_th'
         ]);
 
-
         return ['result_searchs' => $searchResult,  'taxa' => $taxa, 'locality' => $locality, 'expedition' => $expedition, 'is_in_thailand' => $is_in_thailand, 'marinecentertext' => $marinecentertext, 'typestatustext' => $typestatustext];
     }
 
     //sorawit
     //Created : 28-3-65
-    #แยก query ของ name record ออกมา
     public function utilizationCAsDataTable(Request $input)
     {
         $data  = $this->dataUtilization($input);
-        //supakorn 
-        //diversity must show only current name in change request#4 No1
+
         return Datatables::of($data['result_searchs'])
             ->addColumn('cate_ref', function ($row) {
                 return $row->related_catalog_item . $row->related_reference_item;
