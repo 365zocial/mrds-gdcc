@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Migration\V2;
 
+use App\Model\RecordSex;
 use App\Model\Wording_type;
 use App\Model\Wording;
 
@@ -101,26 +102,25 @@ trait WordingCheck {
         }
     }
 
-    protected function wordingSex($wording_en) {
-        //ตรวจ EN เพิ่มคำ
-        // 1 ภาษา
-        if($wording_en !== ""){
-            $wording = Wording::where('wording_type_id', 5)
-                        ->where('name_en', $wording_en)
-                        ->first();
+    protected function wordingSex($wording_en, $unique_record) {
+        if( $wording_en !== "" ){
+            $sex_wording = array("Male", "Female", "Hermaphrodite", "Indeterminate", "Unknown", "Transitional", "Imposex");
 
-            if(is_null($wording)) {
-                $_wording = new Wording;
-                $_wording->wording_type_id = 5;
-                $_wording->name_en = $wording_en;
-                $_wording->name_th = $wording_en;
-                $_wording->status = 2;
-                $_wording->created_by = \Auth::user()->id;
-                $_wording->updated_by = \Auth::user()->id;
-                $_wording->save();
-                return $_wording->id;
-            }else {
-                return $wording->id;
+            // ตัดคำ
+            $arr_wording = explode(",", $wording_en);
+
+            if (count((array) $arr_wording) > 0) {
+                foreach ($arr_wording as $word) {
+                    // นำคำไปเทียบใน array
+                    $result_array = array_search($word, $sex_wording);
+                    // ถ้าเทียบแล้วมีก็ save ถ้าไม่มีก็ไม่ save
+                    if( $result_array != FALSE ) {
+                        $recordSex = new RecordSex();
+                        $recordSex->record_unique_id = $unique_record;
+                        $recordSex->sex_id = $result_array + 1;
+                        $recordSex->save();
+                    }
+                }
             }
         }
     }

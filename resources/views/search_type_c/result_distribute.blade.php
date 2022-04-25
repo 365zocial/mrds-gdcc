@@ -264,6 +264,7 @@
             });
         });
     </script>
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key={{ Config::get('api.google_map') }}&callback=initMap"></script>
+    
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key={{ Config::get('api.google_map') }}&language={{ ($lang==2 ? 'th' : 'en') }}&callback=initMap"></script>
 
 @endsection

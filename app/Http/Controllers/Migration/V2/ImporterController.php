@@ -546,7 +546,6 @@ class ImporterController extends Controller
                 $rc->habitat                            = $this->wordingHabitat($temp->habitat, $temp->habitat_dup);
                 $rc->sediment_type                      = $temp->sediment_type;
                 $rc->type_status                        = $this->wordingTypeStatus($temp->type_status, $temp->type_status_dup);
-                $rc->sex                                = $this->wordingSex($temp->sex);
                 $rc->size                               = $_size[$i_language - 1];
                 $rc->life_stage                         = $this->wordingLifeStage($temp->life_stage, $temp->life_stage_dup);
                 $rc->donated_from                       = $this->wordingDonatedFrom($temp->donated_from);
@@ -620,6 +619,12 @@ class ImporterController extends Controller
                     $rc->updated_at                     = $_old_date_temp;
                 }
                 $rc->save();
+
+                // บันทึกเพศ
+                // สั่งให้ทำแค่ภาษาเดียว
+                if ($rc->language_id == 1) {
+                    $this->wordingSex($temp->sex, $rc->unique_record);
+                }
             }
         }
     }
