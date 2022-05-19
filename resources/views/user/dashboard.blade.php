@@ -143,6 +143,29 @@
             </div>
 
             <div class="col-md-3 menu-box">
+                <a class="box-link" href="{{ url('search/utilization') }}">
+                    <div class="menu-icon-box">
+                        <div>
+                            <img class="icon img-responsive" src='{{ URL::asset("assets/images/icon_dashboard_user/utillization.png") }}' />
+                        </div>
+                        <p class="menu-text">
+                            @if( $lang == 2)
+                            การใช้ประโยชน์
+                            <br>&nbsp;
+                            @else
+                            Utilization
+                            @endif
+                            <br>&nbsp;
+                        </p>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+
+        <div class="row" style="margin-top: 5%; margin-bottom: 30px;">
+
+            <div class="col-md-3 menu-box">
                 <a class="box-link" href="{{ url('search/NameRecord') }}">
                     <div class="menu-icon-box">
                         <div>
@@ -160,10 +183,6 @@
                     </div>
                 </a>
             </div>
-
-        </div>
-
-        <div class="row" style="margin-top: 5%; margin-bottom: 30px;">
 
             <div class="col-md-3 menu-box">
                 <a class="box-link" href="{{ url('abbreviation') }}">
@@ -202,38 +221,19 @@
                 </a>
             </div>
 
-            <div class="col-md-3 menu-box">
-                <a class="box-link" href="{{ url('search/utilization') }}">
-                    <div class="menu-icon-box">
-                        <div>
-                            <img class="icon img-responsive" src='{{ URL::asset("assets/images/icon_dashboard_user/utillization.png") }}' />
-                        </div>
-                        <p class="menu-text">
-                            @if( $lang == 2)
-                            การใช้ประโยชน์
-                            <br>&nbsp;
-                            @else
-                            Utilization
-                            @endif
-                            <br>&nbsp;
-                        </p>
-                    </div>
-                </a>
-            </div>
-
         </div>
 
         <div class="row row-with-margin" style="padding-top: 30px;">
             <p class="content-header font-th-header" style="text-align: left;">
                 @if(Session::get('language') == 2)
-                ระบบฐานข้อมูลทรัพยากรสิ่งมีชีวิตทางทะเล (Marine Resources Database System - MRDS)
+                ระบบฐานข้อมูลทรัพยากรทางทะเล (Marine Resources Database System - MRDS)
                 @else
                 Marine Resources Database System (MRDS)
                 @endif
             </p>
             <p class="menu-text font-th-content" style="text-transform: none;">
                 @if(Session::get('language') == 2)
-                ระบบฐานข้อมูลทรัพยากรสิ่งมีชีวิตทางทะเล (Marine Resources Database System - MRDS) เป็นระบบสารสนเทศของข้อมูลตัวอย่างสิ่งมีชีวิตทางทะเล ทั้งที่มีตัวอย่างอ้างอิงและที่อ้างอิงจากผลงานตีพิมพ์ของส่วนวิจัยทรัพยากรป่าชายเลน กองอนุรักษ์ทรัพยากรป่าชายเลน และสถาบันวิจัยและพัฒนาทรัพยากรทางทะเลและชายฝั่ง ซึ่งประกอบด้วยข้อมูลของศูนย์วิจัยทรัพยากรทางทะเลและชายฝั่งทั้ง 7 ศูนย์ ได้แก่ ศูนย์วิจัยทรัพยากรทางทะเลและชายฝั่งอ่าวไทยฝั่งตะวันออก (ศวทอ.) ศูนย์วิจัยทรัพยากรทางทะเลและชายฝั่งอ่าวไทยตอนบนฝั่งตะวันออก (ศวบอ.) ศูนย์วิจัยทรัพยากรทางทะเลและชายฝั่งอ่าวไทยตอนบนฝั่งตะวันตก (ศวบต.) ศูนย์วิจัยทรัพยากรทางทะเลและชายฝั่งอ่าวไทยตอนกลาง (ศวทก.) ศูนย์วิจัยทรัพยากรทางทะเลและชายฝั่งอ่าวไทยตอนล่าง (ศวทล.) ศูนย์วิจัยทรัพยากรทางทะเลและชายฝั่งทะเลอันดามันตอนบน (ศวอบ.) และศูนย์วิจัยทรัพยากรทางทะเลและชายฝั่งทะเลอันดามันตอนล่าง (ศวอล.) ระบบจะทำการบันทึกข้อมูลจากทุกส่วน/ศูนย์ มาจัดเก็บและจัดทำเป็นฐานข้อมูลเดียวกันเพื่อนำไปใช้ประโยชน์ร่วมกันทั้งในด้านการวิจัยและเพื่อการศึกษา
+                ระบบฐานข้อมูลทรัพยากรทางทะเล (Marine Resources Database System - MRDS) เป็นระบบสารสนเทศของข้อมูลตัวอย่างสิ่งมีชีวิตทางทะเล ทั้งที่มีตัวอย่างอ้างอิงและที่อ้างอิงจากผลงานตีพิมพ์ของส่วนวิจัยทรัพยากรป่าชายเลน กองอนุรักษ์ทรัพยากรป่าชายเลน และสถาบันวิจัยและพัฒนาทรัพยากรทางทะเลและชายฝั่ง ซึ่งประกอบด้วยข้อมูลของศูนย์วิจัยทรัพยากรทางทะเลและชายฝั่งทั้ง 7 ศูนย์ ได้แก่ ศูนย์วิจัยทรัพยากรทางทะเลและชายฝั่งอ่าวไทยฝั่งตะวันออก (ศวทอ.) ศูนย์วิจัยทรัพยากรทางทะเลและชายฝั่งอ่าวไทยตอนบนฝั่งตะวันออก (ศวบอ.) ศูนย์วิจัยทรัพยากรทางทะเลและชายฝั่งอ่าวไทยตอนบนฝั่งตะวันตก (ศวบต.) ศูนย์วิจัยทรัพยากรทางทะเลและชายฝั่งอ่าวไทยตอนกลาง (ศวทก.) ศูนย์วิจัยทรัพยากรทางทะเลและชายฝั่งอ่าวไทยตอนล่าง (ศวทล.) ศูนย์วิจัยทรัพยากรทางทะเลและชายฝั่งทะเลอันดามันตอนบน (ศวอบ.) และศูนย์วิจัยทรัพยากรทางทะเลและชายฝั่งทะเลอันดามันตอนล่าง (ศวอล.) ระบบจะทำการบันทึกข้อมูลจากทุกส่วน/ศูนย์ มาจัดเก็บและจัดทำเป็นฐานข้อมูลเดียวกันเพื่อนำไปใช้ประโยชน์ร่วมกันทั้งในด้านการวิจัยและเพื่อการศึกษา
                 @else
                 Marine Resources Database System (MRDS) is an information system of the Department of Marine and Coastal Resources based on the specimens, which deposited at the Reference Collection of Phuket Marine Biological Center (PMBC), and based on biodiversity information that published by Mangrove Resources Research Subdivision (Mangrove Forest Resources Conservation Division), PMBC, and other six Marine and Coastal Resources Research Center, i.e., Lower Andaman Sea (MCRRCLA), the Eastern Gulf of Thailand (MCRRDE), the Eastern Upper Gulf of Thailand (MCRRCEU), the Western Upper Gulf of Thailand (MCRRCWU), the Center Gulf of Thailand (MCRRDC), the Lower Gulf of Thailand (MCRRDL). The main objective of MRDS is to gather biodiversity information of marine fauna and flora in Thai waters.
                 @endif
