@@ -11,6 +11,22 @@
 |
 */
 
+Route::get('/test-wording', function () {
+    // ให้ดึงคำมาจาก database ให้หมด
+    $total_type_status_id = DB::table('wording')->where('wording_type_id', 2)->where('status', 2)->get();
+    $arr_type_status_id = [];
+
+    if ( count($total_type_status_id) > 0 ) {
+        // ทำให้ id อยู่ใน array
+        foreach ($total_type_status_id as $wording) {
+            array_push($arr_type_status_id, $wording->id);
+        }
+    }
+
+    // ทำการใช้ where in
+    dd(DB::table('record')->whereIn('type_status', $arr_type_status_id)->get());
+});
+
 // Route::get('/', function () {
 //     return view('welcome');
 // });

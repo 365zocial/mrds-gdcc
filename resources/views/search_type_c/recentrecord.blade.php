@@ -530,6 +530,7 @@
                             <p class="search-report-dropdown-header">@if($lang == 2){{'ค้นหาตามประเภทสถานะ'}}@else{{'Search by Type Status'}}@endif</p>
                             <select class="form-control select2" name="typestatus_id" id="typestatus_id">
                                 <option selected disabled="" value="0">Select</option>
+                                <option value="ALL">All</option>
                                 @foreach ( $typestatuses as $typestatus )
                                     @if($lang == 2)
                                         <option value="{{ $typestatus->id }}">{{ $typestatus->name_th }}</option>

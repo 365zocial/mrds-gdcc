@@ -34,6 +34,7 @@ use App\Model\Extra_Info;
 use App\Model\RecordPlace;
 use App\Model\RecordUtilization;
 use Yajra\Datatables\Datatables;
+use Illuminate\Support\Facades\DB;
 
 class SearchTypeBController extends Controller
 {
@@ -727,8 +728,26 @@ class SearchTypeBController extends Controller
             $marinecentertext = "-";
         }
         if ($typestatus_id != "") {
-            $typestatustext = Wording::getWording($typestatus_id)->name_en;
-            $db = $db->where('r.type_status', $typestatus_id);
+            if ($typestatus_id == 'ALL') {  // ตัวเลือก All
+                $typestatustext = 'All';
+
+                // ให้ดึงคำมาจาก database ให้หมด
+                $total_type_status_id = DB::table('wording')->where('wording_type_id', 2)->where('status', 2)->get();
+                $arr_type_status_id = [];
+
+                if ( count($total_type_status_id) > 0 ) {
+                    // ทำให้ id อยู่ใน array
+                    foreach ($total_type_status_id as $wording) {
+                        array_push($arr_type_status_id, $wording->id);
+                    }
+                }
+
+                // ทำการใช้ where in
+                $db = $db->whereIn('r.type_status', $arr_type_status_id);
+            } else {
+                $typestatustext = Wording::getWording($typestatus_id)->name_en;
+                $db = $db->where('r.type_status', $typestatus_id);
+            }
         } else {
             $typestatustext = "-";
         }
