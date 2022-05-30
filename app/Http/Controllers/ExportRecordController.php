@@ -2230,10 +2230,10 @@ class ExportRecordController extends Controller
                                     $data->order_o, $data->suborder, $data->infraorder, $data->family,
                                     html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->identifier,
                                     $data->previous_identifier,
-                                    $data->ocean_sea_lake,
-                                    $data->country_en . '/' . $data->country_th,
-                                    $data->province_en . '/' . $data->province_th,
-                                    $data->expedition,
+                                    ($lang==2 ? $data->ocean_sea_lake_th : $data->ocean_sea_lake_en),
+                                    ($lang==2 ? $data->country_th  : $data->country_en),
+                                    ($lang==2 ? $data->province_th  : $data->province_en),
+                                    ($lang==2 ? $data->expedition_th : $data->expedition_en),
                                     $data->path_pic
                                 ];
                             } elseif ($group_permission_a == 2 && $group_permission_b == 1) {
@@ -2242,11 +2242,10 @@ class ExportRecordController extends Controller
                                     $data->order_o, $data->suborder, $data->infraorder, $data->family,
                                     html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->identifier,
                                     $data->previous_identifier,
-                                    $data->ocean_sea_lake,
-                                    $data->country_en . '/' . $data->country_th,
-                                    $data->province_en . '/' . $data->province_th,
-                                    $data->expedition,
-                                    $data->path_pic,
+                                    ($lang==2 ? $data->ocean_sea_lake_th : $data->ocean_sea_lake_en),
+                                    ($lang==2 ? $data->country_th  : $data->country_en),
+                                    ($lang==2 ? $data->province_th  : $data->province_en),
+                                    ($lang==2 ? $data->expedition_th : $data->expedition_en),
                                     $data->path_pic
                                 ];
                             } elseif ($group_permission_a == 1 && $group_permission_b == 2) {
@@ -2254,10 +2253,10 @@ class ExportRecordController extends Controller
                                     $data->related_catalog_item . '' . $data->related_reference_item,
                                     html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->identifier,
                                     $data->previous_identifier,
-                                    $data->ocean_sea_lake,
-                                    $data->country_en . '/' . $data->country_th,
-                                    $data->province_en . '/' . $data->province_th,
-                                    $data->expedition,
+                                    ($lang==2 ? $data->ocean_sea_lake_th : $data->ocean_sea_lake_en),
+                                    ($lang==2 ? $data->country_th  : $data->country_en),
+                                    ($lang==2 ? $data->province_th  : $data->province_en),
+                                    ($lang==2 ? $data->expedition_th : $data->expedition_en),
                                     $data->path_pic
                                 ];
                             } else {
@@ -2265,10 +2264,10 @@ class ExportRecordController extends Controller
                                     $data->related_catalog_item . '' . $data->related_reference_item,
                                     html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->identifier,
                                     $data->previous_identifier,
-                                    $data->ocean_sea_lake,
-                                    $data->country_en . '/' . $data->country_th,
-                                    $data->province_en . '/' . $data->province_th,
-                                    $data->expedition,
+                                    ($lang==2 ? $data->ocean_sea_lake_th : $data->ocean_sea_lake_en),
+                                    ($lang==2 ? $data->country_th  : $data->country_en),
+                                    ($lang==2 ? $data->province_th  : $data->province_en),
+                                    ($lang==2 ? $data->expedition_th : $data->expedition_en),
                                     $data->path_pic
                                 ];
                             }
