@@ -113,8 +113,9 @@ trait WordingCheck {
                 foreach ($arr_wording as $word) {
                     // นำคำไปเทียบใน array
                     $result_array = array_search($word, $sex_wording);
+
                     // ถ้าเทียบแล้วมีก็ save ถ้าไม่มีก็ไม่ save
-                    if( $result_array != FALSE ) {
+                    if( $result_array !== FALSE ) { // ต้องใช้ !== ไม่งั้นจะ bug ตอน Male
                         $recordSex = new RecordSex();
                         $recordSex->record_unique_id = $unique_record;
                         $recordSex->sex_id = $result_array + 1;

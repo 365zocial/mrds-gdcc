@@ -526,7 +526,7 @@ class ImporterController extends Controller
                     $rc->longitude                       = $this->readVerbatim($temp->verbatim_longitude);
                 } else {
                     $longitude = explode(" ", $temp->longitude);
-                    $rc->latitude                       = $longitude[0];
+                    $rc->longitude                      = $longitude[0];
 
                     // $rc->longitude                          = $temp->longitude;  // TODO: เขียน code ตัดอักษรออก
                 }
