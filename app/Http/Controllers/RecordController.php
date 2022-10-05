@@ -201,19 +201,19 @@ class RecordController extends Controller
 
 		//get input and set value
 		$collector = $input->collector;
-		if ($input->collected_date == null) $input->collected_date = '0000-00-00';
+		if ($input->collected_date == null || $input->collected_date == '-') $input->collected_date = '0000-00-00';
 		$collected_date = date('Y-m-d', strtotime($input->collected_date));
 		$collected_year = date("Y", strtotime($collected_date));;
 		$collected_month = date("m", strtotime($collected_date));;
 		$collected_day = date("d", strtotime($collected_date));;
 		$identifier = $input->cur_identifier;
-		if ($input->cur_identified_date == null) $input->cur_identified_date = '0000-00-00';
+		if ($input->cur_identified_date == null || $input->cur_identified_date == '-') $input->cur_identified_date = '0000-00-00';
 		$identified_date = date('Y-m-d', strtotime($input->cur_identified_date));
 		$identified_year = date("Y", strtotime($identified_date));;
 		$identified_month = date("m", strtotime($identified_date));;
 		$identified_day = date("d", strtotime($identified_date));;
 		$prev_identifier = $input->prev_identifier;
-		if ($input->prev_identified_date == null) $input->prev_identified_date = '0000-00-00';
+		if ($input->prev_identified_date == null || $input->prev_identified_date == '-') $input->prev_identified_date = '0000-00-00';
 		$prev_identified_date = date('Y-m-d', strtotime($input->prev_identified_date));
 		$gear_method = $input->gear_method;
 		$preparation_type = $input->preparation_type;
@@ -916,19 +916,33 @@ class RecordController extends Controller
 
 		//get input and set value
 		$collector = $input->collector;
-		if ($input->collected_date == null) $input->collected_date = '0000-00-00';
-		$collected_date 			= date('Y-m-d', strtotime($input->collected_date));
-		$collected_year 			= date("Y", strtotime($collected_date));;
-		$collected_month 			= date("m", strtotime($collected_date));;
-		$collected_day 				= date("d", strtotime($collected_date));;
+		if ($input->collected_date == null || $input->collected_date == '-') {
+			$input->collected_date = '0000-00-00';
+			$collected_date 			= date('Y-m-d', strtotime($input->collected_date));
+			$collected_year 			= null;
+			$collected_month 			= null;
+			$collected_day 				= null;
+		} else {
+			$collected_date 			= date('Y-m-d', strtotime($input->collected_date));
+			$collected_year 			= date("Y", strtotime($collected_date));
+			$collected_month 			= date("m", strtotime($collected_date));
+			$collected_day 				= date("d", strtotime($collected_date));
+		}
 		$identifier 				= $input->cur_identifier;
-		if ($input->cur_identified_date == null) $input->cur_identified_date = '0000-00-00';
-		$identified_date 			= date('Y-m-d', strtotime($input->cur_identified_date));
-		$identified_year 			= date("Y", strtotime($identified_date));;
-		$identified_month 			= date("m", strtotime($identified_date));;
-		$identified_day 			= date("d", strtotime($identified_date));;
+		if ($input->cur_identified_date == null || $input->cur_identified_date == '-') {
+			$input->cur_identified_date = '0000-00-00';
+			$identified_date 			= date('Y-m-d', strtotime($input->cur_identified_date));
+			$identified_year 			= null;
+			$identified_month 		= null;
+			$identified_day 			= null;
+		} else {
+			$identified_date 			= date('Y-m-d', strtotime($input->cur_identified_date));
+			$identified_year 			= date("Y", strtotime($identified_date));
+			$identified_month 		= date("m", strtotime($identified_date));
+			$identified_day 			= date("d", strtotime($identified_date));
+		}
 		$prev_identifier 			= $input->prev_identifier;
-		if ($input->prev_identified_date == null) $input->prev_identified_date = '0000-00-00';
+		if ($input->prev_identified_date == null || $input->prev_identified_date == '-') $input->prev_identified_date = '0000-00-00';
 		$prev_identified_date 		= date('Y-m-d', strtotime($input->prev_identified_date));
 		$gear_method 				= $input->gear_method;
 		$preparation_type 			= $input->preparation_type;

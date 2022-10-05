@@ -618,7 +618,7 @@
             <div class="col-md-4">
               <p class="search-report-dropdown-header">Collected Date</p>
               <div class='input-group'>
-                  <input type="text" class="form-control date_picker_search" id="collected_date" name="collected_date" placeholder="Calendar" @if ( $record->collected_date != null ) value="{{ Allmean::ReplaceNullWithDefaultDate( $record->collected_date ) }}" @endif readonly>
+                  <input type="text" class="form-control date_picker_search" id="collected_date" name="collected_date" placeholder="Calendar" @if ( $record->collected_date != null ) value="{{ Allmean::ReplaceNullWithDefaultDateOnForm( $record->collected_date ) }}" @endif readonly>
                   <span class="input-group-addon">
                       <span class="glyphicon glyphicon-calendar"></span>
                   </span>
@@ -634,7 +634,7 @@
             <div class="col-md-4">
               <p class="search-report-dropdown-header">Current Idenified Date</p>
               <div class='input-group'>
-                  <input type="text" class="form-control date_picker_search" id="cur_identified_date" name="cur_identified_date" placeholder="Calendar" @if ( $record->identified_date != null ) value="{{ Allmean::ReplaceNullWithDefaultDate( $record->identified_date ) }}" @endif readonly>
+                  <input type="text" class="form-control date_picker_search" id="cur_identified_date" name="cur_identified_date" placeholder="Calendar" @if ( $record->identified_date != null ) value="{{ Allmean::ReplaceNullWithDefaultDateOnForm( $record->identified_date ) }}" @endif readonly>
                   <span class="input-group-addon">
                       <span class="glyphicon glyphicon-calendar"></span>
                   </span>
@@ -650,7 +650,7 @@
             <div class="col-md-4">
               <p class="search-report-dropdown-header">Previous Idenified Date</p>
               <div class='input-group'>
-                  <input type="text" class="form-control date_picker_search" id="prev_identified_date" name="prev_identified_date" placeholder="Calendar" @if ( $record->previous_identified_date != null ) value="{{ Allmean::ReplaceNullWithDefaultDate( $record->previous_identified_date ) }}" @endif readonly>
+                  <input type="text" class="form-control date_picker_search" id="prev_identified_date" name="prev_identified_date" placeholder="Calendar" @if ( $record->previous_identified_date != null ) value="{{ Allmean::ReplaceNullWithDefaultDateOnForm( $record->previous_identified_date ) }}" @endif readonly>
                   <span class="input-group-addon">
                       <span class="glyphicon glyphicon-calendar"></span>
                   </span>

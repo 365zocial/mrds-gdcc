@@ -120,6 +120,20 @@ class AllMean
         return $str;
     }
 
+    // สำหรับ Form Edit ข้อมูล เพื่อป้องกัน bug ตอนเซฟแล้วได้เครื่องหมาย "-"
+    public static function ReplaceNullWithDefaultDateOnForm($attr = "") {
+        $str = "";
+
+        if(is_null($attr) || $attr == "0" || $attr == "0000-00-00"){
+            $str = null;
+        }
+        else{
+            $str = date('d-m-Y', strtotime($attr));
+        }
+
+        return $str;
+    }
+
     public static function ReplaceNullWithDefaultTime($attr = "") {
         $str = "";
 
