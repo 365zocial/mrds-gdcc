@@ -1320,7 +1320,7 @@ class SearchTypeBController extends Controller
             $data['classification']->subclass,
             $data['classification']->infraclass,
             $data['classification']->superorder,
-            $data['classification']->order,
+            $data['classification']->order_o,
             $data['classification']->suborder,
             $data['classification']->infraorder,
             $data['classification']->superfamily,

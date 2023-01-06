@@ -399,7 +399,7 @@ class ClassificationController extends Controller
 		$data['kingdom'] = AllMean::checkNullOrZeroReturnTaxonomy($data['classification']->kingdom);
 		$data['subphylum'] = AllMean::checkNullOrZeroReturnTaxonomy($data['classification']->subphylum);
 		$data['subclass'] = AllMean::checkNullOrZeroReturnTaxonomy($data['classification']->subclass);
-		$data['order'] = AllMean::checkNullOrZeroReturnTaxonomy($data['classification']->order);
+		$data['order'] = AllMean::checkNullOrZeroReturnTaxonomy($data['classification']->order_o);
 		$data['infraorder'] = AllMean::checkNullOrZeroReturnTaxonomy($data['classification']->infraorder);
 		$data['family'] = AllMean::checkNullOrZeroReturnTaxonomy($data['classification']->family);
 		$data['subgenus'] = AllMean::checkNullOrZeroReturnTaxonomy($data['classification']->subgenus);
