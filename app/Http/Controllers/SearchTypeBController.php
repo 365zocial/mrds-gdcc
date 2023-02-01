@@ -959,7 +959,7 @@ class SearchTypeBController extends Controller
 
     //Sorawit
     //Created : 16-6-59
-    //Modified : -
+    //Modified : - * baw update: 25-01-66
     # for search locality form
     public function searchByLocality()
     {
@@ -978,6 +978,9 @@ class SearchTypeBController extends Controller
     # for search locality
     public function doSearchLocality(Request $input)
     {
+        //$lang = Session::get('language');
+        $lang = $input->slang;
+
         // get value from form
         $way = $input->way;
         $source = $input->source;
@@ -999,7 +1002,7 @@ class SearchTypeBController extends Controller
             // query db
             $db = new Record;
             $db = $db->leftjoin('classification as c', 'record.classification_id', '=', 'c.id');
-            $db = $db->where('record.language_id', 1)->where('record.status', 2)->where('record.approve_status', 1)->orderBy('record.id', 'asc');
+            $db = $db->where('record.language_id', $lang)->where('record.status', 2)->where('record.approve_status', 1)->orderBy('record.id', 'asc');
 
             // check condition
             if ($locality_type == 1) {    // ocean_sea_lake
@@ -1042,6 +1045,12 @@ class SearchTypeBController extends Controller
 
             $data['source'] = $source;
             $data['locality_type'] = $locality_type;
+
+
+            //echo $db->toSql();
+            //exit();
+
+            //$data['db'] = $db->toSql();
 
             return Response::json($data);
         } else {    //ajax

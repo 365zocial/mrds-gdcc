@@ -1888,11 +1888,15 @@ class ExportRecordController extends Controller
         //supakorn 
         //diversity must show only current name in change request#4 No11
         //export data require array
+
+        $results->result_searchs = $results->result_searchs->groupBy('classification.current_scientific_name')->get();
+        /*
         if ($way == 'Diversity_Search') {
             $results->result_searchs = $results->result_searchs->groupBy('classification.current_scientific_name')->get();
         } else {
             $results->result_searchs = $results->result_searchs->get();
         }
+        */
         ExportRecordController::printExcelRecord($results, $way);
     }
 
@@ -1908,11 +1912,15 @@ class ExportRecordController extends Controller
         //supakorn 
         //diversity must show only current name in change request#4 No11
         //export data require array
+
+        $results->result_searchs = $results->result_searchs->groupBy('classification.current_scientific_name')->get();
+        /*
         if ($way == 'Diversity_Search') {
             $results->result_searchs = $results->result_searchs->groupBy('classification.current_scientific_name')->get();
         } else {
             $results->result_searchs = $results->result_searchs->get();
         }
+        */
         ExportRecordController::printExcelRecord($results, $way);
     }
 
@@ -1929,10 +1937,12 @@ class ExportRecordController extends Controller
 
         //supakorn 
         //diversity must show only current name in change request#4 No11
+
         if ($way == 'Diversity_Search') {
             $results->result_searchs = $results->result_searchs->groupBy('classification.current_scientific_name')->get();
         } else {
-            $results->result_searchs = $results->result_searchs->get();
+            $results->result_searchs = $results->result_searchs->groupBy('r.unique_record')->orderBy('t4.name', 'asc')->get();
+            //$results->result_searchs = $results->result_searchs->get();
         }
 
         ExportRecordController::printExcelRecord($results, $way);
@@ -2065,13 +2075,21 @@ class ExportRecordController extends Controller
                     //--- Header Table Part ---
                     $arr_header = array();
                     if ($group_permission_a == 2 && $group_permission_b == 2) {
-                        $arr_header = ['ID', 'Phylum', 'Subphylum', 'Class', 'Order', 'Suborder', 'Infraorder', 'Super Family', 'Family', 'Current Name'];
+                        //$arr_header = ['ID', 'Phylum', 'Subphylum', 'Class', 'Order', 'Suborder', 'Infraorder', 'Super Family', 'Family', 'Current Name'];
+                        /* baw edit : 19-01-2556 */
+                        $arr_header = ['','Phylum', 'Subphylum', 'Class', 'Order', 'Suborder', 'Infraorder', 'Super Family', 'Family', 'Current Name'];
                     } elseif ($group_permission_a == 2 && $group_permission_b == 1) {
-                        $arr_header = ['ID', 'Phylum', 'Subphylum', 'Class', 'Order', 'Suborder', 'Infraorder', 'Super Family', 'Family', 'Current Name'];
+                        //$arr_header = ['ID', 'Phylum', 'Subphylum', 'Class', 'Order', 'Suborder', 'Infraorder', 'Super Family', 'Family', 'Current Name'];
+                        /* baw edit : 19-01-2556 */
+                        $arr_header = ['','Phylum', 'Subphylum', 'Class', 'Order', 'Suborder', 'Infraorder', 'Super Family', 'Family', 'Current Name'];
                     } elseif ($group_permission_a == 1 && $group_permission_b == 2) {
-                        $arr_header = ['ID', 'Current Name'];
+                        //$arr_header = ['ID', 'Current Name'];
+                        /* baw edit : 19-01-2556 */
+                        $arr_header = ['','Current Name'];
                     } else {
-                        $arr_header = ['ID', 'Current Name'];
+                        //$arr_header = ['ID', 'Current Name'];
+                        /* baw edit : 19-01-2556 */
+                        $arr_header = ['','Current Name'];
                     }
                     $sheet->row(14, $arr_header);
                     //--- ----------------- ---
@@ -2092,24 +2110,44 @@ class ExportRecordController extends Controller
                             // make array content
                             $arr_content = array();
                             if ($group_permission_a == 2 && $group_permission_b == 2) {
-                                $arr_content = [
+                                /*$arr_content = [
                                     $data->related_catalog_item . $data->related_reference_item, $data->phylum, $data->subphylum, $data->class,
+                                    $data->order_o, $data->suborder, $data->infraorder, $data->superfamily, $data->family,
+                                    html_entity_decode($data->current_scientific_name)
+                                ];
+                                */
+                                /* baw edit : 19-01-2556 */
+                                $arr_content = [
+                                    '', $data->phylum, $data->subphylum, $data->class,
                                     $data->order_o, $data->suborder, $data->infraorder, $data->superfamily, $data->family,
                                     html_entity_decode($data->current_scientific_name)
                                 ];
                             } elseif ($group_permission_a == 2 && $group_permission_b == 1) {
-                                $arr_content = [
+                                /*$arr_content = [
                                     $data->related_catalog_item . $data->related_reference_item, $data->phylum, $data->subphylum, $data->class,
+                                    $data->order_o, $data->suborder, $data->infraorder, $data->superfamily, $data->family,
+                                    html_entity_decode($data->current_scientific_name)
+                                ];*/
+                                /* baw edit : 19-01-2556 */
+                                $arr_content = [
+                                    '', $data->phylum, $data->subphylum, $data->class,
                                     $data->order_o, $data->suborder, $data->infraorder, $data->superfamily, $data->family,
                                     html_entity_decode($data->current_scientific_name)
                                 ];
                             } elseif ($group_permission_a == 1 && $group_permission_b == 2) {
-                                $arr_content = [
+                                /*$arr_content = [
                                     $data->related_catalog_item . $data->related_reference_item, html_entity_decode($data->current_scientific_name)
+                                ];*/
+                                $arr_content = [
+                                    '', html_entity_decode($data->current_scientific_name)
                                 ];
                             } else {
-                                $arr_content = [
+                                /*$arr_content = [
                                     $data->related_catalog_item . $data->related_reference_item, html_entity_decode($data->current_scientific_name)
+                                ];*/
+                                /* baw edit : 19-01-2556 */
+                                $arr_content = [
+                                    '', html_entity_decode($data->current_scientific_name)
                                 ];
                             }
 
@@ -2205,13 +2243,21 @@ class ExportRecordController extends Controller
                     //--- Header Table Part ---
                     $arr_header = array();
                     if ($group_permission_a == 2 && $group_permission_b == 2) {
+                        /* Baw update : 26-01-66 */
                         $arr_header = ['ID', 'Phylum', 'Subphylum', 'Class (Clade)', 'Order (Clade)', 'Suborder (Clade)', 'Infraorder (Clade)', 'Family (Clade)', 'Current Name', 'Previous Name', 'Type', 'Current Indentifier', 'Previous Indentifier', 'Ocean/Sea/Lake', 'Country', 'Province', 'Expendition', 'Picture'];
+                        //$arr_header = ['', 'Phylum', 'Subphylum', 'Class (Clade)', 'Order (Clade)', 'Suborder (Clade)', 'Infraorder (Clade)', 'Family (Clade)', 'Current Name', 'Previous Name', 'Type', 'Current Indentifier', 'Previous Indentifier', 'Ocean/Sea/Lake', 'Country', 'Province', 'Expendition', 'Picture'];
                     } elseif ($group_permission_a == 2 && $group_permission_b == 1) {
+                        /* Baw update : 26-01-66 */
                         $arr_header = ['ID', 'Phylum', 'Subphylum', 'Class (Clade)', 'Order (Clade)', 'Suborder (Clade)', 'Infraorder (Clade)', 'Family (Clade)', 'Current Name', 'Previous Name', 'Type', 'Current Indentifier', 'Previous Indentifier', 'Ocean/Sea/Lake', 'Country', 'Province', 'Expendition', 'Picture'];
+                        //$arr_header = ['', 'Phylum', 'Subphylum', 'Class (Clade)', 'Order (Clade)', 'Suborder (Clade)', 'Infraorder (Clade)', 'Family (Clade)', 'Current Name', 'Previous Name', 'Type', 'Current Indentifier', 'Previous Indentifier', 'Ocean/Sea/Lake', 'Country', 'Province', 'Expendition', 'Picture'];
                     } elseif ($group_permission_a == 1 && $group_permission_b == 2) {
+                        /* Baw update : 26-01-66 */
                         $arr_header = ['ID', 'Current Name', 'Previous Name', 'Type', 'Current Indentifier', 'Previous Indentifier', 'Ocean/Sea/Lake', 'Country', 'Province', 'Expendition', 'Picture'];
+                        //$arr_header = ['', 'Current Name', 'Previous Name', 'Type', 'Current Indentifier', 'Previous Indentifier', 'Ocean/Sea/Lake', 'Country', 'Province', 'Expendition', 'Picture'];
                     } else {
+                        /* Baw update : 26-01-66 */
                         $arr_header = ['ID', 'Current Name', 'Previous Name', 'Type', 'Current Indentifier', 'Previous Indentifier', 'Ocean/Sea/Lake', 'Country', 'Province', 'Expendition', 'Picture'];
+                        //$arr_header = ['', 'Current Name', 'Previous Name', 'Type', 'Current Indentifier', 'Previous Indentifier', 'Ocean/Sea/Lake', 'Country', 'Province', 'Expendition', 'Picture'];
                     }
                     $sheet->row(14, $arr_header);
                     //--- ----------------- ---
@@ -2225,6 +2271,7 @@ class ExportRecordController extends Controller
                             // make array content and check permission
                             $arr_content = array();
                             if ($group_permission_a == 2 && $group_permission_b == 2) {
+                                /* Baw Update : 26-01-66 */
                                 $arr_content = [
                                     $data->related_catalog_item . '' . $data->related_reference_item, $data->phylum, $data->subphylum, $data->class,
                                     $data->order_o, $data->suborder, $data->infraorder, $data->family,
@@ -2236,7 +2283,19 @@ class ExportRecordController extends Controller
                                     ($lang==2 ? $data->expedition_th : $data->expedition_en),
                                     $data->path_pic
                                 ];
+                                /*$arr_content = [
+                                    '', $data->phylum, $data->subphylum, $data->class,
+                                    $data->order_o, $data->suborder, $data->infraorder, $data->family,
+                                    html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->identifier,
+                                    $data->previous_identifier,
+                                    ($lang==2 ? $data->ocean_sea_lake_th : $data->ocean_sea_lake_en),
+                                    ($lang==2 ? $data->country_th  : $data->country_en),
+                                    ($lang==2 ? $data->province_th  : $data->province_en),
+                                    ($lang==2 ? $data->expedition_th : $data->expedition_en),
+                                    $data->path_pic
+                                ];*/
                             } elseif ($group_permission_a == 2 && $group_permission_b == 1) {
+                                /* Baw Update : 26-01-66 */
                                 $arr_content = [
                                     $data->related_catalog_item . '' . $data->related_reference_item, $data->phylum, $data->subphylum, $data->class,
                                     $data->order_o, $data->suborder, $data->infraorder, $data->family,
@@ -2248,6 +2307,17 @@ class ExportRecordController extends Controller
                                     ($lang==2 ? $data->expedition_th : $data->expedition_en),
                                     $data->path_pic
                                 ];
+                                /*$arr_content = [
+                                    '', $data->phylum, $data->subphylum, $data->class,
+                                    $data->order_o, $data->suborder, $data->infraorder, $data->family,
+                                    html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->identifier,
+                                    $data->previous_identifier,
+                                    ($lang==2 ? $data->ocean_sea_lake_th : $data->ocean_sea_lake_en),
+                                    ($lang==2 ? $data->country_th  : $data->country_en),
+                                    ($lang==2 ? $data->province_th  : $data->province_en),
+                                    ($lang==2 ? $data->expedition_th : $data->expedition_en),
+                                    $data->path_pic
+                                ];*/
                             } elseif ($group_permission_a == 1 && $group_permission_b == 2) {
                                 $arr_content = [
                                     $data->related_catalog_item . '' . $data->related_reference_item,
@@ -2259,6 +2329,16 @@ class ExportRecordController extends Controller
                                     ($lang==2 ? $data->expedition_th : $data->expedition_en),
                                     $data->path_pic
                                 ];
+                                /*$arr_content = [
+                                    '',
+                                    html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->identifier,
+                                    $data->previous_identifier,
+                                    ($lang==2 ? $data->ocean_sea_lake_th : $data->ocean_sea_lake_en),
+                                    ($lang==2 ? $data->country_th  : $data->country_en),
+                                    ($lang==2 ? $data->province_th  : $data->province_en),
+                                    ($lang==2 ? $data->expedition_th : $data->expedition_en),
+                                    $data->path_pic
+                                ];*/
                             } else {
                                 $arr_content = [
                                     $data->related_catalog_item . '' . $data->related_reference_item,
@@ -2270,6 +2350,16 @@ class ExportRecordController extends Controller
                                     ($lang==2 ? $data->expedition_th : $data->expedition_en),
                                     $data->path_pic
                                 ];
+                                /*$arr_content = [
+                                    '',
+                                    html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->identifier,
+                                    $data->previous_identifier,
+                                    ($lang==2 ? $data->ocean_sea_lake_th : $data->ocean_sea_lake_en),
+                                    ($lang==2 ? $data->country_th  : $data->country_en),
+                                    ($lang==2 ? $data->province_th  : $data->province_en),
+                                    ($lang==2 ? $data->expedition_th : $data->expedition_en),
+                                    $data->path_pic
+                                ];*/
                             }
 
                             // write in file

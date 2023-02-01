@@ -51,7 +51,7 @@
             <div class="col-md-12">
                 <p class="content-header" style="font-size: 24px !important;">
                     @if( $lang == 2)
-                    ระบบฐานข้อมูลสิ่งมีชีวิตทางทะเล
+                    ระบบฐานข้อมูลทรัพยากรทางทะเล
                     @else
                     Marine Resource Database System
                     @endif

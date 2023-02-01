@@ -26,7 +26,7 @@
   <div class="col-md-12 col-login">
     <p class="login-label-header">
         @if($lang == 1){{ "Welcome to Marine Resources Database System" }}
-        @else{{ "ยินดีต้อนรับสู่ระบบการจัดการฐานข้อมูลสิ่งมีชีวิตทางทะเล" }}
+        @else{{ "ยินดีต้อนรับสู่ระบบการจัดการฐานข้อมูลทรัพยากรทางทะเล" }}
         @endif
     </p>
     <p class="login-label-subheader">

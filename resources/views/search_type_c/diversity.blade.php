@@ -204,6 +204,8 @@
             ],
 });
 
+table.column( 0 ).visible( false );
+
 }
 
     </script>

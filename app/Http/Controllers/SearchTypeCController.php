@@ -188,10 +188,11 @@ class SearchTypeCController extends Controller
     public function diversityCAsDataTable(Request $input)
     {
         $data  = $this->dataDistribution($input);
+
         $btn = '';
         //supakorn 
         //diversity must show only current name in change request#4 No1
-        return Datatables::of($data['result_searchs']->groupBy('classification.current_scientific_name', 'r.unique_record'))
+        return Datatables::of($data['result_searchs']->groupBy('classification.current_scientific_name'))
             ->addColumn('cate_ref', function ($row) {
                 return $row->related_catalog_item . $row->related_reference_item;
             })
@@ -209,6 +210,8 @@ class SearchTypeCController extends Controller
     public function recentRecordCAsDataTable(Request $input)
     {
         $data  = $this->dataDistribution($input);
+        //echo $data['result_searchs']->toSql();
+        //exit();
         $btn = '';
         return Datatables::of($data['result_searchs']->groupBy('r.unique_record'))
             ->addColumn('cate_ref', function ($row) {
@@ -370,7 +373,7 @@ class SearchTypeCController extends Controller
     //แยกส่วนการเตรียมข้อมูลออกมา เพื่อใช้ใน Datatable ด้วย
     public static function dataDistribution(Request $input)
     {
-        $lang = Session::get('language');
+        //$lang = Session::get('language');
         $header_taxonomy        = $input->header_taxonomy;
         $domain                 = $input->domain;
         $kingdom                = $input->kingdom;
@@ -609,6 +612,8 @@ class SearchTypeCController extends Controller
             'r.start_longitude',
             'r.end_longitude'
         ]);
+
+        //echo $db->toSql();
 
 
         return ['result_searchs' => $searchResult,  'taxa' => $taxa, 'locality' => $locality, 'expedition' => $expedition, 'is_in_thailand' => $is_in_thailand, 'marinecentertext' => $marinecentertext, 'typestatustext' => $typestatustext];

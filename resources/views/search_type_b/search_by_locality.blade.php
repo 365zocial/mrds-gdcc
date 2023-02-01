@@ -68,7 +68,8 @@
                         province_id: $('#province_id').val(),
                         district_id: $('#district_id').val(),
                         county_id: $('#county_id').val(),
-                        locality_text: $('#locality_text').val()
+                        locality_text: $('#locality_text').val(),
+                        slang: $("input[name=slang]:checked").val()
                     }
                 }).done(function( data ) {
                     $('.table_result').slideDown();
@@ -163,7 +164,8 @@
                     province_id: $('#province_id').val(),
                     district_id: $('#district_id').val(),
                     county_id: $('#county_id').val(),
-                    locality_text: $('#locality_text').val()
+                    locality_text: $('#locality_text').val(),
+                    slang: $('#slang').val()
                 }
             }).done(function( data ) {
                 if ( data ) {
@@ -224,9 +226,21 @@
                         ];
                     ?>
 
+                    <div class="col-md-12" id="choose_langue">
+                        <p class="search-report-dropdown-header radio">
+                            Language
+                            <label class="radio-inline">
+                                <input type="radio" name="slang" value="2" checked> Thai&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="slang" value="1"> English
+                            </label>
+                        </p>
+                    </div>
+
                     <div class="col-md-12" id="choose_source">
                         <p class="search-report-dropdown-header radio">
-                            Source
+                            Source&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <label class="radio-inline">
                                 <input type="radio" name="source" value="1" checked> Specimens
                             </label>
