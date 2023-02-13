@@ -159,6 +159,7 @@
                 return false;
             }
             var element = $(name_element);
+
             if(!confirm("Confirm to change Group !")){
                 x = x + 1;
                 if( element.prop('checked') ){
@@ -173,18 +174,33 @@
             }else{
                 var id      = element.data('id');
                 var status  = "";
+                
                 if( element.prop('checked') ){
                     var status  = "on";
                 }
+                
                 $('.loader').show();
-                if( $(this).is(':checked') ) {
-                    $.post("{{ url('staff/changeStatus') }}",{ _token : '{{ csrf_token() }}' ,id_en: '{{ $record->id }}', status: 2 });
+
+                var _status = {{$record->status}};
+
+                if(_status == 1){
+                  $.post("{{ url('staff/changeStatus') }}",{ _token : '{{ csrf_token() }}' ,id_en: '{{ $record->id }}', status: 2 });
                 } else {
-                    $.post("{{ url('staff/changeStatus') }}",{ _token : '{{ csrf_token() }}' ,id_en: '{{ $record->id }}', status: 1 });
+                  $.post("{{ url('staff/changeStatus') }}",{ _token : '{{ csrf_token() }}' ,id_en: '{{ $record->id }}', status: 1 });
                 }
+
+                /*            
+                if( $(this).is(':checked') ) {
+                    $.post("{{ url('staff/changeStatus') }}",{ _token : '{{ csrf_token() }}' ,id_en: '{{ $record->id }}', status: 1 });
+                } else {
+                    $.post("{{ url('staff/changeStatus') }}",{ _token : '{{ csrf_token() }}' ,id_en: '{{ $record->id }}', status: 2});
+                }
+                */
+
                 setTimeout( function () {
                     window.location = "{{ url('staff/manageRecord') }}"; //will redirect to your blog page (an ex: blog.html)
                 }, 1500); //will call the function after 2 secs.
+
             }
         }
 
