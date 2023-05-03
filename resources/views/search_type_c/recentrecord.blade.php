@@ -80,6 +80,11 @@
                         family: $('#family').val(),
                         genus: $('#genus').val(),
                         classification: $('#classification').val(),
+                        infraphylum: $('#infraphylum').val(),
+                        superclass: $('#superclass').val(),
+                        subclass: $('#subclass').val(),
+                        infraclass: $('#infraclass').val(),
+                        superorder: $('#superorder').val(),
 
                         chk_taxa: chk_taxa,
                         chk_locality: chk_locality,
@@ -184,6 +189,7 @@
         function initDatatable(params){
             table.destroy();
             table = $('#distributeDataTable').DataTable({
+                "scrollX": true,
                 order: [2, 'asc'],
                 // bFilter: true,
                 // bLengthChange: true,
@@ -206,6 +212,11 @@
                                 { data: 'suborder', name: 't7.name'},
                                 { data: 'infraorder', name: 't8.name'},
                                 { data: 'family', name: 't9.name'},
+                                { data: 'infraphylum', name: 't13.name'},
+                                { data: 'superclass', name: 't14.name'},
+                                { data: 'subclass', name: 't15.name'},
+                                { data: 'infraclass', name: 't16.name'},
+                                { data: 'superorder', name: 't17.name'},
                     @endif
                             { data: 'current_scientific_name_format', name: 'classification.current_scientific_name_format'},
                             { data: 'previous_scientific_name_format', name: 'classification.previous_scientific_name_format'},
@@ -391,7 +402,12 @@
                             [$families,'family'],
                             [$genuses,'genus'],
                             [$species,'species'],
-                            [$classification,'classification']
+                            [$classification,'classification'],
+                            [$infraphylum,'infraphylum'],
+                            [$superclass,'superclass'],
+                            [$subclass,'subclass'],
+                            [$infraclass,'infraclass'],
+                            [$superorder,'superorder']
                         ];
                     ?>
 
@@ -411,7 +427,11 @@
                                 <option value="superfamily">Super Family / Clade</option>
                                 <option value="family">Family / Clade</option>
                                 <option value="genus">Genus</option>
-                                <option value="classification">Species</option>
+                                <option value="infraphylum">Infraphylum</option>
+                                <option value="superclass">Superclass</option>
+                                <option value="subclass">Subclass</option>
+                                <option value="infraclass">Infraclass</option>
+                                <option value="superorder">Superorder</option>
                             </select>
                         </div>
                         <div class="col-md-6 form-group">
@@ -651,6 +671,11 @@
                         <th>Suborder (Clade)</th>
                         <th>Infraorder (Clade)</th>
                         <th>Family (Clade)</th>
+                        <th>infraphylum</th>
+                        <th>superclass</th>
+                        <th>subclass</th>
+                        <th>infraclass</th>
+                        <th>superorder</th>
                     @endif
                     <th>Current Name</th>
                     <th>Previous Name</th>

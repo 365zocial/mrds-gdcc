@@ -148,6 +148,12 @@ class SearchTypeCController extends Controller
         $data['families']               =   Taxonomy::getFamily();
         $data['genuses']                =   Taxonomy::getGenus();
         $data['species']                =   Taxonomy::getSpecies();
+        // 3-5-66 add by nuttawoot
+        $data['infraphylum']            =   Taxonomy::getInfraphylum();
+        $data['superclass']             =   Taxonomy::getSuperclass();
+        $data['subclass']               =   Taxonomy::getSubclass();
+        $data['infraclass']             =   Taxonomy::getInfraclass();
+        $data['superorder']             =   Taxonomy::getSuperorder();
         $data['classification']         =   Classification::getClassificationBySciName();
         $data['marinecenters']          =   Marinecenter::getMarineCenterList();
         $data['typestatuses']           =   Wording::getWordingByWordingTypeForForm(2);

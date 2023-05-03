@@ -2247,11 +2247,11 @@ class ExportRecordController extends Controller
                     $arr_header = array();
                     if ($group_permission_a == 2 && $group_permission_b == 2) {
                         /* Baw update : 26-01-66 */
-                        $arr_header = ['ID', 'Phylum', 'Subphylum', 'Class (Clade)', 'Order (Clade)', 'Suborder (Clade)', 'Infraorder (Clade)', 'Family (Clade)', 'Current Name', 'Previous Name', 'Type', 'Current Indentifier', 'Previous Indentifier', 'Ocean/Sea/Lake', 'Country', 'Province', 'Expendition', 'Picture'];
+                        $arr_header = ['ID', 'Phylum', 'Subphylum', 'Class (Clade)', 'Order (Clade)', 'Suborder (Clade)', 'Infraorder (Clade)', 'Family (Clade)', 'infraphylum','superclass','subclass','infraclass','superorder','Current Name', 'Previous Name', 'Type', 'Current Indentifier', 'Previous Indentifier', 'Ocean/Sea/Lake', 'Country', 'Province', 'Expendition', 'Picture'];
                         //$arr_header = ['', 'Phylum', 'Subphylum', 'Class (Clade)', 'Order (Clade)', 'Suborder (Clade)', 'Infraorder (Clade)', 'Family (Clade)', 'Current Name', 'Previous Name', 'Type', 'Current Indentifier', 'Previous Indentifier', 'Ocean/Sea/Lake', 'Country', 'Province', 'Expendition', 'Picture'];
                     } elseif ($group_permission_a == 2 && $group_permission_b == 1) {
                         /* Baw update : 26-01-66 */
-                        $arr_header = ['ID', 'Phylum', 'Subphylum', 'Class (Clade)', 'Order (Clade)', 'Suborder (Clade)', 'Infraorder (Clade)', 'Family (Clade)', 'Current Name', 'Previous Name', 'Type', 'Current Indentifier', 'Previous Indentifier', 'Ocean/Sea/Lake', 'Country', 'Province', 'Expendition', 'Picture'];
+                        $arr_header = ['ID', 'Phylum', 'Subphylum', 'Class (Clade)', 'Order (Clade)', 'Suborder (Clade)', 'Infraorder (Clade)', 'Family (Clade)', 'infraphylum','superclass','subclass','infraclass','superorder','Current Name', 'Previous Name', 'Type', 'Current Indentifier', 'Previous Indentifier', 'Ocean/Sea/Lake', 'Country', 'Province', 'Expendition', 'Picture'];
                         //$arr_header = ['', 'Phylum', 'Subphylum', 'Class (Clade)', 'Order (Clade)', 'Suborder (Clade)', 'Infraorder (Clade)', 'Family (Clade)', 'Current Name', 'Previous Name', 'Type', 'Current Indentifier', 'Previous Indentifier', 'Ocean/Sea/Lake', 'Country', 'Province', 'Expendition', 'Picture'];
                     } elseif ($group_permission_a == 1 && $group_permission_b == 2) {
                         /* Baw update : 26-01-66 */
@@ -2278,6 +2278,7 @@ class ExportRecordController extends Controller
                                 $arr_content = [
                                     $data->related_catalog_item . '' . $data->related_reference_item, $data->phylum, $data->subphylum, $data->class,
                                     $data->order_o, $data->suborder, $data->infraorder, $data->family,
+                                    $data->infraphylum,$data->superclass,$data->subclass,$data->infraclass,$data->superorder,
                                     html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->identifier,
                                     $data->previous_identifier,
                                     ($lang==2 ? $data->ocean_sea_lake_th : $data->ocean_sea_lake_en),
@@ -2302,6 +2303,7 @@ class ExportRecordController extends Controller
                                 $arr_content = [
                                     $data->related_catalog_item . '' . $data->related_reference_item, $data->phylum, $data->subphylum, $data->class,
                                     $data->order_o, $data->suborder, $data->infraorder, $data->family,
+                                    $data->infraphylum,$data->superclass,$data->subclass,$data->infraclass,$data->superorder,
                                     html_entity_decode($data->current_scientific_name), $data->previous_scientific_name, $data->type_status_en, $data->identifier,
                                     $data->previous_identifier,
                                     ($lang==2 ? $data->ocean_sea_lake_th : $data->ocean_sea_lake_en),
