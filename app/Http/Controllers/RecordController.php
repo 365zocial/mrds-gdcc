@@ -736,6 +736,9 @@ class RecordController extends Controller
 		$query = $query->groupby('record.marinecenter_id', 'record.collection_code', 'record.related_catalog_item', 'record.related_reference_item');
 		// ->orderBy('record.id', 'desc');
 
+		//echo $query->toSql();
+		//exit();
+
 		$btn = '';
 		return Datatables::of($query)
 			->addColumn('action', function ($query) use ($btn) {
@@ -777,10 +780,15 @@ class RecordController extends Controller
 		$record = Record::getFullRecord($record_id);
 
 		$data['record'] = $record[0]; //englist record
+		$marinecenter_id = $data['record']['marinecenter_id'];
+		//echo $marinecenter_id;exit();
+		//$marinecenter_id = Auth::user()->marinecenter_id;
 
 		$data['marinecenter_list'] = Marinecenter::getMarineCenterList();
 
-		$data['marinecenter'] 		= 	Marinecenter::getMarineCenter(Auth::user()->marinecenter_id)->marinecenter_code;
+		//$data['marinecenter'] 		= 	Marinecenter::getMarineCenter(Auth::user()->marinecenter_id)->marinecenter_code;
+		$data['marinecenter'] 		= 	Marinecenter::getMarineCenter($marinecenter_id)->marinecenter_code;
+		
 		$data['classification'] 	= 	Classification::getClassification($record[0]->classification_id);
 
 		// get taxonomy wording
