@@ -2077,11 +2077,11 @@ class ExportRecordController extends Controller
                     if ($group_permission_a == 2 && $group_permission_b == 2) {
                         //$arr_header = ['ID', 'Phylum', 'Subphylum', 'Class', 'Order', 'Suborder', 'Infraorder', 'Super Family', 'Family', 'Current Name'];
                         /* baw edit : 19-01-2556 */
-                        $arr_header = ['','Phylum', 'Subphylum', 'Class', 'Order', 'Suborder', 'Infraorder', 'Super Family', 'Family', 'Current Name'];
+                        $arr_header = ['','Phylum', 'Subphylum', 'Class', 'Order', 'Suborder', 'Infraorder', 'Super Family', 'Family', 'infraphylum','superclass','subclass','infraclass','superorder','Current Name'];
                     } elseif ($group_permission_a == 2 && $group_permission_b == 1) {
                         //$arr_header = ['ID', 'Phylum', 'Subphylum', 'Class', 'Order', 'Suborder', 'Infraorder', 'Super Family', 'Family', 'Current Name'];
                         /* baw edit : 19-01-2556 */
-                        $arr_header = ['','Phylum', 'Subphylum', 'Class', 'Order', 'Suborder', 'Infraorder', 'Super Family', 'Family', 'Current Name'];
+                        $arr_header = ['','Phylum', 'Subphylum', 'Class', 'Order', 'Suborder', 'Infraorder', 'Super Family', 'Family', 'infraphylum','superclass','subclass','infraclass','superorder','Current Name'];
                     } elseif ($group_permission_a == 1 && $group_permission_b == 2) {
                         //$arr_header = ['ID', 'Current Name'];
                         /* baw edit : 19-01-2556 */
@@ -2117,9 +2117,11 @@ class ExportRecordController extends Controller
                                 ];
                                 */
                                 /* baw edit : 19-01-2556 */
+
                                 $arr_content = [
                                     '', $data->phylum, $data->subphylum, $data->class,
                                     $data->order_o, $data->suborder, $data->infraorder, $data->superfamily, $data->family,
+                                    $data->infraphylum,$data->superclass,$data->subclass,$data->infraclass,$data->superorder,
                                     html_entity_decode($data->current_scientific_name)
                                 ];
                             } elseif ($group_permission_a == 2 && $group_permission_b == 1) {
@@ -2132,6 +2134,7 @@ class ExportRecordController extends Controller
                                 $arr_content = [
                                     '', $data->phylum, $data->subphylum, $data->class,
                                     $data->order_o, $data->suborder, $data->infraorder, $data->superfamily, $data->family,
+                                    $data->infraphylum,$data->superclass,$data->subclass,$data->infraclass,$data->superorder,
                                     html_entity_decode($data->current_scientific_name)
                                 ];
                             } elseif ($group_permission_a == 1 && $group_permission_b == 2) {

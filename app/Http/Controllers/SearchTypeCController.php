@@ -76,6 +76,13 @@ class SearchTypeCController extends Controller
         $data['families']               =   Taxonomy::getFamily();
         $data['genuses']                =   Taxonomy::getGenus();
         $data['species']                =   Taxonomy::getSpecies();
+        // 3-5-66 add by nuttawoot
+        $data['infraphylum']            =   Taxonomy::getInfraphylum();
+        $data['superclass']             =   Taxonomy::getSuperclass();
+        $data['subclass']               =   Taxonomy::getSubclass();
+        $data['infraclass']             =   Taxonomy::getInfraclass();
+        $data['superorder']             =   Taxonomy::getSuperorder();
+
         $data['classification']         =   Classification::getClassificationBySciName();
         $data['marinecenters']          =   Marinecenter::getMarineCenterList();
         $data['typestatuses']            =   Wording::getWordingByWordingTypeForForm(2);
@@ -389,6 +396,13 @@ class SearchTypeCController extends Controller
         $species                = $input->species;
         $classification         = $input->classification;
 
+        // add by nuttawoot
+        $infraphylum            = $input->infraphylum;
+        $superclass             = $input->superclass;
+        $subclass               = $input->subclass;
+        $infraclass             = $input->infraclass;
+        $superorder             = $input->superorder;
+
         $locality_type          = $input->locality_type;
         $locality_country       = $input->locality_country;
         $locality_province      = $input->locality_province;
@@ -407,6 +421,7 @@ class SearchTypeCController extends Controller
         $lang = Session::get('language');
         $db = new Classification;
         $db = $db->leftjoin('record as r', 'classification.id', '=', 'r.classification_id');
+
         $db = $db->leftjoin('taxonomy as t1', 'classification.domain', '=', 't1.id');
         $db = $db->leftjoin('taxonomy as t2', 'classification.kingdom', '=', 't2.id');
         $db = $db->leftjoin('taxonomy as t3', 'classification.phylum', '=', 't3.id');
@@ -419,6 +434,13 @@ class SearchTypeCController extends Controller
         $db = $db->leftjoin('taxonomy as t10', 'classification.superfamily', '=', 't10.id');
         $db = $db->leftjoin('taxonomy as t11', 'classification.genus', '=', 't11.id');
         $db = $db->leftjoin('taxonomy as t12', 'classification.species', '=', 't12.id');
+        //add by nuttawoot
+        $db = $db->leftjoin('taxonomy as t13', 'classification.infraphylum', '=', 't13.id');
+        $db = $db->leftjoin('taxonomy as t14', 'classification.superclass', '=', 't14.id');
+        $db = $db->leftjoin('taxonomy as t15', 'classification.subclass', '=', 't15.id');
+        $db = $db->leftjoin('taxonomy as t16', 'classification.infraclass', '=', 't16.id');
+        $db = $db->leftjoin('taxonomy as t17', 'classification.superorder', '=', 't17.id');
+
         $db = $db->leftjoin('province as p', 'r.province', '=', 'p.id');
         $db = $db->leftjoin('country as country', 'r.country', '=', 'country.id');
         $db = $db->leftjoin('wording as w1', 'r.expedition', '=', 'w1.id');
@@ -467,6 +489,21 @@ class SearchTypeCController extends Controller
         } else if ($header_taxonomy == "classification" && $classification != "") {
             $id_taxa        = $classification;
             $db             = $db->where('classification.id', $classification);
+        } else if ($header_taxonomy == "infraphylum" && $infraphylum != "") {
+            $id_taxa        = $infraphylum;
+            $db             = $db->where('classification.infraphylum', $infraphylum);
+        } else if ($header_taxonomy == "superclass" && $superclass != "") {
+            $id_taxa        = $superclass;
+            $db             = $db->where('classification.superclass', $superclass);
+        } else if ($header_taxonomy == "subclass" && $subclass != "") {
+            $id_taxa        = $subclass;
+            $db             = $db->where('classification.subclass', $subclass);
+        } else if ($header_taxonomy == "infraclass" && $infraclass != "") {
+            $id_taxa        = $infraclass;
+            $db             = $db->where('classification.infraclass', $infraclass);
+        } else if ($header_taxonomy == "superorder" && $superorder != "") {
+            $id_taxa        = $superorder;
+            $db             = $db->where('classification.superorder', $superorder);
         }
 
         if ($header_taxonomy == "classification" && $classification != "") {
@@ -591,6 +628,11 @@ class SearchTypeCController extends Controller
             't10.name as superfamily',
             't11.name as genus',
             't12.name as species',
+            't13.name as infraphylum',
+            't14.name as superclass',
+            't15.name as subclass',
+            't16.name as infraclass',
+            't17.name as superorder',
             'r.id as record_id',
             'r.locality',
             'r.identifier',
@@ -613,7 +655,7 @@ class SearchTypeCController extends Controller
             'r.end_longitude'
         ]);
 
-        //echo $db->toSql();
+        //echo $db->toSql();exit();
 
 
         return ['result_searchs' => $searchResult,  'taxa' => $taxa, 'locality' => $locality, 'expedition' => $expedition, 'is_in_thailand' => $is_in_thailand, 'marinecentertext' => $marinecentertext, 'typestatustext' => $typestatustext];

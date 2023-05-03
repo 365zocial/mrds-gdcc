@@ -22,6 +22,11 @@ $("#taxa_chkbox").change(function () {
     $("#genus").val($("#genus option:first").val());
     $("#species").val($("#species option:first").val());
     $("#classification").val($("#classification option:first").val()); // (ชื่อวิทยาศาสตร์)
+    $("#infraphylum").val($("#infraphylum option:first").val());
+    $("#superclass").val($("#superclass option:first").val());
+    $("#subclass").val($("#subclass option:first").val());
+    $("#infraclass").val($("#infraclass option:first").val());
+    $("#superorder").val($("#superorder option:first").val());
   }
 });
 
@@ -152,6 +157,21 @@ $("#taxa_header_id").change(function () {
   if ($(this).val() == "classification") {
     $(".dd_taxa_sub").eq(13).show();
   }
+  if ($(this).val() == "infraphylum") {
+    $(".dd_taxa_sub").eq(14).show();
+  }
+  if ($(this).val() == "superclass") {
+    $(".dd_taxa_sub").eq(15).show();
+  }
+  if ($(this).val() == "subclass") {
+    $(".dd_taxa_sub").eq(16).show();
+  }
+  if ($(this).val() == "infraclass") {
+    $(".dd_taxa_sub").eq(17).show();
+  }
+  if ($(this).val() == "superorder") {
+    $(".dd_taxa_sub").eq(18).show();
+  }
 });
 
 checkBeforeSubmit();
@@ -259,6 +279,41 @@ function checkBeforeSubmit() {
         ) {
           can_submit = false;
           select_tag = $(".dd_taxa_sub").eq(13).children();
+        }
+        if (
+          taxa_h == "infraphylum" &&
+          $(".dd_taxa_sub").eq(14).children().val() == 0
+        ) {
+          can_submit = false;
+          select_tag = $(".dd_taxa_sub").eq(14).children();
+        }
+        if (
+          taxa_h == "superclass" &&
+          $(".dd_taxa_sub").eq(15).children().val() == 0
+        ) {
+          can_submit = false;
+          select_tag = $(".dd_taxa_sub").eq(15).children();
+        }
+        if (
+          taxa_h == "subclass" &&
+          $(".dd_taxa_sub").eq(16).children().val() == 0
+        ) {
+          can_submit = false;
+          select_tag = $(".dd_taxa_sub").eq(16).children();
+        }
+        if (
+          taxa_h == "infraclass" &&
+          $(".dd_taxa_sub").eq(17).children().val() == 0
+        ) {
+          can_submit = false;
+          select_tag = $(".dd_taxa_sub").eq(17).children();
+        }
+        if (
+          taxa_h == "superorder" &&
+          $(".dd_taxa_sub").eq(18).children().val() == 0
+        ) {
+          can_submit = false;
+          select_tag = $(".dd_taxa_sub").eq(18).children();
         }
       }
     }
