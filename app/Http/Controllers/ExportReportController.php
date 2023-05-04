@@ -1115,4 +1115,147 @@ class ExportReportController extends Controller
         // sent name_file for download
         echo $name_file.'.xlsx';
     }
+
+    //Nuttawoot
+	//Created : 4-5-66
+    # Download Admin Report
+    public function downloadAdminReport() {
+
+        $date = date_create();
+        $date_export = date_format($date, "d-m-Y H:i:s");
+        $date_export_file_name = date_format($date, "Y-m-d_H-i-s");
+        $name_file = 'Admin_Report_' . $date_export_file_name;
+
+        $sql = "SELECT
+        r.related_catalog_item,
+        r.related_reference_item,
+        t5.name AS phylum,
+        t6.name AS subphylum,
+        t9.name AS class,
+        t13.name AS order_o,
+        t14.name AS suborder,
+        t15.name AS infraorder,
+        t17.name AS family,
+        
+        /*
+        
+       &amp; = 639 -> &
+       &egrave; = 97 -> è
+       &iacute; = 1  -> í
+       &ouml; = 83 -> ö
+       &rsquo; = 6 -> ’
+       &uuml; = 155 -> ü
+       &aring; = 106 -> å
+       &eacute; = 52 -> é
+       &oacute; = 5 -> ó
+       &ecirc; = 1 -> ê
+       &aacute; = 1 -> á
+       &oslash; = 7 -> ø
+       
+       */
+        
+        
+       REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(c.current_scientific_name, '&amp;', '&'), '&egrave;', 'è'), '&iacute;', 'í'), '&ouml;', 'ö'), '&rsquo;', '’'), '&uuml;', 'ü') , '&aring;', 'å'), '&eacute;', 'é'), '&oacute;', 'ó'), '&ecirc;', 'ê'), '&aacute;', 'á'), '&oslash;', 'ø') as current_scientific_name,
+       
+       REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(c.previous_scientific_name, '&amp;', '&'), '&egrave;', 'è'), '&iacute;', 'í'), '&ouml;', 'ö'), '&rsquo;', '’'), '&uuml;', 'ü') , '&aring;', 'å'), '&eacute;', 'é'), '&oacute;', 'ó'), '&ecirc;', 'ê'), '&aacute;', 'á'), '&oslash;', 'ø') as previous_scientific_name,
+       
+       
+       
+        w1.name_en AS type_status_en,
+        r.identifier,
+        r.previous_identifier,
+        w2.name_en AS ocean_sea_lake_en,
+        country.country_en,
+        province.province_en,
+        w3.name_en AS expendition_en,
+        r.locality,
+        r.individual_count,
+        r.depth_start,
+        r.depth_end
+         
+       FROM record as r
+       
+       LEFT JOIN classification as c on r.classification_id = c.id
+       LEFT JOIN taxonomy AS t5 ON c.phylum = t5.id
+       LEFT JOIN taxonomy AS t6 ON c.subphylum = t6.id
+       LEFT JOIN taxonomy AS t9 ON c.class = t9.id
+       LEFT JOIN taxonomy AS t13 ON c.order_o = t13.id
+       LEFT JOIN taxonomy AS t14 ON c.suborder = t14.id
+       LEFT JOIN taxonomy AS t15 ON c.infraorder = t15.id
+       LEFT JOIN taxonomy AS t17 ON c.family = t17.id
+       LEFT JOIN wording AS w1 ON r.type_status = w1.id
+       LEFT JOIN wording AS w2 ON r.ocean_sea_lake = w2.id
+       LEFT JOIN country ON r.country = country.id
+       LEFT JOIN province ON r.province = province.id
+       LEFT JOIN wording AS w3 ON r.expedition = w3.id
+       
+       WHERE r.language_id = 1 AND r.status = 2  AND r.approve_status = 1
+       ORDER BY r.related_catalog_item, r.related_reference_item";
+
+        $data = DB::select($sql);
+        
+        Excel::create($name_file, function ($excel) use($data) {
+            $excel->sheet('Record Data', function ($sheet) use($data) {
+                //header
+                $sheet->row(1, array(
+                    'related_catalog_item',
+                    'related_reference_item',
+                    'phylum',
+                    'subphylum',
+                    'class',
+                    'order_o',
+                    'suborder',
+                    'infraorder',
+                    'family',
+                    'current_scientific_name',
+                    'previous_scientific_name',
+                    'type_status_en',
+                    'identifier',
+                    'previous_identifier',
+                    'ocean_sea_lake_en',
+                    'country_en',
+                    'province_en',
+                    'expendition_en',
+                    'locality',
+                    'individual_count',
+                    'depth_start',
+                    'depth_end'
+                   )); 
+                   $row_n = 2;
+                   foreach ($data as $info) {
+                       $sheet->row($row_n, array(
+                        ($info->related_catalog_item)?$info->related_catalog_item:"",
+                        ($info->related_reference_item)?$info->related_reference_item:"",
+                        ($info->phylum)?$info->phylum:"",
+                        ($info->subphylum)?$info->subphylum:"",
+                        ($info->class)?$info->class:"",
+                        ($info->order_o)?$info->order_o:"",
+                        ($info->suborder)?$info->suborder:"",
+                        ($info->infraorder)?$info->infraorder:"",
+                        ($info->family)?$info->family:"",
+                        ($info->current_scientific_name)?$info->current_scientific_name:"",
+                        ($info->previous_scientific_name)?$info->previous_scientific_name:"",
+                        ($info->type_status_en)?$info->type_status_en:"",
+                        ($info->identifier)?$info->identifier:"",
+                        ($info->previous_identifier)?$info->previous_identifier:"",
+                        ($info->ocean_sea_lake_en)?$info->ocean_sea_lake_en:"",
+                        ($info->country_en)?$info->country_en:"",
+                        ($info->province_en)?$info->province_en:"",
+                        ($info->expendition_en)?$info->expendition_en:"",
+                        ($info->locality)?$info->locality:"",
+                        ($info->individual_count)?$info->individual_count:"",
+                        ($info->depth_start)?$info->depth_start:"",
+                        ($info->depth_end)?$info->depth_end:""
+                       ));
+                       $row_n++;
+                   }     
+            });
+        })->store('csv', Config::get('path.export_record_file_path'));
+
+        // save export log : 0 is excel, 1 is pdf, 2 is api
+        ExportLog::saveExportLog(0, $name_file);
+
+        // sent name_file for download
+        echo $name_file . '.csv';
+    }
 }

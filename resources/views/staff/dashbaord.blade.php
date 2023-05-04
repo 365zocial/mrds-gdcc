@@ -7,7 +7,16 @@
 
 @section('script')
     <script type="text/javascript">
-
+        function exportRecord() {
+            $.ajax({
+                method: "GET",
+                url: '{!! route('admin.report') !!}',
+            }).done(function( data ) {
+                if ( data ) {
+                    window.location.href = '<?php echo "/export_result_record" ?>'+ '/' + data;
+                }
+            });
+        }
     </script>
 @endsection
 
@@ -15,11 +24,9 @@
 
 <div class="row">
     <div class="col-md-12">
-
         @if(Auth::user()->role_id == 3)
             <!-- Role : Manager -->
             <div class="row" style="margin-bottom: 30px; margin-top: 10%;">
-
                 <div class="col-md-3 menu-box">
                   <a class="box-link" href="{{ url('staff/export_label/form') }}">
                     <div class="menu-icon-box">
@@ -105,7 +112,12 @@
 
         @elseif(Auth::user()->role_id == 2) <!-- Role : Administrator -->
             <div class="row" style="margin-top: 5%; margin-bottom: 30px;">
-
+                <div class="col-md-12">
+                  <button class="btn btn-default btn-gold" style="font-size: 16px;" onclick="exportRecord()">
+                    Download Admin Report
+                  </button>
+                </div>
+                <div style="margin-top:50px"></div>
                 <div class="col-md-3 menu-box">
                   <a class="box-link" href="{{ url('staff/manageClassification') }}">
                     <div class="menu-icon-box">
