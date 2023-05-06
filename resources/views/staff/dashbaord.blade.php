@@ -27,6 +27,7 @@
         @if(Auth::user()->role_id == 3)
             <!-- Role : Manager -->
             <div class="row" style="margin-bottom: 30px; margin-top: 10%;">
+            
                 <div class="col-md-3 menu-box">
                   <a class="box-link" href="{{ url('staff/export_label/form') }}">
                     <div class="menu-icon-box">
@@ -112,12 +113,7 @@
 
         @elseif(Auth::user()->role_id == 2) <!-- Role : Administrator -->
             <div class="row" style="margin-top: 5%; margin-bottom: 30px;">
-                <div class="col-md-12">
-                  <button class="btn btn-default btn-gold" style="font-size: 16px;" onclick="exportRecord()">
-                    Download Admin Report
-                  </button>
-                </div>
-                <div style="margin-top:50px"></div>
+                
                 <div class="col-md-3 menu-box">
                   <a class="box-link" href="{{ url('staff/manageClassification') }}">
                     <div class="menu-icon-box">
@@ -259,6 +255,19 @@
                 </div>
 
             </div>
+            
+            <div class="row" style="margin-bottom: 30px;">
+              <div class="col-md-3 menu-box">
+                  <a class="box-link" href="#" onclick="exportRecord(); return false;">
+                    <div class="menu-icon-box">
+                        <div class="icon-box">
+                            <img class="icon" src='{{ URL::asset("assets/images/icon_dashboard_manager/export-all-data.png") }}' />
+                        </div>
+                        <p class="menu-text">Download<br>Admin Report</p>
+                    </div>
+                  </a>
+              </div>
+            </div>
         @elseif(Auth::user()->role_id == 4) <!-- Role : Board -->
             <div class="row row-centered" style="margin-top: 10%;">
                 <div class="col-md-3 menu-box col-centered">
@@ -282,6 +291,7 @@
                         </div>
                     </a>
                 </div>
+                
             </div>
         @elseif(Auth::user()->role_id == 6) <!-- Role : PGCP -->
             <div class="row row-centered" style="margin-top: 10%;">
