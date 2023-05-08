@@ -8,6 +8,7 @@
 @section('script')
     <script type="text/javascript">
         function exportRecord() {
+            $('.loader').show();
             $.ajax({
                 method: "GET",
                 url: '{!! route('admin.report') !!}',
@@ -15,6 +16,7 @@
                 if ( data ) {
                     window.location.href = '<?php echo "/export_result_record" ?>'+ '/' + data;
                 }
+                $('.loader').hide();
             });
         }
     </script>
@@ -258,7 +260,7 @@
             
             <div class="row" style="margin-bottom: 30px;">
               <div class="col-md-3 menu-box">
-                  <a class="box-link" href="#" onclick="exportRecord(); return false;">
+                  <a class="box-link" href="#" onclick="exportRecord(); return false;" target="_blank">
                     <div class="menu-icon-box">
                         <div class="icon-box">
                             <img class="icon" src='{{ URL::asset("assets/images/icon_dashboard_manager/export-all-data.png") }}' />
