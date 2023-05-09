@@ -1171,7 +1171,9 @@ class ExportReportController extends Controller
         r.locality,
         r.individual_count,
         r.depth_start,
-        r.depth_end
+        r.depth_end,
+        r.latitude,
+        r.longitude
          
        FROM record as r
        
@@ -1190,7 +1192,7 @@ class ExportReportController extends Controller
        LEFT JOIN wording AS w3 ON r.expedition = w3.id
        
        WHERE r.language_id = 1 AND r.status = 2  AND r.approve_status = 1
-       ORDER BY r.related_catalog_item, r.related_reference_item";
+       ORDER BY r.related_catalog_item, r.related_reference_item limit 0,10000";
 
         $data = DB::select($sql);
         
@@ -1219,7 +1221,9 @@ class ExportReportController extends Controller
                     'locality',
                     'individual_count',
                     'depth_start',
-                    'depth_end'
+                    'depth_end',
+                    'latitude',
+                    'longitude'
                    )); 
                    $row_n = 2;
                    foreach ($data as $info) {
@@ -1245,7 +1249,9 @@ class ExportReportController extends Controller
                         ($info->locality)?$info->locality:"",
                         ($info->individual_count)?$info->individual_count:"",
                         ($info->depth_start)?$info->depth_start:"",
-                        ($info->depth_end)?$info->depth_end:""
+                        ($info->depth_end)?$info->depth_end:"",
+                        ($info->latitude)?$info->latitude:"",
+                        ($info->longitude)?$info->longitude:""
                        ));
                        $row_n++;
                    }     

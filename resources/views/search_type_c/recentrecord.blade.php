@@ -420,18 +420,18 @@
                                 <option selected disabled="" value="0">Select</option>
                                 <option value="phylum">Phylum</option>
                                 <option value="subphylum">Subphylum</option>
+                                <option value="infraphylum">Infraphylum</option>
+                                <option value="superclass">Superclass</option>
                                 <option value="class">Class / Clade</option>
+                                <option value="subclass">Subclass</option>
+                                <option value="infraclass">Infraclass</option>
+                                <option value="superorder">Superorder</option>
                                 <option value="order_o">Order / Clade</option>
                                 <option value="suborder">Suborder / Clade</option>
                                 <option value="infraorder">Infraorder / Clade</option>
                                 <option value="superfamily">Super Family / Clade</option>
                                 <option value="family">Family / Clade</option>
                                 <option value="genus">Genus</option>
-                                <option value="infraphylum">Infraphylum</option>
-                                <option value="superclass">Superclass</option>
-                                <option value="subclass">Subclass</option>
-                                <option value="infraclass">Infraclass</option>
-                                <option value="superorder">Superorder</option>
                             </select>
                         </div>
                         <div class="col-md-6 form-group">
