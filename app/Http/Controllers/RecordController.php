@@ -716,6 +716,7 @@ class RecordController extends Controller
 		return view('staff.record.manage.specimens');
 	}
 
+	// baw update : 10-05-66
 	public function getRecordDataTable($source)
 	{
 		// dd(123);
@@ -725,13 +726,14 @@ class RecordController extends Controller
 			->leftjoin('wording as w2', 'record.collection_code', '=', 'w2.id')
 			->join('marinecenter', 'record.marinecenter_id', '=', 'marinecenter.id')
 			->where('record.source', $source)
+			->where('record.status', 2)
 			->where('record.approve_status', 1);
 
-		if (Auth::user()->role_id == 3) {
-			$query = $query->where('record.marinecenter_id', Auth::user()->marinecenter_id)
+		// if (Auth::user()->role_id == 3) {
+		// 	$query = $query->where('record.marinecenter_id', Auth::user()->marinecenter_id)
 
-				->where('record.status', 2);
-		}
+		// 		->where('record.status', 2);
+		// }
 
 		$query = $query->groupby('record.marinecenter_id', 'record.collection_code', 'record.related_catalog_item', 'record.related_reference_item');
 		// ->orderBy('record.id', 'desc');
@@ -759,7 +761,7 @@ class RecordController extends Controller
 
 	//Sorawit
 	//Created : 28-3-59
-	//Modified : 4-6-59 by Chaloemphon
+	//Modified : 3-5-66 by Nuttawoot
 	public function editRecordForm($page, $record_id, $type_redirect)
 	{
 		//record_id = 14 is VFZSUlBRPT0=
