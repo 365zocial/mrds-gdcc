@@ -1192,7 +1192,7 @@ class ExportReportController extends Controller
        LEFT JOIN wording AS w3 ON r.expedition = w3.id
        
        WHERE r.language_id = 1 AND r.status = 2  AND r.approve_status = 1
-       ORDER BY r.related_catalog_item, r.related_reference_item limit 0,10000";
+       ORDER BY r.related_catalog_item, r.related_reference_item";
 
         $data = DB::select($sql);
         
