@@ -1119,7 +1119,12 @@ class ExportReportController extends Controller
     //Nuttawoot
 	//Created : 4-5-66
     # Download Admin Report
-    public function downloadAdminReport() {
+    public function downloadAdminReport(Request $input) {
+
+        $conn = "";
+        if ($input->marine_center != "ALL"){
+            $conn = " and r.marinecenter_id = ".$input->marine_center;
+        }
 
         $date = date_create();
         $date_export = date_format($date, "d-m-Y H:i:s");
@@ -1191,9 +1196,10 @@ class ExportReportController extends Controller
        LEFT JOIN province ON r.province = province.id
        LEFT JOIN wording AS w3 ON r.expedition = w3.id
        
-       WHERE r.language_id = 1 AND r.status = 2  AND r.approve_status = 1
+       WHERE r.language_id = 1 AND r.status = 2  AND r.approve_status = 1 $conn
        ORDER BY r.related_catalog_item, r.related_reference_item";
 
+        //echo $sql;
         $data = DB::select($sql);
         
         Excel::create($name_file, function ($excel) use($data) {
@@ -1264,4 +1270,241 @@ class ExportReportController extends Controller
         // sent name_file for download
         echo $name_file . '.csv';
     }
+
+    //Nuttawoot
+	//Created : 4-5-66
+    # Download Admin Report
+    public function downloadAdminReport2(Request $input) {
+
+        $conn = "";
+        if ($input->marine_center != "ALL"){
+            $conn = " and r.marinecenter_id = ".$input->marine_center;
+        }
+
+        $date = date_create();
+        $date_export = date_format($date, "d-m-Y H:i:s");
+        $date_export_file_name = date_format($date, "Y-m-d_H-i-s");
+        $name_file = 'Admin_Report_' . $date_export_file_name;
+
+        $sql = "SELECT
+
+        REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(c.current_scientific_name, '&amp;', '&'), '&egrave;', 'è'), '&iacute;', 'í'), '&ouml;', 'ö'), '&rsquo;', '’'), '&uuml;', 'ü') , '&aring;', 'å'), '&eacute;', 'é'), '&oacute;', 'ó'), '&ecirc;', 'ê'), '&aacute;', 'á'), '&oslash;', 'ø') as current_scientific_name,
+        r.source,
+        r.marinecenter_id,
+        r.collection_code,
+        r.catalog_number,
+        r.variety_name,
+        r.donated_from,
+        r.deposited_at,
+        r.type_status,
+        r.individual_count,
+        r.sex,
+        r.size,
+        r.life_stage,
+        r.ocean_sea_lake,
+        r.islands_island,
+        r.country,
+        r.locality,
+        r.verbatim_latitude,
+        r.verbatim_longitude,
+        r.latitude,
+        r.longitude,
+        r.start_latitude,
+        r.end_latitude,
+        r.start_longitude,
+        r.end_longitude,
+        r.habitat,
+        r.sediment_type,
+        r.depth_start,
+        r.depth_end,
+        r.collector,
+        r.collected_date,
+        r.identifier,
+        r.identified_date,
+        r.previous_identifier,
+        r.previous_identified_date,
+        r.gear_method,
+        r.preparation_type,
+        r.expedition,
+        r.gene_bank_number,
+        r.diagnosis,
+        r.description,
+        r.note_collector
+/*
+        r.related_catalog_item,
+        r.related_reference_item,
+        t5.name AS phylum,
+        t6.name AS subphylum,
+        t9.name AS class,
+        t13.name AS order_o,
+        t14.name AS suborder,
+        t15.name AS infraorder,
+        t17.name AS family,
+        */
+        /*
+        
+       &amp; = 639 -> &
+       &egrave; = 97 -> è
+       &iacute; = 1  -> í
+       &ouml; = 83 -> ö
+       &rsquo; = 6 -> ’
+       &uuml; = 155 -> ü
+       &aring; = 106 -> å
+       &eacute; = 52 -> é
+       &oacute; = 5 -> ó
+       &ecirc; = 1 -> ê
+       &aacute; = 1 -> á
+       &oslash; = 7 -> ø
+       
+       */
+        
+        
+
+       
+       /*REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(c.previous_scientific_name, '&amp;', '&'), '&egrave;', 'è'), '&iacute;', 'í'), '&ouml;', 'ö'), '&rsquo;', '’'), '&uuml;', 'ü') , '&aring;', 'å'), '&eacute;', 'é'), '&oacute;', 'ó'), '&ecirc;', 'ê'), '&aacute;', 'á'), '&oslash;', 'ø') as previous_scientific_name,*/
+       
+       
+       /*
+        w1.name_en AS type_status_en,
+        r.identifier,
+        r.previous_identifier,
+        w2.name_en AS ocean_sea_lake_en,
+        country.country_en,
+        province.province_en,
+        w3.name_en AS expendition_en,
+        r.locality,
+        r.individual_count,
+        r.depth_start,
+        r.depth_end,
+        r.latitude,
+        r.longitude*/
+         
+       FROM record as r
+       
+       LEFT JOIN classification as c on r.classification_id = c.id
+       /*
+       LEFT JOIN taxonomy AS t5 ON c.phylum = t5.id
+       LEFT JOIN taxonomy AS t6 ON c.subphylum = t6.id
+       LEFT JOIN taxonomy AS t9 ON c.class = t9.id
+       LEFT JOIN taxonomy AS t13 ON c.order_o = t13.id
+       LEFT JOIN taxonomy AS t14 ON c.suborder = t14.id
+       LEFT JOIN taxonomy AS t15 ON c.infraorder = t15.id
+       LEFT JOIN taxonomy AS t17 ON c.family = t17.id
+       LEFT JOIN wording AS w1 ON r.type_status = w1.id
+       LEFT JOIN wording AS w2 ON r.ocean_sea_lake = w2.id
+       LEFT JOIN country ON r.country = country.id
+       LEFT JOIN province ON r.province = province.id
+       LEFT JOIN wording AS w3 ON r.expedition = w3.id*/
+       
+       WHERE r.language_id = 1 AND r.status = 2  AND r.approve_status = 1 $conn
+       ORDER BY r.related_catalog_item, r.related_reference_item limit 0,10";
+
+        //echo $sql;
+        $data = DB::select($sql);
+        
+        Excel::create($name_file, function ($excel) use($data) {
+            $excel->sheet('Record Data', function ($sheet) use($data) {
+                //header
+                $sheet->row(1, array(
+                    'Current Scientific Name',
+                    'Source',
+                    'Marine Center',
+                    'Collection Code',
+                    'Catalog Number',
+                    'Variety Name',
+                    'Donated From',
+                    'Deposited At',
+                    'Type Status',
+                    'Individual Count',
+                    'Sex',
+                    'Size',
+                    'Life Stage',
+                    'Ocean / Sea / Lake',
+                    'Islands / Island',
+                    'Country',
+                    'Locality',
+                    'Verbatim Latitude',
+                    'Verbatim Longitude',
+                    'Latitude',
+                    'Longitude',
+                    'Start Latitude',
+                    'End Latitude',
+                    'Start Longitude',
+                    'End Longitude',
+                    'Habitat',
+                    'Sediment Type',
+                    'Depth Start',
+                    'Depth End',
+                    'Collector',
+                    'Collected Date',
+                    'Current Identifier',
+                    'Current Idenified Date',
+                    'Previous Identifier',
+                    'Previous Idenified Date',
+                    'Gear Method',
+                    'Preparation Type',
+                    'Expedition',
+                    'Gene Bank Number',
+                    'Diagnosis',
+                    'Description',
+                    'Notes'
+                   )); 
+                   $row_n = 2;
+                   foreach ($data as $info) {
+                       $sheet->row($row_n, array(
+                        ($info->current_scientific_name)?$info->current_scientific_name:"",
+                        ($info->source)?$info->source:"",
+                        ($info->marinecenter_id)?$info->marinecenter_id:"",
+                        ($info->collection_code)?$info->collection_code:"",
+                        ($info->catalog_number)?$info->catalog_number:"",
+                        ($info->variety_name)?$info->variety_name:"",
+                        ($info->donated_from)?$info->donated_from:"",
+                        ($info->deposited_at)?$info->deposited_at:"",
+                        ($info->type_status)?$info->type_status:"",
+                        ($info->individual_count)?$info->individual_count:"",
+                        ($info->sex)?$info->sex:"",
+                        ($info->size)?$info->size:"",
+                        ($info->life_stage)?$info->life_stage:"",
+                        ($info->ocean_sea_lake)?$info->ocean_sea_lake:"",
+                        ($info->islands_island)?$info->islands_island:"",
+                        ($info->country)?$info->country:"",
+                        ($info->locality)?$info->locality:"",
+                        ($info->verbatim_latitude)?$info->verbatim_latitude:"",
+                        ($info->verbatim_longitude)?$info->verbatim_longitude:"",
+                        ($info->latitude)?$info->latitude:"",
+                        ($info->longitude)?$info->longitude:"",
+                        ($info->start_latitude)?$info->start_latitude:"",
+                        ($info->end_latitude)?$info->end_latitude:"",
+                        ($info->start_longitude)?$info->start_longitude:"",
+                        ($info->end_longitude)?$info->end_longitude:"",
+                        ($info->habitat)?$info->habitat:"",
+                        ($info->sediment_type)?$info->sediment_type:"",
+                        ($info->depth_start)?$info->depth_start:"",
+                        ($info->depth_end)?$info->depth_end:"",
+                        ($info->collector)?$info->collector:"",
+                        ($info->collected_date)?$info->collected_date:"",
+                        ($info->identifier)?$info->identifier:"",
+                        ($info->identified_date)?$info->identified_date:"",
+                        ($info->previous_identifier)?$info->previous_identifier:"",
+                        ($info->previous_identified_date)?$info->previous_identified_date:"",
+                        ($info->gear_method)?$info->gear_method:"",
+                        ($info->preparation_type)?$info->preparation_type:"",
+                        ($info->expedition)?$info->expedition:"",
+                        ($info->gene_bank_number)?$info->gene_bank_number:"",
+                        ($info->diagnosis)?$info->diagnosis:"",
+                        ($info->description)?$info->description:"",
+                        ($info->note_collector)?$info->note_collector:""
+                       ));
+                       $row_n++;
+                   }     
+            });
+        })->store('csv', Config::get('path.export_record_file_path'));
+
+        // save export log : 0 is excel, 1 is pdf, 2 is api
+        ExportLog::saveExportLog(0, $name_file);
+
+        // sent name_file for download
+        echo $name_file . '.csv';
+    }
+
 }

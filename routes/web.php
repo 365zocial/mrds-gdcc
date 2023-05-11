@@ -77,7 +77,7 @@ Route::group(['middleware' => ['Authen']], function () {
     Route::post('deleteFileForExcelRecord', 'ExportRecordController@deleteFileForExcelRecord'); //Ajax
 
     Route::group(['prefix' => 'staff'], function () {
-        Route::get('downloadAdminReport', 'ExportReportController@downloadAdminReport')->name('admin.report'); //Ajax
+        Route::post('downloadAdminReport', 'ExportReportController@downloadAdminReport'); //Ajax
 
         Route::post('getInfoClassification', 'AjaxController@getInfoClassification'); //AjaxController
         Route::post('getTaxonomyName', 'AjaxController@getTaxonomyName'); //AjaxController
@@ -393,6 +393,7 @@ Route::group(['middleware' => ['Authen']], function () {
                 Route::post('biogeography', 'SearchReportController@searchBiogeography');
 
                 # Show Diversity
+                Route::get('admin_report', 'SearchReportController@admin_report');
                 Route::get('diversity', 'SearchReportController@diversity');
                 Route::post('diversity', 'SearchReportController@searchDiversity');
                 Route::get('diversity/get_location/{method}_{id}', 'SearchReportController@getCountryToCounty');

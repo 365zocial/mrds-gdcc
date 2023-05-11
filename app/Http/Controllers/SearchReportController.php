@@ -16,6 +16,7 @@ use App\Model\Country;
 use App\Model\Province;
 use App\Model\District;
 use App\Model\County;
+use App\Model\Marinecenter;
 
 class SearchReportController extends Controller
 {
@@ -556,6 +557,13 @@ class SearchReportController extends Controller
         } else if ( $attribute === 'Locality' ) {
             return $id;
         }
+    }
+
+    public function admin_report()
+    {
+        $data['marinecenter_list'] = Marinecenter::getMarineCenterList();
+
+        return view('staff.search_report.admin_report',$data);
     }
 
 }

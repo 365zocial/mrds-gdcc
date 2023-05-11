@@ -30,9 +30,7 @@
             <p class="content-header">Choose Report Type</p>
         </div>
     </div>
-
-    <div class="row">
-
+    <div class="row" style="margin-bottom: 30px;">
         <div class="col-md-3 menu-box">
           <a class="box-link" href="{{ url('/staff/searchReport/record_count_chart') }}">
             <div class="menu-icon-box">
@@ -76,7 +74,19 @@
             </div>
           </a>
         </div>
-
     </div>
-
+    @if(Auth::user()->role_id == 2)
+    <div class="row" style="margin-bottom: 30px;">
+      <div class="col-md-3 menu-box">
+          <a class="box-link" href="{{ url('/staff/searchReport/admin_report') }}">
+            <div class="menu-icon-box">
+                <div class="icon-box">
+                    <img class="icon" src='{{ URL::asset("assets/images/icon_dashboard_manager/export-all-data.png") }}' />
+                </div>
+                <p class="menu-text">Download<br>Admin Report</p>
+            </div>
+          </a>
+      </div>
+    </div>
+    @endif
 @endsection

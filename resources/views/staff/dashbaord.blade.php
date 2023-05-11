@@ -7,18 +7,7 @@
 
 @section('script')
     <script type="text/javascript">
-        function exportRecord() {
-            $('.loader').show();
-            $.ajax({
-                method: "GET",
-                url: '{!! route('admin.report') !!}',
-            }).done(function( data ) {
-                if ( data ) {
-                    window.location.href = '<?php echo "/export_result_record" ?>'+ '/' + data;
-                }
-                $('.loader').hide();
-            });
-        }
+
     </script>
 @endsection
 
@@ -257,19 +246,7 @@
                 </div>
 
             </div>
-            
-            <div class="row" style="margin-bottom: 30px;">
-              <div class="col-md-3 menu-box">
-                  <a class="box-link" href="#" onclick="exportRecord(); return false;" target="_blank">
-                    <div class="menu-icon-box">
-                        <div class="icon-box">
-                            <img class="icon" src='{{ URL::asset("assets/images/icon_dashboard_manager/export-all-data.png") }}' />
-                        </div>
-                        <p class="menu-text">Download<br>Admin Report</p>
-                    </div>
-                  </a>
-              </div>
-            </div>
+        
         @elseif(Auth::user()->role_id == 4) <!-- Role : Board -->
             <div class="row row-centered" style="margin-top: 10%;">
                 <div class="col-md-3 menu-box col-centered">
