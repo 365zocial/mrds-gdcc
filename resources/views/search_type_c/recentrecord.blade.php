@@ -212,11 +212,11 @@
                                 { data: 'suborder', name: 't7.name'},
                                 { data: 'infraorder', name: 't8.name'},
                                 { data: 'family', name: 't9.name'},
-                                { data: 'infraphylum', name: 't13.name'},
-                                { data: 'superclass', name: 't14.name'},
-                                { data: 'subclass', name: 't15.name'},
-                                { data: 'infraclass', name: 't16.name'},
-                                { data: 'superorder', name: 't17.name'},
+                                // { data: 'infraphylum', name: 't13.name'},
+                                // { data: 'superclass', name: 't14.name'},
+                                // { data: 'subclass', name: 't15.name'},
+                                // { data: 'infraclass', name: 't16.name'},
+                                // { data: 'superorder', name: 't17.name'},
                     @endif
                             { data: 'current_scientific_name_format', name: 'classification.current_scientific_name_format'},
                             { data: 'previous_scientific_name_format', name: 'classification.previous_scientific_name_format'},
@@ -660,7 +660,7 @@
 
     <div class="row row-inform table_result" style="display:none;">
         <div class="col-md-12">
-            <table id="distributeDataTable" class="display" cellspacing="0">
+            <table id="distributeDataTable" class="display" style="width:100%">
                 <thead>
                     <th>ID</th>
                     @if($group_permission_a == 2)
@@ -671,11 +671,11 @@
                         <th>Suborder (Clade)</th>
                         <th>Infraorder (Clade)</th>
                         <th>Family (Clade)</th>
-                        <th>infraphylum</th>
+                        <!-- <th>infraphylum</th>
                         <th>superclass</th>
                         <th>subclass</th>
                         <th>infraclass</th>
-                        <th>superorder</th>
+                        <th>superorder</th> -->
                     @endif
                     <th>Current Name</th>
                     <th>Previous Name</th>

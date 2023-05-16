@@ -204,11 +204,11 @@
                     { data: 'infraorder', name: 't8.name'},
                     { data: 'family', name: 't9.name'},
                     { data: 'superfamily', name: 't10.name'},
-                    { data: 'infraphylum', name: 't13.name'},
-                    { data: 'superclass', name: 't14.name'},
-                    { data: 'subclass', name: 't15.name'},
-                    { data: 'infraclass', name: 't16.name'},
-                    { data: 'superorder', name: 't17.name'},
+                    // { data: 'infraphylum', name: 't13.name'},
+                    // { data: 'superclass', name: 't14.name'},
+                    // { data: 'subclass', name: 't15.name'},
+                    // { data: 'infraclass', name: 't16.name'},
+                    // { data: 'superorder', name: 't17.name'},
                     
                     //{ data: `{{ ($lang==2 ? 'ocean_sea_lake_th' : 'ocean_sea_lake_en') }}`, name: `{{ ($lang==2 ? 'w4.name_th' : 'w4.name_en') }}`},
                 @endif
@@ -625,7 +625,7 @@ table.column( 0 ).visible( false );
 
     <div class="row row-inform table_result" style="display:none;">
         <div class="col-md-12">
-            <table id="distributeDataTable" class="display" cellspacing="0">
+            <table id="distributeDataTable" class="display" style="width:100%">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -638,11 +638,11 @@ table.column( 0 ).visible( false );
                             <th>Infraorder</th>
                             <th>Superfamily</th>
                             <th>Family</th>
-                            <th>infraphylum</th>
-                            <th>superclass</th>
-                            <th>subclass</th>
-                            <th>infraclass</th>
-                            <th>superorder</th>
+                            <!-- <th>infraphylum</th> -->
+                            <!-- <th>superclass</th>
+                            <th>subclass</th> -->
+                            <!-- <th>infraclass</th>
+                            <th>superorder</th> -->
                         @endif
                         <th>Current Name</th>
                     </tr>
