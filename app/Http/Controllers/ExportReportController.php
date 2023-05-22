@@ -1295,6 +1295,16 @@ class ExportReportController extends Controller
        r.variety_name,
        REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(c.previous_scientific_name, '&amp;', '&'), '&egrave;', 'è'), '&iacute;', 'í'), '&ouml;', 'ö'), '&rsquo;', '’'), '&uuml;', 'ü') , '&aring;', 'å'), '&eacute;', 'é'), '&oacute;', 'ó'), '&ecirc;', 'ê'), '&aacute;', 'á'), '&oslash;', 'ø') as previous_scientific_name,
        w26.name_en as invasive_species,
+       CASE 
+       WHEN rp.place_id = 1 THEN 'น้ำจืด' 
+       WHEN rp.place_id = 2 THEN 'น้ำกร่อย' 
+       WHEN rp.place_id = 3 THEN 'ทะเล' 
+       WHEN rp.place_id = 4 THEN 'ภูเขา' 
+       WHEN rp.place_id = 5 THEN 'บนต้นไม้' 
+       WHEN rp.place_id = 6 THEN 'หน้าดิน' 
+       WHEN rp.place_id = 7 THEN 'ในดิน' 
+       WHEN rp.place_id = 8 THEN 'บนบก' 
+       END as place,
        w27.name_en as living,
        w22.name_en as protection_thai_law,
        w28.name_en as thai_red_list,
@@ -1361,6 +1371,7 @@ class ExportReportController extends Controller
        Left join `wording` w27 on c.living = w27.id
        Left join `wording` w28 on c.thai_red_list = w28.id
        Left join `picture` pc on r.unique_record = pc.unique_record
+       Left join `record_places` rp on r.unique_record = rp.record_unique_id
        where r.language_id = 1 and r.approve_status = 1 and r.status = 2 $conn
        order by r.id desc";
 
@@ -1499,6 +1510,7 @@ class ExportReportController extends Controller
                     'SpecimenPhotograph',
                     'EconomicValue',
                     'Invasive species',
+                    'Place',
                     'Living',
                     'PlantType',
                     'AnimalType1',
@@ -1646,6 +1658,7 @@ class ExportReportController extends Controller
                         ($info->specimen_photograph)?$info->specimen_photograph:"",
                         ($info->economic_value)?$info->economic_value:"",
                         ($info->invasive_species)?$info->invasive_species:"",
+                        ($info->place)?$info->place:"",
                         ($info->living)?$info->living:"",
                         ($info->plant_type)?$info->plant_type:"",
                         ($info->animal_type1)?$info->animal_type1:"",
