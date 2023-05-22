@@ -1361,7 +1361,7 @@ class ExportReportController extends Controller
        Left join `wording` w27 on c.living = w27.id
        Left join `wording` w28 on c.thai_red_list = w28.id
        Left join `picture` pc on r.unique_record = pc.unique_record
-       where r.approve_status = 1 and r.status = 2 $conn
+       where r.language_id = 1 and r.approve_status = 1 and r.status = 2 $conn
        order by r.id desc";
 
         //echo $sql;
