@@ -432,7 +432,7 @@
                                 <option value="superfamily">Super Family / Clade</option>
                                 <option value="family">Family / Clade</option>
                                 <option value="genus">Genus</option>
-                                <option value="species">Species</option>
+                                <option value="classification">Species</option>
                             </select>
                         </div>
                         <div class="col-md-6 form-group">

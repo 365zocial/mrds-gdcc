@@ -353,7 +353,7 @@ table.column( 0 ).visible( false );
 
                 <hr class="search-category-pages hr_search" style="display:none;">
                 <div class="row row-inform taxa_select" style="display:none;">
-                    <div class="col-md-4">
+                <div class="col-md-6 form-group">
                         <p class="search-report-dropdown-header">
                             @if($lang == 2)
                                 ค้นหาด้วยหมวดหมู่
@@ -377,10 +377,10 @@ table.column( 0 ).visible( false );
                             <option value="superfamily">Super Family / Clade</option>
                             <option value="family">Family / Clade</option>
                             <option value="genus">Genus</option>
-                            <option value="species">Species</option>
+                            <option value="classification">Species</option>
                         </select>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6 form-group">
                         <p class="search-report-dropdown-header">&nbsp;</p>
                         <div class="dd_taxa_sub" style="display:none;">
                             <select class="form-control select2" name="taxa_b" value="0" id="">
@@ -401,7 +401,7 @@ table.column( 0 ).visible( false );
                 </div>
 
                 <div class="row row-inform local_select" style="display:none;">
-                    <div class="col-md-4">
+                <div class="col-md-6 form-group">
                         <p class="search-report-dropdown-header">
                             @if($lang == 2)
                                 ค้นหาเชิงพื้นที่
@@ -418,7 +418,7 @@ table.column( 0 ).visible( false );
                             <option id="dd_ocean_sea_lake" value="ocean_sea_lake" >Ocean Sea Lake / มหาสมุทร ทะเล ทะเลสาบ</option>
                         </select>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6 form-group">
                         <p class="search-report-dropdown-header">&nbsp;</p>
                         <div class="dd_locality_sub" style="">
                             <select class="form-control select2" name="" id="">
