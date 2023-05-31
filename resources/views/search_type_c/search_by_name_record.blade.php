@@ -121,8 +121,11 @@
                     { data: 'local_name', name: 'record.local_name'},
                     { data: 'vernacular_name', name: 'record.vernacular_name'},
                     { data: 'common_name', name: 'classification.common_name'},
+                    { data: 'collector', name: 'record.collector'},
+                    { data: 'collected_date', name: 'record.collected_date'},
+                    { data: 'identifier', name: 'record.identifier'},
+                    { data: 'identified_date', name: 'record.identified_date'},
                     { data: 'showpic', orderable: false, searchable: false },   
-                    
                 ],
             });
         }
@@ -260,7 +263,7 @@
                         <p class="search-report-dropdown-header">@if($lang == 2){{'ค้นหาด้วยข้อมูลบุคคล'}}@else{{'Name'}}@endif</p>
                         <select class="form-control select2" id="name_type" name="name_type">
                             <option value="collector">@if($lang == 2){{'ผู้เก็บตัวอย่าง'}}@else{{'Collector'}}@endif</option>
-                            <option value="identifier">@if($lang == 2){{'ผู้ตรวจสอบ'}}@else{{'Identifier'}}@endif</option>
+                            <option value="identifier">@if($lang == 2){{'ผู้ตรวจสอบ'}}@else{{'CurrentIdentifier'}}@endif</option>
                         </select>
                     </div>
                     <div class="col-md-8">
@@ -326,8 +329,11 @@
                         <th>Local Name</th>
                         <th>Vernacular Name</th>
                         <th>Common Name</th>
+                        <th>Collector</th>
+                        <th>CollectedDate</th>
+                        <th>CurrentIdentifier</th>
+                        <th>CurrentIdentifiedDate</th>
                         <th>Picture</th>
-                        
                 </thead>
             </table>
         </div>

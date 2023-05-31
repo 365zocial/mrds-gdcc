@@ -6,6 +6,7 @@
     var markers = [];
     var area = [];
     var data_map = <?php echo $map ?>;
+    //var data_map = [];
     var map_type = "<?php echo $map_type ?>";
     var map;
     var info = [];
@@ -25,13 +26,17 @@
           mapTypeId: google.maps.MapTypeId.roadmap
         });
 
+        new google.maps.Marker({
+            position: init_map[0],
+            map,
+        });
+
         //request 4 if marker more than 20 show text
         if(data_map!== null && data_map.length > 20){
           $('#map').before('It is complicate to display, plase scaledown your searching') 
         } 
 
     }
-    
     
     
     $.each(data_map, function(i, data_map){

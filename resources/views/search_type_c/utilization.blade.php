@@ -278,7 +278,7 @@
 
                 <hr class="search-category-pages hr_search" style="display:none;">
                 <div class="row row-inform taxa_select" style="display:none;">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <p class="search-report-dropdown-header">
                             @if($lang == 2)
                                 ค้นหาด้วยหมวดหมู่
@@ -287,7 +287,7 @@
                             @endif
                         </p>
                         <select class="form-control search-report-select select2" name="header_taxonomy" id="taxa_header_id">
-                            <option selected disabled="" value="0">Select</option>
+                            <!-- <option selected disabled="" value="0">Select</option>
                             <option value="phylum">Phylum</option>
                             <option value="subphylum">Subphylum</option>
                             <option value="class">Class / Clade</option>
@@ -296,10 +296,26 @@
                             <option value="infraorder">Infraorder / Clade</option>
                             <option value="superfamily">Super Family / Clade</option>
                             <option value="family">Family / Clade</option>
+                            <option value="genus">Genus</option> -->
+                            <option selected disabled="" value="0">Select</option>
+                            <option value="phylum">Phylum</option>
+                            <option value="subphylum">Subphylum</option>
+                            <option value="infraphylum">Infraphylum</option>
+                            <option value="superclass">Superclass</option>
+                            <option value="class">Class / Clade</option>
+                            <option value="subclass">Subclass</option>
+                            <option value="infraclass">Infraclass</option>
+                            <option value="superorder">Superorder</option>
+                            <option value="order_o">Order / Clade</option>
+                            <option value="suborder">Suborder / Clade</option>
+                            <option value="infraorder">Infraorder / Clade</option>
+                            <option value="superfamily">Super Family / Clade</option>
+                            <option value="family">Family / Clade</option>
                             <option value="genus">Genus</option>
+                            <option value="classification">Species</option>
                         </select>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <p class="search-report-dropdown-header">&nbsp;</p>
                         <div class="dd_taxa_sub" style="display:none;">
                             <select class="form-control select2" name="taxa_b" value="0" id="">

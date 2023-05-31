@@ -739,6 +739,10 @@ class ExportRecordController extends Controller
                     'classification.current_scientific_name',
                     'record.local_name',
                     'record.vernacular_name',
+                    'record.collector',
+                    'record.collected_date',
+                    'record.identifier',
+                    'record.identified_date',
                     'classification.common_name',
                     'pic.unique_record',
                     'pic.path_pic'
@@ -809,7 +813,7 @@ class ExportRecordController extends Controller
 
                 //--- Header Table Part ---
                 $sheet->row(14, array(
-                    'No.', 'IDCatalog / IDRef', 'Scientific Name', 'Local Name', 'Vernacular Name', 'Common Name'
+                    'No.', 'IDCatalog / IDRef', 'Scientific Name', 'Local Name', 'Vernacular Name', 'Common Name','Collector','CollectedDate','CurrentIdentifier','CurrentIdentifiedDate'
                 ));
                 //--- ----------------- ---
 
@@ -825,7 +829,11 @@ class ExportRecordController extends Controller
                             html_entity_decode($data->current_scientific_name),
                             $data->local_name,
                             $data->vernacular_name,
-                            $data->common_name
+                            $data->common_name,
+                            $data->collector,
+                            $data->collected_date,
+                            $data->identifier,
+                            $data->identified_date
                         ));
                     } else {
                         $sheet->row($row_number, array(
@@ -834,7 +842,11 @@ class ExportRecordController extends Controller
                             html_entity_decode($data->current_scientific_name),
                             $data->local_name,
                             $data->vernacular_name,
-                            $data->common_name
+                            $data->common_name,
+                            $data->collector,
+                            $data->collected_date,
+                            $data->identifier,
+                            $data->identified_date
                         ));
                     }
 
