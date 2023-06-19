@@ -91,7 +91,7 @@
 <div class="row row-with-margin">
     <div class="col-md-6 col-md-offset-3">
         <div class="content-box">
-
+        @if(Auth::user()->role_id == 2)
             <p class="content-header">Download Files(CSV)</p>
 
             <div class="row row-inform">
@@ -116,6 +116,7 @@
             </div>
 
         </div>
+        @endif
     </div>
 </div>
 
