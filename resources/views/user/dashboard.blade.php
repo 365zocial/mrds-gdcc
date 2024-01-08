@@ -226,7 +226,7 @@
         <div class="row row-with-margin" style="padding-top: 30px;">
             <p class="content-header font-th-header" style="text-align: left;">
                 @if(Session::get('language') == 2)
-                ระบบฐานข้อมูลทรัพยากรทางทะเล (MARINE RESOURCES DATABASE SYSTEM - MRDS)
+                ระบบฐานข้อมูลทรัพยากรสิ่งมีชีวิตทางทะเล (MARINE RESOURCES DATABASE SYSTEM - MRDS)
                 @else
                 MARINE RESOURCES DATABASE SYSTEM (MRDS)
                 @endif
