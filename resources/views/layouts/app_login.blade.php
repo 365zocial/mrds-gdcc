@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <title>Marine Resources Database System</title>
         <link rel="stylesheet" href="{{ URL::asset('assets/css/reset.css') }}" media="screen" title="no title" charset="utf-8">
-        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+        <link rel="stylesheet" href="{{ URL::asset('assets/css/bootstrap.min.css') }}" media="screen" title="no title" charset="utf-8">
         <link rel="stylesheet" href="{{ URL::asset('assets/css/header.css') }}" media="screen" title="no title" charset="utf-8">
         <link rel="stylesheet" href="{{ URL::asset('assets/css/footer.css') }}" media="screen" title="no title" charset="utf-8">
         <link rel="stylesheet" href="{{ URL::asset('assets/css/staff.css') }}" media="screen" title="no title" charset="utf-8">
