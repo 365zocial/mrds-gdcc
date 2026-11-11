@@ -56,7 +56,7 @@ return [
     */
 
     'from' => [
-        'address' => 'rc_pmbc@yahoo.com',
+        'address' => 'reference.pmbc@gmail.com',
         'name' => 'MARINE RESOURCE DATABASE SYSTEM',
     ],
 

@@ -93,10 +93,10 @@
     'normal' => $rootDir . '/lib/fonts/DejaVuSerifCondensed',
   ),
   'thsarabun' => array(
-    'normal' => $fontDir . '/thsarabun-normal_0c8e2574d8508c9a66c1f8436f3f83ca',
+    'normal' => $fontDir . '/thsarabun-normal_874f43e9d3b5d9f837817b3d257aae81',
   ),
   'boon' => array(
-    'normal' => $fontDir . '/boon-normal_b70d314c8f6b5c489dfd2ba8956411f4',
+    'normal' => $fontDir . '/boon-normal_0dc336b466d968f864182a15a39f7e2f',
   ),
   'noto sans' => array(
     'italic' => $fontDir . '/867dbaa5281a6a8341fa42445381a4e8',

@@ -111,7 +111,7 @@
 
 <div class="row">
     <div class="col-md-12">
-        <a href="https://365zocial.freshdesk.com/support/solutions/12000000869" target="_blank"><p style="text-align: center;">(@if($lang == 1){{ 'User\'s manual online' }}@else{{ 'คู่มือการใช้งานออนไลน์' }}@endif)</p></a>
+        <a href="https://kssystems3.s3.ap-southeast-1.amazonaws.com/8519279e-0fa5-4ebe-a223-1a3bbc2d5648-user_manual_mrds.pdf" target="_blank"><p style="text-align: center;">(@if($lang == 1){{ 'User\'s manual online' }}@else{{ 'คู่มือการใช้งานออนไลน์' }}@endif)</p></a>
     </div> <!-- /.col-md-8 col-md-offset-2 -->
 </div> <!-- /.row -->
 

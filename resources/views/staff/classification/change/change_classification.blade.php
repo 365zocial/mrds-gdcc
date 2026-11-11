@@ -125,7 +125,27 @@
                                     @if( count($classifications) !== 0 )
                                       <option value="" selected>Search Scientific Name</option>
                                       @foreach($classifications as $classification)
-                                        <option value="{{ $classification->id }}" @if($record->classification_id == $classification->id){{ "selected" }}@endif>{!! $classification->current_scientific_name_format !!}</option>
+                                              <option
+                                                value="{{ $classification->id }}"
+                                                data-search="{{
+                                                    trim(
+                                                        preg_replace(
+                                                            '/\s+/u', ' ',
+                                                            str_replace(
+                                                                ['&nbsp;', chr(0xC2).chr(0xA0)],
+                                                                ' ',
+                                                                html_entity_decode(
+                                                                    strip_tags((string) $classification->current_scientific_name_format),
+                                                                    ENT_QUOTES | ENT_HTML5,
+                                                                    'UTF-8'
+                                                                )
+                                                            )
+                                                        )
+                                                    )
+                                                }}"
+                                                @if(($record->classification_id ?? null) == $classification->id) selected @endif
+                                                {!! $classification->current_scientific_name_format !!}
+                                            </option>
                                       @endforeach
                                     @else
                                       <option value="" selected>No list in select</option>
@@ -181,3 +201,35 @@
         </div> <!-- /.col-md-8 -->
     </div> <!-- /.row -->
 @endsection
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+   $('#cur_sci_name').select2({
+    matcher: function(params, data) {
+        if ($.trim(params.term) === '') {
+            return data;
+        }
+
+        function normalize(str) {
+            return (str || '')
+                .toLowerCase()
+                .replace(/\./g, '')
+                .replace(/\s+/g, ' ')
+                .trim();
+        }
+
+        var term = normalize(params.term);
+
+        var textFromOption = $(data.element).data('search') || data.text;
+        var text = normalize(textFromOption);
+        var isFound = text.indexOf(term) > -1;
+
+        if (isFound) {
+            return data;
+        }
+        
+        return null;
+    }
+   });
+});
+</script>

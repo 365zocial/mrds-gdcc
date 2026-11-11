@@ -111,7 +111,7 @@ class ExportLabelController extends Controller
                 if ($key % 2 === 0) $html .= '<tr style="border: 1px solid #000;">';
                 if (!empty($get->locality)) {
                     $locality = $get->locality;
-                    if (strlen($locality) > 22) $locality = substr($locality, 0, 22) . '...';
+                    if (strlen($locality) > 30) $locality = substr($locality, 0, 30) . '...';
                 } else $locality = '-';
                 if (!empty($get->identifier)) $identifier = $get->identifier;
                 else $identifier = '-';

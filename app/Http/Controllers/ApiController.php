@@ -896,6 +896,7 @@ class ApiController extends Controller
 
         // Check authenticate
         if (Auth::attempt(['name' => $username, 'password' => $password]) && Auth::user()->role_id == 7) {
+
             $expired_date = date("Y-m-d H:i:s", strtotime("+1 hours")); // token มีอายุ 1 ชั่วโมง
             $token = Str::random(256);
 

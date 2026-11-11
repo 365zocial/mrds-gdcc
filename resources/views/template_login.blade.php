@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <title></title>
         <link rel="stylesheet" href="{{ URL::asset('assets/css/reset.css') }}" media="screen" title="no title" charset="utf-8">
-        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
         <link rel="stylesheet" href="{{ URL::asset('assets/css/header.css') }}" media="screen" title="no title" charset="utf-8">
         <link rel="stylesheet" href="{{ URL::asset('assets/css/footer.css') }}" media="screen" title="no title" charset="utf-8">
         <link rel="stylesheet" href="{{ URL::asset('assets/css/staff.css') }}" media="screen" title="no title" charset="utf-8">
@@ -57,7 +57,7 @@
         @include('footer')
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
         <script src="{{ URL::asset('assets/script/alertQuery.js') }}"></script>
 
         @yield('script')

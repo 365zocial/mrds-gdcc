@@ -184,7 +184,7 @@ class AuthenController extends Controller
 
     public function resetPassword($id){
 
-        Session::put('id_user_reset_pass', decrpyt( $id ) );
+        Session::put('id_user_reset_pass', decrypt( $id ) );
         return view('authentication.resetpassword');
     }
 
